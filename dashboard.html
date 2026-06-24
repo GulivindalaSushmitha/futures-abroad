@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Dashboard - Futures Abroad</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+    <link rel="stylesheet" href="css/style.css"/>
+    <link rel="stylesheet" href="css/responsive.css"/>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="header" id="header">
+    <div class="container">
+        <div class="header-inner">
+            <a href="dashboard.html" class="logo">
+                <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+                    <rect width="40" height="40" rx="12" fill="url(#logoGrad)"/>
+                    <path d="M12 28V14L20 20L28 14V28" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M12 20L20 26L28 20" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    <defs>
+                        <linearGradient id="logoGrad" x1="0" y1="0" x2="40" y2="40">
+                            <stop offset="0%" stop-color="#6C3CE1"/>
+                            <stop offset="100%" stop-color="#FF6B6B"/>
+                        </linearGradient>
+                    </defs>
+                </svg>
+                <span>Futures Abroad</span>
+            </a>
+
+            <nav class="nav">
+                <ul>
+                    <li><a href="dashboard.html" class="active">Dashboard</a></li>
+                    <li><a href="#activities">Activities</a></li>
+                    <li><a href="#universities">Universities</a></li>
+                    <li><a href="#portfolio">Portfolio</a></li>
+                </ul>
+            </nav>
+
+            <div class="header-actions">
+                <span class="user-badge" id="userBadge">Welcome, User</span>
+                <a href="#" class="btn btn-outline" id="logoutBtn">Logout</a>
+            </div>
+
+            <button class="mobile-toggle" id="mobileToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </div>
+</header>
+
+<!-- ============================================ -->
+<!-- DASHBOARD CONTENT -->
+<!-- ============================================ -->
+<section class="dashboard">
+    <div class="container">
+        <!-- Welcome Section -->
+        <div class="dashboard-welcome">
+            <div>
+                <span class="section-tag">Dashboard</span>
+                <h1>Welcome back, <span id="userName">Student</span> 👋</h1>
+                <p>Here's your university journey progress at a glance</p>
+            </div>
+            <div class="dashboard-actions">
+                <a href="#" class="btn btn-primary">Continue Journey <i class="fas fa-arrow-right"></i></a>
+            </div>
+        </div>
+
+        <!-- Stats Grid -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-tasks"></i></div>
+                <div class="stat-info">
+                    <span class="stat-value" id="profileStrength">72%</span>
+                    <span class="stat-label">Profile Strength</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width:72%;"></div>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-check-circle"></i></div>
+                <div class="stat-info">
+                    <span class="stat-value">4</span>
+                    <span class="stat-label">Activities Completed</span>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-university"></i></div>
+                <div class="stat-info">
+                    <span class="stat-value">6</span>
+                    <span class="stat-label">Universities Shortlisted</span>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-clock"></i></div>
+                <div class="stat-info">
+                    <span class="stat-value">3</span>
+                    <span class="stat-label">Upcoming Deadlines</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Grade-Based Experience -->
+        <div class="grade-dashboard" id="grade11Experience">
+            <div class="grade-banner">
+                <div class="grade-banner-icon"><i class="fas fa-rocket"></i></div>
+                <div class="grade-banner-content">
+                    <h3>🚀 You're in Grade 11 — Let's Get Serious About Universities!</h3>
+                    <p>You're building a strong profile. Your university shortlist is ready.</p>
+                </div>
+                <a href="#" class="btn btn-primary">View Your Shortlist <i class="fas fa-arrow-right"></i></a>
+            </div>
+        </div>
+
+        <!-- Activity Recommendations -->
+        <div class="dashboard-section">
+            <div class="section-header inline">
+                <div>
+                    <h2>Recommended Activities</h2>
+                    <p>Based on your interest profile</p>
+                </div>
+                <a href="#" class="btn btn-outline btn-sm">View All</a>
+            </div>
+
+            <div class="activity-grid">
+                <div class="activity-card">
+                    <span class="activity-type competition">Competition</span>
+                    <h4>Youth Climate Summit</h4>
+                    <p>Global competition for young environmental leaders</p>
+                    <div class="activity-meta">
+                        <span><i class="fas fa-calendar"></i> 3 days</span>
+                        <span><i class="fas fa-tag"></i> Free</span>
+                    </div>
+                    <div class="activity-match">
+                        <i class="fas fa-star"></i>
+                        <span>92% match • Recommended because you're interested in Environment + Leadership</span>
+                    </div>
+                    <a href="#" class="btn btn-primary btn-sm">Learn More</a>
+                </div>
+
+                <div class="activity-card">
+                    <span class="activity-type internship">Internship</span>
+                    <h4>Tech Startup Accelerator</h4>
+                    <p>Summer program for aspiring entrepreneurs</p>
+                    <div class="activity-meta">
+                        <span><i class="fas fa-calendar"></i> 6 weeks</span>
+                        <span><i class="fas fa-tag"></i> Scholarship Available</span>
+                    </div>
+                    <div class="activity-match">
+                        <i class="fas fa-star"></i>
+                        <span>88% match • Recommended because you're interested in Technology + Business</span>
+                    </div>
+                    <a href="#" class="btn btn-primary btn-sm">Learn More</a>
+                </div>
+
+                <div class="activity-card">
+                    <span class="activity-type volunteering">Volunteering</span>
+                    <h4>Community Leadership Program</h4>
+                    <p>Develop leadership skills through community service</p>
+                    <div class="activity-meta">
+                        <span><i class="fas fa-calendar"></i> 8 weeks</span>
+                        <span><i class="fas fa-tag"></i> Free</span>
+                    </div>
+                    <div class="activity-match">
+                        <i class="fas fa-star"></i>
+                        <span>85% match • Recommended because you're interested in Leadership + Service</span>
+                    </div>
+                    <a href="#" class="btn btn-primary btn-sm">Learn More</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- University Shortlist -->
+        <div class="dashboard-section">
+            <div class="section-header inline">
+                <div>
+                    <h2>Your University Shortlist</h2>
+                    <p>Personalized recommendations based on your profile</p>
+                </div>
+                <a href="#" class="btn btn-outline btn-sm">Edit Shortlist</a>
+            </div>
+
+            <div class="university-grid">
+                <div class="university-card">
+                    <div class="university-rank">Reach</div>
+                    <h4>University of Cambridge</h4>
+                    <p class="university-country"><i class="fas fa-map-marker-alt"></i> United Kingdom</p>
+                    <p class="university-match"><i class="fas fa-star"></i> 95% match • Top for STEM + Research</p>
+                    <div class="university-details">
+                        <span>Acceptance: 21%</span>
+                        <span>Notable: Engineering, Computer Science</span>
+                    </div>
+                    <a href="#" class="btn btn-outline btn-sm">View Details</a>
+                </div>
+
+                <div class="university-card">
+                    <div class="university-rank target">Target</div>
+                    <h4>National University of Singapore</h4>
+                    <p class="university-country"><i class="fas fa-map-marker-alt"></i> Singapore</p>
+                    <p class="university-match"><i class="fas fa-star"></i> 89% match • Strong in Technology + Business</p>
+                    <div class="university-details">
+                        <span>Acceptance: 35%</span>
+                        <span>Notable: Engineering, Business</span>
+                    </div>
+                    <a href="#" class="btn btn-outline btn-sm">View Details</a>
+                </div>
+
+                <div class="university-card">
+                    <div class="university-rank safety">Safety</div>
+                    <h4>University of Melbourne</h4>
+                    <p class="university-country"><i class="fas fa-map-marker-alt"></i> Australia</p>
+                    <p class="university-match"><i class="fas fa-star"></i> 82% match • Excellent for Sciences</p>
+                    <div class="university-details">
+                        <span>Acceptance: 45%</span>
+                        <span>Notable: Medicine, Sciences</span>
+                    </div>
+                    <a href="#" class="btn btn-outline btn-sm">View Details</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Futures Abroad CTA -->
+        <div class="futures-cta">
+            <div class="futures-cta-content">
+                <div class="futures-cta-icon"><i class="fas fa-handshake"></i></div>
+                <div>
+                    <h3>Ready to turn this shortlist into a real application?</h3>
+                    <p>Book your first session with a Futures Abroad counselor and get expert guidance.</p>
+                </div>
+                <a href="#" class="btn btn-primary btn-large">
+                    Book Your Session <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ============================================ -->
+<!-- FOOTER -->
+<!-- ============================================ -->
+<footer class="footer">
+    <div class="container">
+        <div class="footer-grid">
+            <div class="footer-col">
+                <a href="index.html" class="logo">
+                    <svg width="32" height="32" viewBox="0 0 40 40" fill="none">
+                        <rect width="40" height="40" rx="12" fill="url(#logoGrad)"/>
+                        <path d="M12 28V14L20 20L28 14V28" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M12 20L20 26L28 20" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        <defs>
+                            <linearGradient id="logoGrad" x1="0" y1="0" x2="40" y2="40">
+                                <stop offset="0%" stop-color="#6C3CE1"/>
+                                <stop offset="100%" stop-color="#FF6B6B"/>
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                    <span>Futures Abroad</span>
+                </a>
+                <p class="footer-desc">
+                    Your AI-powered university journey guide.
+                    Helping students across the UAE reach their dreams.
+                </p>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-youtube"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                </div>
+            </div>
+
+            <div class="footer-col">
+                <h4>Product</h4>
+                <ul>
+                    <li><a href="how-it-works.html">How It Works</a></li>
+                    <li><a href="index.html#features">Features</a></li>
+                    <li><a href="index.html#journey">Journey</a></li>
+                    <li><a href="#">FAQ</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h4>For Students</h4>
+                <ul>
+                    <li><a href="#">Grade 10</a></li>
+                    <li><a href="#">Grade 11</a></li>
+                    <li><a href="#">Grade 12</a></li>
+                    <li><a href="#">Parents</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h4>Company</h4>
+                <ul>
+                    <li><a href="#">About Us</a></li>
+                    <li><a href="#">Careers</a></li>
+                    <li><a href="#">Blog</a></li>
+                    <li><a href="#">Contact</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h4>KHDA</h4>
+                <ul>
+                    <li><a href="#">Permit #633441</a></li>
+                    <li><a href="#">Accreditation</a></li>
+                    <li><a href="#">Quality Assurance</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; 2026 Futures Abroad. All rights reserved.</p>
+            <div class="footer-legal">
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms of Service</a>
+                <a href="#">Cookie Policy</a>
+                <a href="#">Accessibility</a>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<script src="js/main.js"></script>
+<script src="js/auth.js"></script>
+<script>
+    // Load user data
+    document.addEventListener('DOMContentLoaded', function() {
+        const user = getCurrentUser();
+        if (user) {
+            document.getElementById('userName').textContent = user.name || 'Student';
+            document.getElementById('userBadge').textContent = 'Welcome, ' + (user.name || 'Student');
+        }
+    });
+</script>
+
+</body>
+</html>

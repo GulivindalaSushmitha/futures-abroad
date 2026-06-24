@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Futures Abroad - AI-Powered University Journey</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+    <link rel="stylesheet" href="css/style.css"/>
+    <link rel="stylesheet" href="css/animations.css"/>
+    <link rel="stylesheet" href="css/responsive.css"/>
+</head>
+<body>
+
+<!-- ============================================ -->
+<!-- HEADER WITH STUDENT + ADMIN BUTTONS -->
+<!-- ============================================ -->
+<header class="header" id="header">
+    <div class="container">
+        <div class="header-inner">
+            <a href="index.html" class="logo">
+                <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+                    <rect width="40" height="40" rx="12" fill="url(#logoGrad)"/>
+                    <path d="M12 28V14L20 20L28 14V28" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M12 20L20 26L28 20" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    <defs>
+                        <linearGradient id="logoGrad" x1="0" y1="0" x2="40" y2="40">
+                            <stop offset="0%" stop-color="#6C3CE1"/>
+                            <stop offset="100%" stop-color="#FF6B6B"/>
+                        </linearGradient>
+                    </defs>
+                </svg>
+                <span>Futures Abroad</span>
+            </a>
+
+            <nav class="nav">
+                <ul>
+                    <li><a href="index.html" class="active">Home</a></li>
+                    <li><a href="how-it-works.html">How It Works</a></li>
+                    <li><a href="#journey">Journey</a></li>
+                    <li><a href="#features">Features</a></li>
+                </ul>
+            </nav>
+
+            <div class="header-actions">
+                <!-- STUDENT SIGN IN -->
+                <a href="login.html" class="btn btn-outline">Sign In</a>
+                
+                <!-- STUDENT GET STARTED -->
+                <a href="signup.html" class="btn btn-primary">Get Started</a>
+                
+                <!-- ADMIN LOGIN - Only admin knows credentials -->
+                <a href="admin-login.html" class="btn btn-admin">🔐 Admin Login</a>
+            </div>
+
+            <button class="mobile-toggle" id="mobileToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </div>
+</header>
+
+<!-- ============================================ -->
+<!-- HERO SECTION -->
+<!-- ============================================ -->
+<section class="hero">
+    <div class="container">
+        <div class="hero-grid">
+            <div class="hero-content">
+                <div class="hero-badge">
+                    <i class="fas fa-certificate"></i>
+                    <span>KHDA Certified — Permit #633441</span>
+                </div>
+
+                <h1 class="hero-title">
+                    The UAE's first<br/>
+                    <span class="gradient-text">AI-powered university</span><br/>
+                    <span class="gradient-text">journey platform</span>
+                </h1>
+
+                <p class="hero-description">
+                    Join our community for free. Get real skills, real mentors, and real certificates. 
+                    Upgrade to a program when you're ready for university admissions guidance.
+                </p>
+
+                <div class="hero-cta">
+                    <!-- STUDENT GET STARTED -->
+                    <a href="signup.html" class="btn btn-primary btn-large">
+                        Get Started Free
+                        <i class="fas fa-arrow-right"></i>
+                    </a>
+                    <a href="how-it-works.html" class="btn btn-outline btn-large">
+                        <i class="fas fa-play-circle"></i>
+                        See How It Works
+                    </a>
+                </div>
+
+                <div class="hero-stats">
+                    <div class="stat">
+                        <span class="stat-number" data-count="10000">10,000+</span>
+                        <span class="stat-label">Students Guided</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-number" data-count="95">95%</span>
+                        <span class="stat-label">Success Rate</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-number" data-count="500">500+</span>
+                        <span class="stat-label">Partner Universities</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="hero-visual">
+                <div class="hero-illustration">
+                    <svg viewBox="0 0 500 400" fill="none">
+                        <circle cx="250" cy="200" r="180" fill="url(#heroBg)" opacity="0.1"/>
+                        <circle cx="250" cy="200" r="140" fill="url(#heroBg2)" opacity="0.15"/>
+                        <rect x="190" y="140" width="120" height="120" rx="24" fill="url(#logoGrad)" opacity="0.15"/>
+                        <path d="M220 220V170L250 190L280 170V220" stroke="url(#logoGrad)" stroke-width="6" stroke-linecap="round"/>
+                        <path d="M220 180L250 200L280 180" stroke="url(#logoGrad)" stroke-width="6" stroke-linecap="round"/>
+                        <circle cx="120" cy="100" r="12" fill="#6C3CE1" opacity="0.2"/>
+                        <circle cx="380" cy="80" r="8" fill="#FF6B6B" opacity="0.2"/>
+                        <circle cx="400" cy="300" r="16" fill="#00D4AA" opacity="0.15"/>
+                        <circle cx="100" cy="320" r="10" fill="#6C3CE1" opacity="0.15"/>
+                        <defs>
+                            <linearGradient id="heroBg" x1="0" y1="0" x2="500" y2="400">
+                                <stop offset="0%" stop-color="#6C3CE1"/>
+                                <stop offset="100%" stop-color="#FF6B6B"/>
+                            </linearGradient>
+                            <linearGradient id="heroBg2" x1="0" y1="0" x2="500" y2="400">
+                                <stop offset="0%" stop-color="#FF6B6B"/>
+                                <stop offset="100%" stop-color="#6C3CE1"/>
+                            </linearGradient>
+                            <linearGradient id="logoGrad" x1="0" y1="0" x2="100" y2="100">
+                                <stop offset="0%" stop-color="#6C3CE1"/>
+                                <stop offset="100%" stop-color="#FF6B6B"/>
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                </div>
+
+                <div class="floating-card card-1">
+                    <i class="fas fa-graduation-cap"></i>
+                    <span>Top Universities</span>
+                </div>
+                <div class="floating-card card-2">
+                    <i class="fas fa-robot"></i>
+                    <span>AI Guidance</span>
+                </div>
+                <div class="floating-card card-3">
+                    <i class="fas fa-trophy"></i>
+                    <span>Competitive Edge</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ============================================ -->
+<!-- JOURNEY / 6 PHASES SECTION -->
+<!-- ============================================ -->
+<section class="journey" id="journey">
+    <div class="container">
+        <div class="section-header">
+            <span class="section-tag">Your Journey</span>
+            <h2>6 Steps to University Success</h2>
+            <p>Every phase is powered by AI and personalized to your unique profile</p>
+        </div>
+
+        <div class="journey-grid">
+            <!-- Phase 1 -->
+            <div class="journey-card fade-in">
+                <div class="phase-number">01</div>
+                <div class="phase-icon"><i class="fas fa-user-astronaut"></i></div>
+                <h3>Onboarding & Discovery</h3>
+                <p>AI-powered conversational quiz to discover your interests</p>
+                <div class="phase-details">
+                    <span><i class="fas fa-check-circle"></i> 5-8 Question Quiz</span>
+                    <span><i class="fas fa-check-circle"></i> Interest Profile</span>
+                    <span><i class="fas fa-check-circle"></i> 2-4 Interest Tags</span>
+                </div>
+                <a href="how-it-works.html#phase1" class="phase-link">Learn More →</a>
+            </div>
+
+            <!-- Phase 2 -->
+            <div class="journey-card fade-in">
+                <div class="phase-number">02</div>
+                <div class="phase-icon"><i class="fas fa-compass"></i></div>
+                <h3>Activity Recommendations</h3>
+                <p>Personalized extracurricular matches based on your profile</p>
+                <div class="phase-details">
+                    <span><i class="fas fa-check-circle"></i> 5-8 Matches</span>
+                    <span><i class="fas fa-check-circle"></i> AI Rationale</span>
+                    <span><i class="fas fa-check-circle"></i> Smart Filters</span>
+                </div>
+                <a href="how-it-works.html#phase2" class="phase-link">Learn More →</a>
+            </div>
+
+            <!-- Phase 3 -->
+            <div class="journey-card fade-in">
+                <div class="phase-number">03</div>
+                <div class="phase-icon"><i class="fas fa-clipboard-check"></i></div>
+                <h3>Registration Guidance</h3>
+                <p>Step-by-step checklists and deadline reminders</p>
+                <div class="phase-details">
+                    <span><i class="fas fa-check-circle"></i> Smart Checklists</span>
+                    <span><i class="fas fa-check-circle"></i> Deadline Reminders</span>
+                    <span><i class="fas fa-check-circle"></i> AI Tips</span>
+                </div>
+                <a href="how-it-works.html#phase3" class="phase-link">Learn More →</a>
+            </div>
+
+            <!-- Phase 4 -->
+            <div class="journey-card fade-in">
+                <div class="phase-number">04</div>
+                <div class="phase-icon"><i class="fas fa-pen-fancy"></i></div>
+                <h3>Reflection & Portfolio</h3>
+                <p>Build your portfolio with AI-guided reflections</p>
+                <div class="phase-details">
+                    <span><i class="fas fa-check-circle"></i> Essay-Ready Notes</span>
+                    <span><i class="fas fa-check-circle"></i> Profile Strength</span>
+                    <span><i class="fas fa-check-circle"></i> Skill Tracking</span>
+                </div>
+                <a href="how-it-works.html#phase4" class="phase-link">Learn More →</a>
+            </div>
+
+            <!-- Phase 5 -->
+            <div class="journey-card highlight fade-in">
+                <div class="phase-number">05</div>
+                <div class="phase-icon"><i class="fas fa-university"></i></div>
+                <h3>University Pathway</h3>
+                <p>Personalized university shortlist and recommendations</p>
+                <div class="phase-details">
+                    <span><i class="fas fa-check-circle"></i> 5-8 Universities</span>
+                    <span><i class="fas fa-check-circle"></i> Reach/Target/Safety</span>
+                    <span><i class="fas fa-check-circle"></i> AI Rationale</span>
+                </div>
+                <a href="how-it-works.html#phase5" class="phase-link">Learn More →</a>
+            </div>
+
+            <!-- Phase 6 -->
+            <div class="journey-card fade-in">
+                <div class="phase-number">06</div>
+                <div class="phase-icon"><i class="fas fa-handshake"></i></div>
+                <h3>Expert Handoff</h3>
+                <p>Connect with counselors and complete your journey</p>
+                <div class="phase-details">
+                    <span><i class="fas fa-check-circle"></i> Profile Export</span>
+                    <span><i class="fas fa-check-circle"></i> 1-on-1 Sessions</span>
+                    <span><i class="fas fa-check-circle"></i> Full Support</span>
+                </div>
+                <a href="how-it-works.html#phase6" class="phase-link">Learn More →</a>
+            </div>
+        </div>
+
+        <div class="journey-cta">
+            <a href="signup.html" class="btn btn-primary btn-large">
+                Start Your Journey — Sign Up Free
+                <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- ============================================ -->
+<!-- FEATURES SECTION -->
+<!-- ============================================ -->
+<section class="features" id="features">
+    <div class="container">
+        <div class="section-header">
+            <span class="section-tag">Features</span>
+            <h2>Powered by AI, Guided by Experts</h2>
+            <p>Intelligent technology meets human expertise to guide your university journey</p>
+        </div>
+
+        <div class="features-grid">
+            <div class="feature-card fade-in">
+                <div class="feature-icon"><i class="fas fa-robot"></i></div>
+                <h3>AI-Powered Conversations</h3>
+                <p>Natural language interaction that adapts to your responses and guides you personally</p>
+            </div>
+
+            <div class="feature-card fade-in">
+                <div class="feature-icon"><i class="fas fa-brain"></i></div>
+                <h3>Smart Recommendations</h3>
+                <p>Advanced algorithms match you with perfect activities and universities</p>
+            </div>
+
+            <div class="feature-card fade-in">
+                <div class="feature-icon"><i class="fas fa-chart-line"></i></div>
+                <h3>Progress Tracking</h3>
+                <p>Real-time profile strength scores and milestone tracking keep you on course</p>
+            </div>
+
+            <div class="feature-card fade-in">
+                <div class="feature-icon"><i class="fas fa-users"></i></div>
+                <h3>Expert Handoff</h3>
+                <p>Seamless transition from AI guidance to professional counselor support</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ============================================ -->
+<!-- SELF-ASSESSMENT WIDGET -->
+<!-- ============================================ -->
+<section class="assessment" id="assessment">
+    <div class="container">
+        <div class="assessment-wrapper">
+            <div class="assessment-content">
+                <span class="section-tag">Find Your Path</span>
+                <h2>Where Are You in Your<br/>University Journey?</h2>
+                <p>Answer 3 quick questions and get a personalized roadmap</p>
+
+                <form class="assessment-form" id="assessmentForm">
+                    <div class="form-group">
+                        <label>What grade are you in?</label>
+                        <div class="options-grid">
+                            <label class="option-btn">
+                                <input type="radio" name="grade" value="10" />
+                                <span>Grade 10</span>
+                            </label>
+                            <label class="option-btn">
+                                <input type="radio" name="grade" value="11" />
+                                <span>Grade 11</span>
+                            </label>
+                            <label class="option-btn">
+                                <input type="radio" name="grade" value="12" />
+                                <span>Grade 12</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>What subjects excite you most?</label>
+                        <div class="interest-tags">
+                            <span class="tag" data-tag="STEM">STEM</span>
+                            <span class="tag" data-tag="Medicine">Medicine</span>
+                            <span class="tag" data-tag="Business">Business</span>
+                            <span class="tag" data-tag="Arts">Arts & Design</span>
+                            <span class="tag" data-tag="Technology">Technology</span>
+                            <span class="tag" data-tag="Humanities">Humanities</span>
+                            <span class="tag" data-tag="Environment">Environment</span>
+                            <span class="tag" data-tag="Leadership">Leadership</span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>What's your main goal?</label>
+                        <select class="form-select" id="goalSelect">
+                            <option value="">Select your goal...</option>
+                            <option value="explore">Explore my interests</option>
+                            <option value="activities">Find extracurricular activities</option>
+                            <option value="universities">Find universities</option>
+                            <option value="apply">Start applying to universities</option>
+                        </select>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-block">
+                        Find My Phase
+                        <i class="fas fa-arrow-right"></i>
+                    </button>
+                </form>
+            </div>
+
+            <div class="assessment-visual">
+                <div class="assessment-illustration">
+                    <i class="fas fa-route"></i>
+                    <div class="illustration-text">
+                        <span>Grade 10</span>
+                        <span>→</span>
+                        <span>Grade 11</span>
+                        <span>→</span>
+                        <span>Grade 12</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ============================================ -->
+<!-- GRADE-BASED EXPERIENCE PREVIEW -->
+<!-- ============================================ -->
+<section class="grade-preview">
+    <div class="container">
+        <div class="section-header">
+            <span class="section-tag">Personalized Experience</span>
+            <h2>Every Grade, A Different Journey</h2>
+            <p>Your experience adapts based on your grade level</p>
+        </div>
+
+        <div class="grade-grid">
+            <div class="grade-card fade-in">
+                <div class="grade-badge grade-10">Grade 10</div>
+                <div class="grade-icon"><i class="fas fa-seedling"></i></div>
+                <h3>Build Your Foundation</h3>
+                <ul>
+                    <li><i class="fas fa-check"></i> Profile progress bar</li>
+                    <li><i class="fas fa-check"></i> Activity recommendations</li>
+                    <li><i class="fas fa-check"></i> Gap analysis</li>
+                    <li><i class="fas fa-check"></i> Monthly roadmap</li>
+                </ul>
+                <a href="signup.html" class="btn btn-outline btn-sm">Get Started</a>
+            </div>
+
+            <div class="grade-card highlight-card fade-in">
+                <div class="grade-badge grade-11">Grade 11</div>
+                <div class="grade-icon"><i class="fas fa-rocket"></i></div>
+                <h3>Serious Planning</h3>
+                <ul>
+                    <li><i class="fas fa-check"></i> University shortlist</li>
+                    <li><i class="fas fa-check"></i> Reach/Target/Safety</li>
+                    <li><i class="fas fa-check"></i> Futures Abroad CTA</li>
+                    <li><i class="fas fa-check"></i> Counselor handoff</li>
+                </ul>
+                <a href="signup.html" class="btn btn-primary btn-sm">Start Planning</a>
+            </div>
+
+            <div class="grade-card fade-in">
+                <div class="grade-badge grade-12">Grade 12</div>
+                <div class="grade-icon"><i class="fas fa-flag-checkered"></i></div>
+                <h3>Application Ready</h3>
+                <ul>
+                    <li><i class="fas fa-check"></i> Application deadlines</li>
+                    <li><i class="fas fa-check"></i> Essay support</li>
+                    <li><i class="fas fa-check"></i> FA enrollment</li>
+                    <li><i class="fas fa-check"></i> Final submissions</li>
+                </ul>
+                <a href="signup.html" class="btn btn-outline btn-sm">Get Support</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ============================================ -->
+<!-- COOKIE CONSENT -->
+<!-- ============================================ -->
+<div class="cookie-consent" id="cookieConsent">
+    <div class="cookie-content">
+        <div class="cookie-text">
+            <p>
+                We use essential cookies to keep you logged in, and optional analytics cookies 
+                to improve Futures Abroad. See our 
+                <a href="#">Cookie Policy</a> and <a href="#">Privacy Policy</a>.
+            </p>
+        </div>
+        <div class="cookie-actions">
+            <button class="btn btn-outline btn-sm" id="cookieReject">Reject</button>
+            <button class="btn btn-primary btn-sm" id="cookieAccept">Accept</button>
+        </div>
+    </div>
+</div>
+
+<!-- ============================================ -->
+<!-- FOOTER -->
+<!-- ============================================ -->
+<footer class="footer">
+    <div class="container">
+        <div class="footer-grid">
+            <div class="footer-col">
+                <a href="index.html" class="logo">
+                    <svg width="32" height="32" viewBox="0 0 40 40" fill="none">
+                        <rect width="40" height="40" rx="12" fill="url(#logoGrad)"/>
+                        <path d="M12 28V14L20 20L28 14V28" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M12 20L20 26L28 20" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        <defs>
+                            <linearGradient id="logoGrad" x1="0" y1="0" x2="40" y2="40">
+                                <stop offset="0%" stop-color="#6C3CE1"/>
+                                <stop offset="100%" stop-color="#FF6B6B"/>
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                    <span>Futures Abroad</span>
+                </a>
+                <p class="footer-desc">
+                    Your AI-powered university journey guide.
+                    Helping students across the UAE reach their dreams.
+                </p>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-youtube"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-tiktok"></i></a>
+                </div>
+            </div>
+
+            <div class="footer-col">
+                <h4>Product</h4>
+                <ul>
+                    <li><a href="how-it-works.html">How It Works</a></li>
+                    <li><a href="#features">Features</a></li>
+                    <li><a href="#journey">Journey</a></li>
+                    <li><a href="#">FAQ</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h4>For Students</h4>
+                <ul>
+                    <li><a href="#grade-10">Grade 10</a></li>
+                    <li><a href="#grade-11">Grade 11</a></li>
+                    <li><a href="#grade-12">Grade 12</a></li>
+                    <li><a href="#parents">Parents</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h4>Company</h4>
+                <ul>
+                    <li><a href="#">About Us</a></li>
+                    <li><a href="#">Careers</a></li>
+                    <li><a href="#">Blog</a></li>
+                    <li><a href="#">Contact</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h4>KHDA</h4>
+                <ul>
+                    <li><a href="#">Permit #633441</a></li>
+                    <li><a href="#">Accreditation</a></li>
+                    <li><a href="#">Quality Assurance</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; 2026 Futures Abroad. All rights reserved.</p>
+            <div class="footer-legal">
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms of Service</a>
+                <a href="#">Cookie Policy</a>
+                <a href="#">Accessibility</a>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- ============================================ -->
+<!-- JAVASCRIPT -->
+<!-- ============================================ -->
+<script src="js/main.js"></script>
+<script src="js/timeline.js"></script>
+<script src="js/assessment.js"></script>
+<script src="js/auth.js"></script>
+
+<!-- ============================================ -->
+<!-- ADMIN LOGIN BUTTON STYLES -->
+<!-- ============================================ -->
+<style>
+    /* ============================================ */
+    /* ADMIN LOGIN BUTTON - Only admin knows credentials */
+    /* Credentials are NOT displayed anywhere */
+    /* ============================================ */
+    .btn-admin {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 20px;
+        font-size: 14px;
+        font-weight: 600;
+        border: 2px solid #FF6B6B;
+        border-radius: 12px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        font-family: 'Inter', sans-serif;
+        background: transparent;
+        color: #FF6B6B;
+    }
+    
+    .btn-admin:hover {
+        background: #FF6B6B;
+        color: #FFFFFF;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+    }
+    
+    .btn-admin i {
+        font-size: 14px;
+    }
+    
+    /* ============================================ */
+    /* MOBILE RESPONSIVE */
+    /* ============================================ */
+    @media (max-width: 1024px) {
+        .btn-admin {
+            padding: 6px 14px;
+            font-size: 13px;
+        }
+    }
+    
+    @media (max-width: 768px) {
+        .btn-admin {
+            padding: 6px 12px;
+            font-size: 12px;
+        }
+        .btn-admin span {
+            display: none;
+        }
+        .btn-admin i {
+            font-size: 16px;
+        }
+    }
+</style>
+
+</body>
+</html>

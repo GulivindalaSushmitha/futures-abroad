@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>How It Works - Futures Abroad</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+    <link rel="stylesheet" href="css/style.css"/>
+    <link rel="stylesheet" href="css/animations.css"/>
+    <link rel="stylesheet" href="css/responsive.css"/>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="header" id="header">
+    <div class="container">
+        <div class="header-inner">
+            <a href="index.html" class="logo">
+                <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+                    <rect width="40" height="40" rx="12" fill="url(#logoGrad)"/>
+                    <path d="M12 28V14L20 20L28 14V28" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M12 20L20 26L28 20" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    <defs>
+                        <linearGradient id="logoGrad" x1="0" y1="0" x2="40" y2="40">
+                            <stop offset="0%" stop-color="#6C3CE1"/>
+                            <stop offset="100%" stop-color="#FF6B6B"/>
+                        </linearGradient>
+                    </defs>
+                </svg>
+                <span>Futures Abroad</span>
+            </a>
+
+            <nav class="nav">
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="how-it-works.html" class="active">How It Works</a></li>
+                    <li><a href="index.html#journey">Journey</a></li>
+                    <li><a href="index.html#features">Features</a></li>
+                </ul>
+            </nav>
+
+            <div class="header-actions">
+                <a href="login.html" class="btn btn-outline">Sign In</a>
+                <a href="signup.html" class="btn btn-primary">Get Started</a>
+            </div>
+
+            <button class="mobile-toggle" id="mobileToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </div>
+</header>
+
+<!-- PAGE HERO -->
+<section class="page-hero">
+    <div class="container">
+        <div class="page-hero-content">
+            <span class="section-tag">How It Works</span>
+            <h1>Your 6-Step Journey to<br/><span class="gradient-text">University Success</span></h1>
+            <p>Every phase is powered by AI and personalized to your unique profile</p>
+        </div>
+    </div>
+</section>
+
+<!-- ALL 6 PHASES ACCORDION -->
+<section class="accordion-section">
+    <div class="container">
+        <div class="accordion">
+
+            <!-- ============================================ -->
+            <!-- PHASE 1: Onboarding & Interest Discovery -->
+            <!-- ============================================ -->
+            <div class="accordion-item active" id="phase1">
+                <div class="accordion-header">
+                    <div class="accordion-number">01</div>
+                    <div class="accordion-title">
+                        <i class="fas fa-user-astronaut"></i>
+                        <h3>Onboarding & Interest Discovery</h3>
+                    </div>
+                    <div class="accordion-icon">
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                </div>
+                <div class="accordion-body">
+                    <div class="accordion-content">
+                        <div class="accordion-grid">
+                            <div class="accordion-text">
+                                <h4>📋 What happens?</h4>
+                                <p>The student creates an account and is immediately guided through an AI-driven interest discovery quiz. The output is a named interest profile that drives all future recommendations.</p>
+                                
+                                <h4>📝 Step-by-Step</h4>
+                                <ul>
+                                    <li><i class="fas fa-check-circle"></i> Student lands on sign-up page — enters name, email, grade (10/11/12), school name, and country</li>
+                                    <li><i class="fas fa-check-circle"></i> App creates a basic profile and redirects to the AI Interest Quiz</li>
+                                    <li><i class="fas fa-check-circle"></i> AI conducts a 5-8 question conversational quiz (chat-style UI, not a form)</li>
+                                    <li><i class="fas fa-check-circle"></i> AI generates an Interest Profile: a set of 2-4 tags (e.g., STEM + Leadership + Sustainability)</li>
+                                    <li><i class="fas fa-check-circle"></i> Student can edit or confirm the profile</li>
+                                </ul>
+
+                                <h4>🤖 AI Behavior</h4>
+                                <ul>
+                                    <li><i class="fas fa-robot"></i> Conversational chat interface — NOT a multiple-choice form</li>
+                                    <li><i class="fas fa-robot"></i> Adaptive branching based on answers</li>
+                                    <li><i class="fas fa-robot"></i> Limit to 8 questions maximum</li>
+                                    <li><i class="fas fa-robot"></i> Infer profile from partial answers if student exits early</li>
+                                </ul>
+
+                                <h4>📊 Inputs & Outputs</h4>
+                                <ul>
+                                    <li><i class="fas fa-arrow-right"></i> <strong>Inputs:</strong> Name, grade, school, country, quiz responses</li>
+                                    <li><i class="fas fa-arrow-right"></i> <strong>Outputs:</strong> Student profile object with interest tags</li>
+                                </ul>
+                            </div>
+                            <div class="accordion-visual">
+                                <div class="phase-preview">
+                                    <i class="fas fa-user-astronaut"></i>
+                                    <span>Phase 1</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-cta">
+                            <a href="signup.html" class="btn btn-primary">Start Your Journey <i class="fas fa-arrow-right"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ============================================ -->
+            <!-- PHASE 2: Curated Activity Recommendations -->
+            <!-- ============================================ -->
+            <div class="accordion-item" id="phase2">
+                <div class="accordion-header">
+                    <div class="accordion-number">02</div>
+                    <div class="accordion-title">
+                        <i class="fas fa-compass"></i>
+                        <h3>Curated Activity Recommendations</h3>
+                    </div>
+                    <div class="accordion-icon">
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                </div>
+                <div class="accordion-body">
+                    <div class="accordion-content">
+                        <div class="accordion-grid">
+                            <div class="accordion-text">
+                                <h4>📋 What happens?</h4>
+                                <p>Based on the interest profile, the AI surfaces a personalised feed of 5-8 activities. Each activity card shows what it is, why it was recommended, and what the student will gain.</p>
+                                
+                                <h4>📝 Step-by-Step</h4>
+                                <ul>
+                                    <li><i class="fas fa-check-circle"></i> On profile confirmation, AI queries the activity database filtered by interest tags, grade, country, and cost</li>
+                                    <li><i class="fas fa-check-circle"></i> Top 5-8 matches are presented as activity cards in a feed view</li>
+                                    <li><i class="fas fa-check-circle"></i> Each card shows: Activity name, type, duration, cost, deadline, and a 1-line AI rationale</li>
+                                    <li><i class="fas fa-check-circle"></i> Student can filter by type, duration, cost, and location</li>
+                                    <li><i class="fas fa-check-circle"></i> Student can tap any card to open a detail view with AI Q&A chat</li>
+                                </ul>
+
+                                <h4>🤖 Recommendation Engine</h4>
+                                <ul>
+                                    <li><i class="fas fa-brain"></i> <strong>Primary sort:</strong> Interest tag match score (weighted)</li>
+                                    <li><i class="fas fa-brain"></i> <strong>Secondary sort:</strong> Deadline proximity and grade-appropriateness</li>
+                                    <li><i class="fas fa-brain"></i> Deprioritise activities the student has already completed or saved</li>
+                                    <li><i class="fas fa-brain"></i> Refresh feed weekly with new activities; notify student of new matches</li>
+                                    <li><i class="fas fa-brain"></i> If fewer than 5 matches: broaden tag matching to adjacent interest areas</li>
+                                </ul>
+
+                                <h4>📊 Activity Data Model</h4>
+                                <ul>
+                                    <li><i class="fas fa-database"></i> id, name, type (internship/competition/volunteering/course/workshop/research)</li>
+                                    <li><i class="fas fa-database"></i> interest_tags, grade_min/grade_max, country, cost</li>
+                                    <li><i class="fas fa-database"></i> duration, deadline, skills_gained, registration_url</li>
+                                </ul>
+                            </div>
+                            <div class="accordion-visual">
+                                <div class="phase-preview">
+                                    <i class="fas fa-compass"></i>
+                                    <span>Phase 2</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-cta">
+                            <a href="signup.html" class="btn btn-primary">Find Activities <i class="fas fa-arrow-right"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ============================================ -->
+            <!-- PHASE 3: Activity Selection & Registration -->
+            <!-- ============================================ -->
+            <div class="accordion-item" id="phase3">
+                <div class="accordion-header">
+                    <div class="accordion-number">03</div>
+                    <div class="accordion-title">
+                        <i class="fas fa-clipboard-check"></i>
+                        <h3>Activity Selection & Registration</h3>
+                    </div>
+                    <div class="accordion-icon">
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                </div>
+                <div class="accordion-body">
+                    <div class="accordion-content">
+                        <div class="accordion-grid">
+                            <div class="accordion-text">
+                                <h4>📋 What happens?</h4>
+                                <p>When a student selects an activity, the AI walks them through registration step by step — preparing materials, tracking deadlines, and sending reminders.</p>
+                                
+                                <h4>📝 Step-by-Step</h4>
+                                <ul>
+                                    <li><i class="fas fa-check-circle"></i> Student taps 'Register' on an activity card</li>
+                                    <li><i class="fas fa-check-circle"></i> AI confirms selection and shows a personalised readiness summary</li>
+                                    <li><i class="fas fa-check-circle"></i> AI generates a registration checklist tailored to the activity</li>
+                                    <li><i class="fas fa-check-circle"></i> Checklist items are actionable tasks with sub-steps</li>
+                                    <li><i class="fas fa-check-circle"></i> Deadline is added to the in-app calendar with reminders</li>
+                                    <li><i class="fas fa-check-circle"></i> Student marks the activity as 'Registered' — status updates in their portfolio</li>
+                                </ul>
+
+                                <h4>📋 Checklist Logic</h4>
+                                <ul>
+                                    <li><i class="fas fa-list-check"></i> Items are generated dynamically from registration_requirements field</li>
+                                    <li><i class="fas fa-list-check"></i> Common items: personal statement draft, teacher recommendation, parent permission, fee payment</li>
+                                    <li><i class="fas fa-list-check"></i> AI provides tips per item — e.g., for 'personal statement': 'Keep it under 250 words'</li>
+                                    <li><i class="fas fa-list-check"></i> Items can be assigned due dates independently of the main deadline</li>
+                                </ul>
+
+                                <h4>🔔 Reminders</h4>
+                                <ul>
+                                    <li><i class="fas fa-bell"></i> Push notifications and email reminders at: 2 weeks, 1 week, 3 days, and 1 day before deadline</li>
+                                </ul>
+                            </div>
+                            <div class="accordion-visual">
+                                <div class="phase-preview">
+                                    <i class="fas fa-clipboard-check"></i>
+                                    <span>Phase 3</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-cta">
+                            <a href="signup.html" class="btn btn-primary">Start Registering <i class="fas fa-arrow-right"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ============================================ -->
+            <!-- PHASE 4: Post-Activity Guidance -->
+            <!-- ============================================ -->
+            <div class="accordion-item" id="phase4">
+                <div class="accordion-header">
+                    <div class="accordion-number">04</div>
+                    <div class="accordion-title">
+                        <i class="fas fa-pen-fancy"></i>
+                        <h3>Post-Activity Guidance</h3>
+                    </div>
+                    <div class="accordion-icon">
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                </div>
+                <div class="accordion-body">
+                    <div class="accordion-content">
+                        <div class="accordion-grid">
+                            <div class="accordion-text">
+                                <h4>📋 What happens?</h4>
+                                <p>After an activity is completed, the AI helps the student reflect, log the experience to their portfolio, and surface the next step in their journey.</p>
+                                
+                                <h4>📝 Step-by-Step</h4>
+                                <ul>
+                                    <li><i class="fas fa-check-circle"></i> Student marks activity as 'Completed'</li>
+                                    <li><i class="fas fa-check-circle"></i> App prompts for completion date and a brief outcome note</li>
+                                    <li><i class="fas fa-check-circle"></i> AI adds the activity to the student's Portfolio</li>
+                                    <li><i class="fas fa-check-circle"></i> AI presents a Reflection Prompt — 2-3 guided questions</li>
+                                    <li><i class="fas fa-check-circle"></i> Student's reflection responses are saved as private notes</li>
+                                    <li><i class="fas fa-check-circle"></i> AI updates the student's profile strength score</li>
+                                    <li><i class="fas fa-check-circle"></i> AI surfaces the next recommended activity or milestone</li>
+                                </ul>
+
+                                <h4>📊 Portfolio Object</h4>
+                                <ul>
+                                    <li><i class="fas fa-folder-open"></i> activity_id, date_completed, duration, skills[], student_note</li>
+                                    <li><i class="fas fa-folder-open"></i> reflection_responses[], essay_potential_flag</li>
+                                    <li><i class="fas fa-folder-open"></i> Portfolio is exportable as PDF for counselor handoff</li>
+                                </ul>
+
+                                <h4>📈 Profile Strength Score (0-100)</h4>
+                                <ul>
+                                    <li><i class="fas fa-star"></i> Number of completed activities (max 5 counted) — 30 pts</li>
+                                    <li><i class="fas fa-star"></i> Diversity of activity types — 20 pts</li>
+                                    <li><i class="fas fa-star"></i> Evidence of leadership or initiative — 20 pts</li>
+                                    <li><i class="fas fa-star"></i> Recency (activity completed within last 12 months) — 15 pts</li>
+                                    <li><i class="fas fa-star"></i> Reflection quality (length and depth) — 15 pts</li>
+                                </ul>
+                            </div>
+                            <div class="accordion-visual">
+                                <div class="phase-preview">
+                                    <i class="fas fa-pen-fancy"></i>
+                                    <span>Phase 4</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-cta">
+                            <a href="signup.html" class="btn btn-primary">Build Portfolio <i class="fas fa-arrow-right"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ============================================ -->
+            <!-- PHASE 5: Grade-Based University Pathway -->
+            <!-- ============================================ -->
+            <div class="accordion-item highlight-accordion" id="phase5">
+                <div class="accordion-header">
+                    <div class="accordion-number">05</div>
+                    <div class="accordion-title">
+                        <i class="fas fa-university"></i>
+                        <h3>Grade-Based University Pathway</h3>
+                        <span class="accordion-badge">⭐ Critical</span>
+                    </div>
+                    <div class="accordion-icon">
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                </div>
+                <div class="accordion-body">
+                    <div class="accordion-content">
+                        <div class="accordion-grid">
+                            <div class="accordion-text">
+                                <h4>📋 What happens?</h4>
+                                <p>The app detects the student's grade and forks the experience. Grade 11 students receive a university shortlist and a prominent Futures Abroad CTA.</p>
+                                
+                                <div class="cta-highlight">
+                                    <p><strong>🎯 PRIMARY CONVERSION POINT:</strong> This is the primary conversion point for Futures Abroad enrollment. The UX here must be high-quality and personalised.</p>
+                                </div>
+
+                                <h4>🎓 Grade 11 Experience</h4>
+                                <ul>
+                                    <li><i class="fas fa-check-circle"></i> App detects Grade 11 status and shows: "You're starting Grade 11 — let's get serious about universities"</li>
+                                    <li><i class="fas fa-check-circle"></i> AI generates a preliminary university shortlist (5-8 universities)</li>
+                                    <li><i class="fas fa-check-circle"></i> Each university card shows: name, country, notable programs, acceptance rate range, AI rationale</li>
+                                    <li><i class="fas fa-check-circle"></i> Shortlist is editable — student can add/remove universities</li>
+                                    <li><i class="fas fa-check-circle"></i> <strong>Futures Abroad CTA:</strong> "Ready to turn this shortlist into a real application? Book your first session with a Futures Abroad counselor."</li>
+                                </ul>
+
+                                <h4>🌱 Grade 10 Experience</h4>
+                                <ul>
+                                    <li><i class="fas fa-check-circle"></i> Profile progress bar: "You are X% toward a competitive Grade 11 profile"</li>
+                                    <li><i class="fas fa-check-circle"></i> Gap analysis: AI identifies missing activity types</li>
+                                    <li><i class="fas fa-check-circle"></i> Roadmap view: shows recommended milestones month by month through Grade 11</li>
+                                    <li><i class="fas fa-check-circle"></i> Soft CTA: "Want expert guidance from Day 1? Learn about Futures Abroad."</li>
+                                </ul>
+
+                                <h4>🏛️ University Shortlist Logic</h4>
+                                <ul>
+                                    <li><i class="fas fa-university"></i> Pull from a curated university database</li>
+                                    <li><i class="fas fa-university"></i> Match on: student interest tags → program offerings, target country, self-reported GPA band</li>
+                                    <li><i class="fas fa-university"></i> Include a mix: 2 reach, 3 target, 2 safety (labelled clearly)</li>
+                                </ul>
+                            </div>
+                            <div class="accordion-visual">
+                                <div class="phase-preview">
+                                    <i class="fas fa-university"></i>
+                                    <span>Phase 5</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-cta">
+                            <a href="signup.html" class="btn btn-primary">Book Your University Planning Session <i class="fas fa-arrow-right"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ============================================ -->
+            <!-- PHASE 6: Futures Abroad Handoff -->
+            <!-- ============================================ -->
+            <div class="accordion-item" id="phase6">
+                <div class="accordion-header">
+                    <div class="accordion-number">06</div>
+                    <div class="accordion-title">
+                        <i class="fas fa-handshake"></i>
+                        <h3>Futures Abroad Handoff</h3>
+                    </div>
+                    <div class="accordion-icon">
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                </div>
+                <div class="accordion-body">
+                    <div class="accordion-content">
+                        <div class="accordion-grid">
+                            <div class="accordion-text">
+                                <h4>📋 What happens?</h4>
+                                <p>When a student accepts the Futures Abroad CTA, the app exports their profile and connects them directly with a counselor. This phase completes the app's core funnel.</p>
+                                
+                                <h4>📝 Step-by-Step</h4>
+                                <ul>
+                                    <li><i class="fas fa-check-circle"></i> Student taps 'Register with Futures Abroad' CTA</li>
+                                    <li><i class="fas fa-check-circle"></i> App auto-generates a Profile Summary PDF</li>
+                                    <li><i class="fas fa-check-circle"></i> Student reviews and confirms the PDF before it is shared</li>
+                                    <li><i class="fas fa-check-circle"></i> Student is shown Futures Abroad program options (Grade 10-12 track, Grade 11 fast-track) with pricing</li>
+                                    <li><i class="fas fa-check-circle"></i> Student completes a short intake form (pre-filled from profile)</li>
+                                    <li><i class="fas fa-check-circle"></i> Counselor is notified with the student's profile PDF</li>
+                                    <li><i class="fas fa-check-circle"></i> A first session is scheduled via in-app calendar (Calendly integration)</li>
+                                    <li><i class="fas fa-check-circle"></i> Student enters the Futures Abroad full program</li>
+                                </ul>
+
+                                <h4>📄 Profile Summary PDF Contents</h4>
+                                <ul>
+                                    <li><i class="fas fa-file-pdf"></i> Student name, grade, school, country</li>
+                                    <li><i class="fas fa-file-pdf"></i> Interest profile tags + AI-generated summary paragraph</li>
+                                    <li><i class="fas fa-file-pdf"></i> Completed activities list with dates and skills</li>
+                                    <li><i class="fas fa-file-pdf"></i> Reflection highlights flagged as essay-potential</li>
+                                    <li><i class="fas fa-file-pdf"></i> Preliminary university shortlist</li>
+                                    <li><i class="fas fa-file-pdf"></i> Profile strength score and gap analysis</li>
+                                </ul>
+
+                                <h4>🔄 Post-Enrollment App Behaviour</h4>
+                                <ul>
+                                    <li><i class="fas fa-sync"></i> Counselor can push tasks (essay drafts, test prep schedules) into the student's app</li>
+                                    <li><i class="fas fa-sync"></i> Student's activity feed continues — FA counselor can add recommended activities directly</li>
+                                    <li><i class="fas fa-sync"></i> Parent dashboard remains active with milestone notifications</li>
+                                </ul>
+                            </div>
+                            <div class="accordion-visual">
+                                <div class="phase-preview">
+                                    <i class="fas fa-handshake"></i>
+                                    <span>Phase 6</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-cta">
+                            <a href="signup.html" class="btn btn-primary">Connect With a Counselor <i class="fas fa-arrow-right"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<!-- SELF-ASSESSMENT QUIZ -->
+<section class="assessment-mini">
+    <div class="container">
+        <div class="assessment-mini-wrapper">
+            <div class="assessment-mini-content">
+                <span class="section-tag">Quick Assessment</span>
+                <h3>Which phase are you at?</h3>
+                <p>Take our 3-question quiz to find out where you should start</p>
+            </div>
+            <a href="index.html#assessment" class="btn btn-primary">
+                Take the Quiz <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+    <div class="container">
+        <div class="footer-grid">
+            <div class="footer-col">
+                <a href="index.html" class="logo">
+                    <svg width="32" height="32" viewBox="0 0 40 40" fill="none">
+                        <rect width="40" height="40" rx="12" fill="url(#logoGrad)"/>
+                        <path d="M12 28V14L20 20L28 14V28" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M12 20L20 26L28 20" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        <defs>
+                            <linearGradient id="logoGrad" x1="0" y1="0" x2="40" y2="40">
+                                <stop offset="0%" stop-color="#6C3CE1"/>
+                                <stop offset="100%" stop-color="#FF6B6B"/>
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                    <span>Futures Abroad</span>
+                </a>
+                <p class="footer-desc">
+                    Your AI-powered university journey guide.
+                    Helping students across the UAE reach their dreams.
+                </p>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-youtube"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                </div>
+            </div>
+
+            <div class="footer-col">
+                <h4>Product</h4>
+                <ul>
+                    <li><a href="how-it-works.html">How It Works</a></li>
+                    <li><a href="index.html#features">Features</a></li>
+                    <li><a href="index.html#journey">Journey</a></li>
+                    <li><a href="#">FAQ</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h4>For Students</h4>
+                <ul>
+                    <li><a href="#">Grade 10</a></li>
+                    <li><a href="#">Grade 11</a></li>
+                    <li><a href="#">Grade 12</a></li>
+                    <li><a href="#">Parents</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h4>Company</h4>
+                <ul>
+                    <li><a href="#">About Us</a></li>
+                    <li><a href="#">Careers</a></li>
+                    <li><a href="#">Blog</a></li>
+                    <li><a href="#">Contact</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h4>KHDA</h4>
+                <ul>
+                    <li><a href="#">Permit #633441</a></li>
+                    <li><a href="#">Accreditation</a></li>
+                    <li><a href="#">Quality Assurance</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; 2026 Futures Abroad. All rights reserved.</p>
+            <div class="footer-legal">
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms of Service</a>
+                <a href="#">Cookie Policy</a>
+                <a href="#">Accessibility</a>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<script src="js/main.js"></script>
+<script src="js/accordion.js"></script>
+<script src="js/auth.js"></script>
+
+</body>
+</html>

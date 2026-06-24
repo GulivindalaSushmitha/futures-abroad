@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Sign Up - Futures Abroad</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+    <link rel="stylesheet" href="css/style.css"/>
+    <link rel="stylesheet" href="css/responsive.css"/>
+</head>
+<body>
+
+<header class="header" id="header">
+    <div class="container">
+        <div class="header-inner">
+            <a href="index.html" class="logo">
+                <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+                    <rect width="40" height="40" rx="12" fill="url(#logoGrad)"/>
+                    <path d="M12 28V14L20 20L28 14V28" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M12 20L20 26L28 20" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    <defs>
+                        <linearGradient id="logoGrad" x1="0" y1="0" x2="40" y2="40">
+                            <stop offset="0%" stop-color="#6C3CE1"/>
+                            <stop offset="100%" stop-color="#FF6B6B"/>
+                        </linearGradient>
+                    </defs>
+                </svg>
+                <span>Futures Abroad</span>
+            </a>
+
+            <nav class="nav">
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="how-it-works.html">How It Works</a></li>
+                    <li><a href="index.html#journey">Journey</a></li>
+                    <li><a href="index.html#features">Features</a></li>
+                </ul>
+            </nav>
+
+            <div class="header-actions">
+                <a href="login.html" class="btn btn-outline">Sign In</a>
+                <a href="signup.html" class="btn btn-primary">Get Started</a>
+            </div>
+
+            <button class="mobile-toggle" id="mobileToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </div>
+</header>
+
+<section class="auth-page">
+    <div class="container">
+        <div class="auth-wrapper">
+            <div class="auth-content">
+                <div class="auth-header">
+                    <span class="section-tag">Get Started</span>
+                    <h2>Create Your Account</h2>
+                    <p>Join Futures Abroad and start your university journey with AI guidance</p>
+                </div>
+
+                <form class="auth-form" id="signupForm">
+                    <div class="auth-error" id="signupError" style="display:none;"></div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="signupName">Full Name</label>
+                            <input type="text" id="signupName" placeholder="Enter your full name" required />
+                        </div>
+                        <div class="form-group">
+                            <label for="signupEmail">Email Address</label>
+                            <input type="email" id="signupEmail" placeholder="you@example.com" required />
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="signupPassword">Password</label>
+                            <input type="password" id="signupPassword" placeholder="Min 6 characters" required minlength="6" />
+                        </div>
+                        <div class="form-group">
+                            <label for="signupSchool">School Name</label>
+                            <input type="text" id="signupSchool" placeholder="Enter your school name" />
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="signupCountry">Country</label>
+                            <select id="signupCountry" class="form-select">
+                                <option value="">Select your country</option>
+                                <option value="UAE">United Arab Emirates</option>
+                                <option value="UK">United Kingdom</option>
+                                <option value="USA">United States</option>
+                                <option value="Canada">Canada</option>
+                                <option value="Australia">Australia</option>
+                                <option value="India">India</option>
+                                <option value="Singapore">Singapore</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Grade</label>
+                            <div class="options-grid small-grid">
+                                <label class="option-btn">
+                                    <input type="radio" name="grade" value="10" />
+                                    <span>Grade 10</span>
+                                </label>
+                                <label class="option-btn">
+                                    <input type="radio" name="grade" value="11" />
+                                    <span>Grade 11</span>
+                                </label>
+                                <label class="option-btn">
+                                    <input type="radio" name="grade" value="12" />
+                                    <span>Grade 12</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>What interests you? (Select all that apply)</label>
+                        <div class="interest-tags">
+                            <span class="tag" data-tag="STEM">STEM</span>
+                            <span class="tag" data-tag="Medicine">Medicine</span>
+                            <span class="tag" data-tag="Business">Business</span>
+                            <span class="tag" data-tag="Arts">Arts & Design</span>
+                            <span class="tag" data-tag="Technology">Technology</span>
+                            <span class="tag" data-tag="Humanities">Humanities</span>
+                            <span class="tag" data-tag="Environment">Environment</span>
+                            <span class="tag" data-tag="Leadership">Leadership</span>
+                        </div>
+                    </div>
+
+                    <div class="form-group checkbox-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" required />
+                            <span>I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a></span>
+                        </label>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-block btn-large">
+                        Create Account
+                        <i class="fas fa-arrow-right"></i>
+                    </button>
+
+                    <p class="auth-switch">
+                        Already have an account? <a href="login.html">Sign In</a>
+                    </p>
+                </form>
+            </div>
+
+            <div class="auth-visual">
+                <div class="auth-illustration">
+                    <i class="fas fa-rocket"></i>
+                    <div class="auth-benefits">
+                        <div class="benefit-item">
+                            <i class="fas fa-check-circle"></i>
+                            <span>Free AI-powered guidance</span>
+                        </div>
+                        <div class="benefit-item">
+                            <i class="fas fa-check-circle"></i>
+                            <span>Personalized activity recommendations</span>
+                        </div>
+                        <div class="benefit-item">
+                            <i class="fas fa-check-circle"></i>
+                            <span>University shortlisting</span>
+                        </div>
+                        <div class="benefit-item">
+                            <i class="fas fa-check-circle"></i>
+                            <span>Expert counselor handoff</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<footer class="footer">
+    <div class="container">
+        <div class="footer-grid">
+            <div class="footer-col">
+                <a href="index.html" class="logo">
+                    <svg width="32" height="32" viewBox="0 0 40 40" fill="none">
+                        <rect width="40" height="40" rx="12" fill="url(#logoGrad)"/>
+                        <path d="M12 28V14L20 20L28 14V28" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M12 20L20 26L28 20" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        <defs>
+                            <linearGradient id="logoGrad" x1="0" y1="0" x2="40" y2="40">
+                                <stop offset="0%" stop-color="#6C3CE1"/>
+                                <stop offset="100%" stop-color="#FF6B6B"/>
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                    <span>Futures Abroad</span>
+                </a>
+                <p class="footer-desc">
+                    Your AI-powered university journey guide.
+                    Helping students across the UAE reach their dreams.
+                </p>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-youtube"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                </div>
+            </div>
+
+            <div class="footer-col">
+                <h4>Product</h4>
+                <ul>
+                    <li><a href="how-it-works.html">How It Works</a></li>
+                    <li><a href="index.html#features">Features</a></li>
+                    <li><a href="index.html#journey">Journey</a></li>
+                    <li><a href="#">FAQ</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h4>For Students</h4>
+                <ul>
+                    <li><a href="#">Grade 10</a></li>
+                    <li><a href="#">Grade 11</a></li>
+                    <li><a href="#">Grade 12</a></li>
+                    <li><a href="#">Parents</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h4>Company</h4>
+                <ul>
+                    <li><a href="#">About Us</a></li>
+                    <li><a href="#">Careers</a></li>
+                    <li><a href="#">Blog</a></li>
+                    <li><a href="#">Contact</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h4>KHDA</h4>
+                <ul>
+                    <li><a href="#">Permit #633441</a></li>
+                    <li><a href="#">Accreditation</a></li>
+                    <li><a href="#">Quality Assurance</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; 2026 Futures Abroad. All rights reserved.</p>
+            <div class="footer-legal">
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms of Service</a>
+                <a href="#">Cookie Policy</a>
+                <a href="#">Accessibility</a>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<script src="js/main.js"></script>
+<script src="js/auth.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,22 @@
+@media (max-width: 768px) {
+    .nav {
+        display: none;
+    }
+    .nav.open {
+        display: block;
+        position: absolute;
+        top: 64px;
+        left: 0;
+        right: 0;
+        background: var(--white);
+        padding: 20px;
+        box-shadow: var(--shadow-md);
+    }
+    .nav.open ul {
+        flex-direction: column;
+        gap: 16px;
+    }
+    .mobile-toggle {
+        display: block !important;
+    }
+}
