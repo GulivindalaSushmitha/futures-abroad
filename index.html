@@ -38,7 +38,7 @@
         .compass-header p { color: #4A4A6A; font-size: 18px; }
         .compass-buttons { display: flex; gap: 15px; justify-content: center; flex-wrap: wrap; margin-bottom: 50px; }
         
-        /* BIG CHARACTER CARDS - LIKE PROPLR */
+        /* BIG CARTOON CHARACTERS - LIKE PROPLR */
         .characters-grid { 
             display: grid; 
             grid-template-columns: repeat(4, 1fr); 
@@ -82,7 +82,7 @@
             right: 30px;
         }
         
-        /* BIG Character Image - 160px with face */
+        /* BIG Cartoon Character - 160px illustration */
         .character-image-wrapper {
             background: white;
             padding: 10px;
@@ -154,6 +154,30 @@
             transform: scale(1.05);
         }
         
+        /* Programs Grid */
+        .programs-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+        }
+        .program-card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+            border: 1px solid #eee;
+            transition: all 0.3s;
+        }
+        .program-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.1);
+        }
+        .program-card.highlight {
+            background: linear-gradient(135deg, #f8f5ff, #ffffff);
+            border: 2px solid #6C3CE1;
+        }
+        
         @media (max-width: 992px) {
             .characters-grid { grid-template-columns: repeat(2, 1fr); gap: 40px; }
             .character-image-wrapper { width: 140px; height: 140px; }
@@ -172,6 +196,7 @@
         @media (max-width: 480px) {
             .characters-grid { grid-template-columns: 1fr; gap: 40px; }
             .character-image-wrapper { width: 160px; height: 160px; }
+            .programs-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
@@ -222,7 +247,7 @@
 </header>
 
 <!-- ============================================ -->
-<!-- COMPASS SECTION - WITH REAL CARTOON CHARACTERS -->
+<!-- COMPASS SECTION - WITH CARTOON ILLUSTRATIONS -->
 <!-- ============================================ -->
 <section class="compass-section" id="compass">
     <div class="container">
@@ -244,7 +269,7 @@
         </div>
 
         <!-- ============================================ -->
-        <!-- BIG CARTOON CHARACTERS - USING FREE CHARACTER URLS -->
+        <!-- BIG CARTOON CHARACTERS - Using Illustrated Characters -->
         <!-- ============================================ -->
         <div class="characters-grid">
             
@@ -254,7 +279,11 @@
                     📝 Take the assessment
                 </div>
                 <div class="character-image-wrapper" style="border-color: #6C3CE1;">
-                    <img src="https://i.pravatar.cc/300?img=11" alt="Assessment Character">
+                    <!-- Option A: If you uploaded Open Peeps images -->
+                    <!-- <img src="character1.png" alt="Assessment Character"> -->
+                    
+                    <!-- Option B: Using a cartoon-style avatar service -->
+                    <img src="https://api.dicebear.com/7.x/adventurer/svg?seed=assessment&backgroundColor=6C3CE1" alt="Assessment Character">
                 </div>
                 <span class="character-label">✨ AI-powered</span>
             </div>
@@ -265,7 +294,11 @@
                     ⭐ Get scored
                 </div>
                 <div class="character-image-wrapper" style="border-color: #FF6B6B;">
-                    <img src="https://i.pravatar.cc/300?img=5" alt="Scored Character">
+                    <!-- Option A: If you uploaded Open Peeps images -->
+                    <!-- <img src="character2.png" alt="Scored Character"> -->
+                    
+                    <!-- Option B: Using a cartoon-style avatar service -->
+                    <img src="https://api.dicebear.com/7.x/adventurer/svg?seed=scored&backgroundColor=FF6B6B" alt="Scored Character">
                 </div>
                 <span class="character-label">⚡ Instant results</span>
             </div>
@@ -276,7 +309,11 @@
                     🤖 AI writes your report
                 </div>
                 <div class="character-image-wrapper" style="border-color: #00D4AA;">
-                    <img src="https://i.pravatar.cc/300?img=9" alt="AI Report Character">
+                    <!-- Option A: If you uploaded Open Peeps images -->
+                    <!-- <img src="character3.png" alt="AI Report Character"> -->
+                    
+                    <!-- Option B: Using a cartoon-style avatar service -->
+                    <img src="https://api.dicebear.com/7.x/adventurer/svg?seed=report&backgroundColor=00D4AA" alt="AI Report Character">
                 </div>
                 <span class="character-label">🧠 AI-generated</span>
             </div>
@@ -287,7 +324,11 @@
                     🔓 9 tools unlock
                 </div>
                 <div class="character-image-wrapper" style="border-color: #FF9F43;">
-                    <img src="https://i.pravatar.cc/300?img=1" alt="Tools Character">
+                    <!-- Option A: If you uploaded Open Peeps images -->
+                    <!-- <img src="character4.png" alt="Tools Character"> -->
+                    
+                    <!-- Option B: Using a cartoon-style avatar service -->
+                    <img src="https://api.dicebear.com/7.x/adventurer/svg?seed=tools&backgroundColor=FF9F43" alt="Tools Character">
                 </div>
                 <span class="character-label">🚀 Full access</span>
             </div>
@@ -325,12 +366,12 @@
             <p style="color: #4A4A6A;">Every grade has a unique path designed for your success</p>
         </div>
 
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px;">
+        <div class="programs-grid">
             <!-- Grade 10 -->
-            <div style="background: white; border-radius: 20px; padding: 30px; text-align: center; box-shadow: 0 4px 20px rgba(0,0,0,0.06); border: 1px solid #eee;">
+            <div class="program-card">
                 <div style="display: inline-block; background: #6C3CE1; color: white; padding: 4px 16px; border-radius: 12px; font-size: 12px; font-weight: 600; margin-bottom: 15px;">Foundation</div>
                 <div style="display: flex; justify-content: center; margin-bottom: 15px;">
-                    <img src="https://i.pravatar.cc/150?img=12" alt="Grade 10" style="border-radius: 50%; width: 80px; height: 80px; border: 3px solid #6C3CE1;">
+                    <img src="https://api.dicebear.com/7.x/adventurer/svg?seed=grade10&backgroundColor=6C3CE1" alt="Grade 10" style="border-radius: 50%; width: 80px; height: 80px; border: 3px solid #6C3CE1;">
                 </div>
                 <h3 style="font-size: 24px; margin-bottom: 10px;">Grade 10</h3>
                 <p style="color: #666; font-size: 14px; margin-bottom: 15px;">Build your foundation with exploration and discovery</p>
@@ -343,10 +384,10 @@
             </div>
 
             <!-- Grade 11 -->
-            <div style="background: linear-gradient(135deg, #f8f5ff, #ffffff); border-radius: 20px; padding: 30px; text-align: center; box-shadow: 0 4px 20px rgba(0,0,0,0.06); border: 2px solid #6C3CE1;">
+            <div class="program-card highlight">
                 <div style="display: inline-block; background: #FF6B6B; color: white; padding: 4px 16px; border-radius: 12px; font-size: 12px; font-weight: 600; margin-bottom: 15px;">Most Popular</div>
                 <div style="display: flex; justify-content: center; margin-bottom: 15px;">
-                    <img src="https://i.pravatar.cc/150?img=7" alt="Grade 11" style="border-radius: 50%; width: 80px; height: 80px; border: 3px solid #FF6B6B;">
+                    <img src="https://api.dicebear.com/7.x/adventurer/svg?seed=grade11&backgroundColor=FF6B6B" alt="Grade 11" style="border-radius: 50%; width: 80px; height: 80px; border: 3px solid #FF6B6B;">
                 </div>
                 <h3 style="font-size: 24px; margin-bottom: 10px;">Grade 11</h3>
                 <p style="color: #666; font-size: 14px; margin-bottom: 15px;">Serious planning for your university future</p>
@@ -359,10 +400,10 @@
             </div>
 
             <!-- Grade 12 -->
-            <div style="background: white; border-radius: 20px; padding: 30px; text-align: center; box-shadow: 0 4px 20px rgba(0,0,0,0.06); border: 1px solid #eee;">
+            <div class="program-card">
                 <div style="display: inline-block; background: #00D4AA; color: white; padding: 4px 16px; border-radius: 12px; font-size: 12px; font-weight: 600; margin-bottom: 15px;">Application Ready</div>
                 <div style="display: flex; justify-content: center; margin-bottom: 15px;">
-                    <img src="https://i.pravatar.cc/150?img=3" alt="Grade 12" style="border-radius: 50%; width: 80px; height: 80px; border: 3px solid #00D4AA;">
+                    <img src="https://api.dicebear.com/7.x/adventurer/svg?seed=grade12&backgroundColor=00D4AA" alt="Grade 12" style="border-radius: 50%; width: 80px; height: 80px; border: 3px solid #00D4AA;">
                 </div>
                 <h3 style="font-size: 24px; margin-bottom: 10px;">Grade 12</h3>
                 <p style="color: #666; font-size: 14px; margin-bottom: 15px;">Complete your application with confidence</p>
@@ -412,7 +453,7 @@
             </div>
 
             <div style="display: flex; justify-content: center; margin-top: 30px;">
-                <img src="https://i.pravatar.cc/150?img=4" alt="Showcase" style="border-radius: 50%; width: 80px; height: 80px; border: 3px solid #6C3CE1;">
+                <img src="https://api.dicebear.com/7.x/adventurer/svg?seed=showcase&backgroundColor=6C3CE1" alt="Showcase" style="border-radius: 50%; width: 80px; height: 80px; border: 3px solid #6C3CE1;">
             </div>
         </div>
     </div>
@@ -556,7 +597,7 @@
 <!-- ============================================ -->
 <div style="position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: white; border-radius: 16px; padding: 20px 30px; box-shadow: 0 8px 40px rgba(0,0,0,0.15); max-width: 700px; width: 90%; z-index: 1000; display: flex; align-items: center; justify-content: space-between; gap: 20px; flex-wrap: wrap;">
     <div style="display: flex; align-items: center; gap: 15px; flex: 1;">
-        <img src="https://i.pravatar.cc/100?img=8" alt="Cookie" style="border-radius: 50%; width: 40px; height: 40px;">
+        <img src="https://api.dicebear.com/7.x/adventurer/svg?seed=cookie&backgroundColor=6C3CE1" alt="Cookie" style="border-radius: 50%; width: 40px; height: 40px;">
         <p style="font-size: 13px; color: #4A4A6A; margin: 0;">
             We use essential cookies to keep you logged in, and optional analytics cookies to improve Futures Abroad. See our 
             <a href="#" style="color: #6C3CE1; text-decoration: none;">Cookie Policy</a> and <a href="#" style="color: #6C3CE1; text-decoration: none;">Privacy Policy</a>.
