@@ -9,41 +9,27 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
     <!-- AOS Scroll Animation -->
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet"/>
-    <!-- Google Font for playful look -->
-    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&display=swap" rel="stylesheet"/>
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700;800&display=swap" rel="stylesheet"/>
 
     <style>
         /* ========================================
-           GLOBAL STYLES - CARTOON THEME
+           ALL STYLES INCLUDED HERE
            ======================================== */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
-            font-family: 'Quicksand', 'Segoe UI', sans-serif;
+            font-family: 'Quicksand', sans-serif;
             background: #FFF8F0;
             color: #2D1B4E;
             overflow-x: hidden;
         }
 
-        /* ----- PLAYFUL SCROLLBAR ----- */
-        ::-webkit-scrollbar {
-            width: 10px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #F0E6FF;
-            border-radius: 10px;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #6C3CE1;
-            border-radius: 10px;
-            border: 2px solid #FFD93D;
-        }
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 10px; }
+        ::-webkit-scrollbar-track { background: #F0E6FF; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb { background: #6C3CE1; border-radius: 10px; border: 2px solid #FFD93D; }
 
-        /* ----- BUTTONS ----- */
+        /* Buttons */
         .btn-primary {
             background: #6C3CE1;
             color: #fff;
@@ -54,13 +40,13 @@
             font-size: 16px;
             cursor: pointer;
             box-shadow: 0 8px 25px rgba(108, 60, 225, 0.35);
-            transition: all 0.3s ease;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             font-family: 'Quicksand', sans-serif;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
         }
-        .btn-primary:hover {
-            transform: translateY(-4px) scale(1.02);
-            box-shadow: 0 14px 35px rgba(108, 60, 225, 0.45);
-        }
+        .btn-primary:hover { transform: translateY(-4px) scale(1.02); box-shadow: 0 14px 35px rgba(108, 60, 225, 0.45); }
 
         .btn-secondary {
             background: white;
@@ -71,14 +57,13 @@
             font-weight: 700;
             font-size: 16px;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             font-family: 'Quicksand', sans-serif;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
         }
-        .btn-secondary:hover {
-            background: #6C3CE1;
-            color: white;
-            transform: translateY(-4px);
-        }
+        .btn-secondary:hover { background: #6C3CE1; color: white; transform: translateY(-4px); }
 
         .btn-yellow {
             background: #FFD93D;
@@ -89,98 +74,37 @@
             font-weight: 700;
             font-size: 16px;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             font-family: 'Quicksand', sans-serif;
         }
-        .btn-yellow:hover {
-            transform: translateY(-4px) scale(1.02);
-            box-shadow: 0 8px 30px rgba(255, 217, 61, 0.4);
-        }
+        .btn-yellow:hover { transform: translateY(-4px) scale(1.02); box-shadow: 0 8px 30px rgba(255, 217, 61, 0.4); }
 
-        .btn-outline-light {
-            background: transparent;
-            color: white;
-            border: 2px solid rgba(255,255,255,0.5);
-            padding: 10px 24px;
-            border-radius: 50px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-family: 'Quicksand', sans-serif;
-        }
-        .btn-outline-light:hover {
-            background: rgba(255,255,255,0.15);
-            transform: translateY(-3px);
-        }
-
-        /* ----- FLOATING ANIMATION ----- */
+        /* Animations */
         @keyframes float {
             0% { transform: translateY(0px) rotate(0deg); }
             50% { transform: translateY(-18px) rotate(3deg); }
             100% { transform: translateY(0px) rotate(0deg); }
         }
-        @keyframes floatSlow {
-            0% { transform: translateY(0px); }
-            50% { transform: translateY(-12px); }
-            100% { transform: translateY(0px); }
-        }
         @keyframes wiggle {
             0%, 100% { transform: rotate(-3deg); }
             50% { transform: rotate(3deg); }
         }
+        @keyframes modalPop {
+            0% { transform: scale(0.8) translateY(30px); opacity: 0; }
+            100% { transform: scale(1) translateY(0); opacity: 1; }
+        }
+        @keyframes bounceIn {
+            0% { transform: scale(0.3); opacity: 0; }
+            50% { transform: scale(1.05); }
+            70% { transform: scale(0.9); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        .animate-float { animation: float 4s ease-in-out infinite; }
+        .animate-wiggle { animation: wiggle 3s ease-in-out infinite; }
 
-        .animate-float {
-            animation: float 4s ease-in-out infinite;
-        }
-        .animate-float-slow {
-            animation: floatSlow 5s ease-in-out infinite;
-        }
-        .animate-wiggle {
-            animation: wiggle 3s ease-in-out infinite;
-        }
-
-        /* ----- CARDS ----- */
-        .card {
-            background: white;
-            border-radius: 30px;
-            padding: 30px 25px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.06);
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            border: 3px solid transparent;
-        }
-        .card:hover {
-            transform: translateY(-12px) scale(1.01);
-            box-shadow: 0 25px 60px rgba(108, 60, 225, 0.15);
-            border-color: #FFD93D;
-        }
-
-        .card-featured {
-            background: linear-gradient(145deg, #F0E6FF, #E8D5FF);
-            border: 3px solid #6C3CE1;
-            transform: scale(1.03);
-        }
-        .card-featured:hover {
-            transform: scale(1.03) translateY(-12px);
-        }
-
-        /* ----- BADGES ----- */
-        .badge {
-            padding: 6px 18px;
-            border-radius: 50px;
-            font-weight: 700;
-            font-size: 13px;
-            display: inline-block;
-        }
-        .badge-yellow { background: #FFD93D; color: #2D1B4E; }
-        .badge-purple { background: #6C3CE1; color: white; }
-        .badge-red { background: #FF6B6B; color: white; }
-        .badge-green { background: #51CF66; color: white; }
-
-        /* ========================================
-           NAVIGATION
-           ======================================== */
+        /* ===== NAVBAR ===== */
         .navbar {
-            background: rgba(255, 255, 255, 0.92);
+            background: rgba(255,255,255,0.95);
             backdrop-filter: blur(12px);
             padding: 12px 40px;
             display: flex;
@@ -193,7 +117,6 @@
             flex-wrap: wrap;
             gap: 10px;
         }
-
         .nav-logo {
             display: flex;
             align-items: center;
@@ -202,15 +125,13 @@
             font-weight: 800;
             color: #2D1B4E;
             text-decoration: none;
+            cursor: pointer;
         }
-        .nav-logo span {
-            color: #6C3CE1;
-        }
-
+        .nav-logo span { color: #6C3CE1; }
         .nav-links {
             display: flex;
             align-items: center;
-            gap: 25px;
+            gap: 20px;
             flex-wrap: wrap;
         }
         .nav-links a {
@@ -218,12 +139,11 @@
             color: #2D1B4E;
             font-weight: 600;
             font-size: 15px;
+            cursor: pointer;
             transition: color 0.3s;
             position: relative;
         }
-        .nav-links a:hover {
-            color: #6C3CE1;
-        }
+        .nav-links a:hover { color: #6C3CE1; }
         .nav-links a::after {
             content: '';
             position: absolute;
@@ -235,9 +155,7 @@
             border-radius: 10px;
             transition: width 0.3s;
         }
-        .nav-links a:hover::after {
-            width: 100%;
-        }
+        .nav-links a:hover::after { width: 100%; }
 
         .nav-actions {
             display: flex;
@@ -256,9 +174,7 @@
             border-radius: 50px;
             transition: all 0.3s;
         }
-        .nav-actions .btn-login:hover {
-            background: #F0E6FF;
-        }
+        .nav-actions .btn-login:hover { background: #F0E6FF; }
         .nav-actions .btn-signup {
             background: #6C3CE1;
             color: white;
@@ -272,48 +188,37 @@
             transition: all 0.3s;
             box-shadow: 0 4px 15px rgba(108, 60, 225, 0.3);
         }
-        .nav-actions .btn-signup:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(108, 60, 225, 0.4);
-        }
+        .nav-actions .btn-signup:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(108, 60, 225, 0.4); }
 
-        /* ========================================
-           MODAL / POPUP FOR LOGIN & SIGNUP
-           ======================================== */
+        /* ===== MODAL ===== */
         .modal-overlay {
             display: none;
             position: fixed;
             top: 0; left: 0;
             width: 100%; height: 100%;
-            background: rgba(45, 27, 78, 0.6);
+            background: rgba(45, 27, 78, 0.7);
             backdrop-filter: blur(6px);
             z-index: 9999;
             justify-content: center;
             align-items: center;
         }
-        .modal-overlay.active {
-            display: flex;
-        }
+        .modal-overlay.active { display: flex; }
 
         .modal-box {
             background: white;
             border-radius: 40px;
             padding: 45px 40px;
-            max-width: 440px;
-            width: 90%;
+            max-width: 500px;
+            width: 92%;
+            max-height: 90vh;
+            overflow-y: auto;
             position: relative;
             box-shadow: 0 40px 80px rgba(0,0,0,0.2);
             animation: modalPop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
-        @keyframes modalPop {
-            0% { transform: scale(0.8) translateY(30px); opacity: 0; }
-            100% { transform: scale(1) translateY(0); opacity: 1; }
-        }
-
         .modal-close {
             position: absolute;
-            top: 18px;
-            right: 22px;
+            top: 18px; right: 22px;
             font-size: 28px;
             background: none;
             border: none;
@@ -321,21 +226,10 @@
             color: #888;
             transition: all 0.3s;
         }
-        .modal-close:hover {
-            color: #FF6B6B;
-            transform: rotate(90deg);
-        }
+        .modal-close:hover { color: #FF6B6B; transform: rotate(90deg); }
 
-        .modal-box h2 {
-            font-size: 28px;
-            margin-bottom: 6px;
-            color: #2D1B4E;
-        }
-        .modal-box .sub {
-            color: #888;
-            margin-bottom: 25px;
-            font-size: 15px;
-        }
+        .modal-box h2 { font-size: 28px; margin-bottom: 6px; color: #2D1B4E; }
+        .modal-box .sub { color: #888; margin-bottom: 25px; font-size: 15px; }
 
         .modal-box label {
             font-weight: 600;
@@ -344,7 +238,7 @@
             font-size: 14px;
             color: #2D1B4E;
         }
-        .modal-box input {
+        .modal-box input, .modal-box select {
             width: 100%;
             padding: 14px 18px;
             border: 2px solid #E8E0F0;
@@ -354,12 +248,11 @@
             transition: border 0.3s;
             background: #FAF8FC;
         }
-        .modal-box input:focus {
+        .modal-box input:focus, .modal-box select:focus {
             border-color: #6C3CE1;
             outline: none;
             background: white;
         }
-
         .modal-box .btn-submit {
             width: 100%;
             padding: 16px;
@@ -374,10 +267,7 @@
             transition: all 0.3s;
             font-family: 'Quicksand', sans-serif;
         }
-        .modal-box .btn-submit:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 30px rgba(108, 60, 225, 0.35);
-        }
+        .modal-box .btn-submit:hover { transform: translateY(-3px); box-shadow: 0 8px 30px rgba(108, 60, 225, 0.35); }
 
         .modal-box .switch-link {
             text-align: center;
@@ -391,9 +281,7 @@
             cursor: pointer;
             text-decoration: none;
         }
-        .modal-box .switch-link a:hover {
-            text-decoration: underline;
-        }
+        .modal-box .switch-link a:hover { text-decoration: underline; }
 
         .modal-box .role-select {
             display: flex;
@@ -416,13 +304,62 @@
             background: #F0E6FF;
             color: #6C3CE1;
         }
-        .modal-box .role-select button:hover {
-            border-color: #6C3CE1;
+        .modal-box .role-select button:hover { border-color: #6C3CE1; }
+
+        /* ===== QUIZ STYLES ===== */
+        .quiz-question {
+            background: #F8F4FF;
+            border-radius: 20px;
+            padding: 20px;
+            margin: 12px 0;
+            border-left: 5px solid #6C3CE1;
+        }
+        .quiz-question .q-text {
+            font-weight: 700;
+            font-size: 17px;
+            color: #2D1B4E;
+        }
+        .quiz-options {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-top: 10px;
+        }
+        .quiz-options label {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 16px;
+            background: white;
+            border-radius: 14px;
+            border: 2px solid #E8E0F0;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 500;
+            margin: 0;
+        }
+        .quiz-options label:hover { border-color: #6C3CE1; background: #F0E6FF; }
+        .quiz-options input[type="radio"] {
+            width: 18px;
+            height: 18px;
+            accent-color: #6C3CE1;
+            flex-shrink: 0;
+        }
+        .quiz-progress {
+            background: #E8E0F0;
+            border-radius: 20px;
+            height: 8px;
+            margin: 15px 0;
+            overflow: hidden;
+        }
+        .quiz-progress .bar {
+            height: 100%;
+            background: linear-gradient(90deg, #6C3CE1, #FFD93D);
+            border-radius: 20px;
+            transition: width 0.5s ease;
         }
 
-        /* ========================================
-           HERO SECTION
-           ======================================== */
+        /* ===== HERO ===== */
         .hero {
             background: linear-gradient(135deg, #FFF8F0 0%, #F0E6FF 50%, #FFE8E8 100%);
             padding: 60px 40px 80px;
@@ -434,30 +371,7 @@
             position: relative;
             overflow: hidden;
         }
-        .hero::before {
-            content: '✦';
-            position: absolute;
-            font-size: 120px;
-            color: rgba(108, 60, 225, 0.04);
-            top: -30px;
-            right: -20px;
-            transform: rotate(20deg);
-        }
-        .hero::after {
-            content: '●';
-            position: absolute;
-            font-size: 200px;
-            color: rgba(255, 217, 61, 0.06);
-            bottom: -60px;
-            left: -40px;
-        }
-
-        .hero-left {
-            flex: 1;
-            min-width: 280px;
-            max-width: 600px;
-            z-index: 2;
-        }
+        .hero-left { flex: 1; min-width: 280px; max-width: 600px; z-index: 2; }
         .hero-left .tag {
             display: inline-flex;
             align-items: center;
@@ -470,29 +384,15 @@
             margin-bottom: 18px;
             font-size: 14px;
         }
-        .hero-left h1 {
-            font-size: 48px;
-            line-height: 1.15;
-            color: #2D1B4E;
-        }
-        .hero-left h1 span {
-            color: #6C3CE1;
-        }
-        .hero-left p {
-            font-size: 18px;
-            color: #555;
-            margin: 18px 0 28px;
-            line-height: 1.7;
-        }
-        .hero-left .actions {
-            display: flex;
-            gap: 14px;
-            flex-wrap: wrap;
-        }
+        .hero-left h1 { font-size: 48px; line-height: 1.15; color: #2D1B4E; }
+        .hero-left h1 span { color: #6C3CE1; }
+        .hero-left p { font-size: 18px; color: #555; margin: 18px 0 28px; line-height: 1.7; }
+        .hero-left .actions { display: flex; gap: 14px; flex-wrap: wrap; }
         .hero-left .stats {
             display: flex;
             gap: 30px;
             margin-top: 35px;
+            flex-wrap: wrap;
         }
         .hero-left .stats div {
             display: flex;
@@ -501,9 +401,7 @@
             font-weight: 600;
             font-size: 15px;
         }
-        .hero-left .stats .icon-big {
-            font-size: 28px;
-        }
+        .hero-left .stats .icon-big { font-size: 28px; }
 
         .hero-right {
             flex: 1;
@@ -519,10 +417,7 @@
             box-shadow: 0 25px 70px rgba(108, 60, 225, 0.15);
             animation: float 4s ease-in-out infinite;
         }
-        .hero-right .compass-wrap .emoji-big {
-            font-size: 150px;
-            line-height: 1;
-        }
+        .hero-right .compass-wrap .emoji-big { font-size: 150px; line-height: 1; }
         .hero-right .caption {
             margin-top: 16px;
             font-weight: 700;
@@ -534,21 +429,15 @@
             display: inline-block;
         }
 
-        /* ========================================
-           SECTIONS
-           ======================================== */
-        .section {
-            padding: 70px 40px;
-        }
+        /* ===== SECTIONS ===== */
+        .section { padding: 70px 40px; }
         .section-title {
             text-align: center;
             font-size: 38px;
             color: #2D1B4E;
             margin-bottom: 8px;
         }
-        .section-title span {
-            color: #6C3CE1;
-        }
+        .section-title span { color: #6C3CE1; }
         .section-sub {
             text-align: center;
             color: #777;
@@ -556,6 +445,7 @@
             margin-bottom: 45px;
         }
 
+        /* ===== CARDS ===== */
         .cards-grid {
             display: flex;
             gap: 30px;
@@ -564,15 +454,41 @@
             max-width: 1100px;
             margin: 0 auto;
         }
-        .cards-grid .card {
+        .card {
+            background: white;
+            border-radius: 30px;
+            padding: 30px 25px;
             flex: 1;
             min-width: 240px;
             max-width: 320px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.06);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border: 3px solid transparent;
         }
+        .card:hover {
+            transform: translateY(-12px) scale(1.01);
+            box-shadow: 0 25px 60px rgba(108, 60, 225, 0.15);
+            border-color: #FFD93D;
+        }
+        .card-featured {
+            background: linear-gradient(145deg, #F0E6FF, #E8D5FF);
+            border: 3px solid #6C3CE1;
+            transform: scale(1.03);
+        }
+        .card-featured:hover { transform: scale(1.03) translateY(-12px); }
 
-        /* ========================================
-           SHOWCASE / CTA BANNER
-           ======================================== */
+        .badge {
+            padding: 6px 18px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 13px;
+            display: inline-block;
+        }
+        .badge-yellow { background: #FFD93D; color: #2D1B4E; }
+        .badge-purple { background: #6C3CE1; color: white; }
+        .badge-red { background: #FF6B6B; color: white; }
+
+        /* ===== BANNER ===== */
         .banner-dark {
             background: linear-gradient(135deg, #2D1B4E 0%, #6C3CE1 100%);
             padding: 70px 40px;
@@ -580,15 +496,6 @@
             text-align: center;
             position: relative;
             overflow: hidden;
-        }
-        .banner-dark::before {
-            content: '★';
-            position: absolute;
-            font-size: 180px;
-            color: rgba(255,255,255,0.03);
-            right: -30px;
-            bottom: -40px;
-            transform: rotate(15deg);
         }
         .banner-dark .badge-banner {
             background: #FFD93D;
@@ -599,16 +506,8 @@
             font-weight: 700;
             margin-bottom: 16px;
         }
-        .banner-dark h2 {
-            font-size: 40px;
-            margin-bottom: 12px;
-        }
-        .banner-dark p {
-            font-size: 18px;
-            opacity: 0.9;
-            max-width: 600px;
-            margin: 0 auto 30px;
-        }
+        .banner-dark h2 { font-size: 40px; margin-bottom: 12px; }
+        .banner-dark p { font-size: 18px; opacity: 0.9; max-width: 600px; margin: 0 auto 30px; }
         .banner-dark .tags {
             display: flex;
             gap: 16px;
@@ -622,12 +521,9 @@
             border-radius: 50px;
             font-weight: 600;
             font-size: 14px;
-            backdrop-filter: blur(4px);
         }
 
-        /* ========================================
-           PRICING
-           ======================================== */
+        /* ===== PRICING ===== */
         .pricing-grid {
             display: flex;
             gap: 30px;
@@ -643,41 +539,24 @@
             background: white;
             border-radius: 30px;
             padding: 32px 28px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.06);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.06);
             transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             border: 3px solid transparent;
         }
-        .pricing-grid .p-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 25px 60px rgba(108, 60, 225, 0.12);
-        }
+        .pricing-grid .p-card:hover { transform: translateY(-10px); box-shadow: 0 25px 60px rgba(108, 60, 225, 0.12); }
         .pricing-grid .p-card.featured {
             background: #2D1B4E;
             color: white;
             border-color: #FFD93D;
             transform: scale(1.04);
         }
-        .pricing-grid .p-card.featured:hover {
-            transform: scale(1.04) translateY(-10px);
-        }
-        .pricing-grid .p-card.featured h3,
-        .pricing-grid .p-card.featured .price,
-        .pricing-grid .p-card.featured li {
-            color: white;
-        }
-        .pricing-grid .p-card.featured li {
-            border-bottom-color: rgba(255,255,255,0.1);
-        }
+        .pricing-grid .p-card.featured:hover { transform: scale(1.04) translateY(-10px); }
         .pricing-grid .p-card .price {
             font-size: 36px;
             font-weight: 800;
             margin: 10px 0;
         }
-        .pricing-grid .p-card .price small {
-            font-size: 16px;
-            font-weight: 400;
-            opacity: 0.6;
-        }
+        .pricing-grid .p-card .price small { font-size: 16px; font-weight: 400; opacity: 0.6; }
         .pricing-grid .p-card ul {
             list-style: none;
             padding: 0;
@@ -699,13 +578,9 @@
             transition: all 0.3s;
             font-family: 'Quicksand', sans-serif;
         }
-        .pricing-grid .p-card .btn-plan:hover {
-            transform: translateY(-3px);
-        }
+        .pricing-grid .p-card .btn-plan:hover { transform: translateY(-3px); }
 
-        /* ========================================
-           FOOTER
-           ======================================== */
+        /* ===== FOOTER ===== */
         .footer {
             background: #2D1B4E;
             color: #B8A0D4;
@@ -725,82 +600,55 @@
             font-weight: 500;
             transition: color 0.3s;
         }
-        .footer .links a:hover {
-            color: white;
-        }
-        .footer p {
-            font-size: 14px;
-            opacity: 0.7;
-            max-width: 600px;
-            margin: 0 auto;
-        }
+        .footer .links a:hover { color: white; }
+        .footer p { font-size: 14px; opacity: 0.7; max-width: 600px; margin: 0 auto; }
 
-        /* ========================================
-           RESPONSIVE
-           ======================================== */
-        @media (max-width: 900px) {
-            .navbar {
-                padding: 12px 20px;
-            }
-            .nav-links {
-                gap: 14px;
-            }
-            .hero-left h1 {
-                font-size: 34px;
-            }
-            .section-title {
-                font-size: 30px;
-            }
-            .banner-dark h2 {
-                font-size: 30px;
-            }
+        /* ===== PAGE CONTENT (Hidden by default) ===== */
+        .page-content {
+            display: none;
+            padding: 40px;
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.06);
         }
-        @media (max-width: 600px) {
-            .navbar {
-                flex-direction: column;
-                align-items: stretch;
-                gap: 12px;
-            }
-            .nav-links {
-                justify-content: center;
-            }
-            .nav-actions {
-                justify-content: center;
-            }
-            .hero {
-                padding: 40px 20px 50px;
-            }
-            .hero-left h1 {
-                font-size: 28px;
-            }
-            .hero-left .stats {
-                flex-wrap: wrap;
-                gap: 14px;
-            }
-            .hero-right .compass-wrap .emoji-big {
-                font-size: 100px;
-            }
-            .section {
-                padding: 40px 20px;
-            }
-            .section-title {
-                font-size: 26px;
-            }
-            .pricing-grid .p-card.featured {
-                transform: scale(1);
-            }
-            .pricing-grid .p-card.featured:hover {
-                transform: translateY(-10px);
-            }
-            .banner-dark {
-                padding: 40px 20px;
-            }
-            .banner-dark h2 {
-                font-size: 26px;
-            }
-            .modal-box {
-                padding: 30px 20px;
-            }
+        .page-content.active { display: block; }
+        .page-content h2 {
+            font-size: 32px;
+            color: #2D1B4E;
+            margin-bottom: 10px;
+        }
+        .page-content h2 span { color: #6C3CE1; }
+        .page-content p { color: #555; font-size: 17px; line-height: 1.8; }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 768px) {
+            .navbar { padding: 12px 20px; flex-direction: column; align-items: stretch; gap: 12px; }
+            .nav-links { justify-content: center; gap: 12px; }
+            .nav-actions { justify-content: center; }
+            .hero { padding: 40px 20px 50px; flex-direction: column; text-align: center; }
+            .hero-left h1 { font-size: 32px; }
+            .hero-left .actions { justify-content: center; }
+            .hero-left .stats { justify-content: center; }
+            .hero-right .compass-wrap .emoji-big { font-size: 100px; }
+            .section { padding: 40px 20px; }
+            .section-title { font-size: 28px; }
+            .card { min-width: 100%; max-width: 100%; }
+            .card-featured { transform: scale(1); }
+            .card-featured:hover { transform: translateY(-10px); }
+            .pricing-grid .p-card { min-width: 100%; max-width: 100%; }
+            .pricing-grid .p-card.featured { transform: scale(1); }
+            .pricing-grid .p-card.featured:hover { transform: translateY(-10px); }
+            .banner-dark { padding: 40px 20px; }
+            .banner-dark h2 { font-size: 28px; }
+            .modal-box { padding: 30px 20px; }
+            .page-content { padding: 20px; }
+        }
+        @media (max-width: 480px) {
+            .hero-left h1 { font-size: 26px; }
+            .btn-primary, .btn-secondary, .btn-yellow { padding: 12px 22px; font-size: 14px; width: 100%; justify-content: center; }
+            .hero-left .stats { gap: 14px; font-size: 13px; }
         }
     </style>
 </head>
@@ -810,18 +658,18 @@
     NAVIGATION
     ======================================== -->
     <nav class="navbar">
-        <a href="#" class="nav-logo">
+        <a href="#" class="nav-logo" onclick="showHome()">
             <span style="font-size:30px;">🧭</span>
             Futures <span>Abroad</span>
         </a>
 
         <div class="nav-links">
-            <a href="#">Compass</a>
-            <a href="#">How it works</a>
-            <a href="#">Global Pathway</a>
-            <a href="#">For Schools</a>
-            <a href="#">Pricing</a>
-            <a href="#">FAQ</a>
+            <a onclick="showPage('compass')">🧭 Compass</a>
+            <a onclick="showPage('how-it-works')">❓ How it works</a>
+            <a onclick="showPage('global-pathway')">🌍 Global Pathway</a>
+            <a onclick="showPage('for-schools')">🏫 For Schools</a>
+            <a onclick="showPage('pricing')">💰 Pricing</a>
+            <a onclick="showPage('faq')">❓ FAQ</a>
         </div>
 
         <div class="nav-actions">
@@ -835,12 +683,11 @@
     </nav>
 
     <!-- ========================================
-    LOGIN / SIGNUP MODAL
+    MODAL (Login / Signup / Quiz)
     ======================================== -->
     <div class="modal-overlay" id="authModal">
-        <div class="modal-box">
+        <div class="modal-box" id="modalBox">
             <button class="modal-close" onclick="closeModal()">✕</button>
-
             <div id="modalContent">
                 <!-- Dynamic content loaded by JS -->
             </div>
@@ -848,197 +695,170 @@
     </div>
 
     <!-- ========================================
-    HERO SECTION
+    MAIN HOME PAGE
     ======================================== -->
-    <section class="hero">
-        <div class="hero-left" data-aos="fade-right">
-            <div class="tag">
-                <span>🚀</span> AI-Powered Career Intelligence
-            </div>
-            <h1>
-                Find Your Direction with<br/>
-                <span>Career Intelligence</span>
-            </h1>
-            <p>
-                Psychometric assessment + AI report + 9 tools.<br/>
-                Built for UAE secondary school students.
-            </p>
-            <div class="actions">
-                <button class="btn-primary" onclick="openModal('signup')">
-                    📝 Take the Assessment
-                </button>
-                <button class="btn-secondary">
-                    How it works →
-                </button>
-            </div>
-            <div class="stats">
-                <div><span class="icon-big">⭐</span> Get Scored</div>
-                <div><span class="icon-big">🤖</span> AI Writes Report</div>
-                <div><span class="icon-big">🔓</span> 9 Tools Unlock</div>
-            </div>
-        </div>
+    <div id="homePage">
 
-        <div class="hero-right" data-aos="fade-left">
-            <div class="compass-wrap">
-                <div class="emoji-big">🧭</div>
+        <!-- HERO -->
+        <section class="hero">
+            <div class="hero-left" data-aos="fade-right">
+                <div class="tag"><span>🚀</span> AI-Powered Career Intelligence</div>
+                <h1>Find Your Direction with<br/><span>Career Intelligence</span></h1>
+                <p>Psychometric assessment + AI report + 9 tools.<br/>Built for UAE secondary school students.</p>
+                <div class="actions">
+                    <button class="btn-primary" onclick="openModal('signup')">📝 Take the Assessment</button>
+                    <button class="btn-secondary" onclick="showPage('how-it-works')">How it works →</button>
+                </div>
+                <div class="stats">
+                    <div><span class="icon-big">⭐</span> Get Scored</div>
+                    <div><span class="icon-big">🤖</span> AI Writes Report</div>
+                    <div><span class="icon-big">🔓</span> 9 Tools Unlock</div>
+                </div>
             </div>
-            <div class="caption animate-wiggle">✨ Find your direction</div>
-        </div>
-    </section>
+
+            <div class="hero-right" data-aos="fade-left">
+                <div class="compass-wrap">
+                    <div class="emoji-big">🧭</div>
+                </div>
+                <div class="caption animate-wiggle">✨ Find your direction</div>
+            </div>
+        </section>
+
+        <!-- PROGRAMS -->
+        <section class="section" style="background:white;">
+            <h2 class="section-title" data-aos="fade-up">Choose Your Grade, <span>Start Your Journey</span></h2>
+            <p class="section-sub" data-aos="fade-up" data-aos-delay="100">Every grade has a unique path designed for your success</p>
+
+            <div class="cards-grid">
+                <div class="card" data-aos="zoom-in">
+                    <div style="font-size:48px;">🌱</div>
+                    <h3 style="font-size:22px; margin:10px 0 2px;">Grade 10</h3>
+                    <p style="color:#6C3CE1; font-weight:700;">Foundation</p>
+                    <p style="color:#555; margin:12px 0;">Build your foundation with exploration and discovery</p>
+                    <ul style="list-style:none; padding:0; margin:14px 0;">
+                        <li style="padding:6px 0; border-bottom:1px solid #f0e6ff;">📊 Profile progress bar</li>
+                        <li style="padding:6px 0; border-bottom:1px solid #f0e6ff;">🎯 Activity recommendations</li>
+                        <li style="padding:6px 0;">📈 Gap analysis</li>
+                    </ul>
+                    <span class="badge badge-yellow">Most Popular</span>
+                </div>
+
+                <div class="card card-featured" data-aos="zoom-in" data-aos-delay="100">
+                    <div style="font-size:48px;">🎯</div>
+                    <h3 style="font-size:22px; margin:10px 0 2px;">Grade 11</h3>
+                    <p style="color:#6C3CE1; font-weight:700;">Serious Planning</p>
+                    <p style="color:#555; margin:12px 0;">Serious planning for your university future</p>
+                    <ul style="list-style:none; padding:0; margin:14px 0;">
+                        <li style="padding:6px 0; border-bottom:1px solid #dccdff;">🏛️ University shortlist</li>
+                        <li style="padding:6px 0; border-bottom:1px solid #dccdff;">📊 Reach/Target/Safety</li>
+                        <li style="padding:6px 0;">🤝 Counselor handoff</li>
+                    </ul>
+                    <span class="badge badge-purple">⭐ Featured</span>
+                </div>
+
+                <div class="card" data-aos="zoom-in" data-aos-delay="200">
+                    <div style="font-size:48px;">🎓</div>
+                    <h3 style="font-size:22px; margin:10px 0 2px;">Grade 12</h3>
+                    <p style="color:#FF6B6B; font-weight:700;">Application Ready</p>
+                    <p style="color:#555; margin:12px 0;">Complete your application with confidence</p>
+                    <ul style="list-style:none; padding:0; margin:14px 0;">
+                        <li style="padding:6px 0; border-bottom:1px solid #ffd4d4;">📅 Application deadlines</li>
+                        <li style="padding:6px 0; border-bottom:1px solid #ffd4d4;">✍️ Essay support</li>
+                        <li style="padding:6px 0;">✅ Final submissions</li>
+                    </ul>
+                    <span class="badge badge-red">Rolling Enrolment</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- SHOWCASE -->
+        <section class="banner-dark" data-aos="fade-up">
+            <div class="badge-banner">🔥 REGISTRATION OPEN</div>
+            <h2>The National Showcase 2026</h2>
+            <p>The biggest student competition in the UAE. Present real work. Compete in live challenges. Get judged by industry leaders.</p>
+            <div class="tags">
+                <span>📅 June 2026</span>
+                <span>📍 Dubai, UAE</span>
+                <span>🏆 6 Categories</span>
+                <span>🏫 All Schools</span>
+            </div>
+            <button class="btn-yellow" style="font-size:17px; padding:16px 44px;" onclick="openModal('signup')">Register Now →</button>
+        </section>
+
+        <!-- PRICING -->
+        <section class="section" style="background:#FFF8F0;">
+            <h2 class="section-title" data-aos="fade-up">Pick Your Program. <span>One Step. Done.</span></h2>
+            <p class="section-sub" data-aos="fade-up" data-aos-delay="100">Three programs. Tap the one that fits — only its plans show. KHDA Permit #633441.</p>
+
+            <div class="pricing-grid">
+                <div class="p-card" data-aos="flip-up">
+                    <h3 style="font-size:20px;">Grade 10</h3>
+                    <p style="color:#6C3CE1; font-weight:600;">Foundation</p>
+                    <div class="price">AED 450 <small>/month</small></div>
+                    <ul>
+                        <li>📊 Profile progress bar</li>
+                        <li>🎯 Activity recommendations</li>
+                        <li>🤖 AI-powered guidance</li>
+                    </ul>
+                    <p style="color:#888; font-size:13px;">Starts September 2026</p>
+                    <button class="btn-plan" style="background:#6C3CE1; color:white;" onclick="openModal('signup')">Choose Plan</button>
+                </div>
+
+                <div class="p-card featured" data-aos="flip-up" data-aos-delay="100">
+                    <span class="badge badge-yellow" style="display:inline-block; margin-bottom:6px;">⭐ Most Popular</span>
+                    <h3 style="font-size:20px; color:white;">Grade 11</h3>
+                    <p style="color:#B8A0D4; font-weight:600;">Serious Planning</p>
+                    <div class="price" style="color:#FFD93D;">AED 650 <small style="color:#B8A0D4;">/month</small></div>
+                    <ul>
+                        <li>🏛️ University shortlist</li>
+                        <li>🤝 Counselor handoff</li>
+                        <li>👨‍🏫 1-on-1 mentoring</li>
+                    </ul>
+                    <p style="color:#B8A0D4; font-size:13px;">Starts September 2026</p>
+                    <button class="btn-plan" style="background:#FFD93D; color:#2D1B4E;" onclick="openModal('signup')">Choose Plan</button>
+                </div>
+
+                <div class="p-card" data-aos="flip-up" data-aos-delay="200">
+                    <h3 style="font-size:20px;">Grade 12</h3>
+                    <p style="color:#FF6B6B; font-weight:600;">Application Ready</p>
+                    <div class="price">AED 999 <small>/year</small></div>
+                    <ul>
+                        <li>📅 Application deadlines</li>
+                        <li>✍️ Essay support</li>
+                        <li>🎁 Full support package</li>
+                    </ul>
+                    <p style="color:#888; font-size:13px;">Rolling enrolment</p>
+                    <button class="btn-plan" style="background:#FF6B6B; color:white;" onclick="openModal('signup')">Choose Plan</button>
+                </div>
+            </div>
+        </section>
+    </div>
 
     <!-- ========================================
-    PROGRAMS / GRADE SECTION
+    PAGE CONTENT (for Compass, How it works, etc.)
     ======================================== -->
-    <section class="section" style="background:white;">
-        <h2 class="section-title" data-aos="fade-up">
-            Choose Your Grade, <span>Start Your Journey</span>
-        </h2>
-        <p class="section-sub" data-aos="fade-up" data-aos-delay="100">
-            Every grade has a unique path designed for your success
-        </p>
-
-        <div class="cards-grid">
-            <!-- Grade 10 -->
-            <div class="card" data-aos="zoom-in" data-aos-delay="0">
-                <div style="font-size:48px;">🌱</div>
-                <h3 style="font-size:22px; margin:10px 0 2px;">Grade 10</h3>
-                <p style="color:#6C3CE1; font-weight:700;">Foundation</p>
-                <p style="color:#555; margin:12px 0;">Build your foundation with exploration and discovery</p>
-                <ul style="list-style:none; padding:0; margin:14px 0;">
-                    <li style="padding:6px 0; border-bottom:1px solid #f0e6ff;">📊 Profile progress bar</li>
-                    <li style="padding:6px 0; border-bottom:1px solid #f0e6ff;">🎯 Activity recommendations</li>
-                    <li style="padding:6px 0;">📈 Gap analysis</li>
-                </ul>
-                <span class="badge badge-yellow">Most Popular</span>
-            </div>
-
-            <!-- Grade 11 -->
-            <div class="card card-featured" data-aos="zoom-in" data-aos-delay="100">
-                <div style="font-size:48px;">🎯</div>
-                <h3 style="font-size:22px; margin:10px 0 2px;">Grade 11</h3>
-                <p style="color:#6C3CE1; font-weight:700;">Serious Planning</p>
-                <p style="color:#555; margin:12px 0;">Serious planning for your university future</p>
-                <ul style="list-style:none; padding:0; margin:14px 0;">
-                    <li style="padding:6px 0; border-bottom:1px solid #dccdff;">🏛️ University shortlist</li>
-                    <li style="padding:6px 0; border-bottom:1px solid #dccdff;">📊 Reach/Target/Safety</li>
-                    <li style="padding:6px 0;">🤝 Counselor handoff</li>
-                </ul>
-                <span class="badge badge-purple">⭐ Featured</span>
-            </div>
-
-            <!-- Grade 12 -->
-            <div class="card" data-aos="zoom-in" data-aos-delay="200">
-                <div style="font-size:48px;">🎓</div>
-                <h3 style="font-size:22px; margin:10px 0 2px;">Grade 12</h3>
-                <p style="color:#FF6B6B; font-weight:700;">Application Ready</p>
-                <p style="color:#555; margin:12px 0;">Complete your application with confidence</p>
-                <ul style="list-style:none; padding:0; margin:14px 0;">
-                    <li style="padding:6px 0; border-bottom:1px solid #ffd4d4;">📅 Application deadlines</li>
-                    <li style="padding:6px 0; border-bottom:1px solid #ffd4d4;">✍️ Essay support</li>
-                    <li style="padding:6px 0;">✅ Final submissions</li>
-                </ul>
-                <span class="badge badge-red">Rolling Enrolment</span>
-            </div>
+    <div id="pageContent" class="page-content">
+        <div id="pageContentInner">
+            <!-- Dynamic content loaded by JS -->
         </div>
-    </section>
-
-    <!-- ========================================
-    SHOWCASE BANNER
-    ======================================== -->
-    <section class="banner-dark" data-aos="fade-up">
-        <div class="badge-banner">🔥 REGISTRATION OPEN</div>
-        <h2>The National Showcase 2026</h2>
-        <p>
-            The biggest student competition in the UAE. Present real work. Compete in live challenges.
-            Get judged by industry leaders.
-        </p>
-        <div class="tags">
-            <span>📅 June 2026</span>
-            <span>📍 Dubai, UAE</span>
-            <span>🏆 6 Categories</span>
-            <span>🏫 All Schools</span>
-        </div>
-        <button class="btn-yellow" style="font-size:17px; padding:16px 44px;">
-            Register Now →
-        </button>
-    </section>
-
-    <!-- ========================================
-    PRICING SECTION
-    ======================================== -->
-    <section class="section" style="background:#FFF8F0;">
-        <h2 class="section-title" data-aos="fade-up">
-            Pick Your Program. <span>One Step. Done.</span>
-        </h2>
-        <p class="section-sub" data-aos="fade-up" data-aos-delay="100">
-            Three programs. Tap the one that fits — only its plans show. KHDA Permit #633441.
-        </p>
-
-        <div class="pricing-grid">
-            <!-- Grade 10 Pricing -->
-            <div class="p-card" data-aos="flip-up" data-aos-delay="0">
-                <h3 style="font-size:20px;">Grade 10</h3>
-                <p style="color:#6C3CE1; font-weight:600;">Foundation</p>
-                <div class="price">AED 450 <small>/month</small></div>
-                <ul>
-                    <li>📊 Profile progress bar</li>
-                    <li>🎯 Activity recommendations</li>
-                    <li>🤖 AI-powered guidance</li>
-                </ul>
-                <p style="color:#888; font-size:13px;">Starts September 2026</p>
-                <button class="btn-plan" style="background:#6C3CE1; color:white;" onclick="openModal('signup')">
-                    Choose Plan
-                </button>
-            </div>
-
-            <!-- Grade 11 Pricing (Featured) -->
-            <div class="p-card featured" data-aos="flip-up" data-aos-delay="100">
-                <span class="badge badge-yellow" style="display:inline-block; margin-bottom:6px;">⭐ Most Popular</span>
-                <h3 style="font-size:20px; color:white;">Grade 11</h3>
-                <p style="color:#B8A0D4; font-weight:600;">Serious Planning</p>
-                <div class="price" style="color:#FFD93D;">AED 650 <small style="color:#B8A0D4;">/month</small></div>
-                <ul>
-                    <li>🏛️ University shortlist</li>
-                    <li>🤝 Counselor handoff</li>
-                    <li>👨‍🏫 1-on-1 mentoring</li>
-                </ul>
-                <p style="color:#B8A0D4; font-size:13px;">Starts September 2026</p>
-                <button class="btn-plan" style="background:#FFD93D; color:#2D1B4E;" onclick="openModal('signup')">
-                    Choose Plan
-                </button>
-            </div>
-
-            <!-- Grade 12 Pricing -->
-            <div class="p-card" data-aos="flip-up" data-aos-delay="200">
-                <h3 style="font-size:20px;">Grade 12</h3>
-                <p style="color:#FF6B6B; font-weight:600;">Application Ready</p>
-                <div class="price">AED 999 <small>/year</small></div>
-                <ul>
-                    <li>📅 Application deadlines</li>
-                    <li>✍️ Essay support</li>
-                    <li>🎁 Full support package</li>
-                </ul>
-                <p style="color:#888; font-size:13px;">Rolling enrolment</p>
-                <button class="btn-plan" style="background:#FF6B6B; color:white;" onclick="openModal('signup')">
-                    Choose Plan
-                </button>
-            </div>
-        </div>
-    </section>
+        <button class="btn-secondary" style="margin-top:30px;" onclick="showHome()">← Back to Home</button>
+    </div>
 
     <!-- ========================================
     FOOTER
     ======================================== -->
     <footer class="footer">
         <div class="links">
+            <a onclick="showPage('compass')">Compass</a>
+            <a onclick="showPage('how-it-works')">How it works</a>
+            <a onclick="showPage('global-pathway')">Global Pathway</a>
+            <a onclick="showPage('for-schools')">For Schools</a>
+            <a onclick="showPage('pricing')">Pricing</a>
+            <a onclick="showPage('faq')">FAQ</a>
             <a href="#">Cookie Policy</a>
             <a href="#">Privacy Policy</a>
-            <a href="#">Terms of Service</a>
-            <a href="#">Contact</a>
         </div>
-        <p>
-            We use essential cookies to keep you logged in, and optional analytics cookies to improve Futures Abroad.
-        </p>
+        <p>We use essential cookies to keep you logged in, and optional analytics cookies to improve Futures Abroad.</p>
         <p style="margin-top:14px; opacity:0.5;">© 2026 Futures Abroad. All rights reserved.</p>
     </footer>
 
@@ -1047,77 +867,146 @@
     ======================================== -->
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
-        // Init AOS
-        AOS.init({
-            duration: 700,
-            once: true,
-            offset: 80
-        });
+        // ========================================
+        // INIT AOS
+        // ========================================
+        AOS.init({ duration: 700, once: true, offset: 80 });
 
-        // ----- MODAL LOGIC -----
+        // ========================================
+        // PAGE NAVIGATION
+        // ========================================
+        function showHome() {
+            document.getElementById('homePage').style.display = 'block';
+            document.getElementById('pageContent').classList.remove('active');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function showPage(page) {
+            document.getElementById('homePage').style.display = 'none';
+            const container = document.getElementById('pageContentInner');
+            const content = document.getElementById('pageContent');
+            content.classList.add('active');
+
+            const pages = {
+                'compass': {
+                    title: '🧭 Compass',
+                    desc: 'Find your direction with our AI-powered career compass. Discover which career paths align with your interests, skills, and personality.',
+                    features: [
+                        '📊 Psychometric assessment',
+                        '🎯 Personalized career matches',
+                        '📈 Progress tracking',
+                        '🤖 AI-powered recommendations'
+                    ]
+                },
+                'how-it-works': {
+                    title: '❓ How It Works',
+                    desc: 'Our process is simple and designed to help you discover your ideal career path in just a few steps.',
+                    steps: [
+                        '1️⃣ Take the psychometric assessment',
+                        '2️⃣ AI analyzes your responses',
+                        '3️⃣ Receive your personalized career report',
+                        '4️⃣ Access 9+ career tools',
+                        '5️⃣ Get matched with universities'
+                    ]
+                },
+                'global-pathway': {
+                    title: '🌍 Global Pathway',
+                    desc: 'Explore international education opportunities and find the best universities around the world for your chosen career path.',
+                    features: [
+                        '🏛️ University search across 50+ countries',
+                        '📋 Application guidance',
+                        '🎓 Scholarship finder',
+                        '✈️ Study abroad programs'
+                    ]
+                },
+                'for-schools': {
+                    title: '🏫 For Schools',
+                    desc: 'Empower your students with career intelligence. Futures Abroad partners with schools across the UAE.',
+                    features: [
+                        '📊 Student progress dashboards',
+                        '👨‍🏫 Teacher training programs',
+                        '📈 School-wide analytics',
+                        '🤝 Partnership benefits'
+                    ]
+                },
+                'pricing': {
+                    title: '💰 Pricing',
+                    desc: 'Choose the plan that fits your needs. All plans include access to our AI career intelligence platform.',
+                    plans: [
+                        '🌱 Grade 10: AED 450/month',
+                        '🎯 Grade 11: AED 650/month',
+                        '🎓 Grade 12: AED 999/year'
+                    ]
+                },
+                'faq': {
+                    title: '❓ FAQ',
+                    desc: 'Frequently asked questions about Futures Abroad, our platform, and how we help students find their career path.',
+                    qas: [
+                        'Q: What is Futures Abroad? A: An AI-powered career intelligence platform for UAE secondary school students.',
+                        'Q: How does the assessment work? A: Complete a 10-question psychometric test, and our AI generates a detailed career report.',
+                        'Q: Is this free for schools? A: We offer special partnership programs for schools. Contact us for details.',
+                        'Q: Can I change my career path later? A: Yes! You can retake the assessment anytime as you grow and discover new interests.'
+                    ]
+                }
+            };
+
+            const data = pages[page] || pages['compass'];
+            let html = `<h2>${data.title}</h2><p>${data.desc}</p>`;
+
+            if (data.features) {
+                html += `<ul style="list-style:none; padding:0; margin:20px 0;">`;
+                data.features.forEach(f => {
+                    html += `<li style="padding:10px 0; border-bottom:1px solid #f0e6ff; font-size:17px;">${f}</li>`;
+                });
+                html += `</ul>`;
+            }
+
+            if (data.steps) {
+                html += `<ul style="list-style:none; padding:0; margin:20px 0;">`;
+                data.steps.forEach(s => {
+                    html += `<li style="padding:10px 0; border-bottom:1px solid #f0e6ff; font-size:17px;">${s}</li>`;
+                });
+                html += `</ul>`;
+            }
+
+            if (data.plans) {
+                html += `<ul style="list-style:none; padding:0; margin:20px 0;">`;
+                data.plans.forEach(p => {
+                    html += `<li style="padding:10px 0; border-bottom:1px solid #f0e6ff; font-size:17px;">${p}</li>`;
+                });
+                html += `</ul>`;
+            }
+
+            if (data.qas) {
+                html += `<div style="margin:20px 0;">`;
+                data.qas.forEach(qa => {
+                    const parts = qa.split(' A: ');
+                    html += `<div style="background:#F8F4FF; border-radius:16px; padding:16px 20px; margin:10px 0; border-left:4px solid #6C3CE1;">
+                        <strong style="color:#6C3CE1;">${parts[0]}</strong>
+                        <p style="margin:4px 0 0; color:#555;">A: ${parts[1]}</p>
+                    </div>`;
+                });
+                html += `</div>`;
+            }
+
+            container.innerHTML = html;
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // ========================================
+        // MODAL
+        // ========================================
         const modal = document.getElementById('authModal');
         const modalContent = document.getElementById('modalContent');
 
-        let currentMode = 'login'; // 'login' or 'signup'
-
-        function renderModal(mode) {
-            currentMode = mode;
-            if (mode === 'login') {
-                modalContent.innerHTML = `
-                    <h2>Welcome Back 👋</h2>
-                    <p class="sub">Log in to continue your journey</p>
-                    <label>Email</label>
-                    <input type="email" placeholder="you@example.com" id="loginEmail">
-                    <label>Password</label>
-                    <input type="password" placeholder="••••••••" id="loginPassword">
-                    <button class="btn-submit" onclick="handleLogin()">Log In</button>
-                    <div class="switch-link">
-                        Don't have an account? <a onclick="renderModal('signup')">Sign up</a>
-                    </div>
-                    <div style="margin-top:12px; text-align:center; font-size:13px; color:#aaa;">
-                        <a style="color:#6C3CE1; cursor:pointer;" onclick="renderModal('admin')">Admin login</a>
-                    </div>
-                `;
-            } else if (mode === 'signup') {
-                modalContent.innerHTML = `
-                    <h2>Create Account 🚀</h2>
-                    <p class="sub">Start your career journey today</p>
-                    <label>I am a:</label>
-                    <div class="role-select">
-                        <button class="active" onclick="selectRole(this, 'student')">🎓 Student</button>
-                        <button onclick="selectRole(this, 'admin')">👨‍💼 Admin</button>
-                    </div>
-                    <label>Full Name</label>
-                    <input type="text" placeholder="Your name" id="signupName">
-                    <label>Email</label>
-                    <input type="email" placeholder="you@example.com" id="signupEmail">
-                    <label>Password</label>
-                    <input type="password" placeholder="Create a password" id="signupPassword">
-                    <button class="btn-submit" onclick="handleSignup()">Sign Up</button>
-                    <div class="switch-link">
-                        Already have an account? <a onclick="renderModal('login')">Log in</a>
-                    </div>
-                `;
-            } else if (mode === 'admin') {
-                modalContent.innerHTML = `
-                    <h2>Admin Login 🔐</h2>
-                    <p class="sub">Access the admin dashboard</p>
-                    <label>Admin Email</label>
-                    <input type="email" placeholder="admin@futuresabroad.com" id="adminEmail">
-                    <label>Admin Password</label>
-                    <input type="password" placeholder="••••••••" id="adminPassword">
-                    <button class="btn-submit" onclick="handleAdminLogin()">Login as Admin</button>
-                    <div class="switch-link">
-                        <a onclick="renderModal('login')">← Back to student login</a>
-                    </div>
-                `;
-            }
-        }
-
         function openModal(mode) {
             modal.classList.add('active');
-            renderModal(mode);
             document.body.style.overflow = 'hidden';
+            if (mode === 'login') renderLogin();
+            else if (mode === 'signup') renderSignup();
+            else if (mode === 'admin') renderAdminLogin();
+            else if (mode === 'quiz') renderQuiz();
+            else if (mode === 'quiz-result') renderQuizResult();
         }
 
         function closeModal() {
@@ -1125,25 +1014,388 @@
             document.body.style.overflow = 'auto';
         }
 
-        // Close modal on overlay click
         modal.addEventListener('click', function(e) {
             if (e.target === modal) closeModal();
         });
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') closeModal();
+        });
 
-        // Role selection in signup
+        // ========================================
+        // RENDER LOGIN
+        // ========================================
+        function renderLogin() {
+            modalContent.innerHTML = `
+                <h2>Welcome Back 👋</h2>
+                <p class="sub">Log in to continue your journey</p>
+                <label>Email</label>
+                <input type="email" placeholder="you@example.com" id="loginEmail">
+                <label>Password</label>
+                <input type="password" placeholder="••••••••" id="loginPassword">
+                <button class="btn-submit" onclick="handleLogin()">Log In</button>
+                <div class="switch-link">
+                    Don't have an account? <a onclick="renderSignup()">Sign up</a>
+                </div>
+                <div style="margin-top:12px; text-align:center; font-size:13px; color:#aaa;">
+                    <a style="color:#6C3CE1; cursor:pointer;" onclick="renderAdminLogin()">🔐 Admin login</a>
+                </div>
+            `;
+        }
+
+        // ========================================
+        // RENDER SIGNUP
+        // ========================================
+        function renderSignup() {
+            modalContent.innerHTML = `
+                <h2>Create Account 🚀</h2>
+                <p class="sub">Start your career journey today</p>
+                <label>I am a:</label>
+                <div class="role-select">
+                    <button class="active" onclick="selectRole(this, 'student')">🎓 Student</button>
+                    <button onclick="selectRole(this, 'admin')">👨‍💼 Admin</button>
+                </div>
+                <label>Full Name</label>
+                <input type="text" placeholder="Your name" id="signupName">
+                <label>Email</label>
+                <input type="email" placeholder="you@example.com" id="signupEmail">
+                <label>Password</label>
+                <input type="password" placeholder="Create a password" id="signupPassword">
+                <button class="btn-submit" onclick="handleSignup()">Sign Up</button>
+                <div class="switch-link">
+                    Already have an account? <a onclick="renderLogin()">Log in</a>
+                </div>
+            `;
+        }
+
+        // ========================================
+        // RENDER ADMIN LOGIN
+        // ========================================
+        function renderAdminLogin() {
+            modalContent.innerHTML = `
+                <h2>🔐 Admin Login</h2>
+                <p class="sub">Access the admin dashboard</p>
+                <label>Admin Email</label>
+                <input type="email" placeholder="admin@futuresabroad.com" id="adminEmail">
+                <label>Admin Password</label>
+                <input type="password" placeholder="••••••••" id="adminPassword">
+                <button class="btn-submit" onclick="handleAdminLogin()">Login as Admin</button>
+                <div class="switch-link">
+                    <a onclick="renderLogin()">← Back to student login</a>
+                </div>
+            `;
+        }
+
+        // ========================================
+        // ROLE SELECTION
+        // ========================================
         function selectRole(el, role) {
             document.querySelectorAll('.role-select button').forEach(b => b.classList.remove('active'));
             el.classList.add('active');
             el.dataset.role = role;
         }
 
-        // ----- AUTH HANDLERS (Demo) -----
+        // ========================================
+        // QUIZ DATA - 10 Career Interest Questions
+        // ========================================
+        const quizQuestions = [
+            {
+                q: "Which activity excites you the most?",
+                options: [
+                    "🔬 Doing science experiments",
+                    "💻 Building websites or apps",
+                    "🏥 Helping sick people get better",
+                    "🎨 Creating art or designs",
+                    "📊 Solving math problems"
+                ]
+            },
+            {
+                q: "What school subject do you enjoy most?",
+                options: [
+                    "🧬 Biology",
+                    "💻 Computer Science",
+                    "🧪 Chemistry",
+                    "🎭 Art & Design",
+                    "📐 Mathematics"
+                ]
+            },
+            {
+                q: "Where do you see yourself working?",
+                options: [
+                    "🏥 Hospital or clinic",
+                    "💼 Office with computers",
+                    "🔬 Research laboratory",
+                    "🎨 Creative studio",
+                    "🏛️ University or school"
+                ]
+            },
+            {
+                q: "What kind of problems do you like solving?",
+                options: [
+                    "🧬 Medical/health problems",
+                    "💻 Technical/software problems",
+                    "🔬 Scientific research problems",
+                    "🎨 Creative/design problems",
+                    "📊 Business/financial problems"
+                ]
+            },
+            {
+                q: "Which skill would you most like to develop?",
+                options: [
+                    "🩺 Medical skills",
+                    "💻 Coding & programming",
+                    "🔬 Research skills",
+                    "🎨 Creative skills",
+                    "📈 Business skills"
+                ]
+            },
+            {
+                q: "What's your ideal work environment?",
+                options: [
+                    "🏥 Fast-paced medical environment",
+                    "💻 Tech startup or office",
+                    "🔬 Quiet research lab",
+                    "🎨 Creative studio or gallery",
+                    "🏛️ Corporate office"
+                ]
+            },
+            {
+                q: "Which career sounds most appealing?",
+                options: [
+                    "🩺 Doctor or Nurse",
+                    "💻 Software Engineer",
+                    "🔬 Research Scientist",
+                    "🎨 Graphic Designer",
+                    "📊 Business Analyst"
+                ]
+            },
+            {
+                q: "What do you want your job to achieve?",
+                options: [
+                    "🩺 Save lives and improve health",
+                    "💻 Build innovative technology",
+                    "🔬 Discover new knowledge",
+                    "🎨 Create beautiful things",
+                    "📊 Help businesses grow"
+                ]
+            },
+            {
+                q: "Which activity would you do for fun?",
+                options: [
+                    "🧬 Learning about the human body",
+                    "💻 Building a computer game",
+                    "🔬 Doing science experiments",
+                    "🎨 Painting or drawing",
+                    "📊 Playing strategy games"
+                ]
+            },
+            {
+                q: "What's your biggest career goal?",
+                options: [
+                    "🩺 Become a leading doctor",
+                    "💻 Create world-changing software",
+                    "🔬 Win a Nobel Prize in science",
+                    "🎨 Become a famous artist",
+                    "📊 Build a successful company"
+                ]
+            }
+        ];
+
+        let currentQuizIndex = 0;
+        let quizAnswers = [];
+
+        // ========================================
+        // RENDER QUIZ
+        // ========================================
+        function renderQuiz() {
+            if (currentQuizIndex >= quizQuestions.length) {
+                renderQuizResult();
+                return;
+            }
+
+            const q = quizQuestions[currentQuizIndex];
+            let html = `
+                <h2>🧠 Career Interest Quiz</h2>
+                <p class="sub">Question ${currentQuizIndex + 1} of ${quizQuestions.length}</p>
+                <div class="quiz-progress">
+                    <div class="bar" style="width:${((currentQuizIndex) / quizQuestions.length) * 100}%"></div>
+                </div>
+                <div class="quiz-question">
+                    <div class="q-text">${q.q}</div>
+                    <div class="quiz-options">
+            `;
+
+            q.options.forEach((opt, idx) => {
+                html += `
+                    <label>
+                        <input type="radio" name="quiz" value="${idx}" onchange="selectQuizOption(this)">
+                        ${opt}
+                    </label>
+                `;
+            });
+
+            html += `
+                    </div>
+                </div>
+                <button class="btn-submit" id="quizNextBtn" onclick="nextQuizQuestion()" disabled>
+                    ${currentQuizIndex === quizQuestions.length - 1 ? 'See Results 🎉' : 'Next Question →'}
+                </button>
+                <div class="switch-link">
+                    <a onclick="closeModal()">Exit quiz</a>
+                </div>
+            `;
+
+            modalContent.innerHTML = html;
+            // Store current question index for tracking
+            document.querySelector('.modal-box').dataset.quizIndex = currentQuizIndex;
+        }
+
+        function selectQuizOption(el) {
+            const val = parseInt(el.value);
+            const idx = parseInt(document.querySelector('.modal-box').dataset.quizIndex);
+            quizAnswers[idx] = val;
+            document.getElementById('quizNextBtn').disabled = false;
+        }
+
+        function nextQuizQuestion() {
+            currentQuizIndex++;
+            if (currentQuizIndex < quizQuestions.length) {
+                renderQuiz();
+            } else {
+                renderQuizResult();
+            }
+        }
+
+        // ========================================
+        // RENDER QUIZ RESULT
+        // ========================================
+        function renderQuizResult() {
+            // Count career interests
+            const scores = { medicine: 0, engineering: 0, science: 0, arts: 0, business: 0 };
+            const careers = [
+                { name: 'Medicine', key: 'medicine' },
+                { name: 'Engineering', key: 'engineering' },
+                { name: 'Science', key: 'science' },
+                { name: 'Arts & Design', key: 'arts' },
+                { name: 'Business', key: 'business' }
+            ];
+
+            quizAnswers.forEach((ans, idx) => {
+                const q = quizQuestions[idx];
+                if (!q) return;
+                const opt = q.options[ans];
+                if (!opt) return;
+                if (opt.includes('🩺') || opt.includes('doctor') || opt.includes('medical') || opt.includes('hospital') || opt.includes('nurse') || opt.includes('health')) {
+                    scores.medicine++;
+                } else if (opt.includes('💻') || opt.includes('code') || opt.includes('programming') || opt.includes('software') || opt.includes('website') || opt.includes('app') || opt.includes('tech')) {
+                    scores.engineering++;
+                } else if (opt.includes('🔬') || opt.includes('research') || opt.includes('science') || opt.includes('experiment') || opt.includes('laboratory') || opt.includes('Nobel')) {
+                    scores.science++;
+                } else if (opt.includes('🎨') || opt.includes('art') || opt.includes('design') || opt.includes('creative') || opt.includes('paint') || opt.includes('draw') || opt.includes('studio')) {
+                    scores.arts++;
+                } else if (opt.includes('📊') || opt.includes('business') || opt.includes('financial') || opt.includes('strategy') || opt.includes('company') || opt.includes('analyst')) {
+                    scores.business++;
+                }
+            });
+
+            // Find top career
+            let topCareer = '';
+            let topScore = 0;
+            for (const [key, val] of Object.entries(scores)) {
+                if (val > topScore) {
+                    topScore = val;
+                    topCareer = key;
+                }
+            }
+
+            const careerNames = {
+                medicine: '🩺 Medicine & Healthcare',
+                engineering: '💻 Computer Science & Engineering',
+                science: '🔬 Science & Research',
+                arts: '🎨 Arts & Design',
+                business: '📊 Business & Finance'
+            };
+
+            const careerEmojis = {
+                medicine: '🩺',
+                engineering: '💻',
+                science: '🔬',
+                arts: '🎨',
+                business: '📊'
+            };
+
+            const careerDescriptions = {
+                medicine: 'You are passionate about helping others and interested in healthcare. Consider careers in: Medicine, Nursing, Dentistry, Pharmacy, or Public Health.',
+                engineering: 'You love technology and solving problems creatively. Consider careers in: Software Engineering, Web Development, AI, Robotics, or Data Science.',
+                science: 'You are curious about how the world works. Consider careers in: Research Science, Chemistry, Physics, Environmental Science, or Biotechnology.',
+                arts: 'You have a creative vision and love expressing yourself. Consider careers in: Graphic Design, Animation, Interior Design, Architecture, or Film.',
+                business: 'You have strong analytical and leadership skills. Consider careers in: Finance, Marketing, Management, Entrepreneurship, or Consulting.'
+            };
+
+            let html = `
+                <h2>🎉 Your Career Profile</h2>
+                <p class="sub">Based on your interests, here's your recommended career path</p>
+                <div style="text-align:center; padding:30px 20px; background:linear-gradient(135deg, #F0E6FF, #FFF8F0); border-radius:24px; margin:15px 0;">
+                    <div style="font-size:72px;">${careerEmojis[topCareer] || '🌟'}</div>
+                    <h3 style="color:#2D1B4E; margin:10px 0 5px;">${careerNames[topCareer] || 'Career'}</h3>
+                    <p style="color:#555; font-size:15px; max-width:400px; margin:0 auto;">${careerDescriptions[topCareer] || 'Explore your career options!'}</p>
+                </div>
+                <div style="background:#F8F4FF; border-radius:16px; padding:16px; margin:15px 0;">
+                    <h4 style="color:#6C3CE1;">📊 Your Interest Scores</h4>
+            `;
+
+            for (const [key, val] of Object.entries(scores)) {
+                const pct = Math.round((val / quizQuestions.length) * 100);
+                html += `
+                    <div style="display:flex; align-items:center; gap:10px; margin:6px 0;">
+                        <span style="width:80px; font-size:14px;">${careerNames[key]}</span>
+                        <div style="flex:1; background:#E8E0F0; border-radius:10px; height:10px;">
+                            <div style="width:${pct}%; height:100%; background:${pct > 50 ? '#6C3CE1' : '#FFD93D'}; border-radius:10px; transition:width 1s;"></div>
+                        </div>
+                        <span style="font-weight:700; font-size:14px;">${pct}%</span>
+                    </div>
+                `;
+            }
+
+            html += `
+                </div>
+                <div style="display:flex; gap:10px; flex-wrap:wrap;">
+                    <button class="btn-primary" onclick="closeModal(); showHome();" style="flex:1;">Continue to Dashboard</button>
+                    <button class="btn-secondary" onclick="currentQuizIndex=0; quizAnswers=[]; renderQuiz();" style="flex:1;">Retake Quiz</button>
+                </div>
+                <div class="switch-link">
+                    <a onclick="closeModal()">Close</a>
+                </div>
+            `;
+
+            modalContent.innerHTML = html;
+            // Store scores for later use (admin)
+            localStorage.setItem('quizScores', JSON.stringify(scores));
+            localStorage.setItem('topCareer', topCareer);
+        }
+
+        // ========================================
+        // AUTH HANDLERS
+        // ========================================
         function handleLogin() {
             const email = document.getElementById('loginEmail')?.value || '';
             const password = document.getElementById('loginPassword')?.value || '';
             if (email && password) {
+                // Check if admin
+                if (email === 'admin@futuresabroad.com' && password === 'admin123') {
+                    alert('🔐 Admin logged in successfully!');
+                    closeModal();
+                    return;
+                }
                 alert('✅ Logged in successfully! (Demo)');
                 closeModal();
+                // Show quiz if student
+                if (!email.includes('admin')) {
+                    setTimeout(() => {
+                        currentQuizIndex = 0;
+                        quizAnswers = [];
+                        openModal('quiz');
+                    }, 500);
+                }
             } else {
                 alert('⚠️ Please enter both email and password.');
             }
@@ -1157,8 +1409,15 @@
             const role = roleEl ? roleEl.dataset.role || 'student' : 'student';
 
             if (name && email && password) {
-                alert(`✅ Account created! (Demo)\nRole: ${role}\nName: ${name}`);
+                alert(`✅ Account created!\nRole: ${role}\nName: ${name}\nEmail: ${email}`);
                 closeModal();
+                if (role === 'student') {
+                    setTimeout(() => {
+                        currentQuizIndex = 0;
+                        quizAnswers = [];
+                        openModal('quiz');
+                    }, 500);
+                }
             } else {
                 alert('⚠️ Please fill in all fields.');
             }
@@ -1167,18 +1426,105 @@
         function handleAdminLogin() {
             const email = document.getElementById('adminEmail')?.value || '';
             const password = document.getElementById('adminPassword')?.value || '';
-            if (email && password) {
-                alert('✅ Admin logged in! (Demo)');
+            if (email === 'admin@futuresabroad.com' && password === 'admin123') {
+                alert('🔐 Admin logged in successfully!');
                 closeModal();
+                // Show admin dashboard
+                showAdminDashboard();
             } else {
-                alert('⚠️ Please enter admin credentials.');
+                alert('⚠️ Invalid admin credentials.\nUse: admin@futuresabroad.com / admin123');
             }
         }
 
-        // Close with Escape key
+        function showAdminDashboard() {
+            const scores = JSON.parse(localStorage.getItem('quizScores') || '{}');
+            const topCareer = localStorage.getItem('topCareer') || 'Not taken yet';
+            const totalStudents = 42; // Demo count
+
+            document.getElementById('homePage').style.display = 'none';
+            const container = document.getElementById('pageContentInner');
+            const content = document.getElementById('pageContent');
+            content.classList.add('active');
+
+            let html = `
+                <h2>🔐 Admin Dashboard</h2>
+                <p style="color:#555;">Welcome back, Admin! Here's an overview of student activity.</p>
+                <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(180px,1fr)); gap:20px; margin:25px 0;">
+                    <div style="background:#F0E6FF; border-radius:20px; padding:20px; text-align:center;">
+                        <div style="font-size:32px;">👥</div>
+                        <div style="font-weight:800; font-size:28px;">${totalStudents}</div>
+                        <div style="color:#888; font-size:14px;">Total Students</div>
+                    </div>
+                    <div style="background:#E8F5E9; border-radius:20px; padding:20px; text-align:center;">
+                        <div style="font-size:32px;">✅</div>
+                        <div style="font-weight:800; font-size:28px;">${Math.floor(totalStudents * 0.7)}</div>
+                        <div style="color:#888; font-size:14px;">Quiz Completed</div>
+                    </div>
+                    <div style="background:#FFF3E0; border-radius:20px; padding:20px; text-align:center;">
+                        <div style="font-size:32px;">⭐</div>
+                        <div style="font-weight:800; font-size:28px;">${topCareer}</div>
+                        <div style="color:#888; font-size:14px;">Top Career Choice</div>
+                    </div>
+                </div>
+                <h3>📊 Career Interest Breakdown</h3>
+                <div style="background:#F8F4FF; border-radius:16px; padding:16px; margin:15px 0;">
+            `;
+
+            const careerNames = {
+                medicine: '🩺 Medicine',
+                engineering: '💻 Engineering',
+                science: '🔬 Science',
+                arts: '🎨 Arts',
+                business: '📊 Business'
+            };
+
+            for (const [key, val] of Object.entries(scores)) {
+                const pct = Math.round((val / quizQuestions.length) * 100);
+                html += `
+                    <div style="display:flex; align-items:center; gap:10px; margin:6px 0;">
+                        <span style="width:100px; font-size:14px;">${careerNames[key] || key}</span>
+                        <div style="flex:1; background:#E8E0F0; border-radius:10px; height:10px;">
+                            <div style="width:${pct}%; height:100%; background:${pct > 50 ? '#6C3CE1' : '#FFD93D'}; border-radius:10px;"></div>
+                        </div>
+                        <span style="font-weight:700; font-size:14px;">${pct}%</span>
+                    </div>
+                `;
+            }
+
+            html += `
+                </div>
+                <button class="btn-secondary" onclick="showHome()" style="margin-top:20px;">← Back to Home</button>
+            `;
+
+            container.innerHTML = html;
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // ========================================
+        // KEYBOARD SHORTCUTS
+        // ========================================
         document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape') closeModal();
+            if (e.key === 'Enter' && modal.classList.contains('active')) {
+                const submitBtn = document.querySelector('.btn-submit');
+                if (submitBtn) submitBtn.click();
+            }
         });
+
+        // ========================================
+        // CARTOON CHARACTER - Add 3D Character with Spline
+        // ========================================
+        // To add a 3D cartoon character like Proplr:
+        // 1. Go to https://spline.design/
+        // 2. Create an account
+        // 3. Search for "mascot" or "3D character" in the community library
+        // 4. Click "Remix" to edit it
+        // 5. Click Export → Code Export → Copy the <iframe> code
+        // 6. Paste it in the hero section where you want it
+        // 7. The iframe code will look like: <iframe src="..."></iframe>
+
+        console.log('🧭 Futures Abroad loaded successfully!');
+        console.log('📝 Quiz has', quizQuestions.length, 'questions');
+        console.log('🔐 Admin login: admin@futuresabroad.com / admin123');
     </script>
 
 </body>
