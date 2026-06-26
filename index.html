@@ -85,6 +85,11 @@
             50% { transform: translateY(-18px) rotate(3deg); }
             100% { transform: translateY(0px) rotate(0deg); }
         }
+        @keyframes floatSlow {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-12px); }
+            100% { transform: translateY(0px); }
+        }
         @keyframes wiggle {
             0%, 100% { transform: rotate(-3deg); }
             50% { transform: rotate(3deg); }
@@ -100,6 +105,7 @@
             100% { transform: scale(1); opacity: 1; }
         }
         .animate-float { animation: float 4s ease-in-out infinite; }
+        .animate-float-slow { animation: floatSlow 5s ease-in-out infinite; }
         .animate-wiggle { animation: wiggle 3s ease-in-out infinite; }
 
         /* ===== NAVBAR ===== */
@@ -417,9 +423,26 @@
             box-shadow: 0 25px 70px rgba(108, 60, 225, 0.15);
             animation: float 4s ease-in-out infinite;
         }
-        .hero-right .compass-wrap .emoji-big { font-size: 150px; line-height: 1; }
+        .hero-right .compass-wrap img {
+            width: 150px;
+            height: 150px;
+            object-fit: contain;
+        }
+        .hero-right .character-wrap {
+            margin-top: -20px;
+            animation: floatSlow 5s ease-in-out infinite;
+        }
+        .hero-right .character-wrap img {
+            width: 130px;
+            height: 130px;
+            object-fit: contain;
+            border-radius: 50%;
+            background: white;
+            padding: 10px;
+            box-shadow: 0 15px 40px rgba(108, 60, 225, 0.12);
+        }
         .hero-right .caption {
-            margin-top: 16px;
+            margin-top: 10px;
             font-weight: 700;
             font-size: 18px;
             color: #6C3CE1;
@@ -603,7 +626,7 @@
         .footer .links a:hover { color: white; }
         .footer p { font-size: 14px; opacity: 0.7; max-width: 600px; margin: 0 auto; }
 
-        /* ===== PAGE CONTENT (Hidden by default) ===== */
+        /* ===== PAGE CONTENT ===== */
         .page-content {
             display: none;
             padding: 40px;
@@ -631,7 +654,8 @@
             .hero-left h1 { font-size: 32px; }
             .hero-left .actions { justify-content: center; }
             .hero-left .stats { justify-content: center; }
-            .hero-right .compass-wrap .emoji-big { font-size: 100px; }
+            .hero-right .compass-wrap img { width: 100px; height: 100px; }
+            .hero-right .character-wrap img { width: 90px; height: 90px; }
             .section { padding: 40px 20px; }
             .section-title { font-size: 28px; }
             .card { min-width: 100%; max-width: 100%; }
@@ -717,9 +741,22 @@
             </div>
 
             <div class="hero-right" data-aos="fade-left">
+                <!-- Cartoon Compass (using emoji as fallback) -->
                 <div class="compass-wrap">
-                    <div class="emoji-big">🧭</div>
+                    <img src="https://gulivindalasushmitha.github.io/futures-abroad/compass.png" 
+                         alt="Cartoon Compass" 
+                         style="width:150px; height:150px; object-fit:contain;"
+                         onerror="this.style.display='none'; this.parentElement.innerHTML='<div style=\'font-size:120px;line-height:1;\'>🧭</div>';">
                 </div>
+                
+                <!-- Cartoon Student Character from Proplr -->
+                <div class="character-wrap">
+                    <img src="https://compass.proplr.ae/assets/students-Dk42-8Za.png" 
+                         alt="Cartoon Student" 
+                         style="width:130px; height:130px; object-fit:contain; border-radius:50%; background:white; padding:10px; box-shadow: 0 15px 40px rgba(108,60,225,0.12);"
+                         onerror="this.style.display='none'; this.parentElement.innerHTML='<div style=\'font-size:80px;line-height:1;\'>🧑‍🎓</div>';">
+                </div>
+                
                 <div class="caption animate-wiggle">✨ Find your direction</div>
             </div>
         </section>
@@ -1245,7 +1282,6 @@
             `;
 
             modalContent.innerHTML = html;
-            // Store current question index for tracking
             document.querySelector('.modal-box').dataset.quizIndex = currentQuizIndex;
         }
 
@@ -1269,15 +1305,28 @@
         // RENDER QUIZ RESULT
         // ========================================
         function renderQuizResult() {
-            // Count career interests
             const scores = { medicine: 0, engineering: 0, science: 0, arts: 0, business: 0 };
-            const careers = [
-                { name: 'Medicine', key: 'medicine' },
-                { name: 'Engineering', key: 'engineering' },
-                { name: 'Science', key: 'science' },
-                { name: 'Arts & Design', key: 'arts' },
-                { name: 'Business', key: 'business' }
-            ];
+            const careerNames = {
+                medicine: '🩺 Medicine & Healthcare',
+                engineering: '💻 Computer Science & Engineering',
+                science: '🔬 Science & Research',
+                arts: '🎨 Arts & Design',
+                business: '📊 Business & Finance'
+            };
+            const careerEmojis = {
+                medicine: '🩺',
+                engineering: '💻',
+                science: '🔬',
+                arts: '🎨',
+                business: '📊'
+            };
+            const careerDescriptions = {
+                medicine: 'You are passionate about helping others. Consider: Medicine, Nursing, Dentistry, Pharmacy, or Public Health.',
+                engineering: 'You love technology. Consider: Software Engineering, Web Development, AI, Robotics, or Data Science.',
+                science: 'You are curious about the world. Consider: Research Science, Chemistry, Physics, or Biotechnology.',
+                arts: 'You have a creative vision. Consider: Graphic Design, Animation, Interior Design, Architecture, or Film.',
+                business: 'You have strong analytical skills. Consider: Finance, Marketing, Management, or Consulting.'
+            };
 
             quizAnswers.forEach((ans, idx) => {
                 const q = quizQuestions[idx];
@@ -1297,7 +1346,6 @@
                 }
             });
 
-            // Find top career
             let topCareer = '';
             let topScore = 0;
             for (const [key, val] of Object.entries(scores)) {
@@ -1306,30 +1354,6 @@
                     topCareer = key;
                 }
             }
-
-            const careerNames = {
-                medicine: '🩺 Medicine & Healthcare',
-                engineering: '💻 Computer Science & Engineering',
-                science: '🔬 Science & Research',
-                arts: '🎨 Arts & Design',
-                business: '📊 Business & Finance'
-            };
-
-            const careerEmojis = {
-                medicine: '🩺',
-                engineering: '💻',
-                science: '🔬',
-                arts: '🎨',
-                business: '📊'
-            };
-
-            const careerDescriptions = {
-                medicine: 'You are passionate about helping others and interested in healthcare. Consider careers in: Medicine, Nursing, Dentistry, Pharmacy, or Public Health.',
-                engineering: 'You love technology and solving problems creatively. Consider careers in: Software Engineering, Web Development, AI, Robotics, or Data Science.',
-                science: 'You are curious about how the world works. Consider careers in: Research Science, Chemistry, Physics, Environmental Science, or Biotechnology.',
-                arts: 'You have a creative vision and love expressing yourself. Consider careers in: Graphic Design, Animation, Interior Design, Architecture, or Film.',
-                business: 'You have strong analytical and leadership skills. Consider careers in: Finance, Marketing, Management, Entrepreneurship, or Consulting.'
-            };
 
             let html = `
                 <h2>🎉 Your Career Profile</h2>
@@ -1368,7 +1392,6 @@
             `;
 
             modalContent.innerHTML = html;
-            // Store scores for later use (admin)
             localStorage.setItem('quizScores', JSON.stringify(scores));
             localStorage.setItem('topCareer', topCareer);
         }
@@ -1380,7 +1403,6 @@
             const email = document.getElementById('loginEmail')?.value || '';
             const password = document.getElementById('loginPassword')?.value || '';
             if (email && password) {
-                // Check if admin
                 if (email === 'admin@futuresabroad.com' && password === 'admin123') {
                     alert('🔐 Admin logged in successfully!');
                     closeModal();
@@ -1388,7 +1410,6 @@
                 }
                 alert('✅ Logged in successfully! (Demo)');
                 closeModal();
-                // Show quiz if student
                 if (!email.includes('admin')) {
                     setTimeout(() => {
                         currentQuizIndex = 0;
@@ -1429,7 +1450,6 @@
             if (email === 'admin@futuresabroad.com' && password === 'admin123') {
                 alert('🔐 Admin logged in successfully!');
                 closeModal();
-                // Show admin dashboard
                 showAdminDashboard();
             } else {
                 alert('⚠️ Invalid admin credentials.\nUse: admin@futuresabroad.com / admin123');
@@ -1439,7 +1459,7 @@
         function showAdminDashboard() {
             const scores = JSON.parse(localStorage.getItem('quizScores') || '{}');
             const topCareer = localStorage.getItem('topCareer') || 'Not taken yet';
-            const totalStudents = 42; // Demo count
+            const totalStudents = 42;
 
             document.getElementById('homePage').style.display = 'none';
             const container = document.getElementById('pageContentInner');
@@ -1500,9 +1520,6 @@
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        // ========================================
-        // KEYBOARD SHORTCUTS
-        // ========================================
         document.addEventListener('keydown', function(e) {
             if (e.key === 'Enter' && modal.classList.contains('active')) {
                 const submitBtn = document.querySelector('.btn-submit');
@@ -1510,21 +1527,10 @@
             }
         });
 
-        // ========================================
-        // CARTOON CHARACTER - Add 3D Character with Spline
-        // ========================================
-        // To add a 3D cartoon character like Proplr:
-        // 1. Go to https://spline.design/
-        // 2. Create an account
-        // 3. Search for "mascot" or "3D character" in the community library
-        // 4. Click "Remix" to edit it
-        // 5. Click Export → Code Export → Copy the <iframe> code
-        // 6. Paste it in the hero section where you want it
-        // 7. The iframe code will look like: <iframe src="..."></iframe>
-
         console.log('🧭 Futures Abroad loaded successfully!');
         console.log('📝 Quiz has', quizQuestions.length, 'questions');
         console.log('🔐 Admin login: admin@futuresabroad.com / admin123');
+        console.log('🎨 Cartoon student image loaded from Proplr!');
     </script>
 
 </body>
