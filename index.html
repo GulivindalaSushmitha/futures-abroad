@@ -1,613 +1,259 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Futures Abroad - AI-Powered University Journey</title>
     
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+    <!-- AOS Animation Library -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Inter', sans-serif; background: white; color: #1A1A2E; }
-        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
-        
-        /* Header */
-        .header { padding: 16px 0; border-bottom: 1px solid #eee; background: white; position: sticky; top: 0; z-index: 100; }
-        .header-inner { display: flex; align-items: center; justify-content: space-between; gap: 20px; flex-wrap: wrap; }
-        .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; color: #1A1A2E; font-weight: 700; font-size: 18px; }
-        .nav ul { display: flex; list-style: none; gap: 30px; margin: 0; padding: 0; }
-        .nav ul li a { text-decoration: none; color: #4A4A6A; font-weight: 500; font-size: 14px; transition: color 0.3s; }
-        .nav ul li a:hover, .nav ul li a.active { color: #6C3CE1; }
-        .header-actions { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
-        .btn { padding: 10px 24px; border-radius: 12px; text-decoration: none; font-weight: 600; font-size: 14px; display: inline-flex; align-items: center; gap: 8px; transition: all 0.3s; }
-        .btn-primary { background: #6C3CE1; color: white; border: none; }
-        .btn-primary:hover { background: #5a2fc9; transform: translateY(-2px); box-shadow: 0 4px 15px rgba(108,60,225,0.3); }
-        .btn-outline { background: transparent; color: #1A1A2E; border: 2px solid #ddd; }
-        .btn-outline:hover { border-color: #6C3CE1; color: #6C3CE1; transform: translateY(-2px); }
-        .btn-admin { padding: 8px 16px; border-radius: 12px; border: 2px solid #FF6B6B; text-decoration: none; color: #FF6B6B; font-weight: 600; font-size: 13px; transition: all 0.3s; }
-        .btn-admin:hover { background: #FF6B6B; color: white; transform: translateY(-2px); }
-        .mobile-toggle { display: none; background: none; border: none; font-size: 24px; cursor: pointer; }
-        
-        /* Compass Section */
-        .compass-section { padding: 80px 0; background: #faf8ff; }
-        .compass-header { text-align: center; margin-bottom: 40px; }
-        .section-tag { display: inline-block; background: #6C3CE1; color: white; padding: 4px 16px; border-radius: 12px; font-size: 12px; font-weight: 600; }
-        .compass-header h2 { font-size: 38px; font-weight: 800; margin: 15px 0; }
-        .gradient-text { background: linear-gradient(135deg, #6C3CE1, #FF6B6B); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .compass-header p { color: #4A4A6A; font-size: 18px; }
-        .compass-buttons { display: flex; gap: 15px; justify-content: center; flex-wrap: wrap; margin-bottom: 50px; }
-        
-        /* BIG CARTOON CHARACTERS - LIKE PROPLR */
-        .characters-grid { 
-            display: grid; 
-            grid-template-columns: repeat(4, 1fr); 
-            gap: 30px; 
-            margin-bottom: 50px; 
-        }
-        .character-card { 
-            display: flex; 
-            flex-direction: column; 
-            align-items: center; 
-            text-align: center; 
-        }
-        
-        /* Speech Bubble */
-        .speech-bubble { 
-            padding: 16px 24px; 
-            border-radius: 24px 24px 24px 4px; 
-            font-size: 18px; 
-            font-weight: 700; 
-            margin-bottom: 20px; 
-            box-shadow: 0 4px 25px rgba(0,0,0,0.15); 
-            position: relative; 
-            min-width: 160px;
-            color: white;
-            transition: transform 0.3s;
-        }
-        .speech-bubble:hover { transform: scale(1.05); }
-        .speech-bubble::after {
-            content: '';
-            position: absolute;
-            bottom: -12px;
-            left: 30px;
-            width: 0;
-            height: 0;
-            border-left: 12px solid transparent;
-            border-right: 12px solid transparent;
-            border-top: 12px solid;
-        }
-        .speech-bubble-right::after {
-            left: auto;
-            right: 30px;
-        }
-        
-        /* BIG Cartoon Character - 160px illustration */
-        .character-image-wrapper {
-            background: white;
-            padding: 10px;
-            border-radius: 50%;
-            box-shadow: 0 8px 40px rgba(0,0,0,0.12);
-            border: 5px solid;
-            width: 170px;
-            height: 170px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: transform 0.3s, box-shadow 0.3s;
-            overflow: hidden;
-        }
-        .character-image-wrapper:hover {
-            transform: scale(1.05) rotate(-3deg);
-            box-shadow: 0 12px 50px rgba(0,0,0,0.2);
-        }
-        .character-image-wrapper img {
-            border-radius: 50%;
-            width: 100%;
-            height: 100%;
-            display: block;
-            object-fit: cover;
-        }
-        .character-label { 
-            font-size: 14px; 
-            color: #888; 
-            margin-top: 12px; 
-            font-weight: 500; 
-            background: #f5f5f5;
-            padding: 6px 16px;
-            border-radius: 20px;
-        }
-        
-        /* One Stop Box */
-        .one-stop-box {
-            background: linear-gradient(135deg, #6C3CE1, #FF6B6B);
-            border-radius: 24px;
-            padding: 50px 40px;
-            color: white;
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-        }
-        .one-stop-box .deco-circle {
-            position: absolute;
-            border-radius: 50%;
-            background: rgba(255,255,255,0.05);
-        }
-        .one-stop-box .deco-circle.c1 { top: -80px; right: -80px; width: 200px; height: 200px; }
-        .one-stop-box .deco-circle.c2 { bottom: -60px; left: -60px; width: 150px; height: 150px; }
-        .one-stop-content { position: relative; z-index: 1; }
-        .one-stop-content h2 { font-size: 32px; font-weight: 800; margin-bottom: 10px; }
-        .one-stop-content p { font-size: 18px; opacity: 0.9; margin-bottom: 30px; }
-        .tool-tags { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; }
-        .tool-tag {
-            background: rgba(255,255,255,0.15);
-            backdrop-filter: blur(10px);
-            padding: 12px 24px;
-            border-radius: 12px;
-            font-size: 14px;
-            font-weight: 500;
-            border: 1px solid rgba(255,255,255,0.15);
-            transition: all 0.3s;
-        }
-        .tool-tag:hover {
-            background: rgba(255,255,255,0.25);
-            transform: scale(1.05);
-        }
-        
-        /* Programs Grid */
-        .programs-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 30px;
-        }
-        .program-card {
-            background: white;
-            border-radius: 20px;
-            padding: 30px;
-            text-align: center;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.06);
-            border: 1px solid #eee;
-            transition: all 0.3s;
-        }
-        .program-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 30px rgba(0,0,0,0.1);
-        }
-        .program-card.highlight {
-            background: linear-gradient(135deg, #f8f5ff, #ffffff);
-            border: 2px solid #6C3CE1;
-        }
-        
-        @media (max-width: 992px) {
-            .characters-grid { grid-template-columns: repeat(2, 1fr); gap: 40px; }
-            .character-image-wrapper { width: 140px; height: 140px; }
-        }
-        @media (max-width: 768px) {
-            .nav { display: none; }
-            .mobile-toggle { display: block; }
-            .characters-grid { grid-template-columns: 1fr 1fr; gap: 30px; }
-            .character-image-wrapper { width: 120px; height: 120px; }
-            .speech-bubble { font-size: 14px; padding: 12px 16px; min-width: 100px; }
-            .compass-header h2 { font-size: 28px; }
-            .one-stop-content h2 { font-size: 24px; }
-            .header-actions .btn { padding: 8px 16px; font-size: 13px; }
-            .btn-admin { padding: 6px 12px; font-size: 12px; }
-        }
-        @media (max-width: 480px) {
-            .characters-grid { grid-template-columns: 1fr; gap: 40px; }
-            .character-image-wrapper { width: 160px; height: 160px; }
-            .programs-grid { grid-template-columns: 1fr; }
-        }
+        /* ===== ALL STYLES ARE INCLUDED HERE ===== */
+        /* But you can also keep them in style.css */
     </style>
+    
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<!-- ============================================ -->
-<!-- HEADER -->
-<!-- ============================================ -->
-<header class="header">
-    <div class="container">
-        <div class="header-inner">
-            <a href="index.html" class="logo">
-                <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
-                    <rect width="40" height="40" rx="12" fill="url(#logoGrad)"/>
-                    <path d="M12 28V14L20 20L28 14V28" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-                    <path d="M12 20L20 26L28 20" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-                    <defs>
-                        <linearGradient id="logoGrad" x1="0" y1="0" x2="40" y2="40">
-                            <stop offset="0%" stop-color="#6C3CE1"/>
-                            <stop offset="100%" stop-color="#FF6B6B"/>
-                        </linearGradient>
-                    </defs>
-                </svg>
-                <span>Futures Abroad</span>
-            </a>
+    <!-- ===== HEADER / NAVIGATION ===== -->
+    <header style="background: white; padding: 15px 40px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 20px rgba(0,0,0,0.06); position: sticky; top: 0; z-index: 100;">
+        <div style="display: flex; align-items: center; gap: 10px;">
+            <span style="font-size: 28px;">🧭</span>
+            <span style="font-weight: 800; font-size: 22px; color: #6C3CE1;">Futures <span style="color: #FF6B6B;">Abroad</span></span>
+        </div>
+        <nav style="display: flex; gap: 30px; align-items: center;">
+            <a href="#" style="text-decoration: none; color: #2D1B4E; font-weight: 500;">Programs</a>
+            <a href="#" style="text-decoration: none; color: #2D1B4E; font-weight: 500;">Showcase</a>
+            <a href="#" style="text-decoration: none; color: #2D1B4E; font-weight: 500;">Pricing</a>
+            <button style="background: #FFD93D; border: none; padding: 10px 25px; border-radius: 30px; font-weight: 700; color: #2D1B4E; cursor: pointer; transition: all 0.3s ease;">Get Started</button>
+        </nav>
+    </header>
 
-            <nav class="nav">
-                <ul>
-                    <li><a href="index.html" class="active">Home</a></li>
-                    <li><a href="#programs">Programs</a></li>
-                    <li><a href="#compass">Compass</a></li>
-                    <li><a href="#showcase">Showcase</a></li>
-                    <li><a href="#pricing">Pricing</a></li>
-                </ul>
-            </nav>
-
-            <div class="header-actions">
-                <a href="login.html" class="btn btn-outline">Sign In</a>
-                <a href="signup.html" class="btn btn-primary">Get Started</a>
-                <a href="admin-login.html" class="btn-admin">🔐 Admin</a>
+    <!-- ===== HERO SECTION ===== -->
+    <section style="background: linear-gradient(135deg, #FFF8F0 0%, #F0E6FF 100%); padding: 60px 40px 80px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; overflow: hidden;">
+        <div style="flex: 1; min-width: 300px; max-width: 600px;" data-aos="fade-right">
+            <div style="display: flex; align-items: center; gap: 10px; background: #FFD93D; padding: 8px 20px; border-radius: 50px; display: inline-flex; margin-bottom: 20px;">
+                <span style="font-size: 20px;">🚀</span>
+                <span style="font-weight: 600; color: #2D1B4E;">AI-Powered Career Intelligence</span>
             </div>
+            <h1 style="font-size: 48px; line-height: 1.2; color: #2D1B4E; margin: 20px 0;">
+                Find Your Direction with<br>
+                <span style="color: #6C3CE1;">Career Intelligence</span>
+            </h1>
+            <p style="font-size: 18px; color: #555; line-height: 1.6; margin: 20px 0 30px;">
+                Psychometric assessment + AI report + 9 tools. Built for UAE secondary school students.
+            </p>
+            <div style="display: flex; gap: 15px; flex-wrap: wrap;">
+                <button style="background: #6C3CE1; color: white; border: none; padding: 16px 35px; border-radius: 50px; font-weight: 700; font-size: 16px; cursor: pointer; box-shadow: 0 8px 25px rgba(108, 60, 225, 0.35); transition: all 0.3s ease;">
+                    📝 Take the Assessment
+                </button>
+                <button style="background: white; color: #6C3CE1; border: 2px solid #6C3CE1; padding: 16px 35px; border-radius: 50px; font-weight: 700; font-size: 16px; cursor: pointer; transition: all 0.3s ease;">
+                    Learn More →
+                </button>
+            </div>
+            <div style="display: flex; gap: 30px; margin-top: 40px;">
+                <div><span style="font-weight: 800; font-size: 24px; color: #6C3CE1;">⭐</span> <span style="font-weight: 600;">Get Scored</span></div>
+                <div><span style="font-weight: 800; font-size: 24px; color: #FF6B6B;">🤖</span> <span style="font-weight: 600;">AI Writes Report</span></div>
+                <div><span style="font-weight: 800; font-size: 24px; color: #FFD93D;">🔓</span> <span style="font-weight: 600;">9 Tools Unlock</span></div>
+            </div>
+        </div>
+        
+        <div style="flex: 1; min-width: 280px; text-align: center;" data-aos="fade-left">
+            <!-- COMPASS with floating animation -->
+            <div style="font-size: 180px; animation: float 4s ease-in-out infinite; display: inline-block; background: white; border-radius: 50%; padding: 30px; box-shadow: 0 20px 60px rgba(108, 60, 225, 0.15);">
+                🧭
+            </div>
+            <p style="margin-top: 20px; font-weight: 600; color: #6C3CE1; font-size: 18px;">Find your direction ✨</p>
+        </div>
+    </section>
 
-            <button class="mobile-toggle" id="mobileToggle">
-                <i class="fas fa-bars"></i>
+    <!-- ===== PROGRAMS / GRADE SECTION ===== -->
+    <section style="padding: 70px 40px; background: white;">
+        <h2 style="text-align: center; font-size: 38px; color: #2D1B4E; margin-bottom: 10px;" data-aos="fade-up">
+            Choose Your Grade, <span style="color: #6C3CE1;">Start Your Journey</span>
+        </h2>
+        <p style="text-align: center; color: #666; font-size: 18px; margin-bottom: 50px;" data-aos="fade-up" data-aos-delay="100">
+            Every grade has a unique path designed for your success
+        </p>
+        
+        <div style="display: flex; gap: 30px; justify-content: center; flex-wrap: wrap; max-width: 1100px; margin: 0 auto;">
+            
+            <!-- Grade 10 Card -->
+            <div style="background: #FFF8F0; border-radius: 30px; padding: 35px 30px; flex: 1; min-width: 250px; max-width: 320px; box-shadow: 0 10px 40px rgba(0,0,0,0.06); transition: all 0.4s ease; border: 2px solid transparent;" data-aos="zoom-in" data-aos-delay="0">
+                <div style="font-size: 50px;">🌱</div>
+                <h3 style="font-size: 24px; color: #2D1B4E; margin: 15px 0 5px;">Grade 10</h3>
+                <p style="color: #6C3CE1; font-weight: 600; margin-bottom: 20px;">Foundation</p>
+                <p style="color: #555; line-height: 1.6;">Build your foundation with exploration and discovery</p>
+                <ul style="list-style: none; padding: 0; margin: 20px 0;">
+                    <li style="padding: 8px 0; border-bottom: 1px solid #f0e6ff;">📊 Profile progress bar</li>
+                    <li style="padding: 8px 0; border-bottom: 1px solid #f0e6ff;">🎯 Activity recommendations</li>
+                    <li style="padding: 8px 0;">📈 Gap analysis</li>
+                </ul>
+                <div style="margin-top: 20px; background: #FFD93D; padding: 8px 15px; border-radius: 50px; display: inline-block; font-weight: 600; font-size: 14px; color: #2D1B4E;">Most Popular</div>
+            </div>
+            
+            <!-- Grade 11 Card -->
+            <div style="background: #F0E6FF; border-radius: 30px; padding: 35px 30px; flex: 1; min-width: 250px; max-width: 320px; box-shadow: 0 10px 40px rgba(108, 60, 225, 0.12); transition: all 0.4s ease; border: 3px solid #6C3CE1; transform: scale(1.02);" data-aos="zoom-in" data-aos-delay="100">
+                <div style="font-size: 50px;">🎯</div>
+                <h3 style="font-size: 24px; color: #2D1B4E; margin: 15px 0 5px;">Grade 11</h3>
+                <p style="color: #6C3CE1; font-weight: 600; margin-bottom: 20px;">Serious Planning</p>
+                <p style="color: #555; line-height: 1.6;">Serious planning for your university future</p>
+                <ul style="list-style: none; padding: 0; margin: 20px 0;">
+                    <li style="padding: 8px 0; border-bottom: 1px solid #dccdff;">🏛️ University shortlist</li>
+                    <li style="padding: 8px 0; border-bottom: 1px solid #dccdff;">📊 Reach/Target/Safety</li>
+                    <li style="padding: 8px 0;">🤝 Counselor handoff</li>
+                </ul>
+                <div style="margin-top: 20px; background: #6C3CE1; padding: 8px 20px; border-radius: 50px; display: inline-block; font-weight: 700; font-size: 14px; color: white;">⭐ Featured</div>
+            </div>
+            
+            <!-- Grade 12 Card -->
+            <div style="background: #FFE8E8; border-radius: 30px; padding: 35px 30px; flex: 1; min-width: 250px; max-width: 320px; box-shadow: 0 10px 40px rgba(0,0,0,0.06); transition: all 0.4s ease;" data-aos="zoom-in" data-aos-delay="200">
+                <div style="font-size: 50px;">🎓</div>
+                <h3 style="font-size: 24px; color: #2D1B4E; margin: 15px 0 5px;">Grade 12</h3>
+                <p style="color: #FF6B6B; font-weight: 600; margin-bottom: 20px;">Application Ready</p>
+                <p style="color: #555; line-height: 1.6;">Complete your application with confidence</p>
+                <ul style="list-style: none; padding: 0; margin: 20px 0;">
+                    <li style="padding: 8px 0; border-bottom: 1px solid #ffd4d4;">📅 Application deadlines</li>
+                    <li style="padding: 8px 0; border-bottom: 1px solid #ffd4d4;">✍️ Essay support</li>
+                    <li style="padding: 8px 0;">✅ Final submissions</li>
+                </ul>
+                <div style="margin-top: 20px; background: #FF6B6B; padding: 8px 15px; border-radius: 50px; display: inline-block; font-weight: 600; font-size: 14px; color: white;">Rolling Enrolment</div>
+            </div>
+            
+        </div>
+    </section>
+
+    <!-- ===== SHOWCASE SECTION ===== -->
+    <section style="background: linear-gradient(135deg, #2D1B4E 0%, #6C3CE1 100%); padding: 70px 40px; color: white; text-align: center;">
+        <div style="max-width: 800px; margin: 0 auto;" data-aos="fade-up">
+            <div style="background: #FFD93D; padding: 8px 25px; border-radius: 50px; display: inline-block; font-weight: 700; color: #2D1B4E; margin-bottom: 20px;">🔥 REGISTRATION OPEN</div>
+            <h2 style="font-size: 42px; margin-bottom: 15px;">The National Showcase 2026</h2>
+            <p style="font-size: 18px; opacity: 0.9; max-width: 600px; margin: 0 auto 30px;">
+                The biggest student competition in the UAE. Present real work. Compete in live challenges. Get judged by industry leaders.
+            </p>
+            <div style="display: flex; gap: 30px; justify-content: center; flex-wrap: wrap; margin-bottom: 30px;">
+                <span style="background: rgba(255,255,255,0.15); padding: 12px 25px; border-radius: 50px;">📅 June 2026</span>
+                <span style="background: rgba(255,255,255,0.15); padding: 12px 25px; border-radius: 50px;">📍 Dubai, UAE</span>
+                <span style="background: rgba(255,255,255,0.15); padding: 12px 25px; border-radius: 50px;">🏆 6 Categories</span>
+                <span style="background: rgba(255,255,255,0.15); padding: 12px 25px; border-radius: 50px;">🏫 All Schools</span>
+            </div>
+            <button style="background: #FFD93D; color: #2D1B4E; border: none; padding: 16px 40px; border-radius: 50px; font-weight: 700; font-size: 18px; cursor: pointer; box-shadow: 0 8px 30px rgba(255, 217, 61, 0.3); transition: all 0.3s ease;">
+                Register Now →
             </button>
         </div>
-    </div>
-</header>
+    </section>
 
-<!-- ============================================ -->
-<!-- COMPASS SECTION - WITH CARTOON ILLUSTRATIONS -->
-<!-- ============================================ -->
-<section class="compass-section" id="compass">
-    <div class="container">
-        <!-- Header -->
-        <div class="compass-header">
-            <span class="section-tag">Compass</span>
-            <h2>Find your direction with <span class="gradient-text">career intelligence</span></h2>
-            <p>Psychometric assessment + AI report + 9 tools. Built for UAE secondary school students.</p>
-        </div>
-
-        <!-- Buttons -->
-        <div class="compass-buttons">
-            <a href="#" class="btn btn-primary" style="padding: 14px 32px; font-size: 16px;">
-                Get your career report →
-            </a>
-            <a href="#" class="btn btn-outline" style="padding: 14px 32px; font-size: 16px;">
-                <i class="fas fa-play-circle"></i> How it works
-            </a>
-        </div>
-
-        <!-- ============================================ -->
-        <!-- BIG CARTOON CHARACTERS - Using Illustrated Characters -->
-        <!-- ============================================ -->
-        <div class="characters-grid">
-            
-            <!-- Cartoon 1: Take the assessment -->
-            <div class="character-card">
-                <div class="speech-bubble" style="background: #6C3CE1;">
-                    📝 Take the assessment
-                </div>
-                <div class="character-image-wrapper" style="border-color: #6C3CE1;">
-                    <!-- Option A: If you uploaded Open Peeps images -->
-                    <!-- <img src="character1.png" alt="Assessment Character"> -->
-                    
-                    <!-- Option B: Using a cartoon-style avatar service -->
-                    <img src="https://api.dicebear.com/7.x/adventurer/svg?seed=assessment&backgroundColor=6C3CE1" alt="Assessment Character">
-                </div>
-                <span class="character-label">✨ AI-powered</span>
-            </div>
-
-            <!-- Cartoon 2: Get scored -->
-            <div class="character-card">
-                <div class="speech-bubble speech-bubble-right" style="background: #FF6B6B; border-radius: 24px 24px 4px 24px;">
-                    ⭐ Get scored
-                </div>
-                <div class="character-image-wrapper" style="border-color: #FF6B6B;">
-                    <!-- Option A: If you uploaded Open Peeps images -->
-                    <!-- <img src="character2.png" alt="Scored Character"> -->
-                    
-                    <!-- Option B: Using a cartoon-style avatar service -->
-                    <img src="https://api.dicebear.com/7.x/adventurer/svg?seed=scored&backgroundColor=FF6B6B" alt="Scored Character">
-                </div>
-                <span class="character-label">⚡ Instant results</span>
-            </div>
-
-            <!-- Cartoon 3: AI writes your report -->
-            <div class="character-card">
-                <div class="speech-bubble" style="background: #00D4AA;">
-                    🤖 AI writes your report
-                </div>
-                <div class="character-image-wrapper" style="border-color: #00D4AA;">
-                    <!-- Option A: If you uploaded Open Peeps images -->
-                    <!-- <img src="character3.png" alt="AI Report Character"> -->
-                    
-                    <!-- Option B: Using a cartoon-style avatar service -->
-                    <img src="https://api.dicebear.com/7.x/adventurer/svg?seed=report&backgroundColor=00D4AA" alt="AI Report Character">
-                </div>
-                <span class="character-label">🧠 AI-generated</span>
-            </div>
-
-            <!-- Cartoon 4: 9 tools unlock -->
-            <div class="character-card">
-                <div class="speech-bubble speech-bubble-right" style="background: #FF9F43; border-radius: 24px 24px 4px 24px;">
-                    🔓 9 tools unlock
-                </div>
-                <div class="character-image-wrapper" style="border-color: #FF9F43;">
-                    <!-- Option A: If you uploaded Open Peeps images -->
-                    <!-- <img src="character4.png" alt="Tools Character"> -->
-                    
-                    <!-- Option B: Using a cartoon-style avatar service -->
-                    <img src="https://api.dicebear.com/7.x/adventurer/svg?seed=tools&backgroundColor=FF9F43" alt="Tools Character">
-                </div>
-                <span class="character-label">🚀 Full access</span>
-            </div>
-
-        </div>
-
-        <!-- One Stop for Everything Career -->
-        <div class="one-stop-box">
-            <div class="deco-circle c1"></div>
-            <div class="deco-circle c2"></div>
-            <div class="one-stop-content">
-                <i class="fas fa-compass" style="font-size: 50px; margin-bottom: 15px; display: block;"></i>
-                <h2>One stop for everything career.</h2>
-                <p>Everything you need to own your future</p>
-                
-                <div class="tool-tags">
-                    <span class="tool-tag"><i class="fas fa-clipboard-list" style="margin-right: 8px;"></i> Take the assessment</span>
-                    <span class="tool-tag"><i class="fas fa-chart-simple" style="margin-right: 8px;"></i> Get scored</span>
-                    <span class="tool-tag"><i class="fas fa-robot" style="margin-right: 8px;"></i> AI writes your report</span>
-                    <span class="tool-tag"><i class="fas fa-key" style="margin-right: 8px;"></i> 9 tools unlock</span>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- ============================================ -->
-<!-- PROGRAMS SECTION -->
-<!-- ============================================ -->
-<section id="programs" style="padding: 80px 0; background: white;">
-    <div class="container">
-        <div style="text-align: center; max-width: 700px; margin: 0 auto 50px;">
-            <span class="section-tag">Programs</span>
-            <h2 style="font-size: 38px; font-weight: 800; margin: 15px 0;">Choose Your Grade,<br/>Start Your Journey</h2>
-            <p style="color: #4A4A6A;">Every grade has a unique path designed for your success</p>
-        </div>
-
-        <div class="programs-grid">
-            <!-- Grade 10 -->
-            <div class="program-card">
-                <div style="display: inline-block; background: #6C3CE1; color: white; padding: 4px 16px; border-radius: 12px; font-size: 12px; font-weight: 600; margin-bottom: 15px;">Foundation</div>
-                <div style="display: flex; justify-content: center; margin-bottom: 15px;">
-                    <img src="https://api.dicebear.com/7.x/adventurer/svg?seed=grade10&backgroundColor=6C3CE1" alt="Grade 10" style="border-radius: 50%; width: 80px; height: 80px; border: 3px solid #6C3CE1;">
-                </div>
-                <h3 style="font-size: 24px; margin-bottom: 10px;">Grade 10</h3>
-                <p style="color: #666; font-size: 14px; margin-bottom: 15px;">Build your foundation with exploration and discovery</p>
-                <ul style="list-style: none; padding: 0; text-align: left; margin: 15px 0;">
-                    <li style="padding: 6px 0; display: flex; align-items: center; gap: 10px; font-size: 14px; color: #4A4A6A;"><i class="fas fa-check-circle" style="color: #6C3CE1;"></i> Profile progress bar</li>
-                    <li style="padding: 6px 0; display: flex; align-items: center; gap: 10px; font-size: 14px; color: #4A4A6A;"><i class="fas fa-check-circle" style="color: #6C3CE1;"></i> Activity recommendations</li>
-                    <li style="padding: 6px 0; display: flex; align-items: center; gap: 10px; font-size: 14px; color: #4A4A6A;"><i class="fas fa-check-circle" style="color: #6C3CE1;"></i> Gap analysis</li>
-                </ul>
-                <a href="signup.html" style="display: block; width: 100%; padding: 12px; border-radius: 12px; border: 2px solid #6C3CE1; color: #6C3CE1; text-decoration: none; font-weight: 600; text-align: center;">Learn More →</a>
-            </div>
-
-            <!-- Grade 11 -->
-            <div class="program-card highlight">
-                <div style="display: inline-block; background: #FF6B6B; color: white; padding: 4px 16px; border-radius: 12px; font-size: 12px; font-weight: 600; margin-bottom: 15px;">Most Popular</div>
-                <div style="display: flex; justify-content: center; margin-bottom: 15px;">
-                    <img src="https://api.dicebear.com/7.x/adventurer/svg?seed=grade11&backgroundColor=FF6B6B" alt="Grade 11" style="border-radius: 50%; width: 80px; height: 80px; border: 3px solid #FF6B6B;">
-                </div>
-                <h3 style="font-size: 24px; margin-bottom: 10px;">Grade 11</h3>
-                <p style="color: #666; font-size: 14px; margin-bottom: 15px;">Serious planning for your university future</p>
-                <ul style="list-style: none; padding: 0; text-align: left; margin: 15px 0;">
-                    <li style="padding: 6px 0; display: flex; align-items: center; gap: 10px; font-size: 14px; color: #4A4A6A;"><i class="fas fa-check-circle" style="color: #FF6B6B;"></i> University shortlist</li>
-                    <li style="padding: 6px 0; display: flex; align-items: center; gap: 10px; font-size: 14px; color: #4A4A6A;"><i class="fas fa-check-circle" style="color: #FF6B6B;"></i> Reach/Target/Safety</li>
-                    <li style="padding: 6px 0; display: flex; align-items: center; gap: 10px; font-size: 14px; color: #4A4A6A;"><i class="fas fa-check-circle" style="color: #FF6B6B;"></i> Counselor handoff</li>
-                </ul>
-                <a href="signup.html" style="display: block; width: 100%; padding: 12px; border-radius: 12px; background: #6C3CE1; color: white; text-decoration: none; font-weight: 600; text-align: center;">Start Planning →</a>
-            </div>
-
-            <!-- Grade 12 -->
-            <div class="program-card">
-                <div style="display: inline-block; background: #00D4AA; color: white; padding: 4px 16px; border-radius: 12px; font-size: 12px; font-weight: 600; margin-bottom: 15px;">Application Ready</div>
-                <div style="display: flex; justify-content: center; margin-bottom: 15px;">
-                    <img src="https://api.dicebear.com/7.x/adventurer/svg?seed=grade12&backgroundColor=00D4AA" alt="Grade 12" style="border-radius: 50%; width: 80px; height: 80px; border: 3px solid #00D4AA;">
-                </div>
-                <h3 style="font-size: 24px; margin-bottom: 10px;">Grade 12</h3>
-                <p style="color: #666; font-size: 14px; margin-bottom: 15px;">Complete your application with confidence</p>
-                <ul style="list-style: none; padding: 0; text-align: left; margin: 15px 0;">
-                    <li style="padding: 6px 0; display: flex; align-items: center; gap: 10px; font-size: 14px; color: #4A4A6A;"><i class="fas fa-check-circle" style="color: #00D4AA;"></i> Application deadlines</li>
-                    <li style="padding: 6px 0; display: flex; align-items: center; gap: 10px; font-size: 14px; color: #4A4A6A;"><i class="fas fa-check-circle" style="color: #00D4AA;"></i> Essay support</li>
-                    <li style="padding: 6px 0; display: flex; align-items: center; gap: 10px; font-size: 14px; color: #4A4A6A;"><i class="fas fa-check-circle" style="color: #00D4AA;"></i> Final submissions</li>
-                </ul>
-                <a href="signup.html" style="display: block; width: 100%; padding: 12px; border-radius: 12px; border: 2px solid #00D4AA; color: #00D4AA; text-decoration: none; font-weight: 600; text-align: center;">Get Support →</a>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- ============================================ -->
-<!-- SHOWCASE SECTION -->
-<!-- ============================================ -->
-<section id="showcase" style="padding: 80px 0; background: linear-gradient(135deg, #f8f5ff, #fff5f5);">
-    <div class="container">
-        <div style="text-align: center; max-width: 800px; margin: 0 auto;">
-            <div style="display: inline-block; background: #FF6B6B; color: white; padding: 6px 24px; border-radius: 20px; font-size: 14px; font-weight: 600; margin-bottom: 15px;">REGISTRATION OPEN</div>
-            <h2 style="font-size: 42px; font-weight: 800; margin-bottom: 15px;">The National Showcase 2026</h2>
-            <p style="font-size: 18px; color: #4A4A6A; max-width: 600px; margin: 0 auto 30px;">The biggest student competition in the UAE. Present real work. Compete in live challenges. Get judged by industry leaders.</p>
-            
-            <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; margin: 30px 0;">
-                <div style="background: white; padding: 12px 24px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.06); display: flex; align-items: center; gap: 10px;">
-                    <i class="fas fa-calendar-alt" style="color: #6C3CE1; font-size: 18px;"></i>
-                    <span style="font-weight: 600;">June 2026</span>
-                </div>
-                <div style="background: white; padding: 12px 24px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.06); display: flex; align-items: center; gap: 10px;">
-                    <i class="fas fa-map-marker-alt" style="color: #FF6B6B; font-size: 18px;"></i>
-                    <span style="font-weight: 600;">Dubai, UAE</span>
-                </div>
-                <div style="background: white; padding: 12px 24px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.06); display: flex; align-items: center; gap: 10px;">
-                    <i class="fas fa-trophy" style="color: #00D4AA; font-size: 18px;"></i>
-                    <span style="font-weight: 600;">6 Categories</span>
-                </div>
-                <div style="background: white; padding: 12px 24px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.06); display: flex; align-items: center; gap: 10px;">
-                    <i class="fas fa-school" style="color: #FF9F43; font-size: 18px;"></i>
-                    <span style="font-weight: 600;">All Schools</span>
-                </div>
-            </div>
-
-            <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
-                <a href="#" class="btn btn-primary" style="padding: 14px 32px; font-size: 16px;">Register Now <i class="fas fa-arrow-right"></i></a>
-                <a href="#" class="btn btn-outline" style="padding: 14px 32px; font-size: 16px;">Learn More <i class="fas fa-info-circle"></i></a>
-            </div>
-
-            <div style="display: flex; justify-content: center; margin-top: 30px;">
-                <img src="https://api.dicebear.com/7.x/adventurer/svg?seed=showcase&backgroundColor=6C3CE1" alt="Showcase" style="border-radius: 50%; width: 80px; height: 80px; border: 3px solid #6C3CE1;">
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- ============================================ -->
-<!-- PRICING SECTION -->
-<!-- ============================================ -->
-<section id="pricing" style="padding: 80px 0; background: white;">
-    <div class="container">
-        <div style="text-align: center; max-width: 700px; margin: 0 auto 50px;">
-            <span class="section-tag">Pricing 2026</span>
-            <h2 style="font-size: 38px; font-weight: 800; margin: 15px 0;">Pick your program.<br/>One step. Done.</h2>
-            <p style="color: #4A4A6A;">Three programs. Tap the one that fits — only its plans show. KHDA Permit #633441.</p>
-        </div>
-
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px;">
-            <!-- Grade 10 -->
-            <div style="background: white; border-radius: 20px; padding: 30px; text-align: center; box-shadow: 0 4px 20px rgba(0,0,0,0.06); border: 1px solid #eee;">
-                <h3 style="font-size: 22px;">Grade 10</h3>
-                <div style="display: inline-block; background: #eee; color: #666; padding: 4px 12px; border-radius: 12px; font-size: 12px; margin: 10px 0;">Foundation</div>
-                <div style="margin: 20px 0;">
-                    <span style="font-size: 18px; font-weight: 600; color: #6C3CE1;">AED</span>
-                    <span style="font-size: 48px; font-weight: 800; color: #1A1A2E;">450</span>
-                    <span style="font-size: 16px; color: #666;">/month</span>
-                </div>
-                <ul style="list-style: none; padding: 0; text-align: left; margin: 20px 0;">
-                    <li style="padding: 8px 0; display: flex; align-items: center; gap: 10px; color: #4A4A6A; font-size: 14px;"><i class="fas fa-check" style="color: #6C3CE1;"></i> Profile progress bar</li>
-                    <li style="padding: 8px 0; display: flex; align-items: center; gap: 10px; color: #4A4A6A; font-size: 14px;"><i class="fas fa-check" style="color: #6C3CE1;"></i> Activity recommendations</li>
-                    <li style="padding: 8px 0; display: flex; align-items: center; gap: 10px; color: #4A4A6A; font-size: 14px;"><i class="fas fa-check" style="color: #6C3CE1;"></i> AI-powered guidance</li>
-                </ul>
-                <a href="signup.html" style="display: block; width: 100%; padding: 12px; border-radius: 12px; border: 2px solid #6C3CE1; color: #6C3CE1; text-decoration: none; font-weight: 600; text-align: center;">Get Started →</a>
-                <div style="font-size: 12px; color: #888; margin-top: 10px;">Starts September 2026</div>
-            </div>
-
-            <!-- Grade 11 -->
-            <div style="background: linear-gradient(135deg, #f8f5ff, #ffffff); border-radius: 20px; padding: 30px; text-align: center; box-shadow: 0 4px 20px rgba(0,0,0,0.06); border: 2px solid #6C3CE1;">
-                <h3 style="font-size: 22px;">Grade 11</h3>
-                <div style="display: inline-block; background: #FF6B6B; color: white; padding: 4px 12px; border-radius: 12px; font-size: 12px; margin: 10px 0;">Most Popular</div>
-                <div style="margin: 20px 0;">
-                    <span style="font-size: 18px; font-weight: 600; color: #6C3CE1;">AED</span>
-                    <span style="font-size: 48px; font-weight: 800; color: #1A1A2E;">650</span>
-                    <span style="font-size: 16px; color: #666;">/month</span>
-                </div>
-                <ul style="list-style: none; padding: 0; text-align: left; margin: 20px 0;">
-                    <li style="padding: 8px 0; display: flex; align-items: center; gap: 10px; color: #4A4A6A; font-size: 14px;"><i class="fas fa-check" style="color: #FF6B6B;"></i> University shortlist</li>
-                    <li style="padding: 8px 0; display: flex; align-items: center; gap: 10px; color: #4A4A6A; font-size: 14px;"><i class="fas fa-check" style="color: #FF6B6B;"></i> Counselor handoff</li>
-                    <li style="padding: 8px 0; display: flex; align-items: center; gap: 10px; color: #4A4A6A; font-size: 14px;"><i class="fas fa-check" style="color: #FF6B6B;"></i> 1-on-1 mentoring</li>
-                </ul>
-                <a href="signup.html" style="display: block; width: 100%; padding: 12px; border-radius: 12px; background: #6C3CE1; color: white; text-decoration: none; font-weight: 600; text-align: center;">Start Planning →</a>
-                <div style="font-size: 12px; color: #888; margin-top: 10px;">Starts September 2026</div>
-            </div>
-
-            <!-- Grade 12 -->
-            <div style="background: white; border-radius: 20px; padding: 30px; text-align: center; box-shadow: 0 4px 20px rgba(0,0,0,0.06); border: 1px solid #eee;">
-                <h3 style="font-size: 22px;">Grade 12</h3>
-                <div style="display: inline-block; background: #00D4AA; color: white; padding: 4px 12px; border-radius: 12px; font-size: 12px; margin: 10px 0;">Application Ready</div>
-                <div style="margin: 20px 0;">
-                    <span style="font-size: 18px; font-weight: 600; color: #6C3CE1;">AED</span>
-                    <span style="font-size: 48px; font-weight: 800; color: #1A1A2E;">999</span>
-                    <span style="font-size: 16px; color: #666;">/year</span>
-                </div>
-                <ul style="list-style: none; padding: 0; text-align: left; margin: 20px 0;">
-                    <li style="padding: 8px 0; display: flex; align-items: center; gap: 10px; color: #4A4A6A; font-size: 14px;"><i class="fas fa-check" style="color: #00D4AA;"></i> Application deadlines</li>
-                    <li style="padding: 8px 0; display: flex; align-items: center; gap: 10px; color: #4A4A6A; font-size: 14px;"><i class="fas fa-check" style="color: #00D4AA;"></i> Essay support</li>
-                    <li style="padding: 8px 0; display: flex; align-items: center; gap: 10px; color: #4A4A6A; font-size: 14px;"><i class="fas fa-check" style="color: #00D4AA;"></i> Full support package</li>
-                </ul>
-                <a href="signup.html" style="display: block; width: 100%; padding: 12px; border-radius: 12px; border: 2px solid #00D4AA; color: #00D4AA; text-decoration: none; font-weight: 600; text-align: center;">Get Support →</a>
-                <div style="font-size: 12px; color: #888; margin-top: 10px;">Rolling enrolment</div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- ============================================ -->
-<!-- FOOTER -->
-<!-- ============================================ -->
-<footer style="background: #1A1A2E; color: white; padding: 60px 0 30px;">
-    <div class="container">
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 40px;">
-            <div>
-                <a href="index.html" style="color: white; text-decoration: none; display: flex; align-items: center; gap: 10px; font-size: 20px; font-weight: 700;">
-                    <svg width="32" height="32" viewBox="0 0 40 40" fill="none">
-                        <rect width="40" height="40" rx="12" fill="url(#logoGrad)"/>
-                        <path d="M12 28V14L20 20L28 14V28" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-                        <path d="M12 20L20 26L28 20" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-                        <defs>
-                            <linearGradient id="logoGrad" x1="0" y1="0" x2="40" y2="40">
-                                <stop offset="0%" stop-color="#6C3CE1"/>
-                                <stop offset="100%" stop-color="#FF6B6B"/>
-                            </linearGradient>
-                        </defs>
-                    </svg>
-                    <span>Futures Abroad</span>
-                </a>
-                <p style="color: #aaa; margin-top: 15px; font-size: 14px;">Your AI-powered university journey guide.</p>
-                <div style="display: flex; gap: 12px; margin-top: 15px;">
-                    <a href="#" style="color: #aaa; font-size: 18px;"><i class="fab fa-linkedin-in"></i></a>
-                    <a href="#" style="color: #aaa; font-size: 18px;"><i class="fab fa-twitter"></i></a>
-                    <a href="#" style="color: #aaa; font-size: 18px;"><i class="fab fa-youtube"></i></a>
-                    <a href="#" style="color: #aaa; font-size: 18px;"><i class="fab fa-instagram"></i></a>
-                </div>
-            </div>
-            <div>
-                <h4 style="font-size: 16px; margin-bottom: 15px;">Programs</h4>
-                <ul style="list-style: none; padding: 0;">
-                    <li style="margin-bottom: 8px;"><a href="#programs" style="color: #aaa; text-decoration: none;">Grade 10</a></li>
-                    <li style="margin-bottom: 8px;"><a href="#programs" style="color: #aaa; text-decoration: none;">Grade 11</a></li>
-                    <li style="margin-bottom: 8px;"><a href="#programs" style="color: #aaa; text-decoration: none;">Grade 12</a></li>
-                </ul>
-            </div>
-            <div>
-                <h4 style="font-size: 16px; margin-bottom: 15px;">Resources</h4>
-                <ul style="list-style: none; padding: 0;">
-                    <li style="margin-bottom: 8px;"><a href="#compass" style="color: #aaa; text-decoration: none;">Compass</a></li>
-                    <li style="margin-bottom: 8px;"><a href="#showcase" style="color: #aaa; text-decoration: none;">Showcase</a></li>
-                    <li style="margin-bottom: 8px;"><a href="#pricing" style="color: #aaa; text-decoration: none;">Pricing</a></li>
-                </ul>
-            </div>
-            <div>
-                <h4 style="font-size: 16px; margin-bottom: 15px;">KHDA</h4>
-                <ul style="list-style: none; padding: 0;">
-                    <li style="margin-bottom: 8px;"><a href="#" style="color: #aaa; text-decoration: none;">Permit #633441</a></li>
-                    <li style="margin-bottom: 8px;"><a href="#" style="color: #aaa; text-decoration: none;">Accreditation</a></li>
-                </ul>
-            </div>
-        </div>
-        <div style="border-top: 1px solid #333; margin-top: 40px; padding-top: 20px; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 15px;">
-            <p style="color: #666; font-size: 14px;">&copy; 2026 Futures Abroad. All rights reserved.</p>
-            <div style="display: flex; gap: 20px; flex-wrap: wrap;">
-                <a href="#" style="color: #666; text-decoration: none; font-size: 14px;">Privacy Policy</a>
-                <a href="#" style="color: #666; text-decoration: none; font-size: 14px;">Terms of Service</a>
-                <a href="#" style="color: #666; text-decoration: none; font-size: 14px;">Cookie Policy</a>
-            </div>
-        </div>
-    </div>
-</footer>
-
-<!-- ============================================ -->
-<!-- COOKIE CONSENT -->
-<!-- ============================================ -->
-<div style="position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: white; border-radius: 16px; padding: 20px 30px; box-shadow: 0 8px 40px rgba(0,0,0,0.15); max-width: 700px; width: 90%; z-index: 1000; display: flex; align-items: center; justify-content: space-between; gap: 20px; flex-wrap: wrap;">
-    <div style="display: flex; align-items: center; gap: 15px; flex: 1;">
-        <img src="https://api.dicebear.com/7.x/adventurer/svg?seed=cookie&backgroundColor=6C3CE1" alt="Cookie" style="border-radius: 50%; width: 40px; height: 40px;">
-        <p style="font-size: 13px; color: #4A4A6A; margin: 0;">
-            We use essential cookies to keep you logged in, and optional analytics cookies to improve Futures Abroad. See our 
-            <a href="#" style="color: #6C3CE1; text-decoration: none;">Cookie Policy</a> and <a href="#" style="color: #6C3CE1; text-decoration: none;">Privacy Policy</a>.
+    <!-- ===== PRICING SECTION ===== -->
+    <section style="padding: 70px 40px; background: #FFF8F0;">
+        <h2 style="text-align: center; font-size: 38px; color: #2D1B4E;" data-aos="fade-up">
+            Pick Your Program. <span style="color: #6C3CE1;">One Step. Done.</span>
+        </h2>
+        <p style="text-align: center; color: #666; font-size: 16px; margin-bottom: 40px;" data-aos="fade-up" data-aos-delay="100">
+            Three programs. Tap the one that fits — only its plans show. KHDA Permit #633441.
         </p>
-    </div>
-    <div style="display: flex; gap: 10px;">
-        <button style="padding: 8px 18px; border-radius: 12px; border: 2px solid #ddd; background: transparent; color: #1A1A2E; font-weight: 600; cursor: pointer; font-size: 13px;">Reject</button>
-        <button style="padding: 8px 18px; border-radius: 12px; border: none; background: #6C3CE1; color: white; font-weight: 600; cursor: pointer; font-size: 13px;">Accept All</button>
-    </div>
-</div>
+        
+        <div style="display: flex; gap: 30px; justify-content: center; flex-wrap: wrap; max-width: 1100px; margin: 0 auto;">
+            
+            <!-- Pricing Grade 10 -->
+            <div style="background: white; border-radius: 30px; padding: 35px 30px; flex: 1; min-width: 250px; max-width: 320px; box-shadow: 0 10px 40px rgba(0,0,0,0.06); transition: all 0.4s ease;" data-aos="flip-up" data-aos-delay="0">
+                <h3 style="color: #2D1B4E; font-size: 20px;">Grade 10</h3>
+                <p style="color: #6C3CE1; font-weight: 600;">Foundation</p>
+                <div style="font-size: 36px; font-weight: 800; color: #2D1B4E; margin: 15px 0;">AED 450 <span style="font-size: 16px; font-weight: 400; color: #888;">/month</span></div>
+                <ul style="list-style: none; padding: 0; text-align: left;">
+                    <li style="padding: 8px 0; border-bottom: 1px solid #f5f5f5;">📊 Profile progress bar</li>
+                    <li style="padding: 8px 0; border-bottom: 1px solid #f5f5f5;">🎯 Activity recommendations</li>
+                    <li style="padding: 8px 0;">🤖 AI-powered guidance</li>
+                </ul>
+                <p style="margin: 20px 0 10px; color: #888; font-size: 14px;">Starts September 2026</p>
+                <button style="width: 100%; background: #6C3CE1; color: white; border: none; padding: 14px; border-radius: 50px; font-weight: 700; cursor: pointer; transition: all 0.3s ease;">Choose Plan</button>
+            </div>
+            
+            <!-- Pricing Grade 11 (Featured) -->
+            <div style="background: #2D1B4E; border-radius: 30px; padding: 35px 30px; flex: 1; min-width: 250px; max-width: 320px; box-shadow: 0 15px 50px rgba(108, 60, 225, 0.25); transition: all 0.4s ease; transform: scale(1.03); border: 3px solid #FFD93D;" data-aos="flip-up" data-aos-delay="100">
+                <div style="background: #FFD93D; padding: 5px 15px; border-radius: 50px; display: inline-block; font-weight: 700; font-size: 12px; color: #2D1B4E;">⭐ Most Popular</div>
+                <h3 style="color: white; font-size: 20px; margin-top: 10px;">Grade 11</h3>
+                <p style="color: #B8A0D4; font-weight: 600;">Serious Planning</p>
+                <div style="font-size: 36px; font-weight: 800; color: #FFD93D; margin: 15px 0;">AED 650 <span style="font-size: 16px; font-weight: 400; color: #B8A0D4;">/month</span></div>
+                <ul style="list-style: none; padding: 0; text-align: left; color: #ddd;">
+                    <li style="padding: 8px 0; border-bottom: 1px solid #3D2B5E;">🏛️ University shortlist</li>
+                    <li style="padding: 8px 0; border-bottom: 1px solid #3D2B5E;">🤝 Counselor handoff</li>
+                    <li style="padding: 8px 0;">👨‍🏫 1-on-1 mentoring</li>
+                </ul>
+                <p style="margin: 20px 0 10px; color: #B8A0D4; font-size: 14px;">Starts September 2026</p>
+                <button style="width: 100%; background: #FFD93D; color: #2D1B4E; border: none; padding: 14px; border-radius: 50px; font-weight: 700; cursor: pointer; transition: all 0.3s ease;">Choose Plan</button>
+            </div>
+            
+            <!-- Pricing Grade 12 -->
+            <div style="background: white; border-radius: 30px; padding: 35px 30px; flex: 1; min-width: 250px; max-width: 320px; box-shadow: 0 10px 40px rgba(0,0,0,0.06); transition: all 0.4s ease;" data-aos="flip-up" data-aos-delay="200">
+                <h3 style="color: #2D1B4E; font-size: 20px;">Grade 12</h3>
+                <p style="color: #FF6B6B; font-weight: 600;">Application Ready</p>
+                <div style="font-size: 36px; font-weight: 800; color: #2D1B4E; margin: 15px 0;">AED 999 <span style="font-size: 16px; font-weight: 400; color: #888;">/year</span></div>
+                <ul style="list-style: none; padding: 0; text-align: left;">
+                    <li style="padding: 8px 0; border-bottom: 1px solid #f5f5f5;">📅 Application deadlines</li>
+                    <li style="padding: 8px 0; border-bottom: 1px solid #f5f5f5;">✍️ Essay support</li>
+                    <li style="padding: 8px 0;">🎁 Full support package</li>
+                </ul>
+                <p style="margin: 20px 0 10px; color: #888; font-size: 14px;">Rolling enrolment</p>
+                <button style="width: 100%; background: #FF6B6B; color: white; border: none; padding: 14px; border-radius: 50px; font-weight: 700; cursor: pointer; transition: all 0.3s ease;">Choose Plan</button>
+            </div>
+            
+        </div>
+    </section>
+
+    <!-- ===== FOOTER ===== -->
+    <footer style="background: #2D1B4E; color: #B8A0D4; padding: 40px; text-align: center;">
+        <div style="max-width: 800px; margin: 0 auto;">
+            <div style="display: flex; justify-content: center; gap: 40px; flex-wrap: wrap; margin-bottom: 20px;">
+                <a href="#" style="color: #B8A0D4; text-decoration: none;">Cookie Policy</a>
+                <a href="#" style="color: #B8A0D4; text-decoration: none;">Privacy Policy</a>
+                <a href="#" style="color: #B8A0D4; text-decoration: none;">Terms of Service</a>
+            </div>
+            <p style="font-size: 14px; opacity: 0.7;">We use essential cookies to keep you logged in, and optional analytics cookies to improve Futures Abroad.</p>
+            <p style="margin-top: 20px; font-size: 14px;">© 2026 Futures Abroad. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- ===== JAVASCRIPT LIBRARIES ===== -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({
+            duration: 800,
+            once: true,
+            offset: 100
+        });
+    </script>
+
+    <!-- Additional hover effects -->
+    <style>
+        /* Floating animation for the compass */
+        @keyframes float {
+            0% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-15px) rotate(3deg); }
+            100% { transform: translateY(0px) rotate(0deg); }
+        }
+        
+        /* Hover effects for all cards */
+        div[style*="border-radius: 30px"]:hover {
+            transform: translateY(-10px) !important;
+            box-shadow: 0 20px 60px rgba(108, 60, 225, 0.15) !important;
+        }
+        
+        /* Button hover effects */
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px rgba(108, 60, 225, 0.3) !important;
+        }
+        
+        /* Smooth transitions for everything */
+        * {
+            transition: all 0.3s ease;
+        }
+    </style>
 
 </body>
 </html>
