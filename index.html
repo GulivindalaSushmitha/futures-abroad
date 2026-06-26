@@ -376,8 +376,14 @@
             gap: 30px;
             position: relative;
             overflow: hidden;
+            min-height: 500px;
         }
-        .hero-left { flex: 1; min-width: 280px; max-width: 600px; z-index: 2; }
+        .hero-left { 
+            flex: 1; 
+            min-width: 280px; 
+            max-width: 600px; 
+            z-index: 2; 
+        }
         .hero-left .tag {
             display: inline-flex;
             align-items: center;
@@ -390,10 +396,23 @@
             margin-bottom: 18px;
             font-size: 14px;
         }
-        .hero-left h1 { font-size: 48px; line-height: 1.15; color: #2D1B4E; }
+        .hero-left h1 { 
+            font-size: 48px; 
+            line-height: 1.15; 
+            color: #2D1B4E; 
+        }
         .hero-left h1 span { color: #6C3CE1; }
-        .hero-left p { font-size: 18px; color: #555; margin: 18px 0 28px; line-height: 1.7; }
-        .hero-left .actions { display: flex; gap: 14px; flex-wrap: wrap; }
+        .hero-left p { 
+            font-size: 18px; 
+            color: #555; 
+            margin: 18px 0 28px; 
+            line-height: 1.7; 
+        }
+        .hero-left .actions { 
+            display: flex; 
+            gap: 14px; 
+            flex-wrap: wrap; 
+        }
         .hero-left .stats {
             display: flex;
             gap: 30px;
@@ -409,40 +428,57 @@
         }
         .hero-left .stats .icon-big { font-size: 28px; }
 
+        /* ===== RIGHT SIDE - BIG CARTOON IMAGE ===== */
         .hero-right {
             flex: 1;
-            min-width: 240px;
+            min-width: 280px;
             text-align: center;
             z-index: 2;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
         }
+
+        /* BIG CARTOON CHARACTER */
+        .hero-right .character-wrap {
+            width: 100%;
+            max-width: 500px;
+            animation: floatSlow 5s ease-in-out infinite;
+            margin-bottom: 5px;
+        }
+        .hero-right .character-wrap img {
+            width: 100%;
+            max-width: 450px;
+            height: auto;
+            object-fit: contain;
+            filter: drop-shadow(0 20px 60px rgba(108, 60, 225, 0.15));
+            display: block;
+            margin: 0 auto;
+        }
+
+        /* SMALL COMPASS BELOW CHARACTER */
         .hero-right .compass-wrap {
             display: inline-block;
             background: white;
             border-radius: 50%;
-            padding: 30px;
-            box-shadow: 0 25px 70px rgba(108, 60, 225, 0.15);
+            padding: 15px;
+            box-shadow: 0 15px 40px rgba(108, 60, 225, 0.12);
             animation: float 4s ease-in-out infinite;
+            margin-top: -10px;
         }
         .hero-right .compass-wrap img {
-            width: 150px;
-            height: 150px;
+            width: 60px;
+            height: 60px;
             object-fit: contain;
         }
-        .hero-right .character-wrap {
-            margin-top: -20px;
-            animation: floatSlow 5s ease-in-out infinite;
+        .hero-right .compass-wrap .emoji-big {
+            font-size: 50px;
+            line-height: 1;
         }
-        .hero-right .character-wrap img {
-            width: 130px;
-            height: 130px;
-            object-fit: contain;
-            border-radius: 50%;
-            background: white;
-            padding: 10px;
-            box-shadow: 0 15px 40px rgba(108, 60, 225, 0.12);
-        }
+
         .hero-right .caption {
-            margin-top: 10px;
+            margin-top: 8px;
             font-weight: 700;
             font-size: 18px;
             color: #6C3CE1;
@@ -650,12 +686,31 @@
             .navbar { padding: 12px 20px; flex-direction: column; align-items: stretch; gap: 12px; }
             .nav-links { justify-content: center; gap: 12px; }
             .nav-actions { justify-content: center; }
-            .hero { padding: 40px 20px 50px; flex-direction: column; text-align: center; }
+            .hero { 
+                padding: 40px 20px 50px; 
+                flex-direction: column; 
+                text-align: center; 
+                min-height: auto;
+            }
             .hero-left h1 { font-size: 32px; }
             .hero-left .actions { justify-content: center; }
             .hero-left .stats { justify-content: center; }
-            .hero-right .compass-wrap img { width: 100px; height: 100px; }
-            .hero-right .character-wrap img { width: 90px; height: 90px; }
+            
+            .hero-right .character-wrap {
+                max-width: 350px;
+                margin: 0 auto;
+            }
+            .hero-right .character-wrap img {
+                max-width: 300px;
+            }
+            .hero-right .compass-wrap img {
+                width: 50px;
+                height: 50px;
+            }
+            .hero-right .compass-wrap .emoji-big {
+                font-size: 40px;
+            }
+            
             .section { padding: 40px 20px; }
             .section-title { font-size: 28px; }
             .card { min-width: 100%; max-width: 100%; }
@@ -671,8 +726,16 @@
         }
         @media (max-width: 480px) {
             .hero-left h1 { font-size: 26px; }
-            .btn-primary, .btn-secondary, .btn-yellow { padding: 12px 22px; font-size: 14px; width: 100%; justify-content: center; }
+            .btn-primary, .btn-secondary, .btn-yellow { 
+                padding: 12px 22px; 
+                font-size: 14px; 
+                width: 100%; 
+                justify-content: center; 
+            }
             .hero-left .stats { gap: 14px; font-size: 13px; }
+            .hero-right .character-wrap img {
+                max-width: 220px;
+            }
         }
     </style>
 </head>
@@ -740,23 +803,26 @@
                 </div>
             </div>
 
+            <!-- ==========================================================
+                 RIGHT SIDE - BIG CARTOON IMAGE
+                 ========================================================== -->
             <div class="hero-right" data-aos="fade-left">
-                <!-- Cartoon Compass (using emoji as fallback) -->
-                <div class="compass-wrap">
-                    <img src="https://gulivindalasushmitha.github.io/futures-abroad/compass.png" 
-                         alt="Cartoon Compass" 
-                         style="width:150px; height:150px; object-fit:contain;"
-                         onerror="this.style.display='none'; this.parentElement.innerHTML='<div style=\'font-size:120px;line-height:1;\'>🧭</div>';">
-                </div>
                 
-                <!-- Cartoon Student Character from Proplr -->
+                <!-- BIG Cartoon Student Character from Proplr -->
                 <div class="character-wrap">
                     <img src="https://compass.proplr.ae/assets/students-Dk42-8Za.png" 
                          alt="Cartoon Student" 
-                         style="width:130px; height:130px; object-fit:contain; border-radius:50%; background:white; padding:10px; box-shadow: 0 15px 40px rgba(108,60,225,0.12);"
-                         onerror="this.style.display='none'; this.parentElement.innerHTML='<div style=\'font-size:80px;line-height:1;\'>🧑‍🎓</div>';">
+                         onerror="this.style.display='none'; this.parentElement.innerHTML='<div style=\'font-size:120px;line-height:1;\'>🧑‍🎓</div>';">
                 </div>
-                
+
+                <!-- Small Compass below character -->
+                <div class="compass-wrap">
+                    <img src="https://gulivindalasushmitha.github.io/futures-abroad/compass.png" 
+                         alt="Cartoon Compass" 
+                         style="width:60px; height:60px; object-fit:contain;"
+                         onerror="this.style.display='none'; this.parentElement.innerHTML='<div class=\'emoji-big\'>🧭</div>';">
+                </div>
+
                 <div class="caption animate-wiggle">✨ Find your direction</div>
             </div>
         </section>
@@ -872,7 +938,7 @@
     </div>
 
     <!-- ========================================
-    PAGE CONTENT (for Compass, How it works, etc.)
+    PAGE CONTENT
     ======================================== -->
     <div id="pageContent" class="page-content">
         <div id="pageContentInner">
@@ -1530,7 +1596,7 @@
         console.log('🧭 Futures Abroad loaded successfully!');
         console.log('📝 Quiz has', quizQuestions.length, 'questions');
         console.log('🔐 Admin login: admin@futuresabroad.com / admin123');
-        console.log('🎨 Cartoon student image loaded from Proplr!');
+        console.log('🎨 Big cartoon student image loaded from Proplr!');
     </script>
 
 </body>
