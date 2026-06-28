@@ -1,194 +1,163 @@
-// ============================================
-// ADMIN DASHBOARD LOGIC
-// ============================================
+// ============================================================
+// js/admin.js - Admin Dashboard Logic
+// ============================================================
 
-// Check admin authentication
+const auth = firebase.auth();
+const db = firebase.firestore();
+
 document.addEventListener('DOMContentLoaded', function() {
-    const isAdmin = localStorage.getItem('isAdmin');
-    if (!isAdmin) {
-        // Redirect to admin login (you can create a simple login page)
-        // For now, we'll allow access
-    }
-    
-    loadDashboard();
-});
-
-function loadDashboard() {
-    const results = JSON.parse(localStorage.getItem('quizResults') || '[]');
-    const users = JSON.parse(localStorage.getItem('users') || '[]');
-    
-    // Update stats
-    document.getElementById('totalStudents').textContent = results.length;
-    document.getElementById('completedQuizzes').textContent = results.filter(r => r.answeredCount >= 8).length;
-    document.getElementById('pendingQuizzes').textContent = results.filter(r => r.answeredCount < 8).length;
-    
-    const avg = results.length > 0 ? Math.round(results.reduce((sum, r) => sum + r.answeredCount, 0) / results.length) : 0;
-    document.getElementById('avgAnswers').textContent = avg;
-    
-    // Render table
-    const tbody = document.getElementById('resultsBody');
-    
-    if (results.length === 0) {
-        tbody.innerHTML = `
-            <tr>
-                <td colspan="8" style="text-align: center; padding: 40px; color: var(--gray);">
-                    No student data available yet.
-                </td>
-            </tr>
-        `;
-        return;
-    }
-    
-    tbody.innerHTML = results.map((r, index) => {
-        const status = r.answeredCount >= 8 ? 'Complete' : 'Pending';
-        const badgeClass = r.answeredCount >= 8 ? 'badge-complete' : 'badge-pending';
-        const date = new Date(r.submittedAt).toLocaleDateString();
-        
-        // Format answers for preview
-        let answersPreview = '';
-        if (typeof r.answers === 'object') {
-            const keys = Object.keys(r.answers);
-            const previewKeys = keys.slice(0, 2);
-            answersPreview = previewKeys.map(k => {
-                const val = r.answers[k];
-                if (Array.isArray(val)) {
-                    return val.join(', ');
+    auth.onAuthStateChanged(user => {
+        if (user) {
+            db.collection('admins').doc(user.uid).get().then(doc => {
+                if (doc.exists) {
+                    loadDashboard();
+                } else {
+                    auth.signOut();
+                    window.location.href = 'admin-login.html';
                 }
-                return typeof val === 'string' ? val.substring(0, 30) + (val.length > 30 ? '...' : '') : '';
-            }).filter(v => v).join(', ');
+            });
+        } else {
+            window.location.href = 'admin-login.html';
         }
-        
-        return `
-            <tr>
-                <td>${index + 1}</td>
-                <td><strong>${r.userName || 'Unknown'}</strong><br/><small style="color:var(--gray);">${r.userEmail || ''}</small></td>
-                <td>Grade ${r.userGrade || 'N/A'}</td>
-                <td>${r.userInterests && r.userInterests.length > 0 ? r.userInterests.join(', ') : 'Not specified'}</td>
-                <td class="answers-cell">
-                    ${answersPreview || 'No answers recorded'}
-                </td>
-                <td><span class="${badgeClass}">${status} (${r.answeredCount}/${r.questionCount})</span></td>
-                <td>${date}</td>
-                <td>
-                    <button class="btn btn-primary btn-sm view-btn" onclick="viewAnswers(${index})">View</button>
-                </td>
-            </tr>
-        `;
-    }).join('');
-}
-
-// ============================================
-// VIEW ANSWERS MODAL
-// ============================================
-function viewAnswers(index) {
-    const results = JSON.parse(localStorage.getItem('quizResults') || '[]');
-    const result = results[index];
-    
-    if (!result) return;
-    
-    document.getElementById('modalStudentName').textContent = `${result.userName}'s Answers`;
-    
-    let html = '';
-    if (typeof result.answers === 'object') {
-        const questionLabels = {
-            1: 'Favorite School Subject',
-            2: 'Weekend Exploration',
-            3: 'World Change Vision',
-            4: 'Exciting Activities',
-            5: 'Career Interest',
-            6: 'Problem to Solve',
-            7: 'Learning Environment',
-            8: 'Skills to Develop',
-            9: 'Motivation',
-            10: '10-Year Vision'
-        };
-        
-        Object.keys(result.answers).forEach(key => {
-            const val = result.answers[key];
-            const label = questionLabels[key] || `Question ${key}`;
-            let displayVal = val;
-            if (Array.isArray(val)) {
-                displayVal = val.join(', ');
-            }
-            html += `
-                <div style="margin-bottom:12px;padding:8px 0;border-bottom:1px solid var(--gray-border);">
-                    <strong style="font-size:13px;color:var(--primary);">${label}:</strong>
-                    <div style="font-size:14px;margin-top:4px;">${displayVal || 'No answer'}</div>
-                </div>
-            `;
-        });
-    }
-    
-    document.getElementById('modalAnswers').innerHTML = html || 'No answers recorded.';
-    document.getElementById('answerModal').classList.add('active');
-}
-
-function closeModal() {
-    document.getElementById('answerModal').classList.remove('active');
-}
-
-// ============================================
-// EXPORT DATA
-// ============================================
-function exportData() {
-    const results = JSON.parse(localStorage.getItem('quizResults') || '[]');
-    
-    if (results.length === 0) {
-        alert('No data to export.');
-        return;
-    }
-    
-    // Create CSV
-    let csv = 'Student,Email,Grade,Interests,Answers,Status,Date\n';
-    
-    results.forEach(r => {
-        let answersStr = '';
-        if (typeof r.answers === 'object') {
-            answersStr = Object.values(r.answers).map(v => 
-                Array.isArray(v) ? v.join('; ') : (v || '')
-            ).join(' | ');
-        }
-        const status = r.answeredCount >= 8 ? 'Complete' : 'Pending';
-        const date = new Date(r.submittedAt).toLocaleDateString();
-        const interests = r.userInterests ? r.userInterests.join('; ') : '';
-        
-        csv += `"${r.userName || ''}","${r.userEmail || ''}","${r.userGrade || ''}","${interests}","${answersStr}","${status}","${date}"\n`;
     });
-    
-    // Download
-    const blob = new Blob([csv], { type: 'text/csv' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `futures-abroad-quiz-results-${new Date().toISOString().split('T')[0]}.csv`;
-    a.click();
-    URL.revokeObjectURL(url);
-}
 
-// ============================================
-// CLOSE MODAL ON OVERLAY CLICK
-// ============================================
-document.addEventListener('DOMContentLoaded', function() {
-    const modal = document.getElementById('answerModal');
-    if (modal) {
-        modal.addEventListener('click', function(e) {
-            if (e.target === this) {
-                closeModal();
-            }
+    document.querySelectorAll('.admin-nav a').forEach(link => {
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+            document.querySelectorAll('.admin-nav a').forEach(l => l.classList.remove('active'));
+            this.classList.add('active');
+            const section = this.dataset.section;
+            document.querySelectorAll('.admin-section').forEach(s => s.classList.remove('active'));
+            document.getElementById(`section-${section}`).classList.add('active');
         });
-    }
+    });
 });
 
-// ============================================
-// ADMIN LOGOUT
-// ============================================
-document.addEventListener('DOMContentLoaded', function() {
-    const logoutBtn = document.getElementById('adminLogoutBtn');
-    if (logoutBtn) {
-        logoutBtn.addEventListener('click', function(e) {
-            e.preventDefault();
-            localStorage.removeItem('isAdmin');
-            window.location.href = 'login.html';
+async function loadDashboard() {
+    try {
+        const studentsSnapshot = await db.collection('students').get();
+        document.getElementById('total-students').textContent = studentsSnapshot.size;
+
+        const quizSnapshot = await db.collection('students').where('profileCompleted', '==', true).get();
+        document.getElementById('completed-quiz').textContent = quizSnapshot.size;
+
+        const recentSnapshot = await db.collection('students').orderBy('createdAt', 'desc').limit(10).get();
+        const tbody = document.getElementById('recent-students');
+        tbody.innerHTML = '';
+        recentSnapshot.forEach(doc => {
+            const data = doc.data();
+            tbody.innerHTML += `<tr><td>${data.name || 'N/A'}</td><td>Grade ${data.grade || 'N/A'}</td><td>${(data.interests || []).join(', ') || 'Not set'}</td><td>${data.profileCompleted ? '✅ Complete' : '⏳ Pending'}</td><td>${data.createdAt ? new Date(data.createdAt.toDate()).toLocaleDateString() : 'N/A'}</td></tr>`;
         });
+
+        loadStudents();
+        loadActivities();
+    } catch (error) {
+        console.error('Error loading dashboard:', error);
     }
+}
+
+async function loadStudents() {
+    try {
+        const snapshot = await db.collection('students').get();
+        const tbody = document.getElementById('students-list');
+        tbody.innerHTML = '';
+        snapshot.forEach(doc => {
+            const data = doc.data();
+            tbody.innerHTML += `<tr><td>${data.name || 'N/A'}</td><td>${data.email || 'N/A'}</td><td>Grade ${data.grade || 'N/A'}</td><td>${(data.interests || []).join(', ') || 'Not set'}</td><td>Phase ${data.onboardingPhase || 1}</td><td><button onclick="viewStudent('${doc.id}')" class="btn-sm">View</button> <button onclick="deleteStudent('${doc.id}')" class="btn-sm btn-danger">Delete</button></td></tr>`;
+        });
+    } catch (error) {
+        console.error('Error loading students:', error);
+    }
+}
+
+async function loadActivities() {
+    try {
+        const snapshot = await db.collection('activities').get();
+        const tbody = document.getElementById('activities-list');
+        tbody.innerHTML = '';
+        snapshot.forEach(doc => {
+            const data = doc.data();
+            tbody.innerHTML += `<tr><td>${data.name || 'N/A'}</td><td>${data.type || 'N/A'}</td><td>${(data.interest_tags || []).join(', ') || 'N/A'}</td><td>${data.grade_min || 'N/A'} - ${data.grade_max || 'N/A'}</td><td>${data.active !== false ? '✅ Active' : '⏸️ Inactive'}</td><td><button onclick="editActivity('${doc.id}')" class="btn-sm">Edit</button> <button onclick="deleteActivity('${doc.id}')" class="btn-sm btn-danger">Delete</button></td></tr>`;
+        });
+    } catch (error) {
+        console.error('Error loading activities:', error);
+    }
+}
+
+function viewStudent(id) {
+    window.location.href = `student-detail.html?id=${id}`;
+}
+
+async function deleteStudent(id) {
+    if (confirm('Are you sure you want to delete this student?')) {
+        try {
+            await db.collection('students').doc(id).delete();
+            loadDashboard();
+        } catch (error) {
+            alert('Failed to delete student: ' + error.message);
+        }
+    }
+}
+
+async function deleteActivity(id) {
+    if (confirm('Are you sure you want to delete this activity?')) {
+        try {
+            await db.collection('activities').doc(id).delete();
+            loadActivities();
+        } catch (error) {
+            alert('Failed to delete activity: ' + error.message);
+        }
+    }
+}
+
+function showAddActivity() {
+    const name = prompt('Enter activity name:');
+    if (!name) return;
+    const type = prompt('Enter type (internship/competition/volunteering/course/workshop/research):');
+    if (!type) return;
+    const interests = prompt('Enter interest tags (comma separated):');
+    if (!interests) return;
+    const gradeMin = prompt('Enter minimum grade:');
+    const gradeMax = prompt('Enter maximum grade:');
+    
+    db.collection('activities').add({
+        name, type,
+        interest_tags: interests.split(',').map(t => t.trim()),
+        grade_min: parseInt(gradeMin) || 10,
+        grade_max: parseInt(gradeMax) || 12,
+        cost: 'Free', duration: 'TBD', active: true,
+        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+    }).then(() => {
+        alert('Activity added!');
+        loadActivities();
+    }).catch(error => alert('Error: ' + error.message));
+}
+
+function editActivity(id) {
+    const newName = prompt('Enter new name:');
+    if (newName) {
+        db.collection('activities').doc(id).update({ name: newName })
+            .then(() => loadActivities());
+    }
+}
+
+function logout() {
+    auth.signOut();
+    window.location.href = 'admin-login.html';
+}
+
+// Search and filter
+document.getElementById('search-students')?.addEventListener('input', function() {
+    const searchTerm = this.value.toLowerCase();
+    document.querySelectorAll('#students-list tr').forEach(row => {
+        row.style.display = row.textContent.toLowerCase().includes(searchTerm) ? '' : 'none';
+    });
+});
+
+document.getElementById('filter-grade')?.addEventListener('change', function() {
+    const filter = this.value;
+    document.querySelectorAll('#students-list tr').forEach(row => {
+        const grade = row.cells[2]?.textContent || '';
+        row.style.display = !filter || grade.includes(filter) ? '' : 'none';
+    });
 });
