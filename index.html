@@ -996,6 +996,8 @@
         // Admin credentials (YOURS ONLY)
         const ADMIN_EMAIL = "admin@futuresabroad.com";
         const ADMIN_PASSWORD = "FuturesAdmin2026!";
+        // HARDCODED ADMIN UID - This is YOUR admin user's UID from Firebase
+        const ADMIN_UID = "hrONkvAlxVac4Wc7nwdNlLhd";
 
         console.log("🔥 Firebase initialized successfully!");
         console.log("📁 Project ID:", firebaseConfig.projectId);
@@ -1487,6 +1489,9 @@
             }
         }
 
+        // ========================================
+        // UPDATED ADMIN LOGIN HANDLER
+        // ========================================
         async function handleAdminLogin() {
             const email = document.getElementById('adminEmail')?.value.trim();
             const password = document.getElementById('adminPassword')?.value;
@@ -1500,12 +1505,26 @@
                 const userCredential = await auth.signInWithEmailAndPassword(email, password);
                 const user = userCredential.user;
                 
-                const adminDoc = await db.collection('admins').doc(user.uid).get();
-                if (adminDoc.exists) {
-                    alert('🔐 Admin logged in successfully!');
-                    closeModal();
-                    showAdminDashboard();
-                    return;
+                // Check if the signed-in user's UID matches the hardcoded admin UID
+                if (user.uid === ADMIN_UID) {
+                    // Check if admin document exists in Firestore
+                    const adminDoc = await db.collection('admins').doc(ADMIN_UID).get();
+                    if (adminDoc.exists) {
+                        alert('🔐 Admin logged in successfully!');
+                        closeModal();
+                        showAdminDashboard();
+                        return;
+                    } else {
+                        // Create the admin document if it doesn't exist
+                        await db.collection('admins').doc(ADMIN_UID).set({
+                            email: "admin@futuresabroad.com",
+                            role: "admin"
+                        });
+                        alert('🔐 Admin logged in successfully!');
+                        closeModal();
+                        showAdminDashboard();
+                        return;
+                    }
                 } else {
                     await auth.signOut();
                     showMessage('adminMessage', '❌ Access denied. You are not an admin.');
@@ -1608,6 +1627,7 @@
         console.log('🧭 Futures Abroad loaded successfully!');
         console.log('📝 Quiz has', quizQuestions.length, 'questions');
         console.log('🔐 Admin login: admin@futuresabroad.com / FuturesAdmin2026!');
+        console.log('🔐 Admin UID:', ADMIN_UID);
         console.log('🎨 Cartoon image loaded!');
         console.log('🔥 Firebase connected!');
     </script>
