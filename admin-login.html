@@ -60,13 +60,34 @@
         </div>
     </div>
 
-    <script src="js/firebase-config.js"></script>
+    <!-- Firebase Config -->
     <script>
         // ============================================================
-        // HARDCODED ADMIN UID - This is YOUR admin user's UID
+        // FIREBASE CONFIGURATION
+        // ============================================================
+        const firebaseConfig = {
+          apiKey: "AIzaSyBGJcOifwfWlGeFsFCXhdC67fyRTBOvfGQ",
+          authDomain: "futures-2.firebaseapp.com",
+          projectId: "futures-2",
+          storageBucket: "futures-2.firebasestorage.app",
+          messagingSenderId: "143399880838",
+          appId: "1:143399880838:web:c2232759fcbc1fa2ed2907"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+
+        // ============================================================
+        // YOUR CORRECT ADMIN UID FROM FIREBASE
         // ============================================================
         const ADMIN_UID = "hrONkvAlxVac4Wc7nwdNlLhd";
 
+        console.log("🔥 Firebase initialized!");
+        console.log("🔐 Admin UID:", ADMIN_UID);
+    </script>
+
+    <script>
         document.getElementById('admin-login-form').addEventListener('submit', async function(e) {
             e.preventDefault();
             const email = document.getElementById('admin-email').value;
@@ -76,6 +97,10 @@
             try {
                 const userCredential = await auth.signInWithEmailAndPassword(email, password);
                 const user = userCredential.user;
+                
+                console.log("✅ Logged in as:", user.email);
+                console.log("📌 Your UID:", user.uid);
+                console.log("🔐 Expected Admin UID:", ADMIN_UID);
                 
                 // Check if the signed-in user's UID matches the hardcoded admin UID
                 if (user.uid === ADMIN_UID) {
