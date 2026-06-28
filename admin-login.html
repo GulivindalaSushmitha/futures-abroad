@@ -62,6 +62,11 @@
 
     <script src="js/firebase-config.js"></script>
     <script>
+        // ============================================================
+        // HARDCODED ADMIN UID - This is YOUR admin user's UID
+        // ============================================================
+        const ADMIN_UID = "hrONkvAlxVac4Wc7nwdNlLhd";
+
         document.getElementById('admin-login-form').addEventListener('submit', async function(e) {
             e.preventDefault();
             const email = document.getElementById('admin-email').value;
@@ -69,12 +74,26 @@
             const msgEl = document.getElementById('adminMessage');
             
             try {
+                // Try to sign in
                 const userCredential = await auth.signInWithEmailAndPassword(email, password);
                 const user = userCredential.user;
                 
-                const adminDoc = await db.collection('admins').doc(user.uid).get();
-                if (adminDoc.exists) {
-                    window.location.href = 'admin-dashboard.html';
+                // Check if the signed-in user's UID matches the hardcoded admin UID
+                if (user.uid === ADMIN_UID) {
+                    // Check if admin document exists in Firestore
+                    const adminDoc = await db.collection('admins').doc(ADMIN_UID).get();
+                    if (adminDoc.exists) {
+                        window.location.href = 'admin-dashboard.html';
+                        return;
+                    } else {
+                        // Create the admin document if it doesn't exist
+                        await db.collection('admins').doc(ADMIN_UID).set({
+                            email: "admin@futuresabroad.com",
+                            role: "admin"
+                        });
+                        window.location.href = 'admin-dashboard.html';
+                        return;
+                    }
                 } else {
                     await auth.signOut();
                     msgEl.style.display = 'block';
