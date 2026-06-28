@@ -2,225 +2,93 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Admin Login - Futures Abroad</title>
-    
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
-    <link rel="stylesheet" href="css/style.css"/>
-    <link rel="stylesheet" href="css/responsive.css"/>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/auth.css" />
+    <style>
+        .admin-login-hint {
+            background: #FFF3E0;
+            border-radius: 12px;
+            padding: 12px;
+            margin: 10px 0;
+            font-size: 13px;
+            color: #E65100;
+            border: 1px solid #FFE0B2;
+        }
+        .admin-login-hint strong { color: #BF360C; }
+    </style>
 </head>
 <body>
-
-<header class="header" id="header">
-    <div class="container">
-        <div class="header-inner">
-            <a href="index.html" class="logo">
-                <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
-                    <rect width="40" height="40" rx="12" fill="url(#logoGrad)"/>
-                    <path d="M12 28V14L20 20L28 14V28" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-                    <path d="M12 20L20 26L28 20" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-                    <defs>
-                        <linearGradient id="logoGrad" x1="0" y1="0" x2="40" y2="40">
-                            <stop offset="0%" stop-color="#6C3CE1"/>
-                            <stop offset="100%" stop-color="#FF6B6B"/>
-                        </linearGradient>
-                    </defs>
-                </svg>
-                <span>Futures Abroad</span>
-            </a>
-
-            <nav class="nav">
-                <ul>
-                    <li><a href="index.html">Home</a></li>
-                    <li><a href="how-it-works.html">How It Works</a></li>
-                    <li><a href="index.html#journey">Journey</a></li>
-                    <li><a href="index.html#features">Features</a></li>
-                </ul>
-            </nav>
-
-            <div class="header-actions">
-                <a href="login.html" class="btn btn-outline">Student Login</a>
-                <a href="admin-login.html" class="btn btn-primary">Admin</a>
+    <div class="auth-container">
+        <div class="auth-card">
+            <div class="auth-header">
+                <div class="auth-logo">🔐 Futures Abroad</div>
+                <h1>Admin Login</h1>
+                <p>Access the admin dashboard</p>
             </div>
-
-            <button class="mobile-toggle" id="mobileToggle">
-                <i class="fas fa-bars"></i>
-            </button>
+            <form id="admin-login-form" class="auth-form">
+                <div id="adminMessage" style="display:none; padding:10px; border-radius:10px; margin-bottom:10px;"></div>
+                
+                <div class="admin-login-hint">
+                    <strong>🔑 Admin Credentials (YOURS ONLY):</strong><br />
+                    Email: admin@futuresabroad.com<br />
+                    Password: FuturesAdmin2026!
+                </div>
+                
+                <div class="form-group">
+                    <label>Admin Email</label>
+                    <input type="email" id="admin-email" placeholder="admin@futuresabroad.com" value="admin@futuresabroad.com" required />
+                </div>
+                <div class="form-group">
+                    <label>Admin Password</label>
+                    <input type="password" id="admin-password" placeholder="Enter password" required />
+                </div>
+                <button type="submit" class="btn-submit">Login as Admin 🔐</button>
+            </form>
+            <div class="auth-footer">
+                <p><a href="index.html">← Back to Home</a></p>
+                <p>Student login? <a href="login.html">Click here</a></p>
+            </div>
+        </div>
+        <div class="auth-illustration">
+            <div id="admin-animation"></div>
+            <p style="text-align:center;margin-top:2rem;">🔒 Secure Admin Access</p>
         </div>
     </div>
-</header>
 
-<section class="auth-page">
-    <div class="container">
-        <div class="auth-wrapper">
-            <div class="auth-content">
-                <div class="auth-header">
-                    <span class="section-tag">🔐 Admin Access</span>
-                    <h2>Admin Dashboard Login</h2>
-                    <p>Enter your admin credentials to access student data</p>
-                </div>
-
-                <form class="auth-form" id="adminLoginForm">
-                    <div class="auth-error" id="adminLoginError" style="display:none;"></div>
-
-                    <div class="form-group">
-                        <label for="adminEmail">Admin Email</label>
-                        <input type="email" id="adminEmail" placeholder="Enter admin email" />
-                    </div>
-
-                    <div class="form-group">
-                        <label for="adminPassword">Admin Password</label>
-                        <input type="password" id="adminPassword" placeholder="Enter admin password" />
-                    </div>
-
-                    <button type="submit" class="btn btn-primary btn-block btn-large">
-                        Login as Admin
-                        <i class="fas fa-arrow-right"></i>
-                    </button>
-
-                    <p class="auth-switch">
-                        <a href="login.html">← Back to Student Login</a>
-                    </p>
-                </form>
-            </div>
-
-            <div class="auth-visual">
-                <div class="auth-illustration">
-                    <i class="fas fa-user-shield"></i>
-                    <div class="auth-benefits">
-                        <div class="benefit-item">
-                            <i class="fas fa-check-circle"></i>
-                            <span>View all student quiz results</span>
-                        </div>
-                        <div class="benefit-item">
-                            <i class="fas fa-check-circle"></i>
-                            <span>Export student data as CSV</span>
-                        </div>
-                        <div class="benefit-item">
-                            <i class="fas fa-check-circle"></i>
-                            <span>Monitor student progress</span>
-                        </div>
-                        <div class="benefit-item">
-                            <i class="fas fa-check-circle"></i>
-                            <span>Track quiz completion status</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<footer class="footer">
-    <div class="container">
-        <div class="footer-grid">
-            <div class="footer-col">
-                <a href="index.html" class="logo">
-                    <svg width="32" height="32" viewBox="0 0 40 40" fill="none">
-                        <rect width="40" height="40" rx="12" fill="url(#logoGrad)"/>
-                        <path d="M12 28V14L20 20L28 14V28" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-                        <path d="M12 20L20 26L28 20" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-                        <defs>
-                            <linearGradient id="logoGrad" x1="0" y1="0" x2="40" y2="40">
-                                <stop offset="0%" stop-color="#6C3CE1"/>
-                                <stop offset="100%" stop-color="#FF6B6B"/>
-                            </linearGradient>
-                        </defs>
-                    </svg>
-                    <span>Futures Abroad</span>
-                </a>
-                <p class="footer-desc">
-                    Your AI-powered university journey guide.
-                    Helping students across the UAE reach their dreams.
-                </p>
-                <div class="social-links">
-                    <a href="#"><i class="fab fa-linkedin-in"></i></a>
-                    <a href="#"><i class="fab fa-twitter"></i></a>
-                    <a href="#"><i class="fab fa-youtube"></i></a>
-                    <a href="#"><i class="fab fa-instagram"></i></a>
-                </div>
-            </div>
-
-            <div class="footer-col">
-                <h4>Product</h4>
-                <ul>
-                    <li><a href="how-it-works.html">How It Works</a></li>
-                    <li><a href="index.html#features">Features</a></li>
-                    <li><a href="index.html#journey">Journey</a></li>
-                    <li><a href="#">FAQ</a></li>
-                </ul>
-            </div>
-
-            <div class="footer-col">
-                <h4>For Students</h4>
-                <ul>
-                    <li><a href="#">Grade 10</a></li>
-                    <li><a href="#">Grade 11</a></li>
-                    <li><a href="#">Grade 12</a></li>
-                    <li><a href="#">Parents</a></li>
-                </ul>
-            </div>
-
-            <div class="footer-col">
-                <h4>Company</h4>
-                <ul>
-                    <li><a href="#">About Us</a></li>
-                    <li><a href="#">Careers</a></li>
-                    <li><a href="#">Blog</a></li>
-                    <li><a href="#">Contact</a></li>
-                </ul>
-            </div>
-
-            <div class="footer-col">
-                <h4>KHDA</h4>
-                <ul>
-                    <li><a href="#">Permit #633441</a></li>
-                    <li><a href="#">Accreditation</a></li>
-                    <li><a href="#">Quality Assurance</a></li>
-                </ul>
-            </div>
-        </div>
-
-        <div class="footer-bottom">
-            <p>&copy; 2026 Futures Abroad. All rights reserved.</p>
-            <div class="footer-legal">
-                <a href="#">Privacy Policy</a>
-                <a href="#">Terms of Service</a>
-                <a href="#">Cookie Policy</a>
-                <a href="#">Accessibility</a>
-            </div>
-        </div>
-    </div>
-</footer>
-
-<script src="js/main.js"></script>
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    const adminLoginForm = document.getElementById('adminLoginForm');
-    
-    if (adminLoginForm) {
-        adminLoginForm.addEventListener('submit', function(e) {
+    <script src="js/firebase-config.js"></script>
+    <script>
+        document.getElementById('admin-login-form').addEventListener('submit', async function(e) {
             e.preventDefault();
+            const email = document.getElementById('admin-email').value;
+            const password = document.getElementById('admin-password').value;
+            const msgEl = document.getElementById('adminMessage');
             
-            const email = document.getElementById('adminEmail').value;
-            const password = document.getElementById('adminPassword').value;
-            const errorEl = document.getElementById('adminLoginError');
-            
-            // ONLY ADMIN KNOWS THESE - Hardcoded in code
-            if (email === 'admin@futuresabroad.com' && password === 'admin123') {
-                localStorage.setItem('isAdmin', 'true');
-                localStorage.setItem('adminToken', 'admin_token_' + Date.now());
-                window.location.href = 'admin-dashboard.html';
-            } else {
-                errorEl.textContent = '❌ Invalid admin credentials. Access denied.';
-                errorEl.style.display = 'block';
-                document.getElementById('adminPassword').value = '';
+            try {
+                const userCredential = await auth.signInWithEmailAndPassword(email, password);
+                const user = userCredential.user;
+                
+                const adminDoc = await db.collection('admins').doc(user.uid).get();
+                if (adminDoc.exists) {
+                    window.location.href = 'admin-dashboard.html';
+                } else {
+                    await auth.signOut();
+                    msgEl.style.display = 'block';
+                    msgEl.style.background = '#FFE8E8';
+                    msgEl.style.color = '#C62828';
+                    msgEl.textContent = '❌ Access denied. You are not an admin.';
+                }
+            } catch (error) {
+                msgEl.style.display = 'block';
+                msgEl.style.background = '#FFE8E8';
+                msgEl.style.color = '#C62828';
+                msgEl.textContent = '❌ Login failed: ' + error.message;
             }
         });
-    }
-});
-</script>
-
+    </script>
 </body>
 </html>
