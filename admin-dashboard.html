@@ -2,376 +2,64 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Admin Dashboard - Futures Abroad</title>
-    
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
-    <link rel="stylesheet" href="css/style.css"/>
-    <link rel="stylesheet" href="css/responsive.css"/>
-    <style>
-        .admin-page {
-            padding: 120px 0 60px;
-            background: var(--gray-light);
-            min-height: 100vh;
-        }
-        
-        .admin-wrapper {
-            background: var(--white);
-            border-radius: var(--radius-xl);
-            padding: 40px;
-            box-shadow: var(--shadow-lg);
-        }
-        
-        .admin-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 32px;
-            flex-wrap: wrap;
-            gap: 16px;
-        }
-        
-        .admin-stats {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 16px;
-            margin-bottom: 32px;
-        }
-        
-        .admin-stat {
-            background: var(--gray-light);
-            padding: 16px 20px;
-            border-radius: var(--radius);
-            text-align: center;
-        }
-        
-        .admin-stat .number {
-            font-size: 28px;
-            font-weight: 800;
-            color: var(--primary);
-        }
-        
-        .admin-stat .label {
-            font-size: 14px;
-            color: var(--gray);
-        }
-        
-        .admin-table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 14px;
-        }
-        
-        .admin-table th {
-            background: var(--gray-light);
-            padding: 12px 16px;
-            text-align: left;
-            font-weight: 600;
-            border-bottom: 2px solid var(--gray-border);
-        }
-        
-        .admin-table td {
-            padding: 12px 16px;
-            border-bottom: 1px solid var(--gray-border);
-            vertical-align: top;
-        }
-        
-        .admin-table tr:hover td {
-            background: rgba(108, 60, 225, 0.02);
-        }
-        
-        .admin-table .answers-cell {
-            max-width: 300px;
-            font-size: 13px;
-        }
-        
-        .admin-table .answers-cell ul {
-            margin: 0;
-            padding-left: 16px;
-        }
-        
-        .admin-table .answers-cell li {
-            margin-bottom: 2px;
-        }
-        
-        .badge-complete {
-            background: rgba(0, 212, 170, 0.15);
-            color: var(--accent);
-            padding: 2px 12px;
-            border-radius: 50px;
-            font-size: 12px;
-            font-weight: 600;
-        }
-        
-        .badge-pending {
-            background: rgba(255, 107, 107, 0.15);
-            color: var(--secondary);
-            padding: 2px 12px;
-            border-radius: 50px;
-            font-size: 12px;
-            font-weight: 600;
-        }
-        
-        .view-btn {
-            padding: 4px 12px;
-            font-size: 12px;
-        }
-        
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0,0,0,0.5);
-            z-index: 9999;
-            justify-content: center;
-            align-items: center;
-        }
-        
-        .modal.active {
-            display: flex;
-        }
-        
-        .modal-content {
-            background: var(--white);
-            padding: 40px;
-            border-radius: var(--radius-lg);
-            max-width: 600px;
-            width: 90%;
-            max-height: 80vh;
-            overflow-y: auto;
-        }
-        
-        .modal-close {
-            float: right;
-            background: none;
-            border: none;
-            font-size: 24px;
-            cursor: pointer;
-            color: var(--gray);
-        }
-        
-        .modal-close:hover {
-            color: var(--dark);
-        }
-        
-        @media (max-width: 768px) {
-            .admin-stats {
-                grid-template-columns: repeat(2, 1fr);
-            }
-            
-            .admin-table {
-                font-size: 12px;
-            }
-            
-            .admin-table th,
-            .admin-table td {
-                padding: 8px 10px;
-            }
-            
-            .admin-wrapper {
-                padding: 20px 16px;
-            }
-        }
-    </style>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/admin.css" />
 </head>
 <body>
-
-<header class="header" id="header">
-    <div class="container">
-        <div class="header-inner">
-            <a href="admin-dashboard.html" class="logo">
-                <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
-                    <rect width="40" height="40" rx="12" fill="url(#logoGrad)"/>
-                    <path d="M12 28V14L20 20L28 14V28" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-                    <path d="M12 20L20 26L28 20" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-                    <defs>
-                        <linearGradient id="logoGrad" x1="0" y1="0" x2="40" y2="40">
-                            <stop offset="0%" stop-color="#6C3CE1"/>
-                            <stop offset="100%" stop-color="#FF6B6B"/>
-                        </linearGradient>
-                    </defs>
-                </svg>
-                <span>Admin Dashboard</span>
-            </a>
-
-            <nav class="nav">
-                <ul>
-                    <li><a href="admin-dashboard.html" class="active">Dashboard</a></li>
-                    <li><a href="#students">Students</a></li>
-                    <li><a href="#reports">Reports</a></li>
-                </ul>
+    <div class="admin-container">
+        <aside class="admin-sidebar">
+            <div class="admin-logo">🚀 Futures Abroad<span>Admin Panel</span></div>
+            <nav class="admin-nav">
+                <a href="#" class="active" data-section="dashboard">📊 Dashboard</a>
+                <a href="#" data-section="students">👥 Students</a>
+                <a href="#" data-section="activities">📋 Activities</a>
             </nav>
-
-            <div class="header-actions">
-                <span class="user-badge">Admin</span>
-                <a href="#" class="btn btn-outline" id="adminLogoutBtn">Logout</a>
+            <div class="admin-user">
+                <span>👤 admin@futuresabroad.com</span>
+                <button onclick="logout()">Logout</button>
             </div>
+        </aside>
+        <main class="admin-main">
+            <!-- Dashboard -->
+            <section id="section-dashboard" class="admin-section active">
+                <h1>Dashboard</h1>
+                <div class="stats-grid">
+                    <div class="stat-card"><div class="stat-icon">👥</div><div class="stat-info"><span class="stat-number" id="total-students">0</span><span class="stat-label">Total Students</span></div></div>
+                    <div class="stat-card"><div class="stat-icon">📋</div><div class="stat-info"><span class="stat-number" id="active-activities">0</span><span class="stat-label">Active Activities</span></div></div>
+                    <div class="stat-card"><div class="stat-icon">🎯</div><div class="stat-info"><span class="stat-number" id="completed-quiz">0</span><span class="stat-label">Completed Quiz</span></div></div>
+                    <div class="stat-card"><div class="stat-icon">🏛️</div><div class="stat-info"><span class="stat-number" id="university-shortlists">0</span><span class="stat-label">University Shortlists</span></div></div>
+                </div>
+                <div class="recent-activity">
+                    <h2>Recent Student Sign-ups</h2>
+                    <div class="activity-table"><table><thead><tr><th>Name</th><th>Grade</th><th>Interests</th><th>Status</th><th>Joined</th></tr></thead><tbody id="recent-students"></tbody></table></div>
+                </div>
+            </section>
 
-            <button class="mobile-toggle" id="mobileToggle">
-                <i class="fas fa-bars"></i>
-            </button>
-        </div>
+            <!-- Students -->
+            <section id="section-students" class="admin-section">
+                <h1>Student Management</h1>
+                <div class="admin-toolbar">
+                    <input type="text" id="search-students" placeholder="Search students..." />
+                    <select id="filter-grade"><option value="">All Grades</option><option value="10">Grade 10</option><option value="11">Grade 11</option><option value="12">Grade 12</option></select>
+                </div>
+                <div class="activity-table"><table><thead><tr><th>Name</th><th>Email</th><th>Grade</th><th>Interests</th><th>Phase</th><th>Actions</th></tr></thead><tbody id="students-list"></tbody></table></div>
+            </section>
+
+            <!-- Activities -->
+            <section id="section-activities" class="admin-section">
+                <h1>Activity Management</h1>
+                <button class="btn-primary" onclick="showAddActivity()">+ Add New Activity</button>
+                <div class="activity-table"><table><thead><tr><th>Name</th><th>Type</th><th>Interests</th><th>Grade</th><th>Status</th><th>Actions</th></tr></thead><tbody id="activities-list"></tbody></table></div>
+            </section>
+        </main>
     </div>
-</header>
 
-<section class="admin-page">
-    <div class="container">
-        <div class="admin-wrapper">
-            <div class="admin-header">
-                <div>
-                    <span class="section-tag">Admin</span>
-                    <h1>Student Quiz Results</h1>
-                    <p>View all student responses to the AI Interest Quiz</p>
-                </div>
-                <button class="btn btn-outline" onclick="exportData()">
-                    <i class="fas fa-download"></i> Export Data
-                </button>
-            </div>
-
-            <div class="admin-stats" id="adminStats">
-                <div class="admin-stat">
-                    <div class="number" id="totalStudents">0</div>
-                    <div class="label">Total Students</div>
-                </div>
-                <div class="admin-stat">
-                    <div class="number" id="completedQuizzes">0</div>
-                    <div class="label">Quiz Completed</div>
-                </div>
-                <div class="admin-stat">
-                    <div class="number" id="pendingQuizzes">0</div>
-                    <div class="label">Pending</div>
-                </div>
-                <div class="admin-stat">
-                    <div class="number" id="avgAnswers">0</div>
-                    <div class="label">Avg Questions Answered</div>
-                </div>
-            </div>
-
-            <div style="overflow-x: auto;">
-                <table class="admin-table" id="resultsTable">
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>Student</th>
-                            <th>Grade</th>
-                            <th>Interests</th>
-                            <th>Answers</th>
-                            <th>Status</th>
-                            <th>Date</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody id="resultsBody">
-                        <tr>
-                            <td colspan="8" style="text-align: center; padding: 40px; color: var(--gray);">
-                                No student data available yet.
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- Modal for viewing answers -->
-<div class="modal" id="answerModal">
-    <div class="modal-content">
-        <button class="modal-close" onclick="closeModal()">&times;</button>
-        <h3 id="modalStudentName">Student Answers</h3>
-        <div id="modalAnswers"></div>
-    </div>
-</div>
-
-<footer class="footer">
-    <div class="container">
-        <div class="footer-grid">
-            <div class="footer-col">
-                <a href="index.html" class="logo">
-                    <svg width="32" height="32" viewBox="0 0 40 40" fill="none">
-                        <rect width="40" height="40" rx="12" fill="url(#logoGrad)"/>
-                        <path d="M12 28V14L20 20L28 14V28" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-                        <path d="M12 20L20 26L28 20" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-                        <defs>
-                            <linearGradient id="logoGrad" x1="0" y1="0" x2="40" y2="40">
-                                <stop offset="0%" stop-color="#6C3CE1"/>
-                                <stop offset="100%" stop-color="#FF6B6B"/>
-                            </linearGradient>
-                        </defs>
-                    </svg>
-                    <span>Futures Abroad</span>
-                </a>
-                <p class="footer-desc">
-                    Your AI-powered university journey guide.
-                    Helping students across the UAE reach their dreams.
-                </p>
-                <div class="social-links">
-                    <a href="#"><i class="fab fa-linkedin-in"></i></a>
-                    <a href="#"><i class="fab fa-twitter"></i></a>
-                    <a href="#"><i class="fab fa-youtube"></i></a>
-                    <a href="#"><i class="fab fa-instagram"></i></a>
-                </div>
-            </div>
-
-            <div class="footer-col">
-                <h4>Product</h4>
-                <ul>
-                    <li><a href="how-it-works.html">How It Works</a></li>
-                    <li><a href="index.html#features">Features</a></li>
-                    <li><a href="index.html#journey">Journey</a></li>
-                    <li><a href="#">FAQ</a></li>
-                </ul>
-            </div>
-
-            <div class="footer-col">
-                <h4>For Students</h4>
-                <ul>
-                    <li><a href="#">Grade 10</a></li>
-                    <li><a href="#">Grade 11</a></li>
-                    <li><a href="#">Grade 12</a></li>
-                    <li><a href="#">Parents</a></li>
-                </ul>
-            </div>
-
-            <div class="footer-col">
-                <h4>Company</h4>
-                <ul>
-                    <li><a href="#">About Us</a></li>
-                    <li><a href="#">Careers</a></li>
-                    <li><a href="#">Blog</a></li>
-                    <li><a href="#">Contact</a></li>
-                </ul>
-            </div>
-
-            <div class="footer-col">
-                <h4>KHDA</h4>
-                <ul>
-                    <li><a href="#">Permit #633441</a></li>
-                    <li><a href="#">Accreditation</a></li>
-                    <li><a href="#">Quality Assurance</a></li>
-                </ul>
-            </div>
-        </div>
-
-        <div class="footer-bottom">
-            <p>&copy; 2026 Futures Abroad. All rights reserved.</p>
-            <div class="footer-legal">
-                <a href="#">Privacy Policy</a>
-                <a href="#">Terms of Service</a>
-                <a href="#">Cookie Policy</a>
-                <a href="#">Accessibility</a>
-            </div>
-        </div>
-    </div>
-</footer>
-
-<script src="js/main.js"></script>
-<script src="js/auth.js"></script>
-<script src="js/admin.js"></script>
-
+    <script src="js/firebase-config.js"></script>
+    <script src="js/admin.js"></script>
 </body>
 </html>
