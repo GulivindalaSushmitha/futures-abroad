@@ -19,8 +19,7 @@
 
     <style>
         /* ========================================
-           ALL YOUR EXISTING STYLES GO HERE
-           (Keeping your complete design)
+           ALL STYLES INCLUDED
            ======================================== */
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
@@ -196,7 +195,7 @@
         }
         .nav-actions .btn-signup:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(108, 60, 225, 0.4); }
 
-        /* Admin Login Button in Nav */
+        /* Admin Button */
         .btn-admin-nav {
             background: transparent;
             border: 2px solid #FF6B6B;
@@ -688,28 +687,7 @@
         .page-content h2 span { color: #6C3CE1; }
         .page-content p { color: #555; font-size: 17px; line-height: 1.8; }
 
-        /* ===== ADMIN DASHBOARD STYLES ===== */
-        .admin-stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            margin: 25px 0;
-        }
-        .admin-stat-card {
-            background: #F8F4FF;
-            border-radius: 20px;
-            padding: 20px;
-            text-align: center;
-        }
-        .admin-stat-card .stat-number {
-            font-weight: 800;
-            font-size: 32px;
-            color: #6C3CE1;
-        }
-        .admin-stat-card .stat-label {
-            color: #888;
-            font-size: 14px;
-        }
+        /* Admin Table */
         .admin-table {
             width: 100%;
             border-collapse: collapse;
@@ -734,21 +712,12 @@
             .navbar { padding: 12px 20px; flex-direction: column; align-items: stretch; gap: 12px; }
             .nav-links { justify-content: center; gap: 12px; }
             .nav-actions { justify-content: center; flex-wrap: wrap; }
-            
-            .hero { 
-                padding: 40px 20px 50px; 
-                min-height: auto;
-            }
-            .hero-image {
-                max-width: 320px;
-            }
-            .hero-image img {
-                max-width: 280px;
-            }
+            .hero { padding: 40px 20px 50px; min-height: auto; }
+            .hero-image { max-width: 320px; }
+            .hero-image img { max-width: 280px; }
             .hero-content h1 { font-size: 32px; }
             .hero-content .actions { justify-content: center; }
             .hero-content .stats { justify-content: center; }
-            
             .section { padding: 40px 20px; }
             .section-title { font-size: 28px; }
             .card { min-width: 100%; max-width: 100%; }
@@ -761,7 +730,6 @@
             .banner-dark h2 { font-size: 28px; }
             .modal-box { padding: 30px 20px; }
             .page-content { padding: 20px; }
-            .admin-stats-grid { grid-template-columns: 1fr 1fr; }
         }
         @media (max-width: 480px) {
             .hero-content h1 { font-size: 26px; }
@@ -772,17 +740,7 @@
                 justify-content: center; 
             }
             .hero-content .stats { gap: 14px; font-size: 13px; }
-            .hero-image img {
-                max-width: 200px;
-            }
-            .hero-compass img {
-                width: 40px;
-                height: 40px;
-            }
-            .hero-compass .emoji-big {
-                font-size: 32px;
-            }
-            .admin-stats-grid { grid-template-columns: 1fr; }
+            .hero-image img { max-width: 200px; }
         }
     </style>
 </head>
@@ -1012,13 +970,37 @@
     </footer>
 
     <!-- ========================================
-    SCRIPTS
+    SCRIPTS - Firebase Config + All JavaScript
     ======================================== -->
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     
-    <!-- Firebase Config -->
-    <script src="js/firebase-config.js"></script>
-    
+    <!-- Firebase Configuration -->
+    <script>
+        // ============================================================
+        // FIREBASE CONFIGURATION - YOUR FREE API KEY
+        // ============================================================
+        const firebaseConfig = {
+          apiKey: "AIzaSyBGJcOifwfWlGeFsFCXhdC67fyRTBOvfGQ",
+          authDomain: "futures-2.firebaseapp.com",
+          projectId: "futures-2",
+          storageBucket: "futures-2.firebasestorage.app",
+          messagingSenderId: "143399880838",
+          appId: "1:143399880838:web:c2232759fcbc1fa2ed2907"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+
+        // Admin credentials (YOURS ONLY)
+        const ADMIN_EMAIL = "admin@futuresabroad.com";
+        const ADMIN_PASSWORD = "FuturesAdmin2026!";
+
+        console.log("🔥 Firebase initialized successfully!");
+        console.log("📁 Project ID:", firebaseConfig.projectId);
+    </script>
+
     <script>
         // ========================================
         // INIT AOS
@@ -1175,7 +1157,7 @@
         });
 
         // ========================================
-        // RENDER LOGIN (With Firebase)
+        // RENDER LOGIN
         // ========================================
         function renderLogin() {
             modalContent.innerHTML = `
@@ -1197,7 +1179,7 @@
         }
 
         // ========================================
-        // RENDER SIGNUP (With Firebase)
+        // RENDER SIGNUP
         // ========================================
         function renderSignup() {
             modalContent.innerHTML = `
@@ -1223,7 +1205,7 @@
         }
 
         // ========================================
-        // RENDER ADMIN LOGIN (With Firebase)
+        // RENDER ADMIN LOGIN
         // ========================================
         function renderAdminLogin() {
             modalContent.innerHTML = `
@@ -1251,109 +1233,19 @@
         }
 
         // ========================================
-        // QUIZ DATA - 10 Career Interest Questions
+        // QUIZ DATA
         // ========================================
         const quizQuestions = [
-            {
-                q: "Which activity excites you the most?",
-                options: [
-                    "🔬 Doing science experiments",
-                    "💻 Building websites or apps",
-                    "🏥 Helping sick people get better",
-                    "🎨 Creating art or designs",
-                    "📊 Solving math problems"
-                ]
-            },
-            {
-                q: "What school subject do you enjoy most?",
-                options: [
-                    "🧬 Biology",
-                    "💻 Computer Science",
-                    "🧪 Chemistry",
-                    "🎭 Art & Design",
-                    "📐 Mathematics"
-                ]
-            },
-            {
-                q: "Where do you see yourself working?",
-                options: [
-                    "🏥 Hospital or clinic",
-                    "💼 Office with computers",
-                    "🔬 Research laboratory",
-                    "🎨 Creative studio",
-                    "🏛️ University or school"
-                ]
-            },
-            {
-                q: "What kind of problems do you like solving?",
-                options: [
-                    "🧬 Medical/health problems",
-                    "💻 Technical/software problems",
-                    "🔬 Scientific research problems",
-                    "🎨 Creative/design problems",
-                    "📊 Business/financial problems"
-                ]
-            },
-            {
-                q: "Which skill would you most like to develop?",
-                options: [
-                    "🩺 Medical skills",
-                    "💻 Coding & programming",
-                    "🔬 Research skills",
-                    "🎨 Creative skills",
-                    "📈 Business skills"
-                ]
-            },
-            {
-                q: "What's your ideal work environment?",
-                options: [
-                    "🏥 Fast-paced medical environment",
-                    "💻 Tech startup or office",
-                    "🔬 Quiet research lab",
-                    "🎨 Creative studio or gallery",
-                    "🏛️ Corporate office"
-                ]
-            },
-            {
-                q: "Which career sounds most appealing?",
-                options: [
-                    "🩺 Doctor or Nurse",
-                    "💻 Software Engineer",
-                    "🔬 Research Scientist",
-                    "🎨 Graphic Designer",
-                    "📊 Business Analyst"
-                ]
-            },
-            {
-                q: "What do you want your job to achieve?",
-                options: [
-                    "🩺 Save lives and improve health",
-                    "💻 Build innovative technology",
-                    "🔬 Discover new knowledge",
-                    "🎨 Create beautiful things",
-                    "📊 Help businesses grow"
-                ]
-            },
-            {
-                q: "Which activity would you do for fun?",
-                options: [
-                    "🧬 Learning about the human body",
-                    "💻 Building a computer game",
-                    "🔬 Doing science experiments",
-                    "🎨 Painting or drawing",
-                    "📊 Playing strategy games"
-                ]
-            },
-            {
-                q: "What's your biggest career goal?",
-                options: [
-                    "🩺 Become a leading doctor",
-                    "💻 Create world-changing software",
-                    "🔬 Win a Nobel Prize in science",
-                    "🎨 Become a famous artist",
-                    "📊 Build a successful company"
-                ]
-            }
+            { q: "Which activity excites you the most?", options: ["🔬 Doing science experiments", "💻 Building websites or apps", "🏥 Helping sick people get better", "🎨 Creating art or designs", "📊 Solving math problems"] },
+            { q: "What school subject do you enjoy most?", options: ["🧬 Biology", "💻 Computer Science", "🧪 Chemistry", "🎭 Art & Design", "📐 Mathematics"] },
+            { q: "Where do you see yourself working?", options: ["🏥 Hospital or clinic", "💼 Office with computers", "🔬 Research laboratory", "🎨 Creative studio", "🏛️ University or school"] },
+            { q: "What kind of problems do you like solving?", options: ["🧬 Medical/health problems", "💻 Technical/software problems", "🔬 Scientific research problems", "🎨 Creative/design problems", "📊 Business/financial problems"] },
+            { q: "Which skill would you most like to develop?", options: ["🩺 Medical skills", "💻 Coding & programming", "🔬 Research skills", "🎨 Creative skills", "📈 Business skills"] },
+            { q: "What's your ideal work environment?", options: ["🏥 Fast-paced medical environment", "💻 Tech startup or office", "🔬 Quiet research lab", "🎨 Creative studio or gallery", "🏛️ Corporate office"] },
+            { q: "Which career sounds most appealing?", options: ["🩺 Doctor or Nurse", "💻 Software Engineer", "🔬 Research Scientist", "🎨 Graphic Designer", "📊 Business Analyst"] },
+            { q: "What do you want your job to achieve?", options: ["🩺 Save lives and improve health", "💻 Build innovative technology", "🔬 Discover new knowledge", "🎨 Create beautiful things", "📊 Help businesses grow"] },
+            { q: "Which activity would you do for fun?", options: ["🧬 Learning about the human body", "💻 Building a computer game", "🔬 Doing science experiments", "🎨 Painting or drawing", "📊 Playing strategy games"] },
+            { q: "What's your biggest career goal?", options: ["🩺 Become a leading doctor", "💻 Create world-changing software", "🔬 Win a Nobel Prize in science", "🎨 Become a famous artist", "📊 Build a successful company"] }
         ];
 
         let currentQuizIndex = 0;
@@ -1425,20 +1317,8 @@
         // ========================================
         function renderQuizResult() {
             const scores = { medicine: 0, engineering: 0, science: 0, arts: 0, business: 0 };
-            const careerNames = {
-                medicine: '🩺 Medicine & Healthcare',
-                engineering: '💻 Computer Science & Engineering',
-                science: '🔬 Science & Research',
-                arts: '🎨 Arts & Design',
-                business: '📊 Business & Finance'
-            };
-            const careerEmojis = {
-                medicine: '🩺',
-                engineering: '💻',
-                science: '🔬',
-                arts: '🎨',
-                business: '📊'
-            };
+            const careerNames = { medicine: '🩺 Medicine & Healthcare', engineering: '💻 Computer Science & Engineering', science: '🔬 Science & Research', arts: '🎨 Arts & Design', business: '📊 Business & Finance' };
+            const careerEmojis = { medicine: '🩺', engineering: '💻', science: '🔬', arts: '🎨', business: '📊' };
             const careerDescriptions = {
                 medicine: 'You are passionate about helping others. Consider: Medicine, Nursing, Dentistry, Pharmacy, or Public Health.',
                 engineering: 'You love technology. Consider: Software Engineering, Web Development, AI, Robotics, or Data Science.',
@@ -1516,13 +1396,8 @@
         }
 
         // ========================================
-        // AUTH HANDLERS WITH FIREBASE
+        // FIREBASE AUTH HANDLERS
         // ========================================
-        
-        // Admin credentials (YOURS ONLY)
-        const ADMIN_EMAIL = "admin@futuresabroad.com";
-        const ADMIN_PASSWORD = "FuturesAdmin2026!";
-
         function showMessage(elementId, message, isError = true) {
             const el = document.getElementById(elementId);
             if (el) {
@@ -1546,7 +1421,7 @@
                 const userCredential = await auth.signInWithEmailAndPassword(email, password);
                 const user = userCredential.user;
                 
-                // Check if user is admin
+                // Check if admin
                 const adminDoc = await db.collection('admins').doc(user.uid).get();
                 if (adminDoc.exists) {
                     alert('🔐 Admin logged in successfully!');
@@ -1557,7 +1432,6 @@
 
                 alert('✅ Logged in successfully!');
                 closeModal();
-                // Redirect to dashboard
                 window.location.href = 'dashboard.html';
             } catch (error) {
                 showMessage('loginMessage', '❌ Login failed: ' + error.message);
@@ -1584,7 +1458,6 @@
                 const userCredential = await auth.createUserWithEmailAndPassword(email, password);
                 const user = userCredential.user;
 
-                // Save user data to Firestore
                 await db.collection('students').doc(user.uid).set({
                     uid: user.uid,
                     name: name,
@@ -1602,7 +1475,6 @@
                 alert(`✅ Account created successfully!\nWelcome ${name}!`);
                 closeModal();
                 
-                // Start quiz for students
                 if (role === 'student') {
                     setTimeout(() => {
                         currentQuizIndex = 0;
@@ -1628,7 +1500,6 @@
                 const userCredential = await auth.signInWithEmailAndPassword(email, password);
                 const user = userCredential.user;
                 
-                // Check if user is admin
                 const adminDoc = await db.collection('admins').doc(user.uid).get();
                 if (adminDoc.exists) {
                     alert('🔐 Admin logged in successfully!');
@@ -1645,7 +1516,7 @@
         }
 
         // ========================================
-        // SHOW ADMIN DASHBOARD
+        // ADMIN DASHBOARD
         // ========================================
         async function showAdminDashboard() {
             document.getElementById('homePage').style.display = 'none';
@@ -1653,7 +1524,6 @@
             const content = document.getElementById('pageContent');
             content.classList.add('active');
 
-            // Get real data from Firestore
             let totalStudents = 0;
             let completedQuiz = 0;
             let studentsList = [];
@@ -1661,7 +1531,6 @@
             try {
                 const snapshot = await db.collection('students').get();
                 totalStudents = snapshot.size;
-                
                 snapshot.forEach(doc => {
                     const data = doc.data();
                     if (data.profileCompleted) completedQuiz++;
@@ -1671,58 +1540,21 @@
                 console.error('Error fetching students:', error);
             }
 
-            const scores = JSON.parse(localStorage.getItem('quizScores') || '{}');
-            const topCareer = localStorage.getItem('topCareer') || 'Not taken yet';
-            const careerNames = {
-                medicine: '🩺 Medicine',
-                engineering: '💻 Engineering',
-                science: '🔬 Science',
-                arts: '🎨 Arts',
-                business: '📊 Business'
-            };
-
             let html = `
                 <h2>🔐 Admin Dashboard</h2>
                 <p style="color:#555;">Welcome back, Admin! Here's an overview of student activity.</p>
-                <div class="admin-stats-grid">
-                    <div class="admin-stat-card">
-                        <div class="stat-number">${totalStudents}</div>
-                        <div class="stat-label">👥 Total Students</div>
+                <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:20px; margin:25px 0;">
+                    <div style="background:#F0E6FF; border-radius:20px; padding:20px; text-align:center;">
+                        <div style="font-size:32px;">👥</div>
+                        <div style="font-weight:800; font-size:28px;">${totalStudents}</div>
+                        <div style="color:#888; font-size:14px;">Total Students</div>
                     </div>
-                    <div class="admin-stat-card">
-                        <div class="stat-number">${completedQuiz}</div>
-                        <div class="stat-label">✅ Quiz Completed</div>
-                    </div>
-                    <div class="admin-stat-card">
-                        <div class="stat-number">${topCareer !== 'Not taken yet' ? '⭐' : '📝'}</div>
-                        <div class="stat-label">Top Career: ${topCareer}</div>
-                    </div>
-                    <div class="admin-stat-card">
-                        <div class="stat-number">${Math.round(totalStudents * 0.7)}</div>
-                        <div class="stat-label">📊 Active Students</div>
+                    <div style="background:#E8F5E9; border-radius:20px; padding:20px; text-align:center;">
+                        <div style="font-size:32px;">✅</div>
+                        <div style="font-weight:800; font-size:28px;">${completedQuiz}</div>
+                        <div style="color:#888; font-size:14px;">Quiz Completed</div>
                     </div>
                 </div>
-
-                <h3>📊 Career Interest Breakdown</h3>
-                <div style="background:#F8F4FF; border-radius:16px; padding:16px; margin:15px 0;">
-            `;
-
-            for (const [key, val] of Object.entries(scores)) {
-                const pct = Math.round((val / quizQuestions.length) * 100);
-                html += `
-                    <div style="display:flex; align-items:center; gap:10px; margin:6px 0;">
-                        <span style="width:100px; font-size:14px;">${careerNames[key] || key}</span>
-                        <div style="flex:1; background:#E8E0F0; border-radius:10px; height:10px;">
-                            <div style="width:${pct}%; height:100%; background:${pct > 50 ? '#6C3CE1' : '#FFD93D'}; border-radius:10px;"></div>
-                        </div>
-                        <span style="font-weight:700; font-size:14px;">${pct}%</span>
-                    </div>
-                `;
-            }
-
-            html += `
-                </div>
-
                 <h3>👥 All Students</h3>
                 <div style="background:#F8F4FF; border-radius:16px; padding:16px; overflow-x:auto;">
                     <table class="admin-table">
@@ -1733,7 +1565,6 @@
                                 <th>Grade</th>
                                 <th>Interests</th>
                                 <th>Status</th>
-                                <th>Joined</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -1748,19 +1579,17 @@
                             <td>${student.grade || 'Not set'}</td>
                             <td>${(student.interests || []).join(', ') || 'Not set'}</td>
                             <td>${student.profileCompleted ? '✅ Complete' : '⏳ Pending'}</td>
-                            <td>${student.createdAt ? new Date(student.createdAt.toDate()).toLocaleDateString() : 'N/A'}</td>
                         </tr>
                     `;
                 });
             } else {
-                html += `<tr><td colspan="6" style="text-align:center; padding:20px; color:#888;">No students registered yet.</td></tr>`;
+                html += `<tr><td colspan="5" style="padding:20px; text-align:center; color:#888;">No students registered yet.</td></tr>`;
             }
 
             html += `
                         </tbody>
                     </table>
                 </div>
-
                 <button class="btn-secondary" onclick="showHome()" style="margin-top:20px;">← Back to Home</button>
             `;
 
@@ -1768,9 +1597,7 @@
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        // ========================================
-        // KEYBOARD SHORTCUTS
-        // ========================================
+        // Keyboard shortcut for Enter key
         document.addEventListener('keydown', function(e) {
             if (e.key === 'Enter' && modal.classList.contains('active')) {
                 const submitBtn = document.querySelector('.btn-submit');
@@ -1781,7 +1608,7 @@
         console.log('🧭 Futures Abroad loaded successfully!');
         console.log('📝 Quiz has', quizQuestions.length, 'questions');
         console.log('🔐 Admin login: admin@futuresabroad.com / FuturesAdmin2026!');
-        console.log('🎨 Cartoon image on top, text below layout!');
+        console.log('🎨 Cartoon image loaded!');
         console.log('🔥 Firebase connected!');
     </script>
 
