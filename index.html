@@ -1001,6 +1001,7 @@
 
         console.log("🔥 Firebase initialized successfully!");
         console.log("📁 Project ID:", firebaseConfig.projectId);
+        console.log("🔐 Admin UID:", ADMIN_UID);
     </script>
 
     <script>
@@ -1504,6 +1505,10 @@
             try {
                 const userCredential = await auth.signInWithEmailAndPassword(email, password);
                 const user = userCredential.user;
+                
+                console.log("✅ Logged in as:", user.email);
+                console.log("📌 Your UID:", user.uid);
+                console.log("🔐 Expected Admin UID:", ADMIN_UID);
                 
                 // Check if the signed-in user's UID matches the hardcoded admin UID
                 if (user.uid === ADMIN_UID) {
