@@ -1,5 +1,5 @@
 // ============================================================
-// js/quiz.js - AI Interest Quiz Logic
+// js/quiz.js - AI Quiz Logic
 // ============================================================
 
 const db = firebase.firestore();
@@ -10,7 +10,6 @@ let conversationHistory = [];
 let questionCount = 0;
 const MAX_QUESTIONS = 8;
 
-// Question Bank
 const QUESTION_BANK = {
     opening: [
         {
@@ -89,12 +88,42 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     } else startQuiz();
     
+    // Render initial quiz UI
+    renderQuizUI();
+});
+
+function renderQuizUI() {
+    const container = document.getElementById('quiz-container');
+    container.innerHTML = `
+        <div class="quiz-progress" style="margin:15px 0;">
+            <div id="progress-fill" class="bar" style="width:0%"></div>
+        </div>
+        <div id="question-counter" style="text-align:center;color:#888;font-size:14px;margin-bottom:15px;">Question 1 of ${MAX_QUESTIONS}</div>
+        <div id="chat-messages" style="background:#F8F4FF;border-radius:16px;padding:20px;min-height:200px;max-height:400px;overflow-y:auto;margin-bottom:15px;">
+            <div style="display:flex;gap:12px;margin-bottom:15px;">
+                <div style="font-size:24px;">🤖</div>
+                <div style="background:white;padding:12px 16px;border-radius:16px;flex:1;">
+                    <p>Hi there! 👋 I'm your AI career guide. Let's discover what makes you unique!</p>
+                    <p style="margin-top:8px;">I'll ask you a few questions about your interests. There are no wrong answers — just be yourself!</p>
+                </div>
+            </div>
+        </div>
+        <div style="display:flex;gap:10px;">
+            <input type="text" id="chat-input" placeholder="Type your answer here..." style="flex:1;padding:12px 16px;border:2px solid #E8E0F0;border-radius:12px;font-family:'Quicksand',sans-serif;font-size:15px;">
+            <button id="send-btn" style="padding:12px 24px;background:#6C3CE1;color:white;border:none;border-radius:12px;font-weight:700;cursor:pointer;">Send ✨</button>
+        </div>
+        <div style="display:flex;justify-content:space-between;margin-top:12px;">
+            <button id="skip-quiz" style="padding:8px 20px;background:transparent;border:2px solid #E8E0F0;border-radius:50px;color:#888;cursor:pointer;">Skip Quiz</button>
+            <span style="color:#aaa;font-size:13px;">Press Enter to send</span>
+        </div>
+    `;
+
     document.getElementById('send-btn').addEventListener('click', sendMessage);
     document.getElementById('chat-input').addEventListener('keypress', function(e) {
         if (e.key === 'Enter') sendMessage();
     });
     document.getElementById('skip-quiz').addEventListener('click', skipQuiz);
-});
+}
 
 function startQuiz() {
     db.collection('students').doc(userId).get().then(doc => {
@@ -160,11 +189,17 @@ function sendMessage() {
 }
 
 function showQuickReplies(options) {
-    const container = document.querySelector('.chat-input');
+    const container = document.querySelector('#quiz-container');
     const quickReplies = document.createElement('div');
+    quickReplies.style.cssText = 'display:flex;flex-wrap:wrap;gap:8px;margin:10px 0;';
     quickReplies.className = 'quick-replies';
-    quickReplies.innerHTML = options.map(opt => `<button class="quick-reply-btn" data-text="${opt}">${opt}</button>`).join('');
-    container.parentNode.insertBefore(quickReplies, container);
+    quickReplies.innerHTML = options.map(opt => 
+        `<button class="quick-reply-btn" style="padding:8px 16px;background:white;border:2px solid #6C3CE1;border-radius:50px;color:#6C3CE1;cursor:pointer;font-weight:500;font-family:'Quicksand',sans-serif;" data-text="${opt}">${opt}</button>`
+    ).join('');
+    
+    const inputContainer = document.querySelector('#quiz-container > div:last-child');
+    inputContainer.parentNode.insertBefore(quickReplies, inputContainer);
+    
     document.querySelectorAll('.quick-reply-btn').forEach(btn => {
         btn.addEventListener('click', function() {
             document.getElementById('chat-input').value = this.dataset.text;
@@ -197,13 +232,16 @@ function detectCategory(text) {
 function addMessage(type, content) {
     const container = document.getElementById('chat-messages');
     const messageDiv = document.createElement('div');
-    messageDiv.className = `message ${type === 'ai' ? 'ai-message' : 'user-message'}`;
+    messageDiv.style.cssText = `display:flex;gap:12px;margin-bottom:15px;animation:fadeInUp 0.3s ease;`;
+    
     const avatar = document.createElement('div');
-    avatar.className = 'message-avatar';
+    avatar.style.cssText = 'font-size:24px;';
     avatar.textContent = type === 'ai' ? '🤖' : '👤';
+    
     const contentDiv = document.createElement('div');
-    contentDiv.className = 'message-content';
+    contentDiv.style.cssText = `background:${type === 'ai' ? 'white' : '#6C3CE1'};color:${type === 'ai' ? '#2D1B4E' : 'white'};padding:12px 16px;border-radius:16px;flex:1;`;
     contentDiv.innerHTML = content.replace(/\n/g, '<br>');
+    
     messageDiv.appendChild(avatar);
     messageDiv.appendChild(contentDiv);
     container.appendChild(messageDiv);
@@ -246,13 +284,13 @@ async function generateProfile() {
         'Technology': 'You\'re excited by innovation and how technology can solve problems.'
     };
     
-    let resultHTML = `<h2>🎉 Your Interest Profile is Ready!</h2><p>Based on your answers, here's what we've discovered:</p><div class="profile-tags">`;
+    let resultHTML = `<h2 style="font-size:24px;color:#2D1B4E;margin-bottom:10px;">🎉 Your Interest Profile is Ready!</h2><p style="color:#555;">Based on your answers, here's what we've discovered:</p><div style="display:flex;flex-wrap:wrap;gap:12px;margin:15px 0;">`;
     tags.forEach(tag => {
         const emoji = tagEmojis[tag] || '🌟';
         const desc = tagDescriptions[tag] || 'You showed strong interest in this area.';
-        resultHTML += `<div class="tag-card"><span class="tag-emoji">${emoji}</span><span class="tag-name">${tag}</span><p class="tag-desc">${desc}</p></div>`;
+        resultHTML += `<div style="background:white;padding:12px 16px;border-radius:12px;border:2px solid #6C3CE1;flex:1;min-width:150px;"><div style="font-size:24px;">${emoji}</div><div style="font-weight:700;color:#6C3CE1;">${tag}</div><p style="color:#888;font-size:13px;margin-top:4px;">${desc}</p></div>`;
     });
-    resultHTML += `</div><p>We'll use these interests to find the perfect activities for you! 🎯</p><a href="dashboard.html" class="btn-primary">Continue to Dashboard →</a>`;
+    resultHTML += `</div><p style="color:#555;">We'll use these interests to find the perfect activities for you! 🎯</p><button class="btn-primary" onclick="window.location.href='dashboard.html'" style="margin-top:15px;">Continue to Dashboard →</button>`;
     addMessage('ai', resultHTML);
 }
 
@@ -284,8 +322,7 @@ function generateInterestTags(responses) {
 
 async function skipQuiz() {
     if (confirm('Skip the quiz? We\'ll use your initial interests to get you started.')) {
-        const initialInterests = document.querySelector('.interest-btn.selected');
-        const tags = initialInterests ? [initialInterests.dataset.tag] : ['Leadership & Service', 'Technology'];
+        const tags = ['Leadership & Service', 'Technology'];
         await db.collection('students').doc(userId).update({
             interestTags: tags,
             profileCompleted: true,
