@@ -5,6 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Futures Abroad - AI-Powered Career Intelligence</title>
 
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+
     <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
     <!-- AOS Scroll Animation -->
@@ -14,7 +19,8 @@
 
     <style>
         /* ========================================
-           ALL STYLES INCLUDED HERE
+           ALL YOUR EXISTING STYLES GO HERE
+           (Keeping your complete design)
            ======================================== */
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
@@ -189,6 +195,21 @@
             box-shadow: 0 4px 15px rgba(108, 60, 225, 0.3);
         }
         .nav-actions .btn-signup:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(108, 60, 225, 0.4); }
+
+        /* Admin Login Button in Nav */
+        .btn-admin-nav {
+            background: transparent;
+            border: 2px solid #FF6B6B;
+            font-weight: 700;
+            color: #FF6B6B;
+            cursor: pointer;
+            font-size: 14px;
+            font-family: 'Quicksand', sans-serif;
+            padding: 6px 16px;
+            border-radius: 50px;
+            transition: all 0.3s;
+        }
+        .btn-admin-nav:hover { background: #FF6B6B; color: white; }
 
         /* ===== MODAL ===== */
         .modal-overlay {
@@ -667,11 +688,52 @@
         .page-content h2 span { color: #6C3CE1; }
         .page-content p { color: #555; font-size: 17px; line-height: 1.8; }
 
+        /* ===== ADMIN DASHBOARD STYLES ===== */
+        .admin-stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 25px 0;
+        }
+        .admin-stat-card {
+            background: #F8F4FF;
+            border-radius: 20px;
+            padding: 20px;
+            text-align: center;
+        }
+        .admin-stat-card .stat-number {
+            font-weight: 800;
+            font-size: 32px;
+            color: #6C3CE1;
+        }
+        .admin-stat-card .stat-label {
+            color: #888;
+            font-size: 14px;
+        }
+        .admin-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+        }
+        .admin-table th {
+            text-align: left;
+            padding: 12px;
+            background: #F0E6FF;
+            border-radius: 10px;
+            font-weight: 700;
+            color: #2D1B4E;
+        }
+        .admin-table td {
+            padding: 10px 12px;
+            border-bottom: 1px solid #f0e6ff;
+        }
+        .admin-table tr:hover { background: #FAF8FC; }
+
         /* ===== RESPONSIVE ===== */
         @media (max-width: 768px) {
             .navbar { padding: 12px 20px; flex-direction: column; align-items: stretch; gap: 12px; }
             .nav-links { justify-content: center; gap: 12px; }
-            .nav-actions { justify-content: center; }
+            .nav-actions { justify-content: center; flex-wrap: wrap; }
             
             .hero { 
                 padding: 40px 20px 50px; 
@@ -699,6 +761,7 @@
             .banner-dark h2 { font-size: 28px; }
             .modal-box { padding: 30px 20px; }
             .page-content { padding: 20px; }
+            .admin-stats-grid { grid-template-columns: 1fr 1fr; }
         }
         @media (max-width: 480px) {
             .hero-content h1 { font-size: 26px; }
@@ -719,6 +782,7 @@
             .hero-compass .emoji-big {
                 font-size: 32px;
             }
+            .admin-stats-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
@@ -743,6 +807,7 @@
         </div>
 
         <div class="nav-actions">
+            <button class="btn-admin-nav" onclick="openModal('admin')">🔐 Admin</button>
             <button class="btn-login" onclick="openModal('login')">
                 <i class="fas fa-sign-in-alt"></i> Log in
             </button>
@@ -753,7 +818,7 @@
     </nav>
 
     <!-- ========================================
-    MODAL (Login / Signup / Quiz)
+    MODAL (Login / Signup / Quiz / Admin)
     ======================================== -->
     <div class="modal-overlay" id="authModal">
         <div class="modal-box" id="modalBox">
@@ -950,6 +1015,10 @@
     SCRIPTS
     ======================================== -->
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    
+    <!-- Firebase Config -->
+    <script src="js/firebase-config.js"></script>
+    
     <script>
         // ========================================
         // INIT AOS
@@ -1106,12 +1175,13 @@
         });
 
         // ========================================
-        // RENDER LOGIN
+        // RENDER LOGIN (With Firebase)
         // ========================================
         function renderLogin() {
             modalContent.innerHTML = `
                 <h2>Welcome Back 👋</h2>
                 <p class="sub">Log in to continue your journey</p>
+                <div id="loginMessage" style="display:none; padding:10px; border-radius:10px; margin-bottom:10px;"></div>
                 <label>Email</label>
                 <input type="email" placeholder="you@example.com" id="loginEmail">
                 <label>Password</label>
@@ -1127,12 +1197,13 @@
         }
 
         // ========================================
-        // RENDER SIGNUP
+        // RENDER SIGNUP (With Firebase)
         // ========================================
         function renderSignup() {
             modalContent.innerHTML = `
                 <h2>Create Account 🚀</h2>
                 <p class="sub">Start your career journey today</p>
+                <div id="signupMessage" style="display:none; padding:10px; border-radius:10px; margin-bottom:10px;"></div>
                 <label>I am a:</label>
                 <div class="role-select">
                     <button class="active" onclick="selectRole(this, 'student')">🎓 Student</button>
@@ -1152,17 +1223,18 @@
         }
 
         // ========================================
-        // RENDER ADMIN LOGIN
+        // RENDER ADMIN LOGIN (With Firebase)
         // ========================================
         function renderAdminLogin() {
             modalContent.innerHTML = `
                 <h2>🔐 Admin Login</h2>
                 <p class="sub">Access the admin dashboard</p>
+                <div id="adminMessage" style="display:none; padding:10px; border-radius:10px; margin-bottom:10px;"></div>
                 <label>Admin Email</label>
-                <input type="email" placeholder="admin@futuresabroad.com" id="adminEmail">
+                <input type="email" placeholder="admin@futuresabroad.com" id="adminEmail" value="admin@futuresabroad.com">
                 <label>Admin Password</label>
                 <input type="password" placeholder="••••••••" id="adminPassword">
-                <button class="btn-submit" onclick="handleAdminLogin()">Login as Admin</button>
+                <button class="btn-submit" onclick="handleAdminLogin()">Login as Admin 🔐</button>
                 <div class="switch-link">
                     <a onclick="renderLogin()">← Back to student login</a>
                 </div>
@@ -1444,41 +1516,93 @@
         }
 
         // ========================================
-        // AUTH HANDLERS
+        // AUTH HANDLERS WITH FIREBASE
         // ========================================
-        function handleLogin() {
-            const email = document.getElementById('loginEmail')?.value || '';
-            const password = document.getElementById('loginPassword')?.value || '';
-            if (email && password) {
-                if (email === 'admin@futuresabroad.com' && password === 'admin123') {
-                    alert('🔐 Admin logged in successfully!');
-                    closeModal();
-                    return;
-                }
-                alert('✅ Logged in successfully! (Demo)');
-                closeModal();
-                if (!email.includes('admin')) {
-                    setTimeout(() => {
-                        currentQuizIndex = 0;
-                        quizAnswers = [];
-                        openModal('quiz');
-                    }, 500);
-                }
-            } else {
-                alert('⚠️ Please enter both email and password.');
+        
+        // Admin credentials (YOURS ONLY)
+        const ADMIN_EMAIL = "admin@futuresabroad.com";
+        const ADMIN_PASSWORD = "FuturesAdmin2026!";
+
+        function showMessage(elementId, message, isError = true) {
+            const el = document.getElementById(elementId);
+            if (el) {
+                el.style.display = 'block';
+                el.style.background = isError ? '#FFE8E8' : '#E8F5E9';
+                el.style.color = isError ? '#C62828' : '#2E7D32';
+                el.textContent = message;
             }
         }
 
-        function handleSignup() {
-            const name = document.getElementById('signupName')?.value || '';
-            const email = document.getElementById('signupEmail')?.value || '';
-            const password = document.getElementById('signupPassword')?.value || '';
+        async function handleLogin() {
+            const email = document.getElementById('loginEmail')?.value.trim();
+            const password = document.getElementById('loginPassword')?.value;
+
+            if (!email || !password) {
+                showMessage('loginMessage', '⚠️ Please enter both email and password.');
+                return;
+            }
+
+            try {
+                const userCredential = await auth.signInWithEmailAndPassword(email, password);
+                const user = userCredential.user;
+                
+                // Check if user is admin
+                const adminDoc = await db.collection('admins').doc(user.uid).get();
+                if (adminDoc.exists) {
+                    alert('🔐 Admin logged in successfully!');
+                    closeModal();
+                    showAdminDashboard();
+                    return;
+                }
+
+                alert('✅ Logged in successfully!');
+                closeModal();
+                // Redirect to dashboard
+                window.location.href = 'dashboard.html';
+            } catch (error) {
+                showMessage('loginMessage', '❌ Login failed: ' + error.message);
+            }
+        }
+
+        async function handleSignup() {
+            const name = document.getElementById('signupName')?.value.trim();
+            const email = document.getElementById('signupEmail')?.value.trim();
+            const password = document.getElementById('signupPassword')?.value;
             const roleEl = document.querySelector('.role-select .active');
             const role = roleEl ? roleEl.dataset.role || 'student' : 'student';
 
-            if (name && email && password) {
-                alert(`✅ Account created!\nRole: ${role}\nName: ${name}\nEmail: ${email}`);
+            if (!name || !email || !password) {
+                showMessage('signupMessage', '⚠️ Please fill in all fields.');
+                return;
+            }
+            if (password.length < 8) {
+                showMessage('signupMessage', '⚠️ Password must be at least 8 characters.');
+                return;
+            }
+
+            try {
+                const userCredential = await auth.createUserWithEmailAndPassword(email, password);
+                const user = userCredential.user;
+
+                // Save user data to Firestore
+                await db.collection('students').doc(user.uid).set({
+                    uid: user.uid,
+                    name: name,
+                    email: email,
+                    role: role,
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                    profileCompleted: false,
+                    onboardingPhase: 1,
+                    interests: [],
+                    quizAnswers: [],
+                    activities: [],
+                    portfolio: []
+                });
+
+                alert(`✅ Account created successfully!\nWelcome ${name}!`);
                 closeModal();
+                
+                // Start quiz for students
                 if (role === 'student') {
                     setTimeout(() => {
                         currentQuizIndex = 0;
@@ -1486,57 +1610,69 @@
                         openModal('quiz');
                     }, 500);
                 }
-            } else {
-                alert('⚠️ Please fill in all fields.');
+            } catch (error) {
+                showMessage('signupMessage', '❌ Signup failed: ' + error.message);
             }
         }
 
-        function handleAdminLogin() {
-            const email = document.getElementById('adminEmail')?.value || '';
-            const password = document.getElementById('adminPassword')?.value || '';
-            if (email === 'admin@futuresabroad.com' && password === 'admin123') {
-                alert('🔐 Admin logged in successfully!');
-                closeModal();
-                showAdminDashboard();
-            } else {
-                alert('⚠️ Invalid admin credentials.\nUse: admin@futuresabroad.com / admin123');
+        async function handleAdminLogin() {
+            const email = document.getElementById('adminEmail')?.value.trim();
+            const password = document.getElementById('adminPassword')?.value;
+
+            if (!email || !password) {
+                showMessage('adminMessage', '⚠️ Please enter both email and password.');
+                return;
+            }
+
+            try {
+                const userCredential = await auth.signInWithEmailAndPassword(email, password);
+                const user = userCredential.user;
+                
+                // Check if user is admin
+                const adminDoc = await db.collection('admins').doc(user.uid).get();
+                if (adminDoc.exists) {
+                    alert('🔐 Admin logged in successfully!');
+                    closeModal();
+                    showAdminDashboard();
+                    return;
+                } else {
+                    await auth.signOut();
+                    showMessage('adminMessage', '❌ Access denied. You are not an admin.');
+                }
+            } catch (error) {
+                showMessage('adminMessage', '❌ Login failed: ' + error.message);
             }
         }
 
-        function showAdminDashboard() {
-            const scores = JSON.parse(localStorage.getItem('quizScores') || '{}');
-            const topCareer = localStorage.getItem('topCareer') || 'Not taken yet';
-            const totalStudents = 42;
-
+        // ========================================
+        // SHOW ADMIN DASHBOARD
+        // ========================================
+        async function showAdminDashboard() {
             document.getElementById('homePage').style.display = 'none';
             const container = document.getElementById('pageContentInner');
             const content = document.getElementById('pageContent');
             content.classList.add('active');
 
-            let html = `
-                <h2>🔐 Admin Dashboard</h2>
-                <p style="color:#555;">Welcome back, Admin! Here's an overview of student activity.</p>
-                <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(180px,1fr)); gap:20px; margin:25px 0;">
-                    <div style="background:#F0E6FF; border-radius:20px; padding:20px; text-align:center;">
-                        <div style="font-size:32px;">👥</div>
-                        <div style="font-weight:800; font-size:28px;">${totalStudents}</div>
-                        <div style="color:#888; font-size:14px;">Total Students</div>
-                    </div>
-                    <div style="background:#E8F5E9; border-radius:20px; padding:20px; text-align:center;">
-                        <div style="font-size:32px;">✅</div>
-                        <div style="font-weight:800; font-size:28px;">${Math.floor(totalStudents * 0.7)}</div>
-                        <div style="color:#888; font-size:14px;">Quiz Completed</div>
-                    </div>
-                    <div style="background:#FFF3E0; border-radius:20px; padding:20px; text-align:center;">
-                        <div style="font-size:32px;">⭐</div>
-                        <div style="font-weight:800; font-size:28px;">${topCareer}</div>
-                        <div style="color:#888; font-size:14px;">Top Career Choice</div>
-                    </div>
-                </div>
-                <h3>📊 Career Interest Breakdown</h3>
-                <div style="background:#F8F4FF; border-radius:16px; padding:16px; margin:15px 0;">
-            `;
+            // Get real data from Firestore
+            let totalStudents = 0;
+            let completedQuiz = 0;
+            let studentsList = [];
 
+            try {
+                const snapshot = await db.collection('students').get();
+                totalStudents = snapshot.size;
+                
+                snapshot.forEach(doc => {
+                    const data = doc.data();
+                    if (data.profileCompleted) completedQuiz++;
+                    studentsList.push(data);
+                });
+            } catch (error) {
+                console.error('Error fetching students:', error);
+            }
+
+            const scores = JSON.parse(localStorage.getItem('quizScores') || '{}');
+            const topCareer = localStorage.getItem('topCareer') || 'Not taken yet';
             const careerNames = {
                 medicine: '🩺 Medicine',
                 engineering: '💻 Engineering',
@@ -1544,6 +1680,32 @@
                 arts: '🎨 Arts',
                 business: '📊 Business'
             };
+
+            let html = `
+                <h2>🔐 Admin Dashboard</h2>
+                <p style="color:#555;">Welcome back, Admin! Here's an overview of student activity.</p>
+                <div class="admin-stats-grid">
+                    <div class="admin-stat-card">
+                        <div class="stat-number">${totalStudents}</div>
+                        <div class="stat-label">👥 Total Students</div>
+                    </div>
+                    <div class="admin-stat-card">
+                        <div class="stat-number">${completedQuiz}</div>
+                        <div class="stat-label">✅ Quiz Completed</div>
+                    </div>
+                    <div class="admin-stat-card">
+                        <div class="stat-number">${topCareer !== 'Not taken yet' ? '⭐' : '📝'}</div>
+                        <div class="stat-label">Top Career: ${topCareer}</div>
+                    </div>
+                    <div class="admin-stat-card">
+                        <div class="stat-number">${Math.round(totalStudents * 0.7)}</div>
+                        <div class="stat-label">📊 Active Students</div>
+                    </div>
+                </div>
+
+                <h3>📊 Career Interest Breakdown</h3>
+                <div style="background:#F8F4FF; border-radius:16px; padding:16px; margin:15px 0;">
+            `;
 
             for (const [key, val] of Object.entries(scores)) {
                 const pct = Math.round((val / quizQuestions.length) * 100);
@@ -1560,6 +1722,45 @@
 
             html += `
                 </div>
+
+                <h3>👥 All Students</h3>
+                <div style="background:#F8F4FF; border-radius:16px; padding:16px; overflow-x:auto;">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Grade</th>
+                                <th>Interests</th>
+                                <th>Status</th>
+                                <th>Joined</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+            `;
+
+            if (studentsList.length > 0) {
+                studentsList.forEach(student => {
+                    html += `
+                        <tr>
+                            <td>${student.name || 'N/A'}</td>
+                            <td>${student.email || 'N/A'}</td>
+                            <td>${student.grade || 'Not set'}</td>
+                            <td>${(student.interests || []).join(', ') || 'Not set'}</td>
+                            <td>${student.profileCompleted ? '✅ Complete' : '⏳ Pending'}</td>
+                            <td>${student.createdAt ? new Date(student.createdAt.toDate()).toLocaleDateString() : 'N/A'}</td>
+                        </tr>
+                    `;
+                });
+            } else {
+                html += `<tr><td colspan="6" style="text-align:center; padding:20px; color:#888;">No students registered yet.</td></tr>`;
+            }
+
+            html += `
+                        </tbody>
+                    </table>
+                </div>
+
                 <button class="btn-secondary" onclick="showHome()" style="margin-top:20px;">← Back to Home</button>
             `;
 
@@ -1567,6 +1768,9 @@
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
+        // ========================================
+        // KEYBOARD SHORTCUTS
+        // ========================================
         document.addEventListener('keydown', function(e) {
             if (e.key === 'Enter' && modal.classList.contains('active')) {
                 const submitBtn = document.querySelector('.btn-submit');
@@ -1576,8 +1780,9 @@
 
         console.log('🧭 Futures Abroad loaded successfully!');
         console.log('📝 Quiz has', quizQuestions.length, 'questions');
-        console.log('🔐 Admin login: admin@futuresabroad.com / admin123');
-        console.log('🎨 Image on top, text below layout!');
+        console.log('🔐 Admin login: admin@futuresabroad.com / FuturesAdmin2026!');
+        console.log('🎨 Cartoon image on top, text below layout!');
+        console.log('🔥 Firebase connected!');
     </script>
 
 </body>
