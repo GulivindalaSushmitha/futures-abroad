@@ -1,431 +1,298 @@
-// ============================================
-// QUIZ DATA - 10 Questions Based on Interest Areas
-// ============================================
-const quizQuestions = [
-    {
-        id: 1,
-        question: "What subject do you look forward to most at school?",
-        subtext: "This helps us understand your academic interests",
-        type: "radio",
-        options: [
-            "Mathematics & Sciences",
-            "English & Literature",
-            "History & Social Studies",
-            "Art & Design",
-            "Business & Economics",
-            "Computer Science & Technology"
-        ]
-    },
-    {
-        id: 2,
-        question: "If you had a free weekend, what would you build or explore?",
-        subtext: "Tell us about your creative and curious side",
-        type: "text",
-        placeholder: "Describe what you'd do..."
-    },
-    {
-        id: 3,
-        question: "What kind of change do you want to see in the world?",
-        subtext: "Your answer helps us find activities that match your values",
-        type: "textarea",
-        placeholder: "Share your vision..."
-    },
-    {
-        id: 4,
-        question: "Which of these activities excites you the most?",
-        subtext: "Select all that apply to your interests",
-        type: "checkbox",
-        options: [
-            "Conducting scientific research",
-            "Creating art or design",
-            "Leading a team or project",
-            "Starting a business",
-            "Volunteering for a cause",
-            "Learning to code",
-            "Writing or journalism",
-            "Working with people"
-        ]
-    },
-    {
-        id: 5,
-        question: "What career path interests you the most?",
-        subtext: "This helps us match you with relevant experiences",
-        type: "radio",
-        options: [
-            "Engineering & Technology",
-            "Medicine & Healthcare",
-            "Business & Entrepreneurship",
-            "Law & Politics",
-            "Education & Research",
-            "Creative Arts & Design",
-            "Environmental Science",
-            "Data & Analytics"
-        ]
-    },
-    {
-        id: 6,
-        question: "Describe a problem you'd love to solve.",
-        subtext: "Your passion for solving problems drives your future path",
-        type: "textarea",
-        placeholder: "What problem matters most to you..."
-    },
-    {
-        id: 7,
-        question: "What type of learning environment suits you best?",
-        subtext: "This helps us recommend activities and programs",
-        type: "radio",
-        options: [
-            "Independent research",
-            "Team projects & collaboration",
-            "Hands-on practical work",
-            "Lecture & academic study",
-            "Creative exploration",
-            "Competitive challenges"
-        ]
-    },
-    {
-        id: 8,
-        question: "Which of these skills would you like to develop?",
-        subtext: "Select the skills you want to build",
-        type: "checkbox",
-        options: [
-            "Leadership",
-            "Communication",
-            "Critical Thinking",
-            "Creativity",
-            "Problem Solving",
-            "Teamwork",
-            "Technical Skills",
-            "Project Management"
-        ]
-    },
-    {
-        id: 9,
-        question: "What motivates you to succeed?",
-        subtext: "Understanding your motivation helps us guide you",
-        type: "radio",
-        options: [
-            "Making a positive impact",
-            "Achieving personal goals",
-            "Building a successful career",
-            "Helping others",
-            "Creating something new",
-            "Gaining knowledge"
-        ]
-    },
-    {
-        id: 10,
-        question: "Where do you see yourself in 10 years?",
-        subtext: "This helps us create your personalized university pathway",
-        type: "textarea",
-        placeholder: "Share your vision for the future..."
-    }
-];
+// ============================================================
+// js/quiz.js - AI Interest Quiz Logic
+// ============================================================
 
-// ============================================
-// QUIZ STATE
-// ============================================
+const db = firebase.firestore();
 let currentQuestion = 0;
-let quizAnswers = {};
+let userResponses = [];
+let userId = '';
+let conversationHistory = [];
+let questionCount = 0;
+const MAX_QUESTIONS = 8;
 
-// ============================================
-// RENDER QUIZ
-// ============================================
-document.addEventListener('DOMContentLoaded', function() {
-    const container = document.getElementById('quizContainer');
-    if (!container) return;
-
-    // Render all questions
-    quizQuestions.forEach((q, index) => {
-        const div = document.createElement('div');
-        div.className = `question-item ${index === 0 ? 'active' : ''}`;
-        div.dataset.question = index;
-        
-        let html = `
-            <div class="question-number">Question ${index + 1} of ${quizQuestions.length}</div>
-            <h3>${q.question}</h3>
-            ${q.subtext ? `<p class="question-sub">${q.subtext}</p>` : ''}
-        `;
-
-        if (q.type === 'radio') {
-            html += `<div class="options-group">`;
-            q.options.forEach(opt => {
-                html += `
-                    <div class="option-item" onclick="selectOption(this, '${q.id}', '${opt}')">
-                        <input type="radio" name="q${q.id}" value="${opt}" />
-                        <label>${opt}</label>
-                    </div>
-                `;
-            });
-            html += `</div>`;
-        } else if (q.type === 'checkbox') {
-            html += `<div class="options-group">`;
-            q.options.forEach(opt => {
-                html += `
-                    <div class="option-item" onclick="toggleCheckbox(this, '${q.id}', '${opt}')">
-                        <input type="checkbox" name="q${q.id}" value="${opt}" />
-                        <label>${opt}</label>
-                    </div>
-                `;
-            });
-            html += `</div>`;
-        } else if (q.type === 'text') {
-            html += `
-                <input type="text" class="text-input" placeholder="${q.placeholder || 'Type your answer...'}" 
-                       onchange="saveTextAnswer('${q.id}', this.value)" />
-            `;
-        } else if (q.type === 'textarea') {
-            html += `
-                <textarea class="textarea-input" placeholder="${q.placeholder || 'Type your answer...'}" 
-                          onchange="saveTextAnswer('${q.id}', this.value)"></textarea>
-            `;
+// Question Bank
+const QUESTION_BANK = {
+    opening: [
+        {
+            id: 'q1',
+            text: 'What subject do you look forward to most at school? 🏫',
+            followUp: {
+                'biology': 'health', 'chemistry': 'health', 'physics': 'stem',
+                'mathematics': 'stem', 'computer science': 'stem', 'history': 'humanities',
+                'philosophy': 'humanities', 'business': 'business', 'economics': 'business',
+                'art': 'arts', 'music': 'arts', 'design': 'arts', 'sustainability': 'environment',
+                'psychology': 'social_sciences'
+            }
+        },
+        {
+            id: 'q2',
+            text: 'If you had a free weekend, what would you build or explore? 🛠️',
+            followUp: {
+                'app': 'tech', 'website': 'tech', 'robot': 'tech', 'art': 'arts',
+                'music': 'arts', 'experiment': 'stem', 'code': 'tech', 'business': 'business',
+                'volunteer': 'leadership', 'nature': 'environment'
+            }
         }
+    ],
+    deep: {
+        health: [
+            { id: 'health_1', text: "That's fascinating! 🩺 Are you more drawn to clinical medicine, medical research, or public health?", options: ['Clinical Medicine', 'Medical Research', 'Public Health', 'Pharmacy', 'Mental Health'] },
+            { id: 'health_2', text: 'What kind of healthcare impact excites you most?', options: ['Helping patients directly', 'Finding new cures', 'Preventing disease', 'Mental wellbeing'] }
+        ],
+        stem: [
+            { id: 'stem_1', text: "Science! 🧪 What area of science sparks your curiosity the most?", options: ['Physics & Astronomy', 'Chemistry', 'Biology', 'Mathematics', 'Engineering', 'Data Science'] },
+            { id: 'stem_2', text: 'Do you enjoy solving problems through:', options: ['Experiments & Lab Work', 'Mathematical Models', 'Building & Creating', 'Computer Programming'] }
+        ],
+        tech: [
+            { id: 'tech_1', text: "Tech is the future! 💻 What technology area interests you?", options: ['AI & Machine Learning', 'App Development', 'Cybersecurity', 'Game Design', 'Robotics', 'Blockchain'] },
+            { id: 'tech_2', text: 'What excites you most about technology?', options: ['Creating new tools', 'Solving complex problems', 'Innovating for good', 'Building businesses'] }
+        ],
+        business: [
+            { id: 'business_1', text: "Business mind! 💼 Which business area appeals to you?", options: ['Entrepreneurship', 'Finance & Investing', 'Marketing', 'Consulting', 'Management', 'Real Estate'] },
+            { id: 'business_2', text: 'What would you like to achieve in business?', options: ['Build a company', 'Lead a team', 'Make smart investments', 'Create impactful campaigns'] }
+        ],
+        arts: [
+            { id: 'arts_1', text: "Creative soul! 🎨 What's your creative passion?", options: ['Visual Art', 'Graphic Design', 'Architecture', 'Fashion', 'Photography', 'Film', 'Music'] },
+            { id: 'arts_2', text: 'What kind of creative projects do you enjoy?', options: ['Personal expression', 'Commercial projects', 'Social impact', 'Digital creation'] }
+        ],
+        humanities: [
+            { id: 'humanities_1', text: "Deep thinker! 📚 Which humanities subject calls to you?", options: ['History', 'Philosophy', 'Political Science', 'Law', 'Linguistics', 'Classical Studies'] },
+            { id: 'humanities_2', text: 'What drives your interest in this area?', options: ['Understanding the past', 'Shaping the future', 'Justice & Fairness', 'Human expression'] }
+        ],
+        environment: [
+            { id: 'env_1', text: "Earth's champion! 🌍 What environmental focus intrigues you?", options: ['Climate Change', 'Marine Biology', 'Environmental Policy', 'Renewable Energy', 'Conservation'] },
+            { id: 'env_2', text: 'How would you like to make an environmental impact?', options: ['Research', 'Policy & Advocacy', 'Sustainable Business', 'Community Education'] }
+        ],
+        leadership: [
+            { id: 'leadership_1', text: "Natural leader! 👥 What kind of leadership role fits you?", options: ['Student Government', 'Community Organizer', 'Team Captain', 'Social Enterprise', 'Non-Profit Lead'] },
+            { id: 'leadership_2', text: 'What change do you want to lead?', options: ['School/Community Change', 'Social Justice', 'Environmental Action', 'Youth Empowerment'] }
+        ],
+        social_sciences: [
+            { id: 'social_1', text: "Understanding people! 🧠 What social science area interests you?", options: ['Psychology', 'Sociology', 'Anthropology', 'Economics', 'International Relations'] },
+            { id: 'social_2', text: 'What would you like to understand better about society?', options: ['Human Behavior', 'Social Structures', 'Global Relations', 'Economic Systems'] }
+        ]
+    },
+    closing: [
+        { id: 'closing_1', text: 'What kind of change do you want to see in the world? 🌟', context: true },
+        { id: 'closing_2', text: 'What do you hope to achieve in the next 5 years? 🎯', context: true }
+    ]
+};
 
-        div.innerHTML = html;
-        container.appendChild(div);
+document.addEventListener('DOMContentLoaded', function() {
+    const urlParams = new URLSearchParams(window.location.search);
+    userId = urlParams.get('uid');
+    
+    if (!userId) {
+        firebase.auth().onAuthStateChanged(user => {
+            if (user) { userId = user.uid; startQuiz(); }
+            else window.location.href = 'signup.html';
+        });
+    } else startQuiz();
+    
+    document.getElementById('send-btn').addEventListener('click', sendMessage);
+    document.getElementById('chat-input').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') sendMessage();
     });
-
-    // Update progress
-    updateProgress();
-
-    // Navigation buttons
-    const prevBtn = document.getElementById('prevBtn');
-    const nextBtn = document.getElementById('nextBtn');
-    const submitBtn = document.getElementById('submitBtn');
-
-    prevBtn.addEventListener('click', () => navigateQuestion(-1));
-    nextBtn.addEventListener('click', () => navigateQuestion(1));
-
-    // Form submit
-    document.getElementById('quizForm').addEventListener('submit', function(e) {
-        e.preventDefault();
-        submitQuiz();
-    });
+    document.getElementById('skip-quiz').addEventListener('click', skipQuiz);
 });
 
-// ============================================
-// NAVIGATION FUNCTIONS
-// ============================================
-function navigateQuestion(direction) {
-    const questions = document.querySelectorAll('.question-item');
-    const total = questions.length;
-    
-    // Save current answer before moving
-    saveCurrentAnswer(currentQuestion);
-    
-    // Hide current
-    questions[currentQuestion].classList.remove('active');
-    
-    // Update index
-    currentQuestion += direction;
-    
-    // Clamp
-    if (currentQuestion < 0) currentQuestion = 0;
-    if (currentQuestion >= total) currentQuestion = total - 1;
-    
-    // Show new
-    questions[currentQuestion].classList.add('active');
-    
-    // Update buttons
-    updateNavigationButtons();
-    updateProgress();
+function startQuiz() {
+    db.collection('students').doc(userId).get().then(doc => {
+        if (doc.exists && doc.data().profileCompleted) {
+            window.location.href = 'dashboard.html';
+            return;
+        }
+        askNextQuestion();
+    });
 }
 
-function updateNavigationButtons() {
-    const prevBtn = document.getElementById('prevBtn');
-    const nextBtn = document.getElementById('nextBtn');
-    const submitBtn = document.getElementById('submitBtn');
-    const total = quizQuestions.length;
-    
-    prevBtn.style.display = currentQuestion === 0 ? 'none' : 'inline-flex';
-    
-    if (currentQuestion === total - 1) {
-        nextBtn.style.display = 'none';
-        submitBtn.style.display = 'inline-flex';
-    } else {
-        nextBtn.style.display = 'inline-flex';
-        submitBtn.style.display = 'none';
+function askNextQuestion() {
+    const questionData = getNextQuestion();
+    if (!questionData || questionCount >= MAX_QUESTIONS) {
+        generateProfile();
+        return;
     }
+    questionCount++;
+    updateProgress();
+    addMessage('ai', questionData.text);
+    conversationHistory.push({ role: 'assistant', content: questionData.text, questionId: questionData.id });
+    if (questionData.options && questionData.options.length > 0) {
+        setTimeout(() => showQuickReplies(questionData.options), 600);
+    }
+}
+
+function getNextQuestion() {
+    if (currentQuestion === 0) {
+        const questions = QUESTION_BANK.opening;
+        const selected = questions[Math.floor(Math.random() * questions.length)];
+        currentQuestion++;
+        return selected;
+    }
+    const lastResponse = userResponses[userResponses.length - 1];
+    if (lastResponse && lastResponse.category) {
+        const deepQuestions = QUESTION_BANK.deep[lastResponse.category];
+        if (deepQuestions && deepQuestions.length > 0) {
+            const askedIds = userResponses.map(r => r.questionId);
+            const nextQuestion = deepQuestions.find(q => !askedIds.includes(q.id));
+            if (nextQuestion) { currentQuestion++; return nextQuestion; }
+        }
+    }
+    const askedIds = userResponses.map(r => r.questionId);
+    const closingQuestions = QUESTION_BANK.closing.filter(q => !askedIds.includes(q.id));
+    if (closingQuestions.length > 0 && questionCount < MAX_QUESTIONS - 1) {
+        currentQuestion++;
+        return closingQuestions[0];
+    }
+    return null;
+}
+
+function sendMessage() {
+    const input = document.getElementById('chat-input');
+    const text = input.value.trim();
+    if (!text) return;
+    addMessage('user', text);
+    input.value = '';
+    const questionId = conversationHistory[conversationHistory.length - 1]?.questionId || '';
+    const category = detectCategory(text);
+    userResponses.push({ questionId, answer: text, category });
+    conversationHistory.push({ role: 'user', content: text });
+    setTimeout(() => askNextQuestion(), 800);
+}
+
+function showQuickReplies(options) {
+    const container = document.querySelector('.chat-input');
+    const quickReplies = document.createElement('div');
+    quickReplies.className = 'quick-replies';
+    quickReplies.innerHTML = options.map(opt => `<button class="quick-reply-btn" data-text="${opt}">${opt}</button>`).join('');
+    container.parentNode.insertBefore(quickReplies, container);
+    document.querySelectorAll('.quick-reply-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            document.getElementById('chat-input').value = this.dataset.text;
+            sendMessage();
+            this.parentNode.remove();
+        });
+    });
+    setTimeout(() => { if (quickReplies.parentNode) quickReplies.remove(); }, 10000);
+}
+
+function detectCategory(text) {
+    const keywords = {
+        'health': ['medicine', 'doctor', 'health', 'patient', 'hospital', 'clinic', 'medical', 'biology', 'chemistry'],
+        'stem': ['science', 'physics', 'math', 'mathematics', 'engineering', 'chemistry', 'biology', 'research'],
+        'tech': ['computer', 'code', 'programming', 'ai', 'machine learning', 'cybersecurity', 'app', 'developer'],
+        'business': ['business', 'entrepreneur', 'finance', 'marketing', 'startup', 'investment', 'company'],
+        'arts': ['art', 'design', 'music', 'drawing', 'creative', 'architecture', 'fashion', 'photography'],
+        'humanities': ['history', 'philosophy', 'law', 'politics', 'linguistics', 'literature'],
+        'environment': ['climate', 'sustainability', 'environment', 'green', 'renewable', 'conservation', 'nature'],
+        'leadership': ['lead', 'leadership', 'manage', 'organize', 'community', 'volunteer', 'social change'],
+        'social_sciences': ['psychology', 'sociology', 'anthropology', 'economics', 'international relations']
+    };
+    const lowerText = text.toLowerCase();
+    for (const [category, words] of Object.entries(keywords)) {
+        if (words.some(word => lowerText.includes(word))) return category;
+    }
+    return 'general';
+}
+
+function addMessage(type, content) {
+    const container = document.getElementById('chat-messages');
+    const messageDiv = document.createElement('div');
+    messageDiv.className = `message ${type === 'ai' ? 'ai-message' : 'user-message'}`;
+    const avatar = document.createElement('div');
+    avatar.className = 'message-avatar';
+    avatar.textContent = type === 'ai' ? '🤖' : '👤';
+    const contentDiv = document.createElement('div');
+    contentDiv.className = 'message-content';
+    contentDiv.innerHTML = content.replace(/\n/g, '<br>');
+    messageDiv.appendChild(avatar);
+    messageDiv.appendChild(contentDiv);
+    container.appendChild(messageDiv);
+    container.scrollTop = container.scrollHeight;
 }
 
 function updateProgress() {
-    const total = quizQuestions.length;
-    const progress = ((currentQuestion + 1) / total) * 100;
-    document.getElementById('progressFill').style.width = progress + '%';
-    document.getElementById('progressText').textContent = `Question ${currentQuestion + 1} of ${total}`;
+    const progress = Math.min((questionCount / MAX_QUESTIONS) * 100, 100);
+    document.getElementById('progress-fill').style.width = progress + '%';
+    document.getElementById('question-counter').textContent = `Question ${Math.min(questionCount, MAX_QUESTIONS)} of ${MAX_QUESTIONS}`;
 }
 
-// ============================================
-// ANSWER HANDLING
-// ============================================
-function selectOption(element, questionId, value) {
-    const parent = element.closest('.options-group');
-    parent.querySelectorAll('.option-item').forEach(item => {
-        item.classList.remove('selected');
-        item.querySelector('input').checked = false;
-    });
-    element.classList.add('selected');
-    element.querySelector('input').checked = true;
-    quizAnswers[questionId] = value;
-}
-
-function toggleCheckbox(element, questionId, value) {
-    element.classList.toggle('selected');
-    const checkbox = element.querySelector('input');
-    checkbox.checked = !checkbox.checked;
+async function generateProfile() {
+    addMessage('ai', '✨ Analyzing your answers... I\'m building your interest profile!');
+    await new Promise(resolve => setTimeout(resolve, 2000));
     
-    if (!quizAnswers[questionId]) {
-        quizAnswers[questionId] = [];
-    }
-    
-    if (checkbox.checked) {
-        quizAnswers[questionId].push(value);
-    } else {
-        quizAnswers[questionId] = quizAnswers[questionId].filter(v => v !== value);
-    }
-}
-
-function saveTextAnswer(questionId, value) {
-    quizAnswers[questionId] = value;
-}
-
-function saveCurrentAnswer(index) {
-    const question = quizQuestions[index];
-    const container = document.querySelector(`.question-item[data-question="${index}"]`);
-    if (!container) return;
-    
-    if (question.type === 'radio') {
-        const selected = container.querySelector('input[type="radio"]:checked');
-        if (selected) {
-            quizAnswers[question.id] = selected.value;
-        }
-    } else if (question.type === 'checkbox') {
-        const checked = container.querySelectorAll('input[type="checkbox"]:checked');
-        quizAnswers[question.id] = Array.from(checked).map(c => c.value);
-    } else if (question.type === 'text' || question.type === 'textarea') {
-        const input = container.querySelector('input, textarea');
-        if (input && input.value) {
-            quizAnswers[question.id] = input.value;
-        }
-    }
-}
-
-// ============================================
-// SUBMIT QUIZ
-// ============================================
-function submitQuiz() {
-    // Save last answer
-    saveCurrentAnswer(currentQuestion);
-    
-    // Check if all questions answered
-    const total = quizQuestions.length;
-    let answered = 0;
-    
-    quizQuestions.forEach(q => {
-        if (quizAnswers[q.id] && 
-            (typeof quizAnswers[q.id] === 'string' ? quizAnswers[q.id].trim() : quizAnswers[q.id].length > 0)) {
-            answered++;
-        }
+    const tags = generateInterestTags(userResponses);
+    await db.collection('students').doc(userId).update({
+        interestTags: tags,
+        profileCompleted: true,
+        onboardingPhase: 2,
+        quizResponses: userResponses,
+        profileStrength: 20
     });
     
-    if (answered < total) {
-        if (!confirm(`You've answered ${answered} of ${total} questions. Continue anyway?`)) {
-            return;
-        }
-    }
-    
-    // Get user data
-    const user = JSON.parse(localStorage.getItem('user') || '{}');
-    
-    // Create quiz result
-    const quizResult = {
-        userId: user.id || 'unknown',
-        userName: user.name || 'Student',
-        userEmail: user.email || '',
-        userGrade: user.grade || '',
-        userInterests: user.interests || [],
-        answers: quizAnswers,
-        submittedAt: new Date().toISOString(),
-        questionCount: total,
-        answeredCount: answered
+    const tagEmojis = {
+        'STEM': '🔬', 'Medicine & Health': '⚕️', 'Humanities': '📚',
+        'Social Sciences': '🧠', 'Arts & Design': '🎨', 'Business': '💼',
+        'Environment': '🌍', 'Leadership & Service': '👥', 'Technology': '💻'
+    };
+    const tagDescriptions = {
+        'STEM': 'You love exploring how things work through science and mathematics.',
+        'Medicine & Health': 'You care about human wellbeing and want to make a difference in people\'s lives.',
+        'Humanities': 'You\'re fascinated by human culture, history, and ideas.',
+        'Social Sciences': 'You\'re interested in understanding human behavior and society.',
+        'Arts & Design': 'You have a creative spirit! You express yourself through visual, musical, or design-based mediums.',
+        'Business': 'You have an entrepreneurial mindset. You think about how to create value and lead teams.',
+        'Environment': 'You care about our planet and want to make a sustainable impact.',
+        'Leadership & Service': 'You\'re a natural leader who wants to make a positive change in your community.',
+        'Technology': 'You\'re excited by innovation and how technology can solve problems.'
     };
     
-    // Save to localStorage (Database)
-    saveQuizResult(quizResult);
-    
-    // Show completion
-    showCompletion(quizResult);
+    let resultHTML = `<h2>🎉 Your Interest Profile is Ready!</h2><p>Based on your answers, here's what we've discovered:</p><div class="profile-tags">`;
+    tags.forEach(tag => {
+        const emoji = tagEmojis[tag] || '🌟';
+        const desc = tagDescriptions[tag] || 'You showed strong interest in this area.';
+        resultHTML += `<div class="tag-card"><span class="tag-emoji">${emoji}</span><span class="tag-name">${tag}</span><p class="tag-desc">${desc}</p></div>`;
+    });
+    resultHTML += `</div><p>We'll use these interests to find the perfect activities for you! 🎯</p><a href="dashboard.html" class="btn-primary">Continue to Dashboard →</a>`;
+    addMessage('ai', resultHTML);
 }
 
-function saveQuizResult(result) {
-    // Get existing results
-    let results = JSON.parse(localStorage.getItem('quizResults') || '[]');
-    results.push(result);
-    localStorage.setItem('quizResults', JSON.stringify(results));
-    
-    // Mark user as quiz completed
-    const user = JSON.parse(localStorage.getItem('user') || '{}');
-    user.quizCompleted = true;
-    user.quizAnswers = result.answers;
-    localStorage.setItem('user', JSON.stringify(user));
-}
-
-function showCompletion(result) {
-    const container = document.getElementById('quizContainer');
-    const nav = document.querySelector('.quiz-navigation');
-    const header = document.querySelector('.quiz-header');
-    
-    // Hide navigation
-    nav.style.display = 'none';
-    
-    // Create completion view
-    container.innerHTML = `
-        <div class="quiz-complete">
-            <div class="icon"><i class="fas fa-check-circle"></i></div>
-            <h2>🎉 Quiz Complete!</h2>
-            <p>Thank you for sharing your interests. We've created your personalized profile.</p>
-            
-            <div class="summary-box">
-                <h4>Your Profile Summary</h4>
-                <p><strong>Name:</strong> ${result.userName}</p>
-                <p><strong>Grade:</strong> ${result.userGrade}</p>
-                <p><strong>Interests:</strong> ${result.userInterests.join(', ') || 'Not specified'}</p>
-                <p><strong>Questions Answered:</strong> ${result.answeredCount} of ${result.questionCount}</p>
-            </div>
-            
-            <a href="dashboard.html" class="btn btn-primary btn-large">
-                Go to Dashboard <i class="fas fa-arrow-right"></i>
-            </a>
-        </div>
-    `;
-    
-    // Update header
-    header.querySelector('h1').textContent = 'Profile Complete!';
-    header.querySelector('p').textContent = 'Your AI-powered journey is ready to begin.';
-    document.querySelector('.quiz-progress').style.display = 'none';
-}
-
-// ============================================
-// ADMIN FUNCTIONS (View Results)
-// ============================================
-function getAllQuizResults() {
-    return JSON.parse(localStorage.getItem('quizResults') || '[]');
-}
-
-function getStudentQuizResults(studentId) {
-    const results = getAllQuizResults();
-    return results.filter(r => r.userId === studentId);
-}
-
-// ============================================
-// INIT - Check if user is logged in
-// ============================================
-document.addEventListener('DOMContentLoaded', function() {
-    const user = JSON.parse(localStorage.getItem('user') || '{}');
-    if (!user.id) {
-        window.location.href = 'login.html';
+function generateInterestTags(responses) {
+    const categoryCount = {};
+    responses.forEach(r => {
+        if (r.category && r.category !== 'general') {
+            categoryCount[r.category] = (categoryCount[r.category] || 0) + 1;
+        }
+    });
+    const categoryMap = {
+        'health': 'Medicine & Health', 'stem': 'STEM', 'tech': 'Technology',
+        'business': 'Business', 'arts': 'Arts & Design', 'humanities': 'Humanities',
+        'environment': 'Environment', 'leadership': 'Leadership & Service',
+        'social_sciences': 'Social Sciences'
+    };
+    const sorted = Object.entries(categoryCount)
+        .sort((a, b) => b[1] - a[1])
+        .slice(0, 4)
+        .map(([key]) => categoryMap[key] || key)
+        .filter(Boolean);
+    if (sorted.length < 2) {
+        const firstCategory = responses[0]?.category;
+        if (firstCategory && categoryMap[firstCategory]) sorted.push(categoryMap[firstCategory]);
+        sorted.push('Leadership & Service');
     }
-    
-    // Update user badge
-    document.getElementById('userBadge').textContent = `Welcome, ${user.name || 'Student'}`;
-});
+    return [...new Set(sorted)];
+}
+
+async function skipQuiz() {
+    if (confirm('Skip the quiz? We\'ll use your initial interests to get you started.')) {
+        const initialInterests = document.querySelector('.interest-btn.selected');
+        const tags = initialInterests ? [initialInterests.dataset.tag] : ['Leadership & Service', 'Technology'];
+        await db.collection('students').doc(userId).update({
+            interestTags: tags,
+            profileCompleted: true,
+            onboardingPhase: 2,
+            quizResponses: [],
+            profileStrength: 10
+        });
+        window.location.href = 'dashboard.html';
+    }
+}
