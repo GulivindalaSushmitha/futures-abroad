@@ -84,128 +84,168 @@
         }
         .btn-yellow:hover { transform: translateY(-4px) scale(1.02); box-shadow: 0 8px 30px rgba(255, 217, 61, 0.4); }
 
-        /* Animations */
-        @keyframes float {
+        /* ===== WALKING ANIMATIONS FOR CARTOON IMAGE ===== */
+        @keyframes walkInFromLeft {
+            0% { 
+                transform: translateX(-300px) scale(0.5) rotate(-10deg); 
+                opacity: 0; 
+            }
+            40% { 
+                transform: translateX(30px) scale(1.1) rotate(2deg); 
+                opacity: 1; 
+            }
+            70% { 
+                transform: translateX(-10px) scale(0.95) rotate(-2deg); 
+            }
+            100% { 
+                transform: translateX(0) scale(1) rotate(0deg); 
+                opacity: 1; 
+            }
+        }
+
+        @keyframes walkInFromRight {
+            0% { 
+                transform: translateX(300px) scale(0.5) rotate(10deg); 
+                opacity: 0; 
+            }
+            40% { 
+                transform: translateX(-30px) scale(1.1) rotate(-2deg); 
+                opacity: 1; 
+            }
+            70% { 
+                transform: translateX(10px) scale(0.95) rotate(2deg); 
+            }
+            100% { 
+                transform: translateX(0) scale(1) rotate(0deg); 
+                opacity: 1; 
+            }
+        }
+
+        @keyframes floatSlow {
             0% { transform: translateY(0px) rotate(0deg); }
-            50% { transform: translateY(-18px) rotate(3deg); }
+            50% { transform: translateY(-15px) rotate(2deg); }
             100% { transform: translateY(0px) rotate(0deg); }
         }
-        @keyframes floatSlow {
-            0% { transform: translateY(0px); }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
             50% { transform: translateY(-12px); }
-            100% { transform: translateY(0px); }
         }
-        @keyframes wiggle {
-            0%, 100% { transform: rotate(-3deg); }
-            50% { transform: rotate(3deg); }
-        }
-        @keyframes modalPop {
-            0% { transform: scale(0.8) translateY(30px); opacity: 0; }
-            100% { transform: scale(1) translateY(0); opacity: 1; }
-        }
-        @keyframes walkInFromLeft {
-            0% { transform: translateX(-200px) scale(0.6); opacity: 0; }
-            60% { transform: translateX(20px) scale(1.05); opacity: 1; }
-            100% { transform: translateX(0) scale(1); opacity: 1; }
-        }
-        @keyframes walkInFromRight {
-            0% { transform: translateX(200px) scale(0.6); opacity: 0; }
-            60% { transform: translateX(-20px) scale(1.05); opacity: 1; }
-            100% { transform: translateX(0) scale(1); opacity: 1; }
-        }
-        @keyframes bounceWalk {
-            0%, 100% { transform: translateY(0) rotate(0deg); }
-            25% { transform: translateY(-10px) rotate(-5deg); }
-            75% { transform: translateY(-10px) rotate(5deg); }
-        }
-        @keyframes characterWave {
-            0%, 100% { transform: rotate(0deg); }
-            25% { transform: rotate(-15deg); }
-            75% { transform: rotate(15deg); }
-        }
-        @keyframes floatCharacter {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-15px); }
-        }
+
         @keyframes sparkle {
-            0%, 100% { opacity: 0; transform: scale(0); }
-            50% { opacity: 1; transform: scale(1); }
-        }
-        @keyframes runningMan {
-            0% { background-position: 0 0; }
-            100% { background-position: -200px 0; }
+            0%, 100% { opacity: 0; transform: scale(0) rotate(0deg); }
+            50% { opacity: 1; transform: scale(1) rotate(180deg); }
         }
 
-        .animate-float { animation: float 4s ease-in-out infinite; }
-        .animate-float-slow { animation: floatSlow 5s ease-in-out infinite; }
-        .animate-wiggle { animation: wiggle 3s ease-in-out infinite; }
-        .animate-walk-left { animation: walkInFromLeft 1.2s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; }
-        .animate-walk-right { animation: walkInFromRight 1.2s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; }
-        .animate-bounce-walk { animation: bounceWalk 1.5s ease-in-out infinite; }
-        .animate-wave { animation: characterWave 2s ease-in-out infinite; transform-origin: right center; }
-        .animate-float-char { animation: floatCharacter 3s ease-in-out infinite; }
+        @keyframes walkingLegs {
+            0% { transform: rotate(-10deg); }
+            50% { transform: rotate(10deg); }
+            100% { transform: rotate(-10deg); }
+        }
 
-        /* ===== CHARACTER CONTAINER ===== */
-        .character-container {
+        /* ===== WALKING CARTOON CONTAINER ===== */
+        .walking-cartoon-container {
             display: flex;
             justify-content: center;
             align-items: flex-end;
             gap: 20px;
             flex-wrap: wrap;
-            margin: 10px 0 20px;
-            min-height: 200px;
+            margin: 0 auto 10px;
+            min-height: 280px;
             position: relative;
+            width: 100%;
+            max-width: 700px;
         }
-        .character {
+
+        .walking-cartoon {
+            position: relative;
             display: flex;
             flex-direction: column;
             align-items: center;
-            font-size: 70px;
-            line-height: 1;
-            filter: drop-shadow(0 10px 30px rgba(108, 60, 225, 0.15));
             transition: all 0.5s;
-            position: relative;
+            cursor: pointer;
         }
-        .character .label {
+
+        .walking-cartoon img {
+            max-width: 200px;
+            height: auto;
+            object-fit: contain;
+            filter: drop-shadow(0 15px 40px rgba(108, 60, 225, 0.2));
+            transition: transform 0.5s;
+            display: block;
+        }
+
+        .walking-cartoon.walk-left {
+            animation: walkInFromLeft 1.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        }
+
+        .walking-cartoon.walk-right {
+            animation: walkInFromRight 1.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        }
+
+        .walking-cartoon.bouncing {
+            animation: bounce 1.5s ease-in-out infinite;
+        }
+
+        .walking-cartoon .speech-bubble {
+            position: absolute;
+            top: -50px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: white;
+            padding: 8px 20px;
+            border-radius: 25px;
+            font-size: 14px;
+            font-weight: 700;
+            color: #2D1B4E;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+            white-space: nowrap;
+            opacity: 0;
+            transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+            border: 2px solid #6C3CE1;
+            pointer-events: none;
+        }
+
+        .walking-cartoon .speech-bubble::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-left: 10px solid transparent;
+            border-right: 10px solid transparent;
+            border-top: 10px solid white;
+        }
+
+        .walking-cartoon:hover .speech-bubble {
+            opacity: 1;
+            transform: translateX(-50%) translateY(-5px);
+        }
+
+        .walking-cartoon .sparkle {
+            position: absolute;
+            font-size: 18px;
+            animation: sparkle 1.5s ease-in-out infinite;
+            pointer-events: none;
+        }
+
+        .walking-cartoon .sparkle:nth-child(2) { animation-delay: 0.3s; top: -15px; right: -10px; }
+        .walking-cartoon .sparkle:nth-child(3) { animation-delay: 0.6s; top: 10px; right: -20px; }
+        .walking-cartoon .sparkle:nth-child(4) { animation-delay: 0.9s; top: -20px; left: -10px; }
+
+        .walking-cartoon .label {
             font-size: 12px;
             font-weight: 700;
             color: #6C3CE1;
-            background: rgba(255,255,255,0.9);
-            padding: 4px 14px;
+            background: rgba(255,255,255,0.95);
+            padding: 4px 16px;
             border-radius: 20px;
-            margin-top: 4px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.06);
-        }
-        .character .sparkle {
-            position: absolute;
-            top: -10px;
-            right: -10px;
-            font-size: 20px;
-            animation: sparkle 1.5s ease-in-out infinite;
-        }
-        .character .sparkle:nth-child(2) {
-            top: 10px;
-            right: -20px;
-            animation-delay: 0.5s;
-        }
-        .character .sparkle:nth-child(3) {
-            top: -15px;
-            right: 5px;
-            animation-delay: 1s;
-        }
-        .character.walking {
-            animation: bounceWalk 0.8s ease-in-out infinite;
-        }
-        .character .emoji-big {
-            font-size: 80px;
-            display: block;
-            transition: transform 0.3s;
-        }
-        .character:hover .emoji-big {
-            transform: scale(1.15) rotate(-5deg);
+            margin-top: 6px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            border: 1px solid #E8E0F0;
         }
 
-        /* ===== HERO WITH CHARACTERS ===== */
+        /* ===== HERO SECTION ===== */
         .hero {
             background: linear-gradient(135deg, #FFF8F0 0%, #F0E6FF 50%, #FFE8E8 100%);
             padding: 40px 40px 60px;
@@ -219,119 +259,20 @@
             text-align: center;
         }
 
-        /* Floating decorations */
+        /* Floating Decorations */
         .hero-deco {
             position: absolute;
             font-size: 40px;
-            opacity: 0.15;
+            opacity: 0.12;
             animation: floatSlow 6s ease-in-out infinite;
+            pointer-events: none;
         }
-        .hero-deco:nth-child(1) { top: 10%; left: 5%; animation-delay: 0s; }
-        .hero-deco:nth-child(2) { top: 20%; right: 8%; animation-delay: 1s; }
+        .hero-deco:nth-child(1) { top: 8%; left: 5%; animation-delay: 0s; }
+        .hero-deco:nth-child(2) { top: 15%; right: 8%; animation-delay: 1s; }
         .hero-deco:nth-child(3) { bottom: 20%; left: 8%; animation-delay: 2s; }
-        .hero-deco:nth-child(4) { bottom: 30%; right: 5%; animation-delay: 1.5s; }
-
-        /* CHARACTERS IN HERO */
-        .hero-characters {
-            display: flex;
-            justify-content: center;
-            align-items: flex-end;
-            gap: 30px;
-            flex-wrap: wrap;
-            margin-bottom: 10px;
-            width: 100%;
-            max-width: 600px;
-            position: relative;
-            min-height: 180px;
-        }
-
-        .hero-characters .char {
-            font-size: 80px;
-            line-height: 1;
-            filter: drop-shadow(0 15px 40px rgba(108, 60, 225, 0.15));
-            transition: transform 0.3s;
-            position: relative;
-        }
-        .hero-characters .char:hover {
-            transform: scale(1.1) rotate(-5deg);
-        }
-        .hero-characters .char.walk-in-left {
-            animation: walkInFromLeft 1.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
-        }
-        .hero-characters .char.walk-in-right {
-            animation: walkInFromRight 1.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
-        }
-        .hero-characters .char.bouncing {
-            animation: bounceWalk 1.2s ease-in-out infinite;
-        }
-        .hero-characters .char .speech-bubble {
-            position: absolute;
-            top: -40px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: white;
-            padding: 6px 16px;
-            border-radius: 20px;
-            font-size: 14px;
-            font-weight: 700;
-            color: #2D1B4E;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-            white-space: nowrap;
-            opacity: 0;
-            transition: opacity 0.5s;
-        }
-        .hero-characters .char:hover .speech-bubble {
-            opacity: 1;
-        }
-        .hero-characters .char .speech-bubble::after {
-            content: '';
-            position: absolute;
-            bottom: -8px;
-            left: 50%;
-            transform: translateX(-50%);
-            border-left: 8px solid transparent;
-            border-right: 8px solid transparent;
-            border-top: 8px solid white;
-        }
-
-        /* IMAGE SECTION - TOP */
-        .hero-image {
-            width: 100%;
-            max-width: 400px;
-            margin: 0 auto 10px;
-            position: relative;
-        }
-        .hero-image img {
-            width: 100%;
-            max-width: 380px;
-            height: auto;
-            object-fit: contain;
-            filter: drop-shadow(0 20px 60px rgba(108, 60, 225, 0.15));
-            display: block;
-            margin: 0 auto;
-            animation: floatSlow 4s ease-in-out infinite;
-        }
-
-        /* SMALL COMPASS BELOW IMAGE */
-        .hero-compass {
-            display: inline-block;
-            background: white;
-            border-radius: 50%;
-            padding: 12px 15px;
-            box-shadow: 0 15px 40px rgba(108, 60, 225, 0.12);
-            animation: float 4s ease-in-out infinite;
-            margin-top: -10px;
-            margin-bottom: 10px;
-        }
-        .hero-compass img {
-            width: 50px;
-            height: 50px;
-            object-fit: contain;
-        }
-        .hero-compass .emoji-big {
-            font-size: 40px;
-            line-height: 1;
-        }
+        .hero-deco:nth-child(4) { bottom: 25%; right: 5%; animation-delay: 1.5s; }
+        .hero-deco:nth-child(5) { top: 50%; left: 2%; animation-delay: 0.5s; font-size: 30px; }
+        .hero-deco:nth-child(6) { top: 40%; right: 2%; animation-delay: 1.8s; font-size: 30px; }
 
         .hero-caption {
             font-weight: 700;
@@ -344,7 +285,6 @@
             margin-bottom: 20px;
         }
 
-        /* TEXT CONTENT - BELOW IMAGE */
         .hero-content {
             max-width: 700px;
             width: 100%;
@@ -395,268 +335,6 @@
             font-size: 15px;
         }
         .hero-content .stats .icon-big { font-size: 28px; }
-
-        /* ===== SECTIONS ===== */
-        .section { padding: 70px 40px; }
-        .section-title {
-            text-align: center;
-            font-size: 38px;
-            color: #2D1B4E;
-            margin-bottom: 8px;
-        }
-        .section-title span { color: #6C3CE1; }
-        .section-sub {
-            text-align: center;
-            color: #777;
-            font-size: 17px;
-            margin-bottom: 45px;
-        }
-
-        /* ===== CARDS ===== */
-        .cards-grid {
-            display: flex;
-            gap: 30px;
-            justify-content: center;
-            flex-wrap: wrap;
-            max-width: 1100px;
-            margin: 0 auto;
-        }
-        .card {
-            background: white;
-            border-radius: 30px;
-            padding: 30px 25px;
-            flex: 1;
-            min-width: 240px;
-            max-width: 320px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.06);
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            border: 3px solid transparent;
-        }
-        .card:hover {
-            transform: translateY(-12px) scale(1.01);
-            box-shadow: 0 25px 60px rgba(108, 60, 225, 0.15);
-            border-color: #FFD93D;
-        }
-        .card-featured {
-            background: linear-gradient(145deg, #F0E6FF, #E8D5FF);
-            border: 3px solid #6C3CE1;
-            transform: scale(1.03);
-        }
-        .card-featured:hover { transform: scale(1.03) translateY(-12px); }
-
-        .badge {
-            padding: 6px 18px;
-            border-radius: 50px;
-            font-weight: 700;
-            font-size: 13px;
-            display: inline-block;
-        }
-        .badge-yellow { background: #FFD93D; color: #2D1B4E; }
-        .badge-purple { background: #6C3CE1; color: white; }
-        .badge-red { background: #FF6B6B; color: white; }
-
-        /* ===== BANNER ===== */
-        .banner-dark {
-            background: linear-gradient(135deg, #2D1B4E 0%, #6C3CE1 100%);
-            padding: 70px 40px;
-            color: white;
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-        }
-        .banner-dark .badge-banner {
-            background: #FFD93D;
-            color: #2D1B4E;
-            padding: 6px 24px;
-            border-radius: 50px;
-            display: inline-block;
-            font-weight: 700;
-            margin-bottom: 16px;
-        }
-        .banner-dark h2 { font-size: 40px; margin-bottom: 12px; }
-        .banner-dark p { font-size: 18px; opacity: 0.9; max-width: 600px; margin: 0 auto 30px; }
-        .banner-dark .tags {
-            display: flex;
-            gap: 16px;
-            justify-content: center;
-            flex-wrap: wrap;
-            margin-bottom: 30px;
-        }
-        .banner-dark .tags span {
-            background: rgba(255,255,255,0.12);
-            padding: 10px 24px;
-            border-radius: 50px;
-            font-weight: 600;
-            font-size: 14px;
-        }
-
-        /* ===== PRICING ===== */
-        .pricing-grid {
-            display: flex;
-            gap: 30px;
-            justify-content: center;
-            flex-wrap: wrap;
-            max-width: 1100px;
-            margin: 0 auto;
-        }
-        .pricing-grid .p-card {
-            flex: 1;
-            min-width: 240px;
-            max-width: 320px;
-            background: white;
-            border-radius: 30px;
-            padding: 32px 28px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.06);
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            border: 3px solid transparent;
-        }
-        .pricing-grid .p-card:hover { transform: translateY(-10px); box-shadow: 0 25px 60px rgba(108, 60, 225, 0.12); }
-        .pricing-grid .p-card.featured {
-            background: #2D1B4E;
-            color: white;
-            border-color: #FFD93D;
-            transform: scale(1.04);
-        }
-        .pricing-grid .p-card.featured:hover { transform: scale(1.04) translateY(-10px); }
-        .pricing-grid .p-card .price {
-            font-size: 36px;
-            font-weight: 800;
-            margin: 10px 0;
-        }
-        .pricing-grid .p-card .price small { font-size: 16px; font-weight: 400; opacity: 0.6; }
-        .pricing-grid .p-card ul {
-            list-style: none;
-            padding: 0;
-            margin: 18px 0;
-            text-align: left;
-        }
-        .pricing-grid .p-card ul li {
-            padding: 8px 0;
-            border-bottom: 1px solid #f0e6ff;
-        }
-        .pricing-grid .p-card .btn-plan {
-            width: 100%;
-            padding: 14px;
-            border-radius: 50px;
-            border: none;
-            font-weight: 700;
-            font-size: 16px;
-            cursor: pointer;
-            transition: all 0.3s;
-            font-family: 'Quicksand', sans-serif;
-        }
-        .pricing-grid .p-card .btn-plan:hover { transform: translateY(-3px); }
-
-        /* ===== FOOTER ===== */
-        .footer {
-            background: #2D1B4E;
-            color: #B8A0D4;
-            padding: 40px 40px 30px;
-            text-align: center;
-        }
-        .footer .links {
-            display: flex;
-            justify-content: center;
-            gap: 30px;
-            flex-wrap: wrap;
-            margin-bottom: 18px;
-        }
-        .footer .links a {
-            color: #B8A0D4;
-            text-decoration: none;
-            font-weight: 500;
-            transition: color 0.3s;
-            cursor: pointer;
-        }
-        .footer .links a:hover { color: white; }
-        .footer p { font-size: 14px; opacity: 0.7; max-width: 600px; margin: 0 auto; }
-
-        /* ===== PAGE CONTENT ===== */
-        .page-content {
-            display: none;
-            padding: 40px;
-            max-width: 1000px;
-            margin: 0 auto;
-            background: white;
-            border-radius: 30px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.06);
-        }
-        .page-content.active { display: block; }
-        .page-content h2 {
-            font-size: 32px;
-            color: #2D1B4E;
-            margin-bottom: 10px;
-        }
-        .page-content h2 span { color: #6C3CE1; }
-        .page-content p { color: #555; font-size: 17px; line-height: 1.8; }
-
-        /* Admin Table */
-        .admin-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 15px 0;
-        }
-        .admin-table th {
-            text-align: left;
-            padding: 12px;
-            background: #F0E6FF;
-            border-radius: 10px;
-            font-weight: 700;
-            color: #2D1B4E;
-        }
-        .admin-table td {
-            padding: 10px 12px;
-            border-bottom: 1px solid #f0e6ff;
-        }
-        .admin-table tr:hover { background: #FAF8FC; }
-
-        /* ===== RESPONSIVE ===== */
-        @media (max-width: 768px) {
-            .navbar { padding: 12px 20px; flex-direction: column; align-items: stretch; gap: 12px; }
-            .nav-links { justify-content: center; gap: 12px; flex-wrap: wrap; }
-            .nav-actions { justify-content: center; flex-wrap: wrap; }
-            .hero { padding: 30px 20px 40px; min-height: auto; }
-            .hero-image { max-width: 280px; }
-            .hero-image img { max-width: 220px; }
-            .hero-content h1 { font-size: 28px; }
-            .hero-content .actions { justify-content: center; }
-            .hero-content .stats { justify-content: center; }
-            .hero-characters .char { font-size: 50px; }
-            .hero-characters { gap: 15px; min-height: 120px; }
-            .section { padding: 40px 20px; }
-            .section-title { font-size: 28px; }
-            .card { min-width: 100%; max-width: 100%; }
-            .card-featured { transform: scale(1); }
-            .card-featured:hover { transform: translateY(-10px); }
-            .pricing-grid .p-card { min-width: 100%; max-width: 100%; }
-            .pricing-grid .p-card.featured { transform: scale(1); }
-            .pricing-grid .p-card.featured:hover { transform: translateY(-10px); }
-            .banner-dark { padding: 40px 20px; }
-            .banner-dark h2 { font-size: 28px; }
-            .modal-box { padding: 30px 20px; }
-            .page-content { padding: 20px; }
-            .character-container { min-height: 120px; gap: 10px; }
-            .character .emoji-big { font-size: 50px; }
-            .hero-characters .char .speech-bubble {
-                font-size: 10px;
-                padding: 4px 10px;
-                white-space: normal;
-                top: -30px;
-            }
-        }
-        @media (max-width: 480px) {
-            .hero-content h1 { font-size: 24px; }
-            .btn-primary, .btn-secondary, .btn-yellow { 
-                padding: 12px 22px; 
-                font-size: 14px; 
-                width: 100%; 
-                justify-content: center; 
-            }
-            .hero-content .stats { gap: 14px; font-size: 13px; }
-            .hero-image img { max-width: 160px; }
-            .hero-characters .char { font-size: 40px; }
-            .character .emoji-big { font-size: 40px; }
-        }
 
         /* ===== NAVBAR ===== */
         .navbar {
@@ -746,7 +424,6 @@
         }
         .nav-actions .btn-signup:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(108, 60, 225, 0.4); }
 
-        /* Admin Button */
         .btn-admin-nav {
             background: transparent;
             border: 2px solid #FF6B6B;
@@ -787,6 +464,11 @@
             box-shadow: 0 40px 80px rgba(0,0,0,0.2);
             animation: modalPop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
+        @keyframes modalPop {
+            0% { transform: scale(0.8) translateY(30px); opacity: 0; }
+            100% { transform: scale(1) translateY(0); opacity: 1; }
+        }
+
         .modal-close {
             position: absolute;
             top: 18px; right: 22px;
@@ -801,7 +483,6 @@
 
         .modal-box h2 { font-size: 28px; margin-bottom: 6px; color: #2D1B4E; }
         .modal-box .sub { color: #888; margin-bottom: 25px; font-size: 15px; }
-
         .modal-box label {
             font-weight: 600;
             display: block;
@@ -877,7 +558,7 @@
         }
         .modal-box .role-select button:hover { border-color: #6C3CE1; }
 
-        /* ===== QUIZ STYLES ===== */
+        /* ===== QUIZ ===== */
         .quiz-question {
             background: #F8F4FF;
             border-radius: 20px;
@@ -929,6 +610,264 @@
             border-radius: 20px;
             transition: width 0.5s ease;
         }
+
+        /* ===== OTHER SECTIONS ===== */
+        .section { padding: 70px 40px; }
+        .section-title {
+            text-align: center;
+            font-size: 38px;
+            color: #2D1B4E;
+            margin-bottom: 8px;
+        }
+        .section-title span { color: #6C3CE1; }
+        .section-sub {
+            text-align: center;
+            color: #777;
+            font-size: 17px;
+            margin-bottom: 45px;
+        }
+
+        .cards-grid {
+            display: flex;
+            gap: 30px;
+            justify-content: center;
+            flex-wrap: wrap;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+        .card {
+            background: white;
+            border-radius: 30px;
+            padding: 30px 25px;
+            flex: 1;
+            min-width: 240px;
+            max-width: 320px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.06);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border: 3px solid transparent;
+        }
+        .card:hover {
+            transform: translateY(-12px) scale(1.01);
+            box-shadow: 0 25px 60px rgba(108, 60, 225, 0.15);
+            border-color: #FFD93D;
+        }
+        .card-featured {
+            background: linear-gradient(145deg, #F0E6FF, #E8D5FF);
+            border: 3px solid #6C3CE1;
+            transform: scale(1.03);
+        }
+        .card-featured:hover { transform: scale(1.03) translateY(-12px); }
+
+        .badge {
+            padding: 6px 18px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 13px;
+            display: inline-block;
+        }
+        .badge-yellow { background: #FFD93D; color: #2D1B4E; }
+        .badge-purple { background: #6C3CE1; color: white; }
+        .badge-red { background: #FF6B6B; color: white; }
+
+        .banner-dark {
+            background: linear-gradient(135deg, #2D1B4E 0%, #6C3CE1 100%);
+            padding: 70px 40px;
+            color: white;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .banner-dark .badge-banner {
+            background: #FFD93D;
+            color: #2D1B4E;
+            padding: 6px 24px;
+            border-radius: 50px;
+            display: inline-block;
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+        .banner-dark h2 { font-size: 40px; margin-bottom: 12px; }
+        .banner-dark p { font-size: 18px; opacity: 0.9; max-width: 600px; margin: 0 auto 30px; }
+        .banner-dark .tags {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 30px;
+        }
+        .banner-dark .tags span {
+            background: rgba(255,255,255,0.12);
+            padding: 10px 24px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .pricing-grid {
+            display: flex;
+            gap: 30px;
+            justify-content: center;
+            flex-wrap: wrap;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+        .pricing-grid .p-card {
+            flex: 1;
+            min-width: 240px;
+            max-width: 320px;
+            background: white;
+            border-radius: 30px;
+            padding: 32px 28px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.06);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border: 3px solid transparent;
+        }
+        .pricing-grid .p-card:hover { transform: translateY(-10px); box-shadow: 0 25px 60px rgba(108, 60, 225, 0.12); }
+        .pricing-grid .p-card.featured {
+            background: #2D1B4E;
+            color: white;
+            border-color: #FFD93D;
+            transform: scale(1.04);
+        }
+        .pricing-grid .p-card.featured:hover { transform: scale(1.04) translateY(-10px); }
+        .pricing-grid .p-card .price {
+            font-size: 36px;
+            font-weight: 800;
+            margin: 10px 0;
+        }
+        .pricing-grid .p-card .price small { font-size: 16px; font-weight: 400; opacity: 0.6; }
+        .pricing-grid .p-card ul {
+            list-style: none;
+            padding: 0;
+            margin: 18px 0;
+            text-align: left;
+        }
+        .pricing-grid .p-card ul li {
+            padding: 8px 0;
+            border-bottom: 1px solid #f0e6ff;
+        }
+        .pricing-grid .p-card .btn-plan {
+            width: 100%;
+            padding: 14px;
+            border-radius: 50px;
+            border: none;
+            font-weight: 700;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: 'Quicksand', sans-serif;
+        }
+        .pricing-grid .p-card .btn-plan:hover { transform: translateY(-3px); }
+
+        .footer {
+            background: #2D1B4E;
+            color: #B8A0D4;
+            padding: 40px 40px 30px;
+            text-align: center;
+        }
+        .footer .links {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+            margin-bottom: 18px;
+        }
+        .footer .links a {
+            color: #B8A0D4;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+            cursor: pointer;
+        }
+        .footer .links a:hover { color: white; }
+        .footer p { font-size: 14px; opacity: 0.7; max-width: 600px; margin: 0 auto; }
+
+        .page-content {
+            display: none;
+            padding: 40px;
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.06);
+        }
+        .page-content.active { display: block; }
+        .page-content h2 {
+            font-size: 32px;
+            color: #2D1B4E;
+            margin-bottom: 10px;
+        }
+        .page-content h2 span { color: #6C3CE1; }
+        .page-content p { color: #555; font-size: 17px; line-height: 1.8; }
+
+        .admin-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+        }
+        .admin-table th {
+            text-align: left;
+            padding: 12px;
+            background: #F0E6FF;
+            border-radius: 10px;
+            font-weight: 700;
+            color: #2D1B4E;
+        }
+        .admin-table td {
+            padding: 10px 12px;
+            border-bottom: 1px solid #f0e6ff;
+        }
+        .admin-table tr:hover { background: #FAF8FC; }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 768px) {
+            .navbar { padding: 12px 20px; flex-direction: column; align-items: stretch; gap: 12px; }
+            .nav-links { justify-content: center; gap: 12px; flex-wrap: wrap; }
+            .nav-actions { justify-content: center; flex-wrap: wrap; }
+            .hero { padding: 30px 20px 40px; min-height: auto; }
+            .hero-content h1 { font-size: 28px; }
+            .hero-content .actions { justify-content: center; }
+            .hero-content .stats { justify-content: center; }
+            .section { padding: 40px 20px; }
+            .section-title { font-size: 28px; }
+            .card { min-width: 100%; max-width: 100%; }
+            .card-featured { transform: scale(1); }
+            .card-featured:hover { transform: translateY(-10px); }
+            .pricing-grid .p-card { min-width: 100%; max-width: 100%; }
+            .pricing-grid .p-card.featured { transform: scale(1); }
+            .pricing-grid .p-card.featured:hover { transform: translateY(-10px); }
+            .banner-dark { padding: 40px 20px; }
+            .banner-dark h2 { font-size: 28px; }
+            .modal-box { padding: 30px 20px; }
+            .page-content { padding: 20px; }
+            .walking-cartoon-container { min-height: 180px; }
+            .walking-cartoon img { max-width: 140px; }
+            .walking-cartoon .speech-bubble {
+                font-size: 11px;
+                padding: 5px 14px;
+                white-space: normal;
+                top: -40px;
+            }
+            .hero-deco { font-size: 25px; }
+        }
+        @media (max-width: 480px) {
+            .hero-content h1 { font-size: 24px; }
+            .btn-primary, .btn-secondary, .btn-yellow { 
+                padding: 12px 22px; 
+                font-size: 14px; 
+                width: 100%; 
+                justify-content: center; 
+            }
+            .hero-content .stats { gap: 14px; font-size: 13px; }
+            .walking-cartoon img { max-width: 100px; }
+            .walking-cartoon-container { min-height: 140px; }
+            .walking-cartoon .speech-bubble {
+                font-size: 10px;
+                padding: 4px 10px;
+                top: -32px;
+            }
+            .hero-deco { font-size: 18px; }
+        }
     </style>
 </head>
 <body>
@@ -979,52 +918,72 @@
     ======================================== -->
     <div id="homePage">
 
-        <!-- HERO SECTION - WITH WALKING CHARACTERS -->
+        <!-- HERO SECTION - WITH WALKING CARTOON IMAGES -->
         <section class="hero">
             <!-- Floating Decorations -->
             <div class="hero-deco">🌟</div>
             <div class="hero-deco">✨</div>
             <div class="hero-deco">🎯</div>
             <div class="hero-deco">🚀</div>
+            <div class="hero-deco">⭐</div>
+            <div class="hero-deco">🌈</div>
 
-            <!-- TOP: Walking Characters (Cartoons) -->
-            <div class="hero-characters" id="heroCharacters">
-                <div class="char walk-in-left bouncing" style="animation-delay:0.2s;">
-                    <span class="speech-bubble">🚀 Let's go!</span>
-                    <span>🧑‍🎓</span>
+            <!-- TOP: Walking Cartoon Images -->
+            <div class="walking-cartoon-container" id="cartoonContainer">
+                <!-- Cartoon 1 - Walks from Left -->
+                <div class="walking-cartoon walk-left" style="animation-delay:0s;">
+                    <div class="speech-bubble">🚀 Let's go!</div>
+                    <span class="sparkle">✨</span>
+                    <span class="sparkle">⭐</span>
+                    <span class="sparkle">🌟</span>
+                    <img 
+                        src="https://compass.proplr.ae/assets/students-Dk42-8Za.png" 
+                        alt="Walking Student" 
+                        onerror="this.style.display='none'; this.parentElement.innerHTML='<div style=\'font-size:80px;line-height:1;\'>🧑‍🎓</div>';"
+                    />
+                    <span class="label">🌟 Explorer</span>
                 </div>
-                <div class="char walk-in-left bouncing" style="animation-delay:0.6s;">
-                    <span class="speech-bubble">🌟 Find your path!</span>
-                    <span>👩‍🎓</span>
+
+                <!-- Cartoon 2 - Walks from Right -->
+                <div class="walking-cartoon walk-right" style="animation-delay:0.3s;">
+                    <div class="speech-bubble">🎯 Find your path!</div>
+                    <span class="sparkle">⭐</span>
+                    <span class="sparkle">✨</span>
+                    <span class="sparkle">💫</span>
+                    <img 
+                        src="https://compass.proplr.ae/assets/students-Dk42-8Za.png" 
+                        alt="Walking Student" 
+                        onerror="this.style.display='none'; this.parentElement.innerHTML='<div style=\'font-size:80px;line-height:1;\'>🧑‍🎓</div>';"
+                    />
+                    <span class="label">🎯 Achiever</span>
                 </div>
-                <div class="char walk-in-right bouncing" style="animation-delay:0.4s;">
-                    <span class="speech-bubble">🎯 I'm ready!</span>
-                    <span>🧑‍💻</span>
-                </div>
-                <div class="char walk-in-right bouncing" style="animation-delay:0.8s;">
-                    <span class="speech-bubble">💪 Let's do this!</span>
-                    <span>👩‍🔬</span>
+
+                <!-- Cartoon 3 - Walks from Left -->
+                <div class="walking-cartoon walk-left" style="animation-delay:0.6s;">
+                    <div class="speech-bubble">💪 Let's do this!</div>
+                    <span class="sparkle">🌟</span>
+                    <span class="sparkle">⭐</span>
+                    <span class="sparkle">✨</span>
+                    <img 
+                        src="https://compass.proplr.ae/assets/students-Dk42-8Za.png" 
+                        alt="Walking Student" 
+                        onerror="this.style.display='none'; this.parentElement.innerHTML='<div style=\'font-size:80px;line-height:1;\'>🧑‍🎓</div>';"
+                    />
+                    <span class="label">💪 Go-Getter</span>
                 </div>
             </div>
 
-            <!-- TOP: Big Cartoon Image -->
-            <div class="hero-image" data-aos="fade-down">
-                <img src="https://compass.proplr.ae/assets/students-Dk42-8Za.png" 
-                     alt="Cartoon Student" 
-                     onerror="this.style.display='none'; this.parentElement.innerHTML='<div style=\'font-size:80px;line-height:1;\'>🧑‍🎓</div>';">
-            </div>
-
-            <!-- Small Compass below image -->
-            <div class="hero-compass">
+            <!-- Small Compass below -->
+            <div class="hero-compass" style="display:inline-block; background:white; border-radius:50%; padding:12px 15px; box-shadow:0 15px 40px rgba(108,60,225,0.12); animation:float 4s ease-in-out infinite; margin:5px 0 10px;">
                 <img src="https://gulivindalasushmitha.github.io/futures-abroad/compass.png" 
                      alt="Cartoon Compass" 
                      style="width:50px; height:50px; object-fit:contain;"
-                     onerror="this.style.display='none'; this.parentElement.innerHTML='<div class=\'emoji-big\'>🧭</div>';">
+                     onerror="this.style.display='none'; this.parentElement.innerHTML='<div style=\'font-size:40px;line-height:1;\'>🧭</div>';">
             </div>
 
             <div class="hero-caption animate-wiggle">✨ Find your direction</div>
 
-            <!-- BOTTOM: All Text Content -->
+            <!-- BOTTOM: Text Content -->
             <div class="hero-content" data-aos="fade-up">
                 <div class="tag"><span>🚀</span> AI-Powered Career Intelligence</div>
                 <h1>Find Your Direction with<br/><span>Career Intelligence</span></h1>
@@ -1041,13 +1000,13 @@
             </div>
         </section>
 
+        <!-- ===== REST OF THE SECTIONS (UNCHANGED) ===== -->
         <!-- PROGRAMS SECTION -->
         <section class="section" style="background:white;">
             <h2 class="section-title" data-aos="fade-up">Choose Your Grade, <span>Start Your Journey</span></h2>
             <p class="section-sub" data-aos="fade-up" data-aos-delay="100">Every grade has a unique path designed for your success</p>
 
             <div class="cards-grid">
-                <!-- Grade 10 -->
                 <div class="card" data-aos="zoom-in">
                     <div style="font-size:48px;">🌱</div>
                     <h3 style="font-size:22px; margin:10px 0 2px;">Grade 10</h3>
@@ -1061,7 +1020,6 @@
                     <span class="badge badge-yellow">Most Popular</span>
                 </div>
 
-                <!-- Grade 11 -->
                 <div class="card card-featured" data-aos="zoom-in" data-aos-delay="100">
                     <div style="font-size:48px;">🎯</div>
                     <h3 style="font-size:22px; margin:10px 0 2px;">Grade 11</h3>
@@ -1075,7 +1033,6 @@
                     <span class="badge badge-purple">⭐ Featured</span>
                 </div>
 
-                <!-- Grade 12 -->
                 <div class="card" data-aos="zoom-in" data-aos-delay="200">
                     <div style="font-size:48px;">🎓</div>
                     <h3 style="font-size:22px; margin:10px 0 2px;">Grade 12</h3>
@@ -1183,14 +1140,13 @@
     </footer>
 
     <!-- ========================================
-    SCRIPTS - Firebase Config + All JavaScript
+    SCRIPTS
     ======================================== -->
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     
-    <!-- Firebase Configuration -->
     <script>
         // ============================================================
-        // FIREBASE CONFIGURATION - YOUR FREE API KEY
+        // FIREBASE CONFIGURATION
         // ============================================================
         const firebaseConfig = {
           apiKey: "AIzaSyBGJcOifwfWlGeFsFCXhdC67fyRTBOvfGQ",
@@ -1201,19 +1157,15 @@
           appId: "1:143399880838:web:c2232759fcbc1fa2ed2907"
         };
 
-        // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth();
         const db = firebase.firestore();
 
-        // Admin credentials (YOURS ONLY)
         const ADMIN_EMAIL = "admin@futuresabroad.com";
         const ADMIN_PASSWORD = "FuturesAdmin2026!";
         const ADMIN_UID = "hrONkvAlxVac4Wc7nwdNLhdOIe33";
 
         console.log("🔥 Firebase initialized successfully!");
-        console.log("📁 Project ID:", firebaseConfig.projectId);
-        console.log("🔐 Admin UID:", ADMIN_UID);
     </script>
 
     <script>
@@ -1223,34 +1175,16 @@
         AOS.init({ duration: 700, once: true, offset: 80 });
 
         // ========================================
-        // CHARACTER ANIMATION CONTROLLER
+        // ADD BOUNCING AFTER WALKING
         // ========================================
         document.addEventListener('DOMContentLoaded', function() {
-            // Add bouncing class to all hero characters after they walk in
             setTimeout(() => {
-                document.querySelectorAll('.hero-characters .char').forEach((char, index) => {
+                document.querySelectorAll('.walking-cartoon').forEach((el, index) => {
                     setTimeout(() => {
-                        char.classList.add('bouncing');
+                        el.classList.add('bouncing');
                     }, index * 200);
                 });
-            }, 1500);
-
-            // Add sparkle effects to characters
-            document.querySelectorAll('.hero-characters .char').forEach((char) => {
-                const sparkles = ['✨', '⭐', '🌟'];
-                sparkles.forEach((sparkle, i) => {
-                    const el = document.createElement('span');
-                    el.className = 'sparkle';
-                    el.textContent = sparkle;
-                    el.style.position = 'absolute';
-                    el.style.fontSize = '16px';
-                    el.style.animation = `sparkle ${1.5 + i * 0.5}s ease-in-out infinite`;
-                    el.style.animationDelay = `${i * 0.5}s`;
-                    el.style.top = `${-10 + i * 10}px`;
-                    el.style.right = `${-5 + i * 15}px`;
-                    char.appendChild(el);
-                });
-            });
+            }, 2000);
         });
 
         // ========================================
@@ -1260,16 +1194,16 @@
             document.getElementById('homePage').style.display = 'block';
             document.getElementById('pageContent').classList.remove('active');
             window.scrollTo({ top: 0, behavior: 'smooth' });
-            // Re-trigger character animations
+            // Re-trigger animations
             setTimeout(() => {
-                document.querySelectorAll('.hero-characters .char').forEach((char, index) => {
-                    char.style.animation = 'none';
+                document.querySelectorAll('.walking-cartoon').forEach((el, index) => {
+                    el.style.animation = 'none';
                     setTimeout(() => {
-                        char.style.animation = index % 2 === 0 ? 'walkInFromLeft 0.8s ease forwards' : 'walkInFromRight 0.8s ease forwards';
+                        el.style.animation = index % 2 === 0 ? 'walkInFromLeft 1.2s ease forwards' : 'walkInFromRight 1.2s ease forwards';
                         setTimeout(() => {
-                            char.classList.add('bouncing');
-                        }, 900);
-                    }, 50);
+                            el.classList.add('bouncing');
+                        }, 1400);
+                    }, 100);
                 });
             }, 300);
         }
@@ -1283,62 +1217,37 @@
             const pages = {
                 'compass': {
                     title: '🧭 Compass',
-                    desc: 'Find your direction with our AI-powered career compass. Discover which career paths align with your interests, skills, and personality.',
-                    features: [
-                        '📊 Psychometric assessment',
-                        '🎯 Personalized career matches',
-                        '📈 Progress tracking',
-                        '🤖 AI-powered recommendations'
-                    ]
+                    desc: 'Find your direction with our AI-powered career compass.',
+                    features: ['📊 Psychometric assessment', '🎯 Personalized career matches', '📈 Progress tracking', '🤖 AI-powered recommendations']
                 },
                 'how-it-works': {
                     title: '❓ How It Works',
-                    desc: 'Our process is simple and designed to help you discover your ideal career path in just a few steps.',
-                    steps: [
-                        '1️⃣ Take the psychometric assessment',
-                        '2️⃣ AI analyzes your responses',
-                        '3️⃣ Receive your personalized career report',
-                        '4️⃣ Access 9+ career tools',
-                        '5️⃣ Get matched with universities'
-                    ]
+                    desc: 'Our process is simple and designed to help you discover your ideal career path.',
+                    steps: ['1️⃣ Take the psychometric assessment', '2️⃣ AI analyzes your responses', '3️⃣ Receive your personalized career report', '4️⃣ Access 9+ career tools', '5️⃣ Get matched with universities']
                 },
                 'global-pathway': {
                     title: '🌍 Global Pathway',
-                    desc: 'Explore international education opportunities and find the best universities around the world for your chosen career path.',
-                    features: [
-                        '🏛️ University search across 50+ countries',
-                        '📋 Application guidance',
-                        '🎓 Scholarship finder',
-                        '✈️ Study abroad programs'
-                    ]
+                    desc: 'Explore international education opportunities.',
+                    features: ['🏛️ University search across 50+ countries', '📋 Application guidance', '🎓 Scholarship finder', '✈️ Study abroad programs']
                 },
                 'for-schools': {
                     title: '🏫 For Schools',
-                    desc: 'Empower your students with career intelligence. Futures Abroad partners with schools across the UAE.',
-                    features: [
-                        '📊 Student progress dashboards',
-                        '👨‍🏫 Teacher training programs',
-                        '📈 School-wide analytics',
-                        '🤝 Partnership benefits'
-                    ]
+                    desc: 'Empower your students with career intelligence.',
+                    features: ['📊 Student progress dashboards', '👨‍🏫 Teacher training programs', '📈 School-wide analytics', '🤝 Partnership benefits']
                 },
                 'pricing': {
                     title: '💰 Pricing',
-                    desc: 'Choose the plan that fits your needs. All plans include access to our AI career intelligence platform.',
-                    plans: [
-                        '🌱 Grade 10: AED 450/month',
-                        '🎯 Grade 11: AED 650/month',
-                        '🎓 Grade 12: AED 999/year'
-                    ]
+                    desc: 'Choose the plan that fits your needs.',
+                    plans: ['🌱 Grade 10: AED 450/month', '🎯 Grade 11: AED 650/month', '🎓 Grade 12: AED 999/year']
                 },
                 'faq': {
                     title: '❓ FAQ',
-                    desc: 'Frequently asked questions about Futures Abroad, our platform, and how we help students find their career path.',
+                    desc: 'Frequently asked questions.',
                     qas: [
-                        'Q: What is Futures Abroad? A: An AI-powered career intelligence platform for UAE secondary school students.',
-                        'Q: How does the assessment work? A: Complete a 10-question psychometric test, and our AI generates a detailed career report.',
-                        'Q: Is this free for schools? A: We offer special partnership programs for schools. Contact us for details.',
-                        'Q: Can I change my career path later? A: Yes! You can retake the assessment anytime as you grow and discover new interests.'
+                        'Q: What is Futures Abroad? A: An AI-powered career intelligence platform.',
+                        'Q: How does the assessment work? A: Complete a 10-question psychometric test.',
+                        'Q: Is this free for schools? A: We offer special partnership programs.',
+                        'Q: Can I change my career path later? A: Yes! You can retake the assessment anytime.'
                     ]
                 }
             };
@@ -1481,9 +1390,6 @@
             `;
         }
 
-        // ========================================
-        // ROLE SELECTION
-        // ========================================
         function selectRole(el, role) {
             document.querySelectorAll('.role-select button').forEach(b => b.classList.remove('active'));
             el.classList.add('active');
@@ -1509,9 +1415,6 @@
         let currentQuizIndex = 0;
         let quizAnswers = [];
 
-        // ========================================
-        // RENDER QUIZ
-        // ========================================
         function renderQuiz() {
             if (currentQuizIndex >= quizQuestions.length) {
                 renderQuizResult();
@@ -1570,9 +1473,6 @@
             }
         }
 
-        // ========================================
-        // RENDER QUIZ RESULT
-        // ========================================
         function renderQuizResult() {
             const scores = { medicine: 0, engineering: 0, science: 0, arts: 0, business: 0 };
             const careerNames = { medicine: '🩺 Medicine & Healthcare', engineering: '💻 Computer Science & Engineering', science: '🔬 Science & Research', arts: '🎨 Arts & Design', business: '📊 Business & Finance' };
@@ -1653,9 +1553,6 @@
             localStorage.setItem('topCareer', topCareer);
         }
 
-        // ========================================
-        // FIREBASE AUTH HANDLERS
-        // ========================================
         function showMessage(elementId, message, isError = true) {
             const el = document.getElementById(elementId);
             if (el) {
@@ -1689,7 +1586,6 @@
 
                 alert('✅ Logged in successfully!');
                 closeModal();
-                window.location.href = 'dashboard.html';
             } catch (error) {
                 showMessage('loginMessage', '❌ Login failed: ' + error.message);
             }
@@ -1744,9 +1640,6 @@
             }
         }
 
-        // ========================================
-        // ADMIN LOGIN HANDLER
-        // ========================================
         async function handleAdminLogin() {
             const email = document.getElementById('adminEmail')?.value.trim();
             const password = document.getElementById('adminPassword')?.value;
@@ -1759,10 +1652,6 @@
             try {
                 const userCredential = await auth.signInWithEmailAndPassword(email, password);
                 const user = userCredential.user;
-                
-                console.log("✅ Logged in as:", user.email);
-                console.log("📌 Your UID:", user.uid);
-                console.log("🔐 Expected Admin UID:", ADMIN_UID);
                 
                 if (user.uid === ADMIN_UID) {
                     const adminDoc = await db.collection('admins').doc(ADMIN_UID).get();
@@ -1785,9 +1674,6 @@
             }
         }
 
-        // ========================================
-        // ADMIN DASHBOARD
-        // ========================================
         async function showAdminDashboard() {
             document.getElementById('homePage').style.display = 'none';
             const container = document.getElementById('pageContentInner');
@@ -1867,7 +1753,6 @@
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        // Keyboard shortcut for Enter key
         document.addEventListener('keydown', function(e) {
             if (e.key === 'Enter' && modal.classList.contains('active')) {
                 const submitBtn = document.querySelector('.btn-submit');
@@ -1876,11 +1761,7 @@
         });
 
         console.log('🧭 Futures Abroad loaded successfully!');
-        console.log('📝 Quiz has', quizQuestions.length, 'questions');
-        console.log('🔐 Admin login: admin@futuresabroad.com / FuturesAdmin2026!');
-        console.log('🔐 Admin UID:', ADMIN_UID);
-        console.log('🎨 Cartoon characters with walking animation loaded!');
-        console.log('🔥 Firebase connected!');
+        console.log('🎨 Cartoon images walking animation loaded!');
     </script>
 
 </body>
