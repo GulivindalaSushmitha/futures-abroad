@@ -84,17 +84,17 @@
         }
         .btn-yellow:hover { transform: translateY(-4px) scale(1.02); box-shadow: 0 8px 30px rgba(255, 217, 61, 0.4); }
 
-        /* ===== WALKING ANIMATIONS FOR CARTOON IMAGE ===== */
+        /* ===== WALKING ANIMATIONS ===== */
         @keyframes walkInFromLeft {
             0% { 
-                transform: translateX(-300px) scale(0.5) rotate(-10deg); 
+                transform: translateX(-400px) scale(0.3) rotate(-15deg); 
                 opacity: 0; 
             }
-            40% { 
-                transform: translateX(30px) scale(1.1) rotate(2deg); 
+            30% { 
+                transform: translateX(30px) scale(1.1) rotate(3deg); 
                 opacity: 1; 
             }
-            70% { 
+            60% { 
                 transform: translateX(-10px) scale(0.95) rotate(-2deg); 
             }
             100% { 
@@ -105,14 +105,14 @@
 
         @keyframes walkInFromRight {
             0% { 
-                transform: translateX(300px) scale(0.5) rotate(10deg); 
+                transform: translateX(400px) scale(0.3) rotate(15deg); 
                 opacity: 0; 
             }
-            40% { 
-                transform: translateX(-30px) scale(1.1) rotate(-2deg); 
+            30% { 
+                transform: translateX(-30px) scale(1.1) rotate(-3deg); 
                 opacity: 1; 
             }
-            70% { 
+            60% { 
                 transform: translateX(10px) scale(0.95) rotate(2deg); 
             }
             100% { 
@@ -121,15 +121,10 @@
             }
         }
 
-        @keyframes floatSlow {
-            0% { transform: translateY(0px) rotate(0deg); }
-            50% { transform: translateY(-15px) rotate(2deg); }
-            100% { transform: translateY(0px) rotate(0deg); }
-        }
-
         @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-12px); }
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            25% { transform: translateY(-12px) rotate(-3deg); }
+            75% { transform: translateY(-12px) rotate(3deg); }
         }
 
         @keyframes sparkle {
@@ -137,24 +132,27 @@
             50% { opacity: 1; transform: scale(1) rotate(180deg); }
         }
 
-        @keyframes walkingLegs {
-            0% { transform: rotate(-10deg); }
-            50% { transform: rotate(10deg); }
-            100% { transform: rotate(-10deg); }
+        @keyframes floatSlow {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+            100% { transform: translateY(0px); }
         }
+
+        .animate-float-slow { animation: floatSlow 5s ease-in-out infinite; }
 
         /* ===== WALKING CARTOON CONTAINER ===== */
         .walking-cartoon-container {
             display: flex;
             justify-content: center;
             align-items: flex-end;
-            gap: 20px;
+            gap: 10px;
             flex-wrap: wrap;
-            margin: 0 auto 10px;
-            min-height: 280px;
+            margin: 0 auto 15px;
+            min-height: 300px;
             position: relative;
             width: 100%;
-            max-width: 700px;
+            max-width: 900px;
+            padding: 10px 0;
         }
 
         .walking-cartoon {
@@ -164,57 +162,61 @@
             align-items: center;
             transition: all 0.5s;
             cursor: pointer;
+            flex: 0 0 auto;
+            width: 90px;
         }
 
         .walking-cartoon img {
-            max-width: 200px;
+            width: 100%;
+            max-width: 85px;
             height: auto;
             object-fit: contain;
-            filter: drop-shadow(0 15px 40px rgba(108, 60, 225, 0.2));
+            filter: drop-shadow(0 10px 30px rgba(108, 60, 225, 0.2));
             transition: transform 0.5s;
             display: block;
         }
 
         .walking-cartoon.walk-left {
-            animation: walkInFromLeft 1.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+            animation: walkInFromLeft 1.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
         }
 
         .walking-cartoon.walk-right {
-            animation: walkInFromRight 1.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+            animation: walkInFromRight 1.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
         }
 
         .walking-cartoon.bouncing {
-            animation: bounce 1.5s ease-in-out infinite;
+            animation: bounce 1.2s ease-in-out infinite;
         }
 
         .walking-cartoon .speech-bubble {
             position: absolute;
-            top: -50px;
+            top: -45px;
             left: 50%;
             transform: translateX(-50%);
             background: white;
-            padding: 8px 20px;
-            border-radius: 25px;
-            font-size: 14px;
+            padding: 5px 14px;
+            border-radius: 20px;
+            font-size: 11px;
             font-weight: 700;
             color: #2D1B4E;
-            box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+            box-shadow: 0 6px 25px rgba(0,0,0,0.12);
             white-space: nowrap;
             opacity: 0;
-            transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
             border: 2px solid #6C3CE1;
             pointer-events: none;
+            z-index: 10;
         }
 
         .walking-cartoon .speech-bubble::after {
             content: '';
             position: absolute;
-            bottom: -10px;
+            bottom: -8px;
             left: 50%;
             transform: translateX(-50%);
-            border-left: 10px solid transparent;
-            border-right: 10px solid transparent;
-            border-top: 10px solid white;
+            border-left: 8px solid transparent;
+            border-right: 8px solid transparent;
+            border-top: 8px solid white;
         }
 
         .walking-cartoon:hover .speech-bubble {
@@ -224,31 +226,39 @@
 
         .walking-cartoon .sparkle {
             position: absolute;
-            font-size: 18px;
+            font-size: 14px;
             animation: sparkle 1.5s ease-in-out infinite;
             pointer-events: none;
+            z-index: 5;
         }
 
-        .walking-cartoon .sparkle:nth-child(2) { animation-delay: 0.3s; top: -15px; right: -10px; }
-        .walking-cartoon .sparkle:nth-child(3) { animation-delay: 0.6s; top: 10px; right: -20px; }
-        .walking-cartoon .sparkle:nth-child(4) { animation-delay: 0.9s; top: -20px; left: -10px; }
+        .walking-cartoon .sparkle:nth-child(2) { animation-delay: 0.2s; top: -20px; right: -8px; }
+        .walking-cartoon .sparkle:nth-child(3) { animation-delay: 0.5s; top: 5px; right: -15px; }
+        .walking-cartoon .sparkle:nth-child(4) { animation-delay: 0.8s; top: -25px; left: -5px; }
+        .walking-cartoon .sparkle:nth-child(5) { animation-delay: 1.1s; bottom: 20px; right: -18px; }
 
         .walking-cartoon .label {
-            font-size: 12px;
+            font-size: 10px;
             font-weight: 700;
             color: #6C3CE1;
             background: rgba(255,255,255,0.95);
-            padding: 4px 16px;
-            border-radius: 20px;
-            margin-top: 6px;
+            padding: 3px 12px;
+            border-radius: 15px;
+            margin-top: 4px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.08);
             border: 1px solid #E8E0F0;
+            text-align: center;
+            width: 100%;
+            max-width: 85px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         /* ===== HERO SECTION ===== */
         .hero {
             background: linear-gradient(135deg, #FFF8F0 0%, #F0E6FF 50%, #FFE8E8 100%);
-            padding: 40px 40px 60px;
+            padding: 30px 40px 50px;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -262,17 +272,17 @@
         /* Floating Decorations */
         .hero-deco {
             position: absolute;
-            font-size: 40px;
-            opacity: 0.12;
+            font-size: 30px;
+            opacity: 0.10;
             animation: floatSlow 6s ease-in-out infinite;
             pointer-events: none;
         }
-        .hero-deco:nth-child(1) { top: 8%; left: 5%; animation-delay: 0s; }
-        .hero-deco:nth-child(2) { top: 15%; right: 8%; animation-delay: 1s; }
-        .hero-deco:nth-child(3) { bottom: 20%; left: 8%; animation-delay: 2s; }
-        .hero-deco:nth-child(4) { bottom: 25%; right: 5%; animation-delay: 1.5s; }
-        .hero-deco:nth-child(5) { top: 50%; left: 2%; animation-delay: 0.5s; font-size: 30px; }
-        .hero-deco:nth-child(6) { top: 40%; right: 2%; animation-delay: 1.8s; font-size: 30px; }
+        .hero-deco:nth-child(1) { top: 5%; left: 3%; animation-delay: 0s; }
+        .hero-deco:nth-child(2) { top: 10%; right: 5%; animation-delay: 1s; }
+        .hero-deco:nth-child(3) { bottom: 15%; left: 5%; animation-delay: 2s; }
+        .hero-deco:nth-child(4) { bottom: 20%; right: 3%; animation-delay: 1.5s; }
+        .hero-deco:nth-child(5) { top: 45%; left: 2%; animation-delay: 0.5s; font-size: 22px; }
+        .hero-deco:nth-child(6) { top: 35%; right: 2%; animation-delay: 1.8s; font-size: 22px; }
 
         .hero-caption {
             font-weight: 700;
@@ -282,7 +292,7 @@
             padding: 6px 24px;
             border-radius: 50px;
             display: inline-block;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
         }
 
         .hero-content {
@@ -299,11 +309,11 @@
             border-radius: 50px;
             font-weight: 700;
             color: #2D1B4E;
-            margin-bottom: 18px;
+            margin-bottom: 15px;
             font-size: 14px;
         }
         .hero-content h1 { 
-            font-size: 48px; 
+            font-size: 46px; 
             line-height: 1.15; 
             color: #2D1B4E; 
         }
@@ -311,7 +321,7 @@
         .hero-content p { 
             font-size: 18px; 
             color: #555; 
-            margin: 18px 0 28px; 
+            margin: 15px 0 25px; 
             line-height: 1.7; 
         }
         .hero-content .actions { 
@@ -322,8 +332,8 @@
         }
         .hero-content .stats {
             display: flex;
-            gap: 30px;
-            margin-top: 35px;
+            gap: 25px;
+            margin-top: 30px;
             flex-wrap: wrap;
             justify-content: center;
         }
@@ -334,7 +344,31 @@
             font-weight: 600;
             font-size: 15px;
         }
-        .hero-content .stats .icon-big { font-size: 28px; }
+        .hero-content .stats .icon-big { font-size: 26px; }
+
+        /* Compass */
+        .hero-compass {
+            display: inline-block;
+            background: white;
+            border-radius: 50%;
+            padding: 10px 13px;
+            box-shadow: 0 15px 40px rgba(108, 60, 225, 0.12);
+            animation: float 4s ease-in-out infinite;
+            margin: 5px 0 10px;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-12px) rotate(5deg); }
+        }
+        .hero-compass img {
+            width: 45px;
+            height: 45px;
+            object-fit: contain;
+        }
+        .hero-compass .emoji-big {
+            font-size: 35px;
+            line-height: 1;
+        }
 
         /* ===== NAVBAR ===== */
         .navbar {
@@ -824,7 +858,7 @@
             .navbar { padding: 12px 20px; flex-direction: column; align-items: stretch; gap: 12px; }
             .nav-links { justify-content: center; gap: 12px; flex-wrap: wrap; }
             .nav-actions { justify-content: center; flex-wrap: wrap; }
-            .hero { padding: 30px 20px 40px; min-height: auto; }
+            .hero { padding: 20px 15px 30px; min-height: auto; }
             .hero-content h1 { font-size: 28px; }
             .hero-content .actions { justify-content: center; }
             .hero-content .stats { justify-content: center; }
@@ -840,33 +874,46 @@
             .banner-dark h2 { font-size: 28px; }
             .modal-box { padding: 30px 20px; }
             .page-content { padding: 20px; }
-            .walking-cartoon-container { min-height: 180px; }
-            .walking-cartoon img { max-width: 140px; }
+            .walking-cartoon-container { min-height: 180px; gap: 5px; padding: 5px 0; }
+            .walking-cartoon { width: 65px; }
+            .walking-cartoon img { max-width: 60px; }
             .walking-cartoon .speech-bubble {
-                font-size: 11px;
-                padding: 5px 14px;
+                font-size: 9px;
+                padding: 4px 10px;
                 white-space: normal;
-                top: -40px;
+                top: -35px;
+                max-width: 70px;
             }
-            .hero-deco { font-size: 25px; }
+            .walking-cartoon .label { font-size: 8px; max-width: 65px; padding: 2px 8px; }
+            .walking-cartoon .sparkle { font-size: 10px; }
+            .hero-deco { font-size: 20px; }
+            .hero-compass img { width: 35px; height: 35px; }
+            .hero-caption { font-size: 14px; padding: 4px 16px; }
         }
         @media (max-width: 480px) {
-            .hero-content h1 { font-size: 24px; }
+            .hero-content h1 { font-size: 22px; }
             .btn-primary, .btn-secondary, .btn-yellow { 
-                padding: 12px 22px; 
-                font-size: 14px; 
+                padding: 10px 18px; 
+                font-size: 13px; 
                 width: 100%; 
                 justify-content: center; 
             }
-            .hero-content .stats { gap: 14px; font-size: 13px; }
-            .walking-cartoon img { max-width: 100px; }
-            .walking-cartoon-container { min-height: 140px; }
+            .hero-content .stats { gap: 10px; font-size: 12px; }
+            .walking-cartoon { width: 50px; }
+            .walking-cartoon img { max-width: 45px; }
+            .walking-cartoon-container { min-height: 140px; gap: 3px; }
             .walking-cartoon .speech-bubble {
-                font-size: 10px;
-                padding: 4px 10px;
-                top: -32px;
+                font-size: 8px;
+                padding: 3px 8px;
+                top: -28px;
+                max-width: 55px;
             }
-            .hero-deco { font-size: 18px; }
+            .walking-cartoon .label { font-size: 7px; max-width: 50px; padding: 2px 5px; }
+            .walking-cartoon .sparkle { font-size: 8px; }
+            .hero-deco { font-size: 16px; }
+            .hero-compass img { width: 28px; height: 28px; }
+            .hero-caption { font-size: 12px; padding: 3px 12px; }
+            .hero-content .tag { font-size: 11px; padding: 5px 14px; }
         }
     </style>
 </head>
@@ -918,7 +965,7 @@
     ======================================== -->
     <div id="homePage">
 
-        <!-- HERO SECTION - WITH WALKING CARTOON IMAGES -->
+        <!-- HERO SECTION - WITH WALKING CARTOONS (8 TOTAL) -->
         <section class="hero">
             <!-- Floating Decorations -->
             <div class="hero-deco">🌟</div>
@@ -928,62 +975,134 @@
             <div class="hero-deco">⭐</div>
             <div class="hero-deco">🌈</div>
 
-            <!-- TOP: Walking Cartoon Images -->
+            <!-- TOP: 8 Walking Cartoon Images -->
             <div class="walking-cartoon-container" id="cartoonContainer">
-                <!-- Cartoon 1 - Walks from Left -->
+                <!-- LEFT SIDE - 4 Cartoons walking from left -->
                 <div class="walking-cartoon walk-left" style="animation-delay:0s;">
                     <div class="speech-bubble">🚀 Let's go!</div>
                     <span class="sparkle">✨</span>
                     <span class="sparkle">⭐</span>
                     <span class="sparkle">🌟</span>
+                    <span class="sparkle">💫</span>
                     <img 
                         src="https://compass.proplr.ae/assets/students-Dk42-8Za.png" 
                         alt="Walking Student" 
-                        onerror="this.style.display='none'; this.parentElement.innerHTML='<div style=\'font-size:80px;line-height:1;\'>🧑‍🎓</div>';"
+                        onerror="this.style.display='none'; this.parentElement.innerHTML='<div style=\'font-size:50px;line-height:1;\'>🧑‍🎓</div>';"
                     />
                     <span class="label">🌟 Explorer</span>
                 </div>
 
-                <!-- Cartoon 2 - Walks from Right -->
-                <div class="walking-cartoon walk-right" style="animation-delay:0.3s;">
+                <div class="walking-cartoon walk-left" style="animation-delay:0.3s;">
+                    <div class="speech-bubble">💪 Let's do this!</div>
+                    <span class="sparkle">⭐</span>
+                    <span class="sparkle">✨</span>
+                    <span class="sparkle">💫</span>
+                    <span class="sparkle">🌟</span>
+                    <img 
+                        src="https://compass.proplr.ae/assets/students-Dk42-8Za.png" 
+                        alt="Walking Student" 
+                        onerror="this.style.display='none'; this.parentElement.innerHTML='<div style=\'font-size:50px;line-height:1;\'>🧑‍🎓</div>';"
+                    />
+                    <span class="label">💪 Achiever</span>
+                </div>
+
+                <div class="walking-cartoon walk-left" style="animation-delay:0.6s;">
                     <div class="speech-bubble">🎯 Find your path!</div>
+                    <span class="sparkle">🌟</span>
                     <span class="sparkle">⭐</span>
                     <span class="sparkle">✨</span>
                     <span class="sparkle">💫</span>
                     <img 
                         src="https://compass.proplr.ae/assets/students-Dk42-8Za.png" 
                         alt="Walking Student" 
-                        onerror="this.style.display='none'; this.parentElement.innerHTML='<div style=\'font-size:80px;line-height:1;\'>🧑‍🎓</div>';"
+                        onerror="this.style.display='none'; this.parentElement.innerHTML='<div style=\'font-size:50px;line-height:1;\'>🧑‍🎓</div>';"
                     />
-                    <span class="label">🎯 Achiever</span>
+                    <span class="label">🎯 Go-Getter</span>
                 </div>
 
-                <!-- Cartoon 3 - Walks from Left -->
-                <div class="walking-cartoon walk-left" style="animation-delay:0.6s;">
-                    <div class="speech-bubble">💪 Let's do this!</div>
-                    <span class="sparkle">🌟</span>
-                    <span class="sparkle">⭐</span>
+                <div class="walking-cartoon walk-left" style="animation-delay:0.9s;">
+                    <div class="speech-bubble">🌟 Dream Big!</div>
+                    <span class="sparkle">💫</span>
                     <span class="sparkle">✨</span>
+                    <span class="sparkle">⭐</span>
+                    <span class="sparkle">🌟</span>
                     <img 
                         src="https://compass.proplr.ae/assets/students-Dk42-8Za.png" 
                         alt="Walking Student" 
-                        onerror="this.style.display='none'; this.parentElement.innerHTML='<div style=\'font-size:80px;line-height:1;\'>🧑‍🎓</div>';"
+                        onerror="this.style.display='none'; this.parentElement.innerHTML='<div style=\'font-size:50px;line-height:1;\'>🧑‍🎓</div>';"
                     />
-                    <span class="label">💪 Go-Getter</span>
+                    <span class="label">🌈 Dreamer</span>
+                </div>
+
+                <!-- RIGHT SIDE - 4 Cartoons walking from right -->
+                <div class="walking-cartoon walk-right" style="animation-delay:0.15s;">
+                    <div class="speech-bubble">🔥 Let's shine!</div>
+                    <span class="sparkle">✨</span>
+                    <span class="sparkle">⭐</span>
+                    <span class="sparkle">🌟</span>
+                    <span class="sparkle">💫</span>
+                    <img 
+                        src="https://compass.proplr.ae/assets/students-Dk42-8Za.png" 
+                        alt="Walking Student" 
+                        onerror="this.style.display='none'; this.parentElement.innerHTML='<div style=\'font-size:50px;line-height:1;\'>🧑‍🎓</div>';"
+                    />
+                    <span class="label">🔥 Star</span>
+                </div>
+
+                <div class="walking-cartoon walk-right" style="animation-delay:0.45s;">
+                    <div class="speech-bubble">🚀 Sky's the limit!</div>
+                    <span class="sparkle">⭐</span>
+                    <span class="sparkle">✨</span>
+                    <span class="sparkle">💫</span>
+                    <span class="sparkle">🌟</span>
+                    <img 
+                        src="https://compass.proplr.ae/assets/students-Dk42-8Za.png" 
+                        alt="Walking Student" 
+                        onerror="this.style.display='none'; this.parentElement.innerHTML='<div style=\'font-size:50px;line-height:1;\'>🧑‍🎓</div>';"
+                    />
+                    <span class="label">🚀 Pioneer</span>
+                </div>
+
+                <div class="walking-cartoon walk-right" style="animation-delay:0.75s;">
+                    <div class="speech-bubble">💡 Think big!</div>
+                    <span class="sparkle">🌟</span>
+                    <span class="sparkle">⭐</span>
+                    <span class="sparkle">✨</span>
+                    <span class="sparkle">💫</span>
+                    <img 
+                        src="https://compass.proplr.ae/assets/students-Dk42-8Za.png" 
+                        alt="Walking Student" 
+                        onerror="this.style.display='none'; this.parentElement.innerHTML='<div style=\'font-size:50px;line-height:1;\'>🧑‍🎓</div>';"
+                    />
+                    <span class="label">💡 Visionary</span>
+                </div>
+
+                <div class="walking-cartoon walk-right" style="animation-delay:1.05s;">
+                    <div class="speech-bubble">🏆 Be the best!</div>
+                    <span class="sparkle">💫</span>
+                    <span class="sparkle">✨</span>
+                    <span class="sparkle">⭐</span>
+                    <span class="sparkle">🌟</span>
+                    <img 
+                        src="https://compass.proplr.ae/assets/students-Dk42-8Za.png" 
+                        alt="Walking Student" 
+                        onerror="this.style.display='none'; this.parentElement.innerHTML='<div style=\'font-size:50px;line-height:1;\'>🧑‍🎓</div>';"
+                    />
+                    <span class="label">🏆 Champion</span>
                 </div>
             </div>
 
-            <!-- Small Compass below -->
-            <div class="hero-compass" style="display:inline-block; background:white; border-radius:50%; padding:12px 15px; box-shadow:0 15px 40px rgba(108,60,225,0.12); animation:float 4s ease-in-out infinite; margin:5px 0 10px;">
+            <!-- Small Compass -->
+            <div class="hero-compass">
                 <img src="https://gulivindalasushmitha.github.io/futures-abroad/compass.png" 
                      alt="Cartoon Compass" 
-                     style="width:50px; height:50px; object-fit:contain;"
-                     onerror="this.style.display='none'; this.parentElement.innerHTML='<div style=\'font-size:40px;line-height:1;\'>🧭</div>';">
+                     style="width:45px; height:45px; object-fit:contain;"
+                     onerror="this.style.display='none'; this.parentElement.innerHTML='<div class=\'emoji-big\'>🧭</div>';">
             </div>
 
             <div class="hero-caption animate-wiggle">✨ Find your direction</div>
 
-            <!-- BOTTOM: Text Content -->
+            <!-- Text Content -->
             <div class="hero-content" data-aos="fade-up">
                 <div class="tag"><span>🚀</span> AI-Powered Career Intelligence</div>
                 <h1>Find Your Direction with<br/><span>Career Intelligence</span></h1>
@@ -1175,14 +1294,14 @@
         AOS.init({ duration: 700, once: true, offset: 80 });
 
         // ========================================
-        // ADD BOUNCING AFTER WALKING
+        // ADD BOUNCING AFTER WALKING - ALL 8 CARTOONS
         // ========================================
         document.addEventListener('DOMContentLoaded', function() {
             setTimeout(() => {
                 document.querySelectorAll('.walking-cartoon').forEach((el, index) => {
                     setTimeout(() => {
                         el.classList.add('bouncing');
-                    }, index * 200);
+                    }, index * 150);
                 });
             }, 2000);
         });
@@ -1199,7 +1318,7 @@
                 document.querySelectorAll('.walking-cartoon').forEach((el, index) => {
                     el.style.animation = 'none';
                     setTimeout(() => {
-                        el.style.animation = index % 2 === 0 ? 'walkInFromLeft 1.2s ease forwards' : 'walkInFromRight 1.2s ease forwards';
+                        el.style.animation = index < 4 ? 'walkInFromLeft 1.2s ease forwards' : 'walkInFromRight 1.2s ease forwards';
                         setTimeout(() => {
                             el.classList.add('bouncing');
                         }, 1400);
@@ -1761,7 +1880,8 @@
         });
 
         console.log('🧭 Futures Abroad loaded successfully!');
-        console.log('🎨 Cartoon images walking animation loaded!');
+        console.log('🎨 8 Cartoon images walking animation loaded!');
+        console.log('📝 4 from left, 4 from right!');
     </script>
 
 </body>
