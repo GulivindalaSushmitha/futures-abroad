@@ -2017,7 +2017,7 @@
         });
 
         // ========================================
-        // PHASE 2: ACTIVITY RECOMMENDATIONS
+        // PHASE 2: ACTIVITY RECOMMENDATIONS - FIXED VERSION
         // ========================================
 
         // Get student's interest tags from quiz results
@@ -2040,7 +2040,7 @@
             return 10;
         }
 
-        // Load and display activities based on student interests
+        // FIXED: Load activities without where clauses
         async function loadActivities() {
             const studentGrade = getStudentGrade();
             const interests = getStudentInterests();
@@ -2056,45 +2056,68 @@
             }
             
             try {
-                const activitiesRef = db.collection('activities');
-                const snapshot = await activitiesRef
-                    .where('grade_min', '<=', studentGrade)
-                    .where('grade_max', '>=', studentGrade)
-                    .get();
+                // Load ALL activities without filters
+                const snapshot = await db.collection('activities').get();
+                
+                console.log('📦 Total activities in database:', snapshot.size);
+                
+                if (snapshot.empty) {
+                    console.log('⚠️ No activities found in Firestore!');
+                    showNoActivitiesMessage(grid);
+                    return;
+                }
                 
                 let activities = [];
                 snapshot.forEach(doc => {
                     const data = doc.data();
                     data.id = doc.id;
-                    const matchCount = (data.interest_tags || []).filter(tag => 
-                        interests.some(interest => 
-                            tag.toLowerCase().includes(interest.toLowerCase()) || 
-                            interest.toLowerCase().includes(tag.toLowerCase())
-                        )
-                    ).length;
-                    data.matchScore = data.interest_tags.length > 0 ? 
-                        matchCount / data.interest_tags.length : 0;
-                    activities.push(data);
+                    
+                    // Check if activity matches student's grade
+                    const gradeMin = data.grade_min || 10;
+                    const gradeMax = data.grade_max || 12;
+                    
+                    if (gradeMin <= studentGrade && gradeMax >= studentGrade) {
+                        // Calculate match score
+                        const tagMatches = (data.interest_tags || []).filter(tag => 
+                            interests.some(interest => 
+                                tag.toLowerCase().includes(interest.toLowerCase()) || 
+                                interest.toLowerCase().includes(tag.toLowerCase())
+                            )
+                        );
+                        data.matchScore = data.interest_tags && data.interest_tags.length > 0 ? 
+                            tagMatches.length / data.interest_tags.length : 0;
+                        activities.push(data);
+                    }
                 });
                 
+                console.log('✅ Matched activities:', activities.length);
+                
+                // If no activities match grade, show all activities (for testing)
+                if (activities.length === 0) {
+                    console.log('⚠️ No matching activities for grade', studentGrade, '- showing all activities');
+                    snapshot.forEach(doc => {
+                        const data = doc.data();
+                        data.id = doc.id;
+                        data.matchScore = 0.5;
+                        activities.push(data);
+                    });
+                }
+                
+                // Sort by match score (highest first)
                 activities.sort((a, b) => b.matchScore - a.matchScore);
                 const topActivities = activities.slice(0, 8);
                 window.allActivities = activities;
                 
                 renderActivityCards(topActivities);
             } catch (error) {
-                console.error('Error loading activities:', error);
+                console.error('❌ Error loading activities:', error);
                 if (grid) {
                     grid.innerHTML = `
                         <div style="grid-column: 1/-1; text-align: center; padding: 40px; color: #666;">
                             <div style="font-size: 40px; margin-bottom: 15px;">⚠️</div>
-                            <h3 style="color: #2D1B4E;">Unable to load activities</h3>
-                            <p style="color: #666; margin: 10px 0;">Please make sure you have activities in your Firestore database.</p>
-                            <button onclick="seedActivities()" class="btn-primary" style="margin-top: 15px; padding: 12px 24px;">
-                                🚀 Seed Sample Activities
-                            </button>
-                            <br>
-                            <button onclick="loadActivities()" class="btn-secondary" style="margin-top: 10px; padding: 10px 20px;">
+                            <h3 style="color: #2D1B4E;">Error Loading Activities</h3>
+                            <p style="color: #666; margin: 10px 0;">${error.message}</p>
+                            <button onclick="loadActivities()" class="btn-primary" style="margin-top: 15px; padding: 12px 24px;">
                                 🔄 Try Again
                             </button>
                         </div>
@@ -2103,21 +2126,32 @@
             }
         }
 
+        function showNoActivitiesMessage(grid) {
+            if (grid) {
+                grid.innerHTML = `
+                    <div style="grid-column: 1/-1; text-align: center; padding: 40px; background: #f8f4ff; border-radius: 20px;">
+                        <div style="font-size: 48px;">🔍</div>
+                        <h3 style="color: #2D1B4E; margin: 15px 0;">No Activities Found</h3>
+                        <p style="color: #666; max-width: 400px; margin: 0 auto 15px;">
+                            You haven't added any activities to your Firestore database yet.
+                        </p>
+                        <button onclick="seedActivities()" class="btn-primary" style="margin-top: 15px; padding: 12px 24px;">
+                            🚀 Seed Sample Activities
+                        </button>
+                        <p style="color: #888; font-size: 12px; margin-top: 10px;">
+                            This will add 6 sample activities to your database.
+                        </p>
+                    </div>
+                `;
+            }
+        }
+
         function renderActivityCards(activities) {
             const grid = document.getElementById('activityCardsGrid');
             if (!grid) return;
             
             if (!activities || activities.length === 0) {
-                grid.innerHTML = `
-                    <div style="grid-column: 1/-1; text-align: center; padding: 40px; background: #f8f4ff; border-radius: 20px;">
-                        <div style="font-size: 48px;">🔍</div>
-                        <h3 style="color: #2D1B4E; margin: 15px 0;">No activities found</h3>
-                        <p style="color: #666; max-width: 400px; margin: 0 auto 15px;">
-                            Try broadening your interests or check back later for new opportunities.
-                        </p>
-                        <button onclick="loadActivities()" class="btn-primary" style="padding: 10px 24px;">🔄 Refresh</button>
-                    </div>
-                `;
+                showNoActivitiesMessage(grid);
                 return;
             }
             
