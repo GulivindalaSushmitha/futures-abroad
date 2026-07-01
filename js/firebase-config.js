@@ -23,6 +23,7 @@ const db = firebase.firestore();
 // Admin credentials (YOURS ONLY)
 const ADMIN_EMAIL = "admin@futuresabroad.com";
 const ADMIN_PASSWORD = "FuturesAdmin2026!";
+const ADMIN_UID = "hrONkvAlxVac4Wc7nwdNLhdOIe33"; // ADD THIS LINE
 
 console.log("🔥 Firebase initialized successfully!");
 console.log("📁 Project ID:", firebaseConfig.projectId);
