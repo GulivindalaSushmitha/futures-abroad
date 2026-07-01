@@ -2017,10 +2017,9 @@
         });
 
         // ========================================
-        // PHASE 2: ACTIVITY RECOMMENDATIONS - FIXED VERSION
+        // PHASE 2: ACTIVITY RECOMMENDATIONS
         // ========================================
 
-        // Get student's interest tags from quiz results
         function getStudentInterests() {
             const scores = JSON.parse(localStorage.getItem('quizScores') || '{}');
             const tags = [];
@@ -2040,7 +2039,6 @@
             return 10;
         }
 
-        // FIXED: Load activities without where clauses
         async function loadActivities() {
             const studentGrade = getStudentGrade();
             const interests = getStudentInterests();
@@ -2056,7 +2054,6 @@
             }
             
             try {
-                // Load ALL activities without filters
                 const snapshot = await db.collection('activities').get();
                 
                 console.log('📦 Total activities in database:', snapshot.size);
@@ -2072,12 +2069,10 @@
                     const data = doc.data();
                     data.id = doc.id;
                     
-                    // Check if activity matches student's grade
                     const gradeMin = data.grade_min || 10;
                     const gradeMax = data.grade_max || 12;
                     
                     if (gradeMin <= studentGrade && gradeMax >= studentGrade) {
-                        // Calculate match score
                         const tagMatches = (data.interest_tags || []).filter(tag => 
                             interests.some(interest => 
                                 tag.toLowerCase().includes(interest.toLowerCase()) || 
@@ -2092,7 +2087,6 @@
                 
                 console.log('✅ Matched activities:', activities.length);
                 
-                // If no activities match grade, show all activities (for testing)
                 if (activities.length === 0) {
                     console.log('⚠️ No matching activities for grade', studentGrade, '- showing all activities');
                     snapshot.forEach(doc => {
@@ -2103,7 +2097,6 @@
                     });
                 }
                 
-                // Sort by match score (highest first)
                 activities.sort((a, b) => b.matchScore - a.matchScore);
                 const topActivities = activities.slice(0, 8);
                 window.allActivities = activities;
@@ -2392,7 +2385,6 @@
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        // Seed activities function - call this in console to add sample data
         async function seedActivities() {
             const activities = [
                 {
