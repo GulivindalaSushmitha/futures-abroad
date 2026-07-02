@@ -112,6 +112,18 @@
             transition: all 0.3s;
         }
         .btn-secondary:hover { background: #6C3CE1; color: white; }
+        .btn-portfolio {
+            padding: 10px 24px;
+            background: #FFD93D;
+            color: #2D1B4E;
+            border: none;
+            border-radius: 50px;
+            font-weight: 700;
+            cursor: pointer;
+            font-family: 'Quicksand', sans-serif;
+            transition: all 0.3s;
+        }
+        .btn-portfolio:hover { transform: translateY(-2px); box-shadow: 0 4px 15px rgba(255,217,61,0.4); }
         .interests-tag {
             display: inline-block;
             padding: 4px 14px;
@@ -131,6 +143,30 @@
             justify-content: space-between;
             align-items: center;
         }
+        .registered-activity-item .status {
+            font-size: 12px;
+            color: #22c55e;
+            font-weight: 600;
+        }
+        .welcome-badge {
+            display: inline-block;
+            padding: 4px 16px;
+            background: #FFD93D;
+            border-radius: 50px;
+            font-size: 14px;
+            font-weight: 700;
+            color: #2D1B4E;
+            margin-top: 5px;
+        }
+        .phase-badge {
+            display: inline-block;
+            padding: 2px 12px;
+            background: #6C3CE1;
+            border-radius: 50px;
+            font-size: 12px;
+            font-weight: 600;
+            color: white;
+        }
     </style>
 </head>
 <body>
@@ -140,12 +176,16 @@
             <div class="header-actions">
                 <button class="btn-back" onclick="window.location.href='index.html'">← Home</button>
                 <button class="btn-primary" onclick="window.location.href='activities.html'">🎯 Activities</button>
+                <button class="btn-portfolio" onclick="window.location.href='portfolio.html'">📂 Portfolio</button>
                 <button class="btn-logout" onclick="logoutUser()">Logout</button>
             </div>
         </div>
         
         <div style="background: white; padding: 30px; border-radius: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.06);">
-            <h1 id="welcome-text">Welcome!</h1>
+            <div style="display: flex; align-items: center; gap: 15px; flex-wrap: wrap;">
+                <h1 id="welcome-text" style="margin: 0;">Welcome!</h1>
+                <span class="welcome-badge" id="phase-badge">Phase 1</span>
+            </div>
             <p id="user-email" style="color: #888;">Loading...</p>
             
             <div class="dashboard-grid">
@@ -181,6 +221,7 @@
             <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-top: 20px;">
                 <button class="btn-primary" onclick="window.location.href='quiz.html'">📝 Take Quiz</button>
                 <button class="btn-secondary" onclick="window.location.href='activities.html'">🎯 Find Activities</button>
+                <button class="btn-portfolio" onclick="window.location.href='portfolio.html'">📂 View Portfolio</button>
             </div>
         </div>
     </div>
@@ -193,6 +234,7 @@
             signOut,
             doc,
             getDoc,
+            setDoc,
             collection,
             getDocs,
             query,
@@ -214,39 +256,68 @@
                         uid: user.uid,
                         name: user.email.split('@')[0],
                         email: user.email,
-                        createdAt: new Date().toISOString()
+                        createdAt: new Date().toISOString(),
+                        profileCompleted: false,
+                        onboardingPhase: 1,
+                        interests: [],
+                        registered_activities: [],
+                        completed_activities: [],
+                        profileStrength: 0
                     });
                     document.getElementById('welcome-text').textContent = `Hello, ${user.email.split('@')[0]}! 👋`;
                 }
                 
                 document.getElementById('user-email').textContent = `📧 ${user.email}`;
                 
-                // Profile strength
-                const strength = studentData.profileStrength || 0;
-                document.getElementById('profile-strength').textContent = strength + '%';
-                
-                // Activity count
+                // Get registered activities count
                 const registered = studentData.registered_activities || [];
-                document.getElementById('activity-count').textContent = registered.length;
+                const registeredCount = registered.length;
                 
-                // Quiz status
+                // Calculate profile strength (FIXED)
+                let strength = 0;
+                // +20% if interests are set
+                if (studentData.interests && studentData.interests.length > 0) {
+                    strength += 20;
+                }
+                // +10% per registered activity (max 60%)
+                if (registeredCount > 0) {
+                    strength += Math.min(registeredCount * 10, 60);
+                }
+                // +10% if quiz completed
+                if (studentData.profileCompleted) {
+                    strength += 10;
+                }
+                // +10% if phase > 1
+                if (studentData.onboardingPhase && studentData.onboardingPhase > 1) {
+                    strength += 10;
+                }
+                // Cap at 100%
+                strength = Math.min(strength, 100);
+                
+                // Update UI
+                document.getElementById('profile-strength').textContent = strength + '%';
+                document.getElementById('activity-count').textContent = registeredCount;
                 document.getElementById('quiz-status').textContent = studentData.profileCompleted ? '✅ Done' : '⏳ Pending';
                 
-                // Phase
-                document.getElementById('phase').textContent = studentData.onboardingPhase || 1;
+                const phase = studentData.onboardingPhase || 1;
+                document.getElementById('phase').textContent = phase;
+                document.getElementById('phase-badge').textContent = `Phase ${phase}`;
                 
                 // Interests
                 const interests = studentData.interests || [];
                 document.getElementById('interests-list').innerHTML = interests.length > 0 
                     ? interests.map(tag => `<span class="interests-tag">${tag}</span>`).join('')
-                    : 'Not set';
+                    : 'Not set - Take the quiz to discover your interests!';
                 
-                // Registered Activities - Fetch actual activity names
-                if (registered.length > 0) {
+                // Registered Activities - Fetch actual activity names (NO DUPLICATES)
+                if (registeredCount > 0) {
                     const activitiesList = document.getElementById('activities-list');
                     activitiesList.innerHTML = '';
                     
-                    for (const activityId of registered) {
+                    // Use Set to prevent duplicates
+                    const uniqueIds = [...new Set(registered)];
+                    
+                    for (const activityId of uniqueIds) {
                         try {
                             const activityDoc = await getDoc(doc(db, 'activities', activityId));
                             if (activityDoc.exists()) {
@@ -255,7 +326,7 @@
                                 div.className = 'registered-activity-item';
                                 div.innerHTML = `
                                     <span>${actData.name || activityId}</span>
-                                    <span style="font-size: 12px; color: #6C3CE1; font-weight: 600;">✅ Registered</span>
+                                    <span class="status">✅ Registered</span>
                                 `;
                                 activitiesList.appendChild(div);
                             }
