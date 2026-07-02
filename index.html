@@ -1599,7 +1599,7 @@
         }
 
         // ========================================
-        // RENDER SIGNUP
+        // RENDER SIGNUP (UPDATED WITH DUPLICATE PREVENTION)
         // ========================================
         function renderSignup() {
             modalContent.innerHTML = `
@@ -1816,6 +1816,9 @@
             }
         }
 
+        // ========================================
+        // HANDLE LOGIN
+        // ========================================
         async function handleLogin() {
             const email = document.getElementById('loginEmail')?.value.trim();
             const password = document.getElementById('loginPassword')?.value;
@@ -1837,20 +1840,49 @@
                     return;
                 }
 
+                // Check if student profile exists
+                const studentDoc = await db.collection('students').doc(user.uid).get();
+                if (!studentDoc.exists) {
+                    // Create student profile if missing
+                    await db.collection('students').doc(user.uid).set({
+                        uid: user.uid,
+                        email: email,
+                        name: email.split('@')[0],
+                        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                        profileCompleted: false,
+                        onboardingPhase: 1,
+                        interests: [],
+                        registered_activities: [],
+                        completed_activities: []
+                    });
+                }
+
                 alert('✅ Logged in successfully!');
                 closeModal();
+                // Redirect to dashboard
+                window.location.href = 'dashboard.html';
             } catch (error) {
+                console.error('Login error:', error);
                 showMessage('loginMessage', '❌ Login failed: ' + error.message);
             }
         }
 
+        // ========================================
+        // HANDLE SIGNUP (FIXED - PREVENTS DUPLICATES)
+        // ========================================
         async function handleSignup() {
             const name = document.getElementById('signupName')?.value.trim();
             const email = document.getElementById('signupEmail')?.value.trim();
             const password = document.getElementById('signupPassword')?.value;
             const roleEl = document.querySelector('.role-select .active');
             const role = roleEl ? roleEl.dataset.role || 'student' : 'student';
+            const msgEl = document.getElementById('signupMessage');
 
+            // Reset message
+            msgEl.style.display = 'none';
+            msgEl.textContent = '';
+
+            // Validate inputs
             if (!name || !email || !password) {
                 showMessage('signupMessage', '⚠️ Please fill in all fields.');
                 return;
@@ -1861,40 +1893,71 @@
             }
 
             try {
+                // Check if user already exists in Auth
+                try {
+                    // Try to sign in with a dummy password to check if user exists
+                    await auth.signInWithEmailAndPassword(email, 'dummy_password');
+                    // If we get here, user exists (signInWithEmailAndPassword would fail with wrong password)
+                    // But we need to check differently - use fetchSignInMethodsForEmail
+                    const methods = await auth.fetchSignInMethodsForEmail(email);
+                    if (methods && methods.length > 0) {
+                        showMessage('signupMessage', '❌ An account with this email already exists. Please login instead.');
+                        return;
+                    }
+                } catch (signInError) {
+                    // If error is "auth/user-not-found", it means user doesn't exist - good!
+                    // If error is "auth/wrong-password", it means user exists but password is wrong
+                    if (signInError.code === 'auth/wrong-password') {
+                        showMessage('signupMessage', '❌ An account with this email already exists. Please login instead.');
+                        return;
+                    }
+                    // For any other error, continue with signup attempt
+                }
+
+                // Create new user
                 const userCredential = await auth.createUserWithEmailAndPassword(email, password);
                 const user = userCredential.user;
 
+                // Create student profile in Firestore
                 await db.collection('students').doc(user.uid).set({
                     uid: user.uid,
                     name: name,
                     email: email,
                     role: role,
+                    grade: 10,
                     createdAt: firebase.firestore.FieldValue.serverTimestamp(),
                     profileCompleted: false,
                     onboardingPhase: 1,
                     interests: [],
-                    quizAnswers: [],
-                    activities: [],
-                    portfolio: [],
                     registered_activities: [],
-                    completed_activities: []
+                    completed_activities: [],
+                    profileStrength: 0
                 });
 
-                alert(`✅ Account created successfully!\nWelcome ${name}!`);
-                closeModal();
+                showMessage('signupMessage', `✅ Account created successfully! Welcome ${name}!`, false);
                 
-                if (role === 'student') {
-                    setTimeout(() => {
+                setTimeout(() => {
+                    closeModal();
+                    if (role === 'student') {
                         currentQuizIndex = 0;
                         quizAnswers = [];
                         openModal('quiz');
-                    }, 500);
-                }
+                    }
+                }, 800);
+
             } catch (error) {
-                showMessage('signupMessage', '❌ Signup failed: ' + error.message);
+                console.error('Signup error:', error);
+                if (error.code === 'auth/email-already-in-use') {
+                    showMessage('signupMessage', '❌ This email is already registered. Please login instead.');
+                } else {
+                    showMessage('signupMessage', '❌ Signup failed: ' + error.message);
+                }
             }
         }
 
+        // ========================================
+        // HANDLE ADMIN LOGIN
+        // ========================================
         async function handleAdminLogin() {
             const email = document.getElementById('adminEmail')?.value.trim();
             const password = document.getElementById('adminPassword')?.value;
@@ -1929,6 +1992,9 @@
             }
         }
 
+        // ========================================
+        // SHOW ADMIN DASHBOARD
+        // ========================================
         async function showAdminDashboard() {
             document.getElementById('homePage').style.display = 'none';
             document.getElementById('activityFeed').style.display = 'none';
