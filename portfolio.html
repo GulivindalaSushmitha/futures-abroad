@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Portfolio - Futures Abroad</title>
+    <link rel="stylesheet" href="css/style.css" />
+    <style>
+        .portfolio-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 100px 20px 40px;
+            min-height: 100vh;
+            background: #FFF8F0;
+        }
+        .portfolio-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: white;
+            padding: 20px 30px;
+            border-radius: 20px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .portfolio-header .logo {
+            font-size: 24px;
+            font-weight: 800;
+            color: #2D1B4E;
+        }
+        .portfolio-header .logo span { color: #6C3CE1; }
+        .btn-back {
+            padding: 10px 24px;
+            background: #6C3CE1;
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-weight: 700;
+            cursor: pointer;
+            font-family: 'Quicksand', sans-serif;
+            transition: all 0.3s;
+        }
+        .btn-back:hover { transform: translateY(-2px); box-shadow: 0 4px 15px rgba(108,60,225,0.3); }
+        .btn-logout {
+            padding: 10px 24px;
+            background: #FF6B6B;
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-weight: 700;
+            cursor: pointer;
+            font-family: 'Quicksand', sans-serif;
+            transition: all 0.3s;
+        }
+        .btn-logout:hover { transform: translateY(-2px); box-shadow: 0 4px 15px rgba(255,107,107,0.3); }
+        .portfolio-card {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+            border-left: 5px solid #6C3CE1;
+        }
+        .portfolio-card h3 {
+            color: #2D1B4E;
+            margin-bottom: 5px;
+        }
+        .portfolio-card .meta {
+            color: #888;
+            font-size: 14px;
+        }
+        .portfolio-card .skills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            margin-top: 10px;
+        }
+        .portfolio-card .skills span {
+            background: #f0e6ff;
+            color: #6C3CE1;
+            padding: 3px 12px;
+            border-radius: 50px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            background: white;
+            border-radius: 20px;
+        }
+        .empty-state .icon {
+            font-size: 64px;
+            margin-bottom: 15px;
+        }
+        .empty-state h3 {
+            color: #2D1B4E;
+        }
+        .empty-state p {
+            color: #888;
+        }
+    </style>
+</head>
+<body>
+    <div class="portfolio-container">
+        <div class="portfolio-header">
+            <div class="logo">📂 Futures <span>Abroad</span></div>
+            <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                <button class="btn-back" onclick="window.location.href='dashboard.html'">← Dashboard</button>
+                <button class="btn-back" onclick="window.location.href='activities.html'">🎯 Activities</button>
+                <button class="btn-logout" onclick="logoutUser()">Logout</button>
+            </div>
+        </div>
+
+        <h1 style="font-size: 32px; color: #2D1B4E; margin-bottom: 5px;">📂 My Portfolio</h1>
+        <p style="color: #888; margin-bottom: 30px;">All your registered activities and progress</p>
+
+        <div id="portfolio-content">
+            <div class="loading" style="text-align: center; padding: 40px;">
+                <div style="font-size: 40px;">⏳</div>
+                <p>Loading your portfolio...</p>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { 
+            auth, 
+            db, 
+            onAuthStateChanged, 
+            signOut,
+            doc,
+            getDoc,
+            getDocs,
+            collection
+        } from './js/firebase-config.js';
+
+        onAuthStateChanged(auth, async (user) => {
+            if (!user) {
+                window.location.href = 'login.html';
+                return;
+            }
+            await loadPortfolio(user);
+        });
+
+        window.logoutUser = async function() {
+            await signOut(auth);
+            window.location.href = 'index.html';
+        };
+
+        async function loadPortfolio(user) {
+            const container = document.getElementById('portfolio-content');
+            
+            try {
+                const studentDoc = await getDoc(doc(db, 'students', user.uid));
+                
+                if (!studentDoc.exists()) {
+                    container.innerHTML = `
+                        <div class="empty-state">
+                            <div class="icon">📂</div>
+                            <h3>No Portfolio Yet</h3>
+                            <p>Complete your profile and register for activities to build your portfolio.</p>
+                            <button onclick="window.location.href='activities.html'" class="btn-back" style="margin-top: 15px;">🎯 Find Activities</button>
+                        </div>
+                    `;
+                    return;
+                }
+
+                const studentData = studentDoc.data();
+                const registeredIds = studentData.registered_activities || [];
+
+                if (registeredIds.length === 0) {
+                    container.innerHTML = `
+                        <div class="empty-state">
+                            <div class="icon">🔍</div>
+                            <h3>No Activities Registered</h3>
+                            <p>You haven't registered for any activities yet. Start exploring now!</p>
+                            <button onclick="window.location.href='activities.html'" class="btn-back" style="margin-top: 15px;">🎯 Explore Activities</button>
+                        </div>
+                    `;
+                    return;
+                }
+
+                let html = `<p style="color: #6C3CE1; font-weight: 600; margin-bottom: 20px;">You have registered for ${registeredIds.length} activity(ies)</p>`;
+                let completedCount = 0;
+
+                for (const activityId of registeredIds) {
+                    try {
+                        const activityDoc = await getDoc(doc(db, 'activities', activityId));
+                        if (activityDoc.exists()) {
+                            const activity = activityDoc.data();
+                            html += `
+                                <div class="portfolio-card">
+                                    <h3>${activity.name}</h3>
+                                    <div class="meta">
+                                        <span>📌 ${activity.type || 'Activity'}</span>
+                                        <span style="margin-left: 15px;">⏱️ ${activity.duration || 'N/A'}</span>
+                                        <span style="margin-left: 15px;">💰 ${activity.cost || 'Free'}</span>
+                                    </div>
+                                    <div class="skills">
+                                        ${(activity.skills_gained || []).map(skill => 
+                                            `<span>${skill}</span>`
+                                        ).join('')}
+                                    </div>
+                                    <div style="margin-top: 10px; font-size: 14px; color: #22c55e;">
+                                        ✅ Registered
+                                    </div>
+                                </div>
+                            `;
+                        }
+                    } catch (e) {
+                        console.error('Error fetching activity:', e);
+                    }
+                }
+
+                container.innerHTML = html;
+
+            } catch (error) {
+                console.error('Error loading portfolio:', error);
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="icon">⚠️</div>
+                        <h3>Error Loading Portfolio</h3>
+                        <p>${error.message}</p>
+                        <button onclick="location.reload()" class="btn-back" style="margin-top: 15px;">🔄 Try Again</button>
+                    </div>
+                `;
+            }
+        }
+    </script>
+</body>
+</html>
