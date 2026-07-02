@@ -55,6 +55,18 @@
             transition: all 0.3s;
         }
         .btn-logout:hover { transform: translateY(-2px); box-shadow: 0 4px 15px rgba(255,107,107,0.3); }
+        .btn-primary {
+            padding: 10px 24px;
+            background: #6C3CE1;
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-weight: 700;
+            cursor: pointer;
+            font-family: 'Quicksand', sans-serif;
+            transition: all 0.3s;
+        }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 4px 15px rgba(108,60,225,0.3); }
         .portfolio-card {
             background: white;
             border-radius: 20px;
@@ -62,14 +74,23 @@
             margin-bottom: 20px;
             box-shadow: 0 4px 20px rgba(0,0,0,0.06);
             border-left: 5px solid #6C3CE1;
+            transition: all 0.3s;
+        }
+        .portfolio-card:hover {
+            transform: translateX(5px);
+            box-shadow: 0 8px 30px rgba(108,60,225,0.12);
         }
         .portfolio-card h3 {
             color: #2D1B4E;
             margin-bottom: 5px;
+            font-size: 20px;
         }
         .portfolio-card .meta {
             color: #888;
             font-size: 14px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
         }
         .portfolio-card .skills {
             display: flex;
@@ -84,6 +105,16 @@
             border-radius: 50px;
             font-size: 12px;
             font-weight: 600;
+        }
+        .portfolio-card .status-badge {
+            display: inline-block;
+            padding: 4px 14px;
+            background: #22c55e;
+            color: white;
+            border-radius: 50px;
+            font-size: 12px;
+            font-weight: 700;
+            margin-top: 10px;
         }
         .empty-state {
             text-align: center;
@@ -101,6 +132,51 @@
         .empty-state p {
             color: #888;
         }
+        .loading {
+            text-align: center;
+            padding: 40px;
+        }
+        .loading .spinner {
+            font-size: 40px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .stats-bar {
+            display: flex;
+            gap: 30px;
+            flex-wrap: wrap;
+            background: #F8F4FF;
+            padding: 15px 25px;
+            border-radius: 16px;
+            margin-bottom: 25px;
+        }
+        .stats-bar .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .stats-bar .stat-item .num {
+            font-weight: 800;
+            font-size: 22px;
+            color: #6C3CE1;
+        }
+        .stats-bar .stat-item .label {
+            color: #888;
+            font-size: 14px;
+        }
+        @media (max-width: 600px) {
+            .stats-bar {
+                flex-direction: column;
+                gap: 10px;
+            }
+            .portfolio-card .meta {
+                flex-direction: column;
+                gap: 5px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -109,7 +185,7 @@
             <div class="logo">📂 Futures <span>Abroad</span></div>
             <div style="display: flex; gap: 10px; flex-wrap: wrap;">
                 <button class="btn-back" onclick="window.location.href='dashboard.html'">← Dashboard</button>
-                <button class="btn-back" onclick="window.location.href='activities.html'">🎯 Activities</button>
+                <button class="btn-primary" onclick="window.location.href='activities.html'">🎯 Activities</button>
                 <button class="btn-logout" onclick="logoutUser()">Logout</button>
             </div>
         </div>
@@ -118,8 +194,8 @@
         <p style="color: #888; margin-bottom: 30px;">All your registered activities and progress</p>
 
         <div id="portfolio-content">
-            <div class="loading" style="text-align: center; padding: 40px;">
-                <div style="font-size: 40px;">⏳</div>
+            <div class="loading">
+                <div class="spinner">⏳</div>
                 <p>Loading your portfolio...</p>
             </div>
         </div>
@@ -171,7 +247,10 @@
                 const studentData = studentDoc.data();
                 const registeredIds = studentData.registered_activities || [];
 
-                if (registeredIds.length === 0) {
+                // REMOVE DUPLICATES using Set
+                const uniqueIds = [...new Set(registeredIds)];
+
+                if (uniqueIds.length === 0) {
                     container.innerHTML = `
                         <div class="empty-state">
                             <div class="icon">🔍</div>
@@ -183,10 +262,26 @@
                     return;
                 }
 
-                let html = `<p style="color: #6C3CE1; font-weight: 600; margin-bottom: 20px;">You have registered for ${registeredIds.length} activity(ies)</p>`;
-                let completedCount = 0;
+                // Show stats
+                let html = `
+                    <div class="stats-bar">
+                        <div class="stat-item">
+                            <span class="num">${uniqueIds.length}</span>
+                            <span class="label">📋 Registered Activities</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="num">${studentData.profileStrength || 0}%</span>
+                            <span class="label">📊 Profile Strength</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="num">${studentData.interests?.length || 0}</span>
+                            <span class="label">🎯 Interests</span>
+                        </div>
+                    </div>
+                `;
 
-                for (const activityId of registeredIds) {
+                // Show each activity (using unique IDs)
+                for (const activityId of uniqueIds) {
                     try {
                         const activityDoc = await getDoc(doc(db, 'activities', activityId));
                         if (activityDoc.exists()) {
@@ -196,17 +291,16 @@
                                     <h3>${activity.name}</h3>
                                     <div class="meta">
                                         <span>📌 ${activity.type || 'Activity'}</span>
-                                        <span style="margin-left: 15px;">⏱️ ${activity.duration || 'N/A'}</span>
-                                        <span style="margin-left: 15px;">💰 ${activity.cost || 'Free'}</span>
+                                        <span>⏱️ ${activity.duration || 'N/A'}</span>
+                                        <span>💰 ${activity.cost || 'Free'}</span>
+                                        <span>📍 ${activity.country || 'Global'}</span>
                                     </div>
                                     <div class="skills">
                                         ${(activity.skills_gained || []).map(skill => 
                                             `<span>${skill}</span>`
-                                        ).join('')}
+                                        ).join('') || '<span style="background: #eee; color: #888;">No skills listed</span>'}
                                     </div>
-                                    <div style="margin-top: 10px; font-size: 14px; color: #22c55e;">
-                                        ✅ Registered
-                                    </div>
+                                    <span class="status-badge">✅ Registered</span>
                                 </div>
                             `;
                         }
