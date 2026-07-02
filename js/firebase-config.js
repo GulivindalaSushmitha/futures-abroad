@@ -1,7 +1,30 @@
 // ============================================================
-// js/firebase-config.js - Firebase Configuration
-// YOUR FREE API KEY IS INCLUDED
+// js/firebase-config.js - Firebase Configuration (FIXED)
 // ============================================================
+
+// Import Firebase SDKs (using v9 modular SDK)
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { 
+    getAuth, 
+    onAuthStateChanged, 
+    signInWithEmailAndPassword,
+    createUserWithEmailAndPassword,
+    signOut 
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+import { 
+    getFirestore, 
+    collection, 
+    doc, 
+    getDoc, 
+    getDocs, 
+    setDoc, 
+    updateDoc, 
+    arrayUnion,
+    arrayRemove,
+    query, 
+    where,
+    deleteDoc
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -14,16 +37,29 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-firebase.initializeApp(firebaseConfig);
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
 
-// Make auth and db available globally
-const auth = firebase.auth();
-const db = firebase.firestore();
-
-// Admin credentials (YOURS ONLY)
-const ADMIN_EMAIL = "admin@futuresabroad.com";
-const ADMIN_PASSWORD = "FuturesAdmin2026!";
-const ADMIN_UID = "hrONkvAlxVac4Wc7nwdNLhdOIe33"; // ADD THIS LINE
+// Export for use in other files
+export { 
+    auth, 
+    db, 
+    onAuthStateChanged,
+    signInWithEmailAndPassword,
+    createUserWithEmailAndPassword,
+    signOut,
+    collection, 
+    doc, 
+    getDoc, 
+    getDocs, 
+    setDoc, 
+    updateDoc, 
+    arrayUnion,
+    arrayRemove,
+    query, 
+    where,
+    deleteDoc
+};
 
 console.log("🔥 Firebase initialized successfully!");
-console.log("📁 Project ID:", firebaseConfig.projectId);
