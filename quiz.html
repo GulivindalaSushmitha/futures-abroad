@@ -4,28 +4,586 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>AI Quiz - Futures Abroad</title>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
     <link rel="stylesheet" href="css/style.css" />
-    <link rel="stylesheet" href="css/auth.css" />
-    <link rel="stylesheet" href="css/quiz.css" />
+    <style>
+        .quiz-container {
+            max-width: 600px;
+            margin: 100px auto;
+            padding: 40px;
+            background: white;
+            border-radius: 30px;
+            box-shadow: 0 20px 60px rgba(108,60,225,0.12);
+            min-height: 500px;
+        }
+        .quiz-container .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .quiz-container .header h1 {
+            font-size: 24px;
+            color: #2D1B4E;
+            margin: 0;
+        }
+        .quiz-container .sub {
+            text-align: center;
+            color: #888;
+            margin-bottom: 30px;
+        }
+        .quiz-question {
+            background: #F8F4FF;
+            border-radius: 20px;
+            padding: 20px;
+            margin: 12px 0;
+            border-left: 5px solid #6C3CE1;
+        }
+        .quiz-question .q-text {
+            font-weight: 700;
+            font-size: 18px;
+            color: #2D1B4E;
+            margin-bottom: 15px;
+        }
+        .quiz-options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .quiz-options label {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            background: white;
+            border-radius: 14px;
+            border: 2px solid #E8E0F0;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 500;
+            margin: 0;
+            font-size: 15px;
+        }
+        .quiz-options label:hover { 
+            border-color: #6C3CE1; 
+            background: #F0E6FF; 
+            transform: translateX(5px);
+        }
+        .quiz-options input[type="radio"] {
+            width: 18px;
+            height: 18px;
+            accent-color: #6C3CE1;
+            flex-shrink: 0;
+        }
+        .quiz-options label.selected {
+            border-color: #6C3CE1;
+            background: #F0E6FF;
+        }
+        .quiz-progress {
+            background: #E8E0F0;
+            border-radius: 20px;
+            height: 8px;
+            margin: 15px 0;
+            overflow: hidden;
+        }
+        .quiz-progress .bar {
+            height: 100%;
+            background: linear-gradient(90deg, #6C3CE1, #FFD93D);
+            border-radius: 20px;
+            transition: width 0.5s ease;
+        }
+        .btn-submit {
+            width: 100%;
+            padding: 16px;
+            background: #6C3CE1;
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 17px;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: all 0.3s;
+            font-family: 'Quicksand', sans-serif;
+        }
+        .btn-submit:hover { 
+            transform: translateY(-3px); 
+            box-shadow: 0 8px 30px rgba(108,60,225,0.35); 
+        }
+        .btn-submit:disabled { 
+            opacity: 0.5; 
+            cursor: not-allowed; 
+            transform: none !important;
+        }
+        .btn-back {
+            padding: 10px 20px;
+            background: #6C3CE1;
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-weight: 700;
+            cursor: pointer;
+            font-family: 'Quicksand', sans-serif;
+            transition: all 0.3s;
+            font-size: 14px;
+        }
+        .btn-back:hover { 
+            transform: translateY(-2px); 
+            box-shadow: 0 4px 15px rgba(108,60,225,0.3); 
+        }
+        .btn-secondary-custom {
+            padding: 10px 20px;
+            background: #FFD93D;
+            color: #2D1B4E;
+            border: none;
+            border-radius: 50px;
+            font-weight: 700;
+            cursor: pointer;
+            font-family: 'Quicksand', sans-serif;
+            transition: all 0.3s;
+            font-size: 14px;
+        }
+        .btn-secondary-custom:hover { 
+            transform: translateY(-2px); 
+            box-shadow: 0 4px 15px rgba(255,217,61,0.4); 
+        }
+        .result-card {
+            text-align: center;
+            padding: 30px 20px;
+            background: linear-gradient(135deg, #F0E6FF, #FFF8F0);
+            border-radius: 24px;
+            margin: 15px 0;
+        }
+        .result-card .emoji { font-size: 72px; }
+        .result-card h3 { color: #2D1B4E; margin: 10px 0 5px; font-size: 24px; }
+        .result-card p { color: #555; font-size: 15px; max-width: 400px; margin: 0 auto; }
+        .interest-score {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 6px 0;
+        }
+        .interest-score .label { 
+            width: 80px; 
+            font-size: 13px; 
+            font-weight: 600;
+            color: #2D1B4E;
+        }
+        .interest-score .bar-bg {
+            flex: 1;
+            background: #E8E0F0;
+            border-radius: 10px;
+            height: 10px;
+            overflow: hidden;
+        }
+        .interest-score .bar-fill {
+            height: 100%;
+            border-radius: 10px;
+            transition: width 1s ease;
+        }
+        .interest-score .pct { 
+            font-weight: 700; 
+            font-size: 14px; 
+            min-width: 40px;
+            text-align: right;
+        }
+        .result-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+        .result-actions button {
+            flex: 1;
+            min-width: 140px;
+            padding: 14px;
+            border: none;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 15px;
+            cursor: pointer;
+            font-family: 'Quicksand', sans-serif;
+            transition: all 0.3s;
+        }
+        .result-actions .btn-view-activities {
+            background: #6C3CE1;
+            color: white;
+        }
+        .result-actions .btn-view-activities:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(108,60,225,0.35);
+        }
+        .result-actions .btn-retake {
+            background: #FFD93D;
+            color: #2D1B4E;
+        }
+        .result-actions .btn-retake:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(255,217,61,0.4);
+        }
+        .q-counter {
+            text-align: right;
+            color: #888;
+            font-size: 14px;
+            font-weight: 600;
+        }
+        @media (max-width: 600px) {
+            .quiz-container {
+                margin: 60px 15px;
+                padding: 25px 20px;
+            }
+            .quiz-container .header h1 { font-size: 20px; }
+            .quiz-options label { font-size: 14px; padding: 10px 14px; }
+            .result-actions button { min-width: 100%; }
+            .interest-score .label { width: 60px; font-size: 11px; }
+        }
+    </style>
 </head>
 <body>
-    <div class="auth-container" style="min-height:100vh; display:flex; align-items:center; justify-content:center; padding:20px;">
-        <div class="auth-card" style="max-width:600px; width:100%;">
-            <div class="auth-header">
-                <div class="auth-logo">🧠 Futures Abroad</div>
-                <h1>AI Interest Quiz</h1>
-                <p>Discover your career interests</p>
-            </div>
-            <div id="quiz-container">
-                <!-- Quiz will be rendered here by JS -->
-            </div>
+    <div class="quiz-container">
+        <div class="header">
+            <h1>🧠 AI Interest Quiz</h1>
+            <button class="btn-back" onclick="window.location.href='dashboard.html'">← Back</button>
+        </div>
+        <p class="sub">Discover your career interests</p>
+        
+        <div id="quizContent">
+            <!-- Dynamic content loaded by JS -->
         </div>
     </div>
 
-    <script src="js/firebase-config.js"></script>
-    <script src="js/quiz.js"></script>
+    <script type="module">
+        import { auth, db, onAuthStateChanged, doc, getDoc, updateDoc } from './js/firebase-config.js';
+
+        // Auth check
+        onAuthStateChanged(auth, async (user) => {
+            if (!user) {
+                window.location.href = 'login.html';
+                return;
+            }
+            startQuiz();
+        });
+
+        // ========================================
+        // QUIZ QUESTIONS
+        // ========================================
+        const questions = [
+            { 
+                q: "Which activity excites you the most?", 
+                options: [
+                    "🔬 Doing science experiments", 
+                    "💻 Building websites or apps", 
+                    "🏥 Helping sick people get better", 
+                    "🎨 Creating art or designs", 
+                    "📊 Solving math problems"
+                ] 
+            },
+            { 
+                q: "What school subject do you enjoy most?", 
+                options: [
+                    "🧬 Biology", 
+                    "💻 Computer Science", 
+                    "🧪 Chemistry", 
+                    "🎭 Art & Design", 
+                    "📐 Mathematics"
+                ] 
+            },
+            { 
+                q: "Where do you see yourself working?", 
+                options: [
+                    "🏥 Hospital or clinic", 
+                    "💼 Office with computers", 
+                    "🔬 Research laboratory", 
+                    "🎨 Creative studio", 
+                    "🏛️ University or school"
+                ] 
+            },
+            { 
+                q: "What kind of problems do you like solving?", 
+                options: [
+                    "🧬 Medical/health problems", 
+                    "💻 Technical/software problems", 
+                    "🔬 Scientific research problems", 
+                    "🎨 Creative/design problems", 
+                    "📊 Business/financial problems"
+                ] 
+            },
+            { 
+                q: "Which skill would you most like to develop?", 
+                options: [
+                    "🩺 Medical skills", 
+                    "💻 Coding & programming", 
+                    "🔬 Research skills", 
+                    "🎨 Creative skills", 
+                    "📈 Business skills"
+                ] 
+            },
+            { 
+                q: "What's your ideal work environment?", 
+                options: [
+                    "🏥 Fast-paced medical environment", 
+                    "💻 Tech startup or office", 
+                    "🔬 Quiet research lab", 
+                    "🎨 Creative studio or gallery", 
+                    "🏛️ Corporate office"
+                ] 
+            },
+            { 
+                q: "Which career sounds most appealing?", 
+                options: [
+                    "🩺 Doctor or Nurse", 
+                    "💻 Software Engineer", 
+                    "🔬 Research Scientist", 
+                    "🎨 Graphic Designer", 
+                    "📊 Business Analyst"
+                ] 
+            },
+            { 
+                q: "What do you want your job to achieve?", 
+                options: [
+                    "🩺 Save lives and improve health", 
+                    "💻 Build innovative technology", 
+                    "🔬 Discover new knowledge", 
+                    "🎨 Create beautiful things", 
+                    "📊 Help businesses grow"
+                ] 
+            },
+            { 
+                q: "Which activity would you do for fun?", 
+                options: [
+                    "🧬 Learning about the human body", 
+                    "💻 Building a computer game", 
+                    "🔬 Doing science experiments", 
+                    "🎨 Painting or drawing", 
+                    "📊 Playing strategy games"
+                ] 
+            },
+            { 
+                q: "What's your biggest career goal?", 
+                options: [
+                    "🩺 Become a leading doctor", 
+                    "💻 Create world-changing software", 
+                    "🔬 Win a Nobel Prize in science", 
+                    "🎨 Become a famous artist", 
+                    "📊 Build a successful company"
+                ] 
+            }
+        ];
+
+        // ========================================
+        // QUIZ STATE
+        // ========================================
+        let currentQuestion = 0;
+        let answers = [];
+        let quizStarted = false;
+
+        // ========================================
+        // START QUIZ
+        // ========================================
+        window.startQuiz = function() {
+            currentQuestion = 0;
+            answers = [];
+            quizStarted = true;
+            renderQuestion();
+        };
+
+        // ========================================
+        // RENDER QUESTION
+        // ========================================
+        function renderQuestion() {
+            const container = document.getElementById('quizContent');
+            
+            if (currentQuestion >= questions.length) {
+                showResults();
+                return;
+            }
+
+            const q = questions[currentQuestion];
+            const progress = ((currentQuestion) / questions.length) * 100;
+            
+            container.innerHTML = `
+                <div class="quiz-progress">
+                    <div class="bar" style="width: ${progress}%"></div>
+                </div>
+                <div class="q-counter">${currentQuestion + 1} of ${questions.length}</div>
+                <div class="quiz-question">
+                    <div class="q-text">${q.q}</div>
+                    <div class="quiz-options" id="optionsContainer">
+                        ${q.options.map((opt, idx) => `
+                            <label class="option-item" data-idx="${idx}">
+                                <input type="radio" name="quiz" value="${idx}">
+                                ${opt}
+                            </label>
+                        `).join('')}
+                    </div>
+                </div>
+                <button class="btn-submit" id="nextBtn" disabled onclick="nextQuestion()">
+                    ${currentQuestion === questions.length - 1 ? '🎉 See Results' : 'Next Question →'}
+                </button>
+            `;
+
+            // Add click event to labels for better UX
+            document.querySelectorAll('.option-item').forEach(label => {
+                label.addEventListener('click', function() {
+                    const radio = this.querySelector('input[type="radio"]');
+                    radio.checked = true;
+                    document.getElementById('nextBtn').disabled = false;
+                    // Highlight selected
+                    document.querySelectorAll('.option-item').forEach(l => l.classList.remove('selected'));
+                    this.classList.add('selected');
+                });
+            });
+        }
+
+        // ========================================
+        // NEXT QUESTION
+        // ========================================
+        window.nextQuestion = function() {
+            const selected = document.querySelector('input[name="quiz"]:checked');
+            if (!selected) return;
+            
+            answers.push(parseInt(selected.value));
+            currentQuestion++;
+            renderQuestion();
+        };
+
+        // ========================================
+        // SHOW RESULTS
+        // ========================================
+        function showResults() {
+            const container = document.getElementById('quizContent');
+            
+            // Calculate scores
+            const scores = { medicine: 0, engineering: 0, science: 0, arts: 0, business: 0 };
+            const careerNames = { 
+                medicine: '🩺 Medicine & Healthcare', 
+                engineering: '💻 Computer Science & Engineering', 
+                science: '🔬 Science & Research', 
+                arts: '🎨 Arts & Design', 
+                business: '📊 Business & Finance' 
+            };
+            const careerEmojis = { 
+                medicine: '🩺', 
+                engineering: '💻', 
+                science: '🔬', 
+                arts: '🎨', 
+                business: '📊' 
+            };
+            const careerColors = {
+                medicine: '#E83A6B',
+                engineering: '#2D7DD2',
+                science: '#6C3CE1',
+                arts: '#FF6B35',
+                business: '#FFD93D'
+            };
+            const careerDescriptions = {
+                medicine: 'You are passionate about helping others. Consider: Medicine, Nursing, Dentistry, Pharmacy, or Public Health.',
+                engineering: 'You love technology. Consider: Software Engineering, Web Development, AI, Robotics, or Data Science.',
+                science: 'You are curious about the world. Consider: Research Science, Chemistry, Physics, or Biotechnology.',
+                arts: 'You have a creative vision. Consider: Graphic Design, Animation, Interior Design, Architecture, or Film.',
+                business: 'You have strong analytical skills. Consider: Finance, Marketing, Management, or Consulting.'
+            };
+
+            // Score each answer
+            answers.forEach((ans, idx) => {
+                const q = questions[idx];
+                const opt = q.options[ans];
+                if (!opt) return;
+                
+                if (opt.includes('🩺') || opt.includes('doctor') || opt.includes('medical') || 
+                    opt.includes('hospital') || opt.includes('nurse') || opt.includes('health')) {
+                    scores.medicine++;
+                } else if (opt.includes('💻') || opt.includes('code') || opt.includes('programming') || 
+                    opt.includes('software') || opt.includes('website') || opt.includes('app') || opt.includes('tech')) {
+                    scores.engineering++;
+                } else if (opt.includes('🔬') || opt.includes('research') || opt.includes('science') || 
+                    opt.includes('experiment') || opt.includes('laboratory')) {
+                    scores.science++;
+                } else if (opt.includes('🎨') || opt.includes('art') || opt.includes('design') || 
+                    opt.includes('creative') || opt.includes('paint') || opt.includes('draw') || opt.includes('studio')) {
+                    scores.arts++;
+                } else if (opt.includes('📊') || opt.includes('business') || opt.includes('financial') || 
+                    opt.includes('strategy') || opt.includes('company') || opt.includes('analyst')) {
+                    scores.business++;
+                }
+            });
+
+            // Find top career
+            let topCareer = '';
+            let topScore = 0;
+            for (const [key, val] of Object.entries(scores)) {
+                if (val > topScore) {
+                    topScore = val;
+                    topCareer = key;
+                }
+            }
+
+            // If tie, pick first
+            if (!topCareer) topCareer = 'engineering';
+
+            // Save interests to Firestore
+            const interests = Object.keys(scores).filter(key => scores[key] > 0);
+            const user = auth.currentUser;
+            if (user) {
+                updateDoc(doc(db, 'students', user.uid), {
+                    interests: interests,
+                    profileCompleted: true,
+                    onboardingPhase: 2,
+                    profileStrength: 20
+                }).catch(console.error);
+            }
+
+            // Store in localStorage for activity matching
+            localStorage.setItem('quizScores', JSON.stringify(scores));
+            localStorage.setItem('interests', JSON.stringify(interests));
+
+            // Build results HTML
+            let html = `
+                <div class="result-card">
+                    <div class="emoji">${careerEmojis[topCareer] || '🌟'}</div>
+                    <h3>${careerNames[topCareer] || 'Career'}</h3>
+                    <p>${careerDescriptions[topCareer] || 'Explore your career options!'}</p>
+                </div>
+                <div style="background: #F8F4FF; border-radius: 16px; padding: 16px; margin: 15px 0;">
+                    <h4 style="color: #6C3CE1; margin-bottom: 12px;">📊 Your Interest Scores</h4>
+                    ${Object.entries(scores).map(([key, val]) => {
+                        const pct = Math.round((val / questions.length) * 100);
+                        const color = pct > 50 ? careerColors[key] : '#FFD93D';
+                        return `
+                            <div class="interest-score">
+                                <span class="label">${careerNames[key]}</span>
+                                <div class="bar-bg">
+                                    <div class="bar-fill" style="width: ${pct}%; background: ${color};"></div>
+                                </div>
+                                <span class="pct">${pct}%</span>
+                            </div>
+                        `;
+                    }).join('')}
+                </div>
+                <div style="background: #E8F5E9; border-radius: 12px; padding: 12px; text-align: center; margin: 10px 0;">
+                    <span style="color: #2E7D32; font-weight: 600;">✅ Quiz completed! Your interests have been saved.</span>
+                </div>
+                <div class="result-actions">
+                    <button class="btn-view-activities" onclick="window.location.href='activities.html'">🎯 View Activities</button>
+                    <button class="btn-retake" onclick="startQuiz()">🔄 Retake Quiz</button>
+                </div>
+                <div style="text-align: center; margin-top: 15px;">
+                    <button class="btn-back" onclick="window.location.href='dashboard.html'" style="font-size: 14px; padding: 8px 20px;">← Back to Dashboard</button>
+                </div>
+            `;
+
+            container.innerHTML = html;
+        }
+
+        // Make functions globally available
+        window.startQuiz = startQuiz;
+        window.nextQuestion = nextQuestion;
+
+        // Start quiz immediately
+        startQuiz();
+
+        console.log('🧠 Quiz loaded successfully!');
+    </script>
 </body>
 </html>
