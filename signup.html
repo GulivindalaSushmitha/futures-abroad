@@ -4,10 +4,6 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Sign Up - Futures Abroad</title>
-    <!-- Firebase SDKs (v9 compat) -->
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
     <link rel="stylesheet" href="css/style.css" />
     <style>
         * {
@@ -113,7 +109,6 @@
             display: block;
             margin-top: 4px;
         }
-
         .grade-selector {
             display: flex;
             gap: 10px;
@@ -141,7 +136,6 @@
             color: white;
             border-color: #6C3CE1;
         }
-
         .interest-tags {
             display: flex;
             flex-wrap: wrap;
@@ -168,7 +162,6 @@
             color: white;
             border-color: #6C3CE1;
         }
-
         .form-navigation {
             display: flex;
             gap: 12px;
@@ -222,7 +215,6 @@
             transform: translateY(-2px);
             box-shadow: 0 4px 20px rgba(108,60,225,0.35);
         }
-
         .auth-footer {
             text-align: center;
             margin-top: 20px;
@@ -235,7 +227,6 @@
             text-decoration: none;
         }
         .auth-footer a:hover { text-decoration: underline; }
-
         .message-box {
             padding: 12px 16px;
             border-radius: 12px;
@@ -254,6 +245,10 @@
             background: #E8F5E9;
             color: #2E7D32;
             border-left: 4px solid #2E7D32;
+        }
+        .message-box.error a {
+            color: #6C3CE1;
+            font-weight: 700;
         }
         .btn-app-redirect {
             display: inline-block;
@@ -387,11 +382,15 @@
     </div>
 
     <!-- ======================================== -->
-    <!-- FIREBASE INITIALIZATION (FIXED) -->
+    <!-- FIREBASE SETUP - COMPLETE FIX -->
     <!-- ======================================== -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+
     <script>
         // ============================================================
-        // FIREBASE CONFIGURATION - INITIALIZE HERE!
+        // FIREBASE CONFIGURATION - MUST BE HERE!
         // ============================================================
         const firebaseConfig = {
             apiKey: "AIzaSyBGJcOifwfWlGeFsFCXhdC67fyRTBOvfGQ",
@@ -402,14 +401,13 @@
             appId: "1:143399880838:web:c2232759fcbc1fa2ed2907"
         };
 
-        // Initialize Firebase (if not already initialized)
+        // Initialize Firebase - THIS IS THE KEY FIX!
         if (!firebase.apps.length) {
             firebase.initializeApp(firebaseConfig);
-            console.log("🔥 Firebase initialized successfully from signup.html!");
-        } else {
-            console.log("🔥 Firebase already initialized.");
+            console.log("🔥 Firebase initialized from signup.html!");
         }
 
+        // Now we can safely use auth and firestore
         const auth = firebase.auth();
         const db = firebase.firestore();
 
