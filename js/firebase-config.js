@@ -1,5 +1,5 @@
 // ============================================================
-// js/firebase-config.js - Firebase Configuration (FIXED)
+// js/firebase-config.js - Firebase Configuration (UPDATED)
 // ============================================================
 
 // Import Firebase SDKs (using v9 modular SDK)
@@ -23,7 +23,8 @@ import {
     arrayRemove,
     query, 
     where,
-    deleteDoc
+    deleteDoc,
+    serverTimestamp // ADD THIS - for timestamps
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 // Your web app's Firebase configuration
@@ -59,7 +60,8 @@ export {
     arrayRemove,
     query, 
     where,
-    deleteDoc
+    deleteDoc,
+    serverTimestamp // ADD THIS
 };
 
 console.log("🔥 Firebase initialized successfully!");
