@@ -6,6 +6,179 @@
     <title>Futures Abroad - Student App</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="css/student-app.css" />
+    <style>
+        /* Additional styles for new features */
+        .reminder-toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, #6C3CE1, #a855f7);
+            color: white;
+            padding: 16px 24px;
+            border-radius: 16px;
+            box-shadow: 0 8px 30px rgba(108, 60, 225, 0.3);
+            z-index: 10000;
+            max-width: 400px;
+            animation: slideUp 0.5s ease;
+            font-family: 'Inter', sans-serif;
+            font-weight: 500;
+        }
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .calendar-section {
+            background: #f8f6ff;
+            border-radius: 16px;
+            padding: 16px;
+            margin: 16px 0;
+        }
+        .calendar-event {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 14px;
+            background: white;
+            border-radius: 10px;
+            margin-bottom: 6px;
+            border-left: 4px solid #6C3CE1;
+        }
+        .calendar-event:last-child {
+            margin-bottom: 0;
+        }
+        .calendar-event .event-icon {
+            font-size: 20px;
+        }
+        .calendar-event .event-details {
+            flex: 1;
+        }
+        .calendar-event .event-details strong {
+            color: #1a1a2e;
+            font-size: 0.95rem;
+        }
+        .calendar-event .event-details .event-date {
+            font-size: 0.85rem;
+            color: #6b6b8a;
+        }
+        .calendar-event .event-badge {
+            background: #c44536;
+            color: white;
+            padding: 2px 12px;
+            border-radius: 50px;
+            font-size: 0.7rem;
+            font-weight: 700;
+        }
+        .calendar-event .event-badge.upcoming {
+            background: #f59e0b;
+        }
+        .external-link-box {
+            margin: 16px 0;
+            padding: 16px;
+            background: #f0f7ff;
+            border-radius: 12px;
+            border: 2px dashed #6C3CE1;
+        }
+        .external-link-box p {
+            color: #1a1a2e;
+            font-weight: 600;
+        }
+        .external-link-box .sub-text {
+            color: #4a4a6a;
+            font-size: 14px;
+            font-weight: 400;
+        }
+        .external-link-box .btn-external {
+            display: inline-block;
+            margin-top: 8px;
+            padding: 10px 24px;
+            background: #6C3CE1;
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s;
+            font-family: inherit;
+        }
+        .external-link-box .btn-external:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(108, 60, 225, 0.3);
+        }
+        .reminder-schedule {
+            font-size: 0.8rem;
+            color: #6b6b8a;
+            padding: 8px 12px;
+            background: #fef3c7;
+            border-radius: 8px;
+            margin: 8px 0;
+        }
+        .reminder-schedule strong {
+            color: #b45309;
+        }
+        /* Completed badge */
+        .completed-badge {
+            display: inline-block;
+            background: #dcfce7;
+            color: #16a34a;
+            padding: 2px 12px;
+            border-radius: 50px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            margin-top: 6px;
+        }
+        /* Notification permission prompt */
+        .notification-prompt {
+            background: #fef3c7;
+            border-radius: 12px;
+            padding: 12px 16px;
+            margin: 10px 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .notification-prompt p {
+            color: #78350f;
+            font-size: 0.9rem;
+            margin: 0;
+        }
+        .notification-prompt .btn-enable {
+            background: #78350f;
+            color: white;
+            border: none;
+            padding: 6px 20px;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: inherit;
+        }
+        .notification-prompt .btn-enable:hover {
+            background: #451a03;
+        }
+        @media (max-width: 768px) {
+            .calendar-event {
+                flex-wrap: wrap;
+            }
+            .reminder-toast {
+                left: 20px;
+                right: 20px;
+                max-width: none;
+                font-size: 0.9rem;
+                padding: 14px 18px;
+            }
+            .notification-prompt {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+    </style>
 </head>
 <body>
     <!-- ===== MODERN HEADER ===== -->
@@ -73,14 +246,14 @@
                         </form>
                     </div>
 
-                    <!-- Step 2: Quiz -->
+                    <!-- Step 2: Adaptive Quiz -->
                     <div id="step2-quiz" style="display: none;">
                         <div class="quiz-container">
                             <div class="quiz-progress-bar">
                                 <div class="quiz-progress-fill" id="quizProgressFill" style="width: 0%;"></div>
                             </div>
                             <div class="quiz-header">
-                                <span class="quiz-step" id="quizProgress">Question 1 of 6</span>
+                                <span class="quiz-step" id="quizProgress">Question 1 of 8</span>
                                 <h2 id="quizQuestion">What subject do you look forward to most at school?</h2>
                             </div>
                             <div class="quiz-options-grid" id="quizOptions">
@@ -134,6 +307,7 @@
                         <option value="volunteering">🤝 Volunteering</option>
                         <option value="course">📚 Course</option>
                         <option value="workshop">🔧 Workshop</option>
+                        <option value="research">🔬 Research</option>
                     </select>
                     <select id="filterCost" class="filter-select-modern">
                         <option value="all">💰 All Costs</option>
@@ -177,6 +351,99 @@
             </div>
         </div>
     </main>
+
+    <!-- Reminder Toast Container -->
+    <div id="reminderToastContainer"></div>
+
+    <!-- Notification Permission Prompt -->
+    <div id="notificationPrompt" class="notification-prompt" style="display: none; position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%); z-index: 9999; max-width: 500px; width: 90%; background: #fef3c7; border-radius: 12px; padding: 12px 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.1);">
+        <p>🔔 Enable notifications to receive registration reminders</p>
+        <button id="enableNotificationsBtn" class="btn-enable">Enable Notifications</button>
+    </div>
+
+    <script>
+        // ========================================
+        // NOTIFICATION PERMISSION
+        // ========================================
+        (function setupNotifications() {
+            const prompt = document.getElementById('notificationPrompt');
+            
+            // Check if notifications are supported
+            if (!('Notification' in window)) {
+                return;
+            }
+            
+            // Check permission status
+            if (Notification.permission === 'default') {
+                prompt.style.display = 'flex';
+            }
+            
+            document.getElementById('enableNotificationsBtn')?.addEventListener('click', async () => {
+                const result = await Notification.requestPermission();
+                if (result === 'granted') {
+                    prompt.style.display = 'none';
+                    console.log('🔔 Notifications enabled!');
+                    // Show a test notification
+                    new Notification('✅ Notifications Enabled!', {
+                        body: 'You will now receive registration reminders.',
+                        icon: 'https://gulivindalasushmitha.github.io/futures-abroad/favicon.ico'
+                    });
+                } else {
+                    prompt.style.display = 'none';
+                    console.log('❌ Notifications denied');
+                }
+            });
+            
+            // Hide after 10 seconds if not interacted
+            setTimeout(() => {
+                if (prompt.style.display !== 'none') {
+                    prompt.style.display = 'none';
+                }
+            }, 10000);
+        })();
+
+        // ========================================
+        // REMINDER TOAST FUNCTION
+        // ========================================
+        window.showReminderToast = function(message) {
+            const container = document.getElementById('reminderToastContainer');
+            if (!container) return;
+            
+            const toast = document.createElement('div');
+            toast.className = 'reminder-toast';
+            toast.textContent = message;
+            container.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transition = 'opacity 0.5s';
+                setTimeout(() => toast.remove(), 500);
+            }, 6000);
+        };
+
+        // ========================================
+        // CHECK FOR REMINDERS ON LOAD
+        // ========================================
+        document.addEventListener('DOMContentLoaded', () => {
+            // Check if there are any reminders in localStorage
+            try {
+                const reminders = JSON.parse(localStorage.getItem('reminders') || '[]');
+                const pending = reminders.filter(r => !r.sent);
+                if (pending.length > 0) {
+                    console.log(`⏰ ${pending.length} pending reminders found`);
+                }
+            } catch (e) {
+                // Ignore
+            }
+        });
+
+        console.log('🚀 Student App loaded with full Phase 1, 2, 3 features!');
+        console.log('✅ Adaptive branching quiz');
+        console.log('✅ Vector matching for activities');
+        console.log('✅ In-app calendar');
+        console.log('✅ Email & push reminders (2w, 1w, 3d, 1d)');
+        console.log('✅ Deep-linking to external registration');
+    </script>
 
     <script type="module">
         import './js/student-app.js';
