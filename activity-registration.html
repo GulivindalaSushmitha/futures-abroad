@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Activity Registration | Futures Abroad</title>
+    <!-- Link to your main styles and the new phase 3 styles -->
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/activity-registration.css" />
+</head>
+<body>
+    <!-- Header (Consistent with your site) -->
+    <header class="main-header">
+        <div class="container">
+            <div class="logo">
+                <a href="index.html">Futures Abroad</a>
+            </div>
+            <nav>
+                <a href="dashboard.html">Dashboard</a>
+                <a href="portfolio.html">My Portfolio</a>
+                <a href="#" id="logout-link">Logout</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container registration-main">
+        <!-- Activity Summary Section -->
+        <section class="activity-summary">
+            <h1>You're registering for:</h1>
+            <h2 id="activity-name">Loading...</h2>
+            <p class="activity-type">Type: <span id="activity-type">--</span></p>
+            <div class="readiness-summary">
+                <h3>📋 Your Readiness Summary</h3>
+                <p id="readiness-text">Loading your personalised registration guide...</p>
+            </div>
+        </section>
+
+        <!-- Checklist Section -->
+        <section class="checklist-section">
+            <h3>✅ Registration Checklist</h3>
+            <p class="deadline-info">Main Deadline: <span id="main-deadline">--</span></p>
+            <ul id="checklist-container">
+                <!-- Checklist items will be inserted here by JavaScript -->
+            </ul>
+        </section>
+
+        <!-- Action Buttons -->
+        <section class="registration-actions">
+            <p class="registration-note">Complete all steps in the checklist to enable registration.</p>
+            <button id="mark-registered-btn" class="btn btn-primary" disabled>Mark as Registered</button>
+            <a href="portfolio.html" class="btn btn-secondary">View My Portfolio</a>
+        </section>
+    </main>
+
+    <script type="module">
+        // Import the phase 3 logic
+        import './js/activity-registration.js';
+    </script>
+</body>
+</html>
