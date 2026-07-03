@@ -20,15 +20,12 @@
     </header>
 
     <main class="app-main">
-        <!-- ======================================== -->
-        <!-- PHASE 1: ONBOARDING & INTEREST DISCOVERY -->
-        <!-- ======================================== -->
+        <!-- PHASE 1: ONBOARDING -->
         <section id="phase1" class="phase active">
             <div class="container phase-container">
                 <h1>🚀 Welcome to Futures Abroad</h1>
                 <p class="subtitle">Let's discover your interests and build your future</p>
                 
-                <!-- Step 1: Basic Profile -->
                 <div id="step1-profile">
                     <form id="profileForm">
                         <div class="form-group">
@@ -60,7 +57,6 @@
                     </form>
                 </div>
 
-                <!-- Step 2: AI Interest Quiz (Chat-style) -->
                 <div id="step2-quiz" style="display: none;">
                     <div class="quiz-header">
                         <h2>🧠 Let's Understand Your Interests</h2>
@@ -80,7 +76,6 @@
                     </div>
                 </div>
 
-                <!-- Step 3: Interest Profile Review -->
                 <div id="step3-profile-review" style="display: none;">
                     <h2>🎯 Your Interest Profile</h2>
                     <p class="subtitle">Based on your answers, we've identified your key interest areas:</p>
@@ -93,9 +88,7 @@
             </div>
         </section>
 
-        <!-- ======================================== -->
-        <!-- PHASE 2: CURATED ACTIVITY RECOMMENDATIONS -->
-        <!-- ======================================== -->
+        <!-- PHASE 2: ACTIVITIES -->
         <section id="phase2" class="phase">
             <div class="container phase-container">
                 <div class="phase2-header">
@@ -108,7 +101,6 @@
                     </div>
                 </div>
 
-                <!-- Filters -->
                 <div class="filters-section">
                     <select id="filterType" class="filter-select">
                         <option value="all">All Types</option>
@@ -136,14 +128,11 @@
                     <button id="applyFiltersBtn" class="btn-secondary btn-sm">Apply Filters</button>
                 </div>
 
-                <!-- Activity Cards Grid -->
                 <div id="activityCardsGrid" class="activity-grid"></div>
             </div>
         </section>
 
-        <!-- ======================================== -->
-        <!-- PHASE 3: ACTIVITY SELECTION & REGISTRATION -->
-        <!-- ======================================== -->
+        <!-- PHASE 3: REGISTRATION -->
         <section id="phase3" class="phase">
             <div class="container phase-container">
                 <div class="phase3-header">
@@ -154,9 +143,7 @@
             </div>
         </section>
 
-        <!-- ======================================== -->
-        <!-- ACTIVITY DETAIL MODAL (Phase 2) -->
-        <!-- ======================================== -->
+        <!-- MODAL -->
         <div id="activityDetailModal" class="modal">
             <div class="modal-content">
                 <span class="modal-close" id="closeModalBtn">&times;</span>
@@ -166,7 +153,6 @@
     </main>
 
     <script type="module">
-        // Import all the phase logic
         import './js/student-app.js';
     </script>
 </body>
