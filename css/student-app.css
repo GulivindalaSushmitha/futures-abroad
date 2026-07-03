@@ -1,548 +1,665 @@
-/* ============================================================
-   css/student-app.css - Complete Styles for Phases 1, 2, 3
-   ============================================================ */
-
-.app-header {
-    background: white;
-    border-bottom: 1px solid #e8e0f0;
-    padding: 15px 0;
-    position: sticky;
-    top: 0;
-    z-index: 100;
-}
-
-.app-header .container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 20px;
-}
-
-.app-header .logo {
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: #2D1B4E;
-}
-
-.app-header nav {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-}
-
-.app-main {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 20px;
-}
-
-.phase {
-    display: none;
-    animation: fadeIn 0.5s ease;
-}
-
-.phase.active {
-    display: block;
-}
-
-.phase-container {
-    background: white;
-    border-radius: 24px;
-    padding: 40px;
-    box-shadow: 0 10px 40px rgba(108, 60, 225, 0.08);
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-#phase1 h1 {
-    font-size: 2.2rem;
-    color: #2D1B4E;
-    margin-bottom: 8px;
-}
-
-#phase1 .subtitle {
-    color: #666;
-    font-size: 1.1rem;
-    margin-bottom: 30px;
-}
-
-.form-group {
-    margin-bottom: 18px;
-}
-
-.form-group label {
-    display: block;
-    font-weight: 600;
-    color: #2D1B4E;
-    margin-bottom: 5px;
-    font-size: 0.95rem;
-}
-
-.form-group input,
-.form-group select {
-    width: 100%;
-    padding: 12px 16px;
-    border: 2px solid #e8e0f0;
-    border-radius: 12px;
-    font-size: 1rem;
-    font-family: inherit;
-    transition: border-color 0.3s;
-}
-
-.form-group input:focus,
-.form-group select:focus {
-    outline: none;
-    border-color: #6C3CE1;
-}
-
-.quiz-header {
-    margin-bottom: 20px;
-}
-
-.quiz-header h2 {
-    color: #2D1B4E;
-    margin-bottom: 4px;
-}
-
-.quiz-progress {
-    color: #888;
-    font-size: 0.9rem;
-}
-
-.chat-container {
-    background: #f8f4ff;
-    border-radius: 16px;
-    padding: 20px;
-    min-height: 200px;
-}
-
-.chat-message {
-    display: flex;
-    gap: 12px;
-    align-items: flex-start;
-}
-
-.chat-message .avatar {
-    font-size: 28px;
-    min-width: 40px;
-}
-
-.chat-message .message-content {
-    flex: 1;
-}
-
-.chat-message .message-content p {
-    font-size: 1.1rem;
-    color: #2D1B4E;
-    font-weight: 600;
-    margin-bottom: 12px;
-}
-
-.quiz-options {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-}
-
-.quiz-option {
-    padding: 12px 18px;
-    border: 2px solid #e8e0f0;
-    border-radius: 12px;
-    background: white;
-    cursor: pointer;
-    transition: all 0.3s;
-    text-align: left;
-    font-size: 1rem;
-    font-family: inherit;
-}
-
-.quiz-option:hover {
-    border-color: #6C3CE1;
-    background: #f8f4ff;
-}
-
-.quiz-option.selected {
-    border-color: #6C3CE1;
-    background: #f0e6ff;
-    font-weight: 600;
-}
-
-.quiz-controls {
-    margin-top: 20px;
-    display: flex;
-    justify-content: flex-end;
-}
-
-.interest-profile {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 12px;
-    margin: 20px 0;
-}
-
-.interest-tag {
-    background: #f0e6ff;
-    color: #6C3CE1;
-    padding: 8px 20px;
-    border-radius: 50px;
-    font-weight: 600;
-    font-size: 1rem;
-}
-
-.interest-tag .explanation {
-    font-weight: 400;
-    color: #555;
-    font-size: 0.85rem;
-}
-
-.profile-actions {
-    display: flex;
-    gap: 12px;
-    margin-top: 20px;
-}
-
-.phase2-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    flex-wrap: wrap;
-    margin-bottom: 15px;
-}
-
-.phase2-header h2 {
-    color: #2D1B4E;
-    margin-bottom: 4px;
-}
-
-.interests-tags {
-    color: #6C3CE1;
-    font-weight: 600;
-    font-size: 0.95rem;
-}
-
-.filters-section {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    margin-bottom: 25px;
-    padding: 15px;
-    background: #f8f4ff;
-    border-radius: 16px;
-}
-
-.filter-select {
-    padding: 8px 14px;
-    border: 2px solid #e8e0f0;
-    border-radius: 50px;
-    font-family: inherit;
-    font-size: 0.9rem;
-    background: white;
-    cursor: pointer;
-}
-
-.filter-select:focus {
-    outline: none;
-    border-color: #6C3CE1;
-}
-
-.activity-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 20px;
-}
-
-.activity-card {
-    background: white;
-    border-radius: 16px;
-    padding: 20px;
-    box-shadow: 0 4px 15px rgba(108, 60, 225, 0.08);
-    border: 2px solid #f0e6ff;
-    transition: all 0.3s;
-    cursor: pointer;
-    position: relative;
-}
-
-.activity-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 8px 30px rgba(108, 60, 225, 0.12);
-}
-
-.activity-card .activity-badge {
-    display: inline-block;
-    background: #6C3CE1;
-    color: white;
-    padding: 4px 14px;
-    border-radius: 50px;
-    font-size: 12px;
-    font-weight: 700;
-}
-
-.activity-card .match-badge {
-    float: right;
-    font-size: 14px;
-    font-weight: 600;
-    color: #888;
-}
-
-.activity-card h3 {
-    color: #2D1B4E;
-    margin: 10px 0 8px;
-    font-size: 1.1rem;
-}
-
-.activity-card .activity-meta {
-    display: flex;
-    gap: 15px;
-    flex-wrap: wrap;
-    font-size: 14px;
-    color: #555;
-    margin: 8px 0;
-}
-
-.activity-card .activity-rationale {
-    background: #f8f4ff;
-    border-radius: 12px;
-    padding: 12px;
-    font-size: 14px;
-    color: #555;
-    border-left: 4px solid #6C3CE1;
-    margin: 10px 0;
-}
-
-.activity-card .activity-rationale strong {
-    color: #6C3CE1;
-}
-
-.activity-card .activity-tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 5px;
-    margin-top: 10px;
-}
-
-.activity-card .activity-tags span {
-    background: #f0e6ff;
-    color: #6C3CE1;
-    padding: 2px 12px;
-    border-radius: 50px;
-    font-size: 11px;
-    font-weight: 600;
-}
-
-.phase3-header {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    margin-bottom: 20px;
-    flex-wrap: wrap;
-}
-
-.phase3-header h2 {
-    color: #2D1B4E;
-    margin: 0;
-}
-
-.readiness-box {
-    background: #f8f4ff;
-    border-radius: 12px;
-    padding: 16px 20px;
-    border-left: 4px solid #6C3CE1;
-    margin: 15px 0;
-}
-
-.readiness-box strong {
-    color: #6C3CE1;
-}
-
-.checklist-item {
-    background: #f9fafc;
-    border: 1px solid #e2e8f0;
-    border-radius: 12px;
-    padding: 14px 18px;
-    margin-bottom: 10px;
-    display: flex;
-    align-items: flex-start;
-    gap: 14px;
-    transition: all 0.3s;
-}
-
-.checklist-item.completed {
-    background: #eaf9ed;
-    border-color: #a3d8b0;
-}
-
-.checklist-item input[type="checkbox"] {
-    width: 20px;
-    height: 20px;
-    margin-top: 2px;
-    cursor: pointer;
-    flex-shrink: 0;
-}
-
-.checklist-item-content {
-    flex: 1;
-}
-
-.checklist-item-title {
-    font-weight: 600;
-    color: #1a2b4c;
-}
-
-.checklist-item-desc {
-    font-size: 0.9rem;
-    color: #5a6c82;
-    display: block;
-}
-
-.checklist-item-due {
-    font-size: 0.8rem;
-    color: #888;
-    display: block;
-    margin-top: 3px;
-}
-
-.registration-actions {
-    text-align: center;
-    margin-top: 25px;
-    padding-top: 20px;
-    border-top: 1px solid #e8e0f0;
-}
-
-.modal {
-    display: none;
-    position: fixed;
-    z-index: 1000;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0,0,0,0.5);
-    justify-content: center;
-    align-items: center;
-}
-
-.modal-content {
-    background: white;
-    border-radius: 24px;
-    padding: 35px;
-    max-width: 600px;
-    width: 90%;
-    max-height: 90vh;
-    overflow-y: auto;
-    position: relative;
-    animation: fadeIn 0.3s ease;
-}
-
-.modal-close {
-    position: absolute;
-    top: 15px;
-    right: 20px;
-    font-size: 28px;
-    cursor: pointer;
-    color: #888;
-}
-
-.modal-close:hover {
-    color: #333;
-}
-
-.btn-primary {
-    background: #6C3CE1;
-    color: white;
-    border: none;
-    padding: 12px 30px;
-    border-radius: 50px;
-    font-size: 1rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s;
-    font-family: inherit;
-}
-
-.btn-primary:hover:not(:disabled) {
-    background: #5a2fc9;
-    transform: translateY(-2px);
-}
-
-.btn-primary:disabled {
-    background: #c4b5d9;
-    cursor: not-allowed;
-}
-
-.btn-full {
-    width: 100%;
-}
-
-.btn-secondary {
-    background: transparent;
-    color: #6C3CE1;
-    border: 2px solid #6C3CE1;
-    padding: 10px 28px;
-    border-radius: 50px;
-    font-size: 1rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s;
-    font-family: inherit;
-}
-
-.btn-secondary:hover {
-    background: #f5f0ff;
-}
-
-.btn-sm {
-    padding: 6px 18px;
-    font-size: 0.85rem;
-}
-
-.btn-outline {
-    background: transparent;
-    color: #2D1B4E;
-    border: 2px solid #e8e0f0;
-    padding: 6px 16px;
-    border-radius: 50px;
-    font-size: 0.9rem;
-    cursor: pointer;
-    font-family: inherit;
-    transition: all 0.3s;
-}
-
-.btn-outline:hover {
-    border-color: #6C3CE1;
-    color: #6C3CE1;
-}
-
-@media (max-width: 768px) {
-    .phase-container {
-        padding: 20px;
+// ============================================================
+// js/student-app.js - Complete Phases 1, 2, 3
+// ============================================================
+
+import { 
+    auth, 
+    db, 
+    onAuthStateChanged,
+    signOut,
+    collection, 
+    doc, 
+    getDoc, 
+    getDocs, 
+    setDoc, 
+    updateDoc, 
+    arrayUnion,
+    query, 
+    where,
+    serverTimestamp
+} from './firebase-config.js';
+
+// ========================================
+// STATE
+// ========================================
+const state = {
+    user: null,
+    studentProfile: null,
+    interests: [],
+    currentQuestion: 0,
+    selectedActivity: null,
+    registeredActivities: [],
+    allActivities: [],
+    filteredActivities: []
+};
+
+// ========================================
+// QUIZ DATA
+// ========================================
+const quizQuestions = [
+    {
+        question: "What subject do you look forward to most at school?",
+        options: ["Biology & Life Sciences", "Math & Physics", "Computer Science", "History & Social Studies", "Art & Design", "Business & Economics"]
+    },
+    {
+        question: "If you had a free weekend, what would you build or explore?",
+        options: ["A science experiment", "A coding project", "A business idea", "A creative art piece", "A community service plan", "A research paper"]
+    },
+    {
+        question: "What kind of change do you want to see in the world?",
+        options: ["Cure diseases", "Solve climate change", "Advance technology", "Promote social justice", "Create beautiful things", "Build better businesses"]
+    },
+    {
+        question: "What kind of work environment suits you best?",
+        options: ["Lab/research", "Office/tech", "Creative studio", "Community/field", "Hospital/clinical", "Corporate/boardroom"]
+    },
+    {
+        question: "Which skill do you most want to develop?",
+        options: ["Critical thinking", "Coding & AI", "Leadership", "Creativity", "Communication", "Financial acumen"]
+    },
+    {
+        question: "What's your ideal university major?",
+        options: ["Medicine", "Engineering", "Computer Science", "Law", "Fine Arts", "Business"]
     }
-    #phase1 h1 {
-        font-size: 1.6rem;
+];
+
+// ========================================
+// INTEREST TAG MAPPING
+// ========================================
+const interestMap = {
+    "Biology & Life Sciences": ["Biology", "Medicine", "Health", "Research"],
+    "Math & Physics": ["Physics", "Mathematics", "Engineering"],
+    "Computer Science": ["Computer Science", "AI", "Technology", "Data Science"],
+    "History & Social Studies": ["History", "Political Science", "Law", "International Relations"],
+    "Art & Design": ["Visual Art", "Design", "Architecture", "Creative"],
+    "Business & Economics": ["Business", "Entrepreneurship", "Finance", "Marketing"],
+    "A science experiment": ["Research", "Chemistry", "Biology"],
+    "A coding project": ["AI", "Computer Science", "App Development"],
+    "A business idea": ["Entrepreneurship", "Finance", "Business"],
+    "A creative art piece": ["Visual Art", "Design", "Creative"],
+    "A community service plan": ["Leadership", "Community Service", "Social Impact"],
+    "A research paper": ["Research", "Writing", "Critical Thinking"],
+    "Cure diseases": ["Medicine", "Biology", "Health"],
+    "Solve climate change": ["Environment", "Sustainability", "Engineering"],
+    "Advance technology": ["AI", "Technology", "Computer Science"],
+    "Promote social justice": ["Law", "Political Science", "Leadership"],
+    "Create beautiful things": ["Art", "Design", "Architecture"],
+    "Build better businesses": ["Business", "Entrepreneurship", "Finance"],
+    "Lab/research": ["Research", "Biology", "Chemistry"],
+    "Office/tech": ["Computer Science", "Technology", "Data Science"],
+    "Creative studio": ["Visual Art", "Design", "Film"],
+    "Community/field": ["Community Service", "Leadership", "Social Impact"],
+    "Hospital/clinical": ["Medicine", "Health", "Psychology"],
+    "Corporate/boardroom": ["Business", "Finance", "Management"],
+    "Critical thinking": ["Research", "Law", "Policy"],
+    "Coding & AI": ["AI", "Computer Science", "Technology"],
+    "Leadership": ["Leadership", "Management", "Social Impact"],
+    "Creativity": ["Art", "Design", "Creative Writing"],
+    "Communication": ["Marketing", "International Relations", "Media"],
+    "Financial acumen": ["Business", "Finance", "Economics"],
+    "Medicine": ["Medicine", "Biology", "Health"],
+    "Engineering": ["Engineering", "Mathematics", "Physics"],
+    "Computer Science": ["Computer Science", "AI", "Technology"],
+    "Law": ["Law", "Political Science", "Justice"],
+    "Fine Arts": ["Visual Art", "Design", "Performance"],
+    "Business": ["Business", "Entrepreneurship", "Finance"]
+};
+
+// ========================================
+// TAG EXPLANATIONS
+// ========================================
+const tagExplanations = {
+    "Biology": "You're curious about life and living systems. This leads to careers in medicine, research, or environmental science.",
+    "Medicine": "You want to help people through healthcare. A path to becoming a doctor, researcher, or public health professional.",
+    "Health": "You care about wellbeing and fitness. Connects to public health, sports science, and nutrition.",
+    "Research": "You love discovering new things. Valuable for any academic or scientific career.",
+    "Physics": "You understand how the universe works. Leads to engineering, space exploration, and technology.",
+    "Computer Science": "You want to shape the future through technology. Careers in AI, software, cybersecurity, and more.",
+    "AI": "You're fascinated by intelligent systems. AI is transforming every industry.",
+    "Sustainability": "You want to create a better future. Focus in business, policy, and engineering.",
+    "Leadership": "You want to inspire and guide others. The most valued skill by universities."
+};
+
+// ========================================
+// DOM REFERENCES
+// ========================================
+const $ = (id) => document.getElementById(id);
+const phase1 = $('phase1');
+const phase2 = $('phase2');
+const phase3 = $('phase3');
+
+const profileForm = $('profileForm');
+const step1Profile = $('step1-profile');
+const step2Quiz = $('step2-quiz');
+const step3Review = $('step3-profile-review');
+const quizQuestion = $('quizQuestion');
+const quizOptions = $('quizOptions');
+const quizProgress = $('quizProgress');
+const quizNextBtn = $('quizNextBtn');
+const interestProfileDisplay = $('interestProfileDisplay');
+const confirmProfileBtn = $('confirmProfileBtn');
+const editProfileBtn = $('editProfileBtn');
+const activityGrid = $('activityCardsGrid');
+const interestProfileDisplay2 = $('interestProfileDisplay2');
+const refreshActivitiesBtn = $('refreshActivitiesBtn');
+const filterType = $('filterType');
+const filterCost = $('filterCost');
+const filterDuration = $('filterDuration');
+const applyFiltersBtn = $('applyFiltersBtn');
+const phase3Content = $('phase3Content');
+const phase3ActivityName = $('phase3ActivityName');
+const backToActivitiesBtn = $('backToActivitiesBtn');
+const modal = $('activityDetailModal');
+const modalContent = $('activityDetailContent');
+const closeModalBtn = $('closeModalBtn');
+const userNameDisplay = $('userNameDisplay');
+const logoutBtn = $('logoutBtn');
+
+// ========================================
+// AUTHENTICATION
+// ========================================
+onAuthStateChanged(auth, async (user) => {
+    if (user) {
+        state.user = user;
+        userNameDisplay.textContent = user.email;
+        document.getElementById('studentEmail').value = user.email;
+        document.getElementById('studentEmail').disabled = true;
+        await loadStudentProfile(user.uid);
+    } else {
+        window.location.href = 'login.html';
     }
-    .activity-grid {
-        grid-template-columns: 1fr;
-    }
-    .filters-section {
-        flex-direction: column;
-    }
-    .filter-select {
-        width: 100%;
-    }
-    .phase2-header {
-        flex-direction: column;
-        gap: 10px;
-    }
-    .profile-actions {
-        flex-direction: column;
-    }
-    .profile-actions .btn-primary,
-    .profile-actions .btn-secondary {
-        width: 100%;
-        text-align: center;
+});
+
+async function loadStudentProfile(uid) {
+    try {
+        const docRef = doc(db, 'students', uid);
+        const docSnap = await getDoc(docRef);
+        
+        if (docSnap.exists()) {
+            const data = docSnap.data();
+            state.studentProfile = data;
+            state.interests = data.interests || [];
+            state.registeredActivities = data.registeredActivities || [];
+            
+            if (state.interests.length > 0) {
+                showPhase('phase2');
+                await loadActivities();
+            } else {
+                if (data.name) document.getElementById('studentName').value = data.name;
+                if (data.grade) document.getElementById('studentGrade').value = data.grade;
+                if (data.school) document.getElementById('studentSchool').value = data.school;
+                if (data.country) document.getElementById('studentCountry').value = data.country;
+            }
+        } else {
+            await setDoc(docRef, {
+                email: state.user.email,
+                createdAt: serverTimestamp(),
+                interests: [],
+                registeredActivities: [],
+                completedActivities: [],
+                profileStrength: 0
+            });
+            state.studentProfile = { email: state.user.email };
+        }
+    } catch (error) {
+        console.error('Error loading profile:', error);
     }
 }
+
+// ========================================
+// PHASE 1
+// ========================================
+profileForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    const name = document.getElementById('studentName').value.trim();
+    const grade = parseInt(document.getElementById('studentGrade').value);
+    const school = document.getElementById('studentSchool').value.trim();
+    const country = document.getElementById('studentCountry').value.trim();
+    
+    if (!name || !grade) {
+        alert('Please fill in all required fields.');
+        return;
+    }
+    
+    try {
+        const docRef = doc(db, 'students', state.user.uid);
+        await updateDoc(docRef, {
+            name, grade, school, country,
+            updatedAt: serverTimestamp()
+        });
+        
+        state.studentProfile = { ...state.studentProfile, name, grade, school, country };
+        step1Profile.style.display = 'none';
+        step2Quiz.style.display = 'block';
+        startQuiz();
+    } catch (error) {
+        console.error('Error saving profile:', error);
+        alert('Failed to save profile. Please try again.');
+    }
+});
+
+function startQuiz() {
+    state.currentQuestion = 0;
+    state.interests = [];
+    renderQuestion();
+}
+
+function renderQuestion() {
+    const q = quizQuestions[state.currentQuestion];
+    if (!q) {
+        finishQuiz();
+        return;
+    }
+    
+    quizProgress.textContent = `Question ${state.currentQuestion + 1} of ${quizQuestions.length}`;
+    quizQuestion.textContent = q.question;
+    quizOptions.innerHTML = '';
+    
+    q.options.forEach(option => {
+        const btn = document.createElement('button');
+        btn.className = 'quiz-option';
+        btn.textContent = option;
+        btn.dataset.value = option;
+        btn.addEventListener('click', () => selectQuizOption(btn));
+        quizOptions.appendChild(btn);
+    });
+    
+    quizNextBtn.disabled = true;
+}
+
+function selectQuizOption(selectedBtn) {
+    document.querySelectorAll('.quiz-option').forEach(el => el.classList.remove('selected'));
+    selectedBtn.classList.add('selected');
+    quizNextBtn.disabled = false;
+    
+    const answer = selectedBtn.dataset.value;
+    const tags = interestMap[answer] || [];
+    state.interests = [...state.interests, ...tags];
+}
+
+quizNextBtn.addEventListener('click', () => {
+    const selected = document.querySelector('.quiz-option.selected');
+    if (!selected) return;
+    
+    state.currentQuestion++;
+    if (state.currentQuestion < quizQuestions.length) {
+        renderQuestion();
+    } else {
+        finishQuiz();
+    }
+});
+
+function finishQuiz() {
+    state.interests = [...new Set(state.interests)];
+    step2Quiz.style.display = 'none';
+    step3Review.style.display = 'block';
+    renderInterestProfile();
+}
+
+function renderInterestProfile() {
+    const tags = state.interests.slice(0, 6);
+    interestProfileDisplay.innerHTML = tags.map(tag => `
+        <div class="interest-tag">
+            ${tag}
+            <span class="explanation"> — ${tagExplanations[tag] || 'This interest opens up many exciting career paths.'}</span>
+        </div>
+    `).join('');
+}
+
+confirmProfileBtn.addEventListener('click', async () => {
+    try {
+        const docRef = doc(db, 'students', state.user.uid);
+        await updateDoc(docRef, {
+            interests: state.interests,
+            updatedAt: serverTimestamp()
+        });
+        showPhase('phase2');
+        await loadActivities();
+    } catch (error) {
+        console.error('Error saving interests:', error);
+        alert('Failed to save interests.');
+    }
+});
+
+editProfileBtn.addEventListener('click', () => {
+    step3Review.style.display = 'none';
+    step2Quiz.style.display = 'block';
+    state.currentQuestion = quizQuestions.length - 1;
+    renderQuestion();
+});
+
+// ========================================
+// PHASE 2
+// ========================================
+async function loadActivities() {
+    activityGrid.innerHTML = `
+        <div style="grid-column: 1/-1; text-align: center; padding: 40px;">
+            <div style="font-size: 40px;">⏳</div>
+            <p style="color: #666;">Loading activities...</p>
+        </div>
+    `;
+    
+    const interestsDisplay = state.interests.slice(0, 5).join(' • ');
+    interestProfileDisplay2.textContent = `Your Interests: ${interestsDisplay}`;
+    
+    try {
+        const snapshot = await getDocs(collection(db, 'activities'));
+        let activities = [];
+        if (!snapshot.empty) {
+            snapshot.forEach(doc => {
+                const data = doc.data();
+                data.id = doc.id;
+                activities.push(data);
+            });
+        } else {
+            // Use sample data if no activities in Firestore
+            activities = getSampleActivities();
+        }
+        
+        state.allActivities = activities;
+        applyFilters();
+    } catch (error) {
+        console.error('Error loading activities:', error);
+        state.allActivities = getSampleActivities();
+        applyFilters();
+    }
+}
+
+function getSampleActivities() {
+    return [
+        {
+            id: 'act_001',
+            name: 'Dubai Youth Sustainability Summit',
+            type: 'competition',
+            interest_tags: ['Sustainability', 'Environment', 'Leadership'],
+            grade_min: 10, grade_max: 12,
+            cost: 'Free', duration: '3 days', deadline: '2026-08-15',
+            skills_gained: ['Public Speaking', 'Project Management'],
+            description: 'Compete to solve sustainability challenges.',
+            rationale: 'Perfect for students passionate about environment and leadership.',
+            registrationRequirements: [
+                { id: 'req1', title: 'Personal Statement', description: '250 words on sustainability', dueDate: '2026-08-01' }
+            ]
+        },
+        {
+            id: 'act_002',
+            name: 'Future Tech Internship',
+            type: 'internship',
+            interest_tags: ['Computer Science', 'Technology', 'AI'],
+            grade_min: 11, grade_max: 12,
+            cost: 'Paid', duration: '4 weeks', deadline: '2026-07-30',
+            skills_gained: ['Python', 'Machine Learning'],
+            description: 'Work on real AI projects.',
+            rationale: 'Great opportunity to gain practical tech experience.',
+            registrationRequirements: [
+                { id: 'req1', title: 'Resume', description: 'List your tech skills', dueDate: '2026-07-15' }
+            ]
+        },
+        {
+            id: 'act_003',
+            name: 'Community Leadership Workshop',
+            type: 'workshop',
+            interest_tags: ['Leadership', 'Community Service'],
+            grade_min: 10, grade_max: 12,
+            cost: 'Free', duration: '2 days', deadline: '2026-09-01',
+            skills_gained: ['Team Management', 'Communication'],
+            description: 'Learn to lead community projects.',
+            rationale: 'Develops leadership skills for university.',
+            registrationRequirements: [
+                { id: 'req1', title: 'Statement of Interest', description: 'Why do you want to be a leader?', dueDate: '2026-08-20' }
+            ]
+        }
+    ];
+}
+
+function applyFilters() {
+    const type = filterType.value;
+    const cost = filterCost.value;
+    const grade = state.studentProfile?.grade || 10;
+    const interests = state.interests;
+    
+    let filtered = state.allActivities.filter(activity => {
+        if (activity.grade_min > grade || activity.grade_max < grade) return false;
+        if (type !== 'all' && activity.type !== type) return false;
+        if (cost !== 'all' && activity.cost !== cost) return false;
+        return true;
+    });
+    
+    filtered = filtered.map(activity => {
+        const matchCount = (activity.interest_tags || []).filter(tag => 
+            interests.some(interest => 
+                tag.toLowerCase().includes(interest.toLowerCase()) || 
+                interest.toLowerCase().includes(tag.toLowerCase())
+            )
+        ).length;
+        const score = activity.interest_tags.length > 0 ? matchCount / activity.interest_tags.length : 0;
+        return { ...activity, matchScore: score };
+    });
+    
+    filtered.sort((a, b) => b.matchScore - a.matchScore);
+    state.filteredActivities = filtered.slice(0, 8);
+    renderActivityCards(state.filteredActivities);
+}
+
+function renderActivityCards(activities) {
+    if (!activities || activities.length === 0) {
+        activityGrid.innerHTML = `
+            <div style="grid-column: 1/-1; text-align: center; padding: 40px; background: #f8f4ff; border-radius: 20px;">
+                <div style="font-size: 48px;">🔍</div>
+                <h3 style="color: #2D1B4E;">No activities found</h3>
+                <p style="color: #666;">Try adjusting your filters.</p>
+            </div>
+        `;
+        return;
+    }
+    
+    const isRegistered = (id) => state.registeredActivities.includes(id);
+    
+    activityGrid.innerHTML = activities.map((activity, index) => `
+        <div class="activity-card" style="animation: fadeIn 0.5s ease ${index * 0.08}s both;">
+            <div>
+                <span class="activity-badge">${activity.type}</span>
+                <span class="match-badge">${activity.matchScore > 0.5 ? '🔥 Top Match' : '💡 Good Fit'}</span>
+            </div>
+            <h3>${activity.name}</h3>
+            <div class="activity-meta">
+                <span>⏱️ ${activity.duration || 'N/A'}</span>
+                <span>💰 ${activity.cost || 'Free'}</span>
+                <span>📅 ${activity.deadline || 'Rolling'}</span>
+            </div>
+            <div class="activity-rationale">
+                <strong>✨ Why this fits you:</strong> ${activity.rationale || 'Based on your interests.'}
+            </div>
+            <div class="activity-tags">
+                ${(activity.interest_tags || []).slice(0, 3).map(tag => `<span>#${tag}</span>`).join('')}
+            </div>
+            <div style="margin-top: 12px; display: flex; gap: 8px;">
+                <button onclick="window.viewActivity('${activity.id}')" class="btn-secondary btn-sm" style="flex: 1;">View Details</button>
+                <button onclick="window.startRegistration('${activity.id}')" class="btn-primary btn-sm" style="flex: 1; ${isRegistered(activity.id) ? 'background: #28a745;' : ''}">
+                    ${isRegistered(activity.id) ? '✅ Registered' : '📝 Register'}
+                </button>
+            </div>
+        </div>
+    `).join('');
+}
+
+// ========================================
+// PHASE 3
+// ========================================
+window.startRegistration = function(activityId) {
+    const activity = state.allActivities.find(a => a.id === activityId);
+    if (!activity) {
+        alert('Activity not found.');
+        return;
+    }
+    
+    state.selectedActivity = activity;
+    showPhase('phase3');
+    phase3ActivityName.textContent = `📝 ${activity.name}`;
+    
+    const isRegistered = state.registeredActivities.includes(activityId);
+    
+    phase3Content.innerHTML = `
+        <div class="phase3-content">
+            <div class="activity-summary">
+                <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 10px;">
+                    <span style="background: #6C3CE1; color: white; padding: 4px 14px; border-radius: 50px; font-size: 14px;">${activity.type}</span>
+                    <span style="color: #888;">📅 ${activity.deadline || 'Rolling deadline'}</span>
+                    <span style="color: #888;">💰 ${activity.cost || 'Free'}</span>
+                </div>
+                <div class="readiness-box">
+                    <strong>📋 Your Readiness Summary</strong>
+                    <p style="margin-top: 8px; color: #333;">You have a strong interest in ${(activity.interest_tags || []).slice(0, 3).join(', ')}. Here's your personalized registration checklist.</p>
+                </div>
+            </div>
+            
+            <div class="checklist-section">
+                <h4 style="color: #2D1B4E; margin-bottom: 10px;">✅ Registration Checklist</h4>
+                <p style="color: #c44536; font-weight: 500; margin-bottom: 15px;">Main Deadline: ${activity.deadline || 'Rolling'}</p>
+                <div id="checklistContainer">
+                    ${(activity.registrationRequirements || []).map((req, index) => `
+                        <div class="checklist-item" id="checklist-${req.id}" data-completed="false">
+                            <input type="checkbox" id="check-${req.id}" onchange="window.toggleChecklist('${req.id}')" ${isRegistered ? 'disabled checked' : ''} />
+                            <div class="checklist-item-content">
+                                <span class="checklist-item-title">${index + 1}. ${req.title}</span>
+                                <span class="checklist-item-desc">${req.description}</span>
+                                <span class="checklist-item-due">📅 Due: ${req.dueDate || 'Before deadline'}</span>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            </div>
+            
+            <div class="registration-actions">
+                ${isRegistered ? `
+                    <p style="color: #28a745; font-weight: 600;">✅ You are already registered!</p>
+                    <button onclick="window.goToPhase2()" class="btn-secondary">Back to Activities</button>
+                ` : `
+                    <p style="color: #666; margin-bottom: 10px;">Complete all steps above to register</p>
+                    <button id="finalRegisterBtn" class="btn-primary" disabled>Complete all steps to register</button>
+                    <br>
+                    <button onclick="window.goToPhase2()" class="btn-secondary" style="margin-top: 10px;">← Back to Activities</button>
+                `}
+            </div>
+        </div>
+    `;
+    
+    if (!isRegistered) {
+        window.toggleChecklist = function(reqId) {
+            const item = document.getElementById(`checklist-${reqId}`);
+            const checkbox = document.getElementById(`check-${reqId}`);
+            if (checkbox.checked) {
+                item.dataset.completed = 'true';
+                item.classList.add('completed');
+            } else {
+                item.dataset.completed = 'false';
+                item.classList.remove('completed');
+            }
+            
+            const allItems = document.querySelectorAll('#checklistContainer .checklist-item');
+            let allDone = true;
+            allItems.forEach(el => {
+                if (el.dataset.completed === 'false') allDone = false;
+            });
+            
+            const btn = document.getElementById('finalRegisterBtn');
+            if (btn) {
+                btn.disabled = !allDone;
+                btn.textContent = allDone ? '✅ Complete Registration' : 'Complete all steps to register';
+                if (allDone) {
+                    btn.onclick = function() {
+                        window.completeRegistration(activityId);
+                    };
+                }
+            }
+        };
+    }
+};
+
+window.completeRegistration = async function(activityId) {
+    if (state.registeredActivities.includes(activityId)) {
+        alert('You are already registered!');
+        return;
+    }
+    
+    try {
+        const docRef = doc(db, 'students', state.user.uid);
+        await updateDoc(docRef, {
+            registeredActivities: arrayUnion(activityId),
+            updatedAt: serverTimestamp()
+        });
+        state.registeredActivities.push(activityId);
+        alert(`🎉 Successfully registered for "${state.selectedActivity.name}"!`);
+        goToPhase2();
+        await loadActivities();
+    } catch (error) {
+        console.error('Error completing registration:', error);
+        alert('Failed to complete registration.');
+    }
+};
+
+// ========================================
+// NAVIGATION
+// ========================================
+function showPhase(phaseId) {
+    document.querySelectorAll('.phase').forEach(el => el.classList.remove('active'));
+    document.getElementById(phaseId).classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+window.goToPhase2 = function() {
+    showPhase('phase2');
+    loadActivities();
+};
+
+// ========================================
+// VIEW DETAIL
+// ========================================
+window.viewActivity = function(activityId) {
+    const activity = state.allActivities.find(a => a.id === activityId);
+    if (!activity) return;
+    
+    modalContent.innerHTML = `
+        <h2 style="color: #2D1B4E;">${activity.name}</h2>
+        <span style="background: #6C3CE1; color: white; padding: 4px 18px; border-radius: 50px; font-size: 14px; display: inline-block;">${activity.type}</span>
+        <div style="margin: 15px 0;">
+            <h4>📝 Description</h4>
+            <p style="color: #555;">${activity.description || 'No description available.'}</p>
+        </div>
+        <div style="margin: 15px 0;">
+            <h4>🎯 Skills</h4>
+            <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+                ${(activity.skills_gained || []).map(skill => 
+                    `<span style="background: #f0e6ff; color: #6C3CE1; padding: 6px 16px; border-radius: 50px;">${skill}</span>`
+                ).join('') || '<span style="color: #888;">No skills listed.</span>'}
+            </div>
+        </div>
+        <button onclick="window.startRegistration('${activity.id}')" class="btn-primary btn-full">📝 Register</button>
+    `;
+    modal.style.display = 'flex';
+};
+
+closeModalBtn.addEventListener('click', () => { modal.style.display = 'none'; });
+modal.addEventListener('click', (e) => { if (e.target === modal) modal.style.display = 'none'; });
+
+// ========================================
+// FILTERS
+// ========================================
+applyFiltersBtn.addEventListener('click', applyFilters);
+refreshActivitiesBtn.addEventListener('click', loadActivities);
+backToActivitiesBtn.addEventListener('click', goToPhase2);
+
+// ========================================
+// LOGOUT
+// ========================================
+logoutBtn.addEventListener('click', async () => {
+    try {
+        await signOut(auth);
+        window.location.href = 'index.html';
+    } catch (error) {
+        console.error('Logout error:', error);
+    }
+});
+
+console.log('🎯 Student App (Phases 1, 2, 3) loaded!');
