@@ -124,6 +124,18 @@
             transition: all 0.3s;
         }
         .btn-portfolio:hover { transform: translateY(-2px); box-shadow: 0 4px 15px rgba(255,217,61,0.4); }
+        .btn-app {
+            padding: 10px 24px;
+            background: linear-gradient(135deg, #6C3CE1, #a855f7);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-weight: 700;
+            cursor: pointer;
+            font-family: 'Quicksand', sans-serif;
+            transition: all 0.3s;
+        }
+        .btn-app:hover { transform: translateY(-2px); box-shadow: 0 4px 20px rgba(108,60,225,0.4); }
         .interests-tag {
             display: inline-block;
             padding: 4px 14px;
@@ -175,7 +187,8 @@
             <div class="logo">🚀 Futures <span>Abroad</span></div>
             <div class="header-actions">
                 <button class="btn-back" onclick="window.location.href='index.html'">← Home</button>
-                <button class="btn-primary" onclick="window.location.href='activities.html'">🎯 Activities</button>
+                <!-- UPDATED: Activities link goes to student-app.html -->
+                <button class="btn-app" onclick="window.location.href='student-app.html'">🚀 Student App</button>
                 <button class="btn-portfolio" onclick="window.location.href='portfolio.html'">📂 Portfolio</button>
                 <button class="btn-logout" onclick="logoutUser()">Logout</button>
             </div>
@@ -220,7 +233,8 @@
 
             <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-top: 20px;">
                 <button class="btn-primary" onclick="window.location.href='quiz.html'">📝 Take Quiz</button>
-                <button class="btn-secondary" onclick="window.location.href='activities.html'">🎯 Find Activities</button>
+                <!-- UPDATED: Activities button goes to student-app.html -->
+                <button class="btn-app" onclick="window.location.href='student-app.html'">🎯 Find Activities</button>
                 <button class="btn-portfolio" onclick="window.location.href='portfolio.html'">📂 View Portfolio</button>
             </div>
         </div>
@@ -273,25 +287,20 @@
                 const registered = studentData.registered_activities || [];
                 const registeredCount = registered.length;
                 
-                // Calculate profile strength (FIXED)
+                // Calculate profile strength
                 let strength = 0;
-                // +20% if interests are set
                 if (studentData.interests && studentData.interests.length > 0) {
                     strength += 20;
                 }
-                // +10% per registered activity (max 60%)
                 if (registeredCount > 0) {
                     strength += Math.min(registeredCount * 10, 60);
                 }
-                // +10% if quiz completed
                 if (studentData.profileCompleted) {
                     strength += 10;
                 }
-                // +10% if phase > 1
                 if (studentData.onboardingPhase && studentData.onboardingPhase > 1) {
                     strength += 10;
                 }
-                // Cap at 100%
                 strength = Math.min(strength, 100);
                 
                 // Update UI
@@ -309,12 +318,11 @@
                     ? interests.map(tag => `<span class="interests-tag">${tag}</span>`).join('')
                     : 'Not set - Take the quiz to discover your interests!';
                 
-                // Registered Activities - Fetch actual activity names (NO DUPLICATES)
+                // Registered Activities
                 if (registeredCount > 0) {
                     const activitiesList = document.getElementById('activities-list');
                     activitiesList.innerHTML = '';
                     
-                    // Use Set to prevent duplicates
                     const uniqueIds = [...new Set(registered)];
                     
                     for (const activityId of uniqueIds) {
