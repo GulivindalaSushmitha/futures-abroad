@@ -24,7 +24,8 @@ import {
     query, 
     where,
     deleteDoc,
-    serverTimestamp // ADD THIS - for timestamps
+    addDoc,           // <-- ADDED: For adding activities
+    serverTimestamp   // <-- ADDED: For timestamps
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 // Your web app's Firebase configuration
@@ -44,12 +45,15 @@ const db = getFirestore(app);
 
 // Export for use in other files
 export { 
+    // Auth
     auth, 
-    db, 
     onAuthStateChanged,
     signInWithEmailAndPassword,
     createUserWithEmailAndPassword,
     signOut,
+    
+    // Firestore
+    db, 
     collection, 
     doc, 
     getDoc, 
@@ -61,7 +65,8 @@ export {
     query, 
     where,
     deleteDoc,
-    serverTimestamp // ADD THIS
+    addDoc,           // <-- ADDED
+    serverTimestamp   // <-- ADDED
 };
 
 console.log("🔥 Firebase initialized successfully!");
