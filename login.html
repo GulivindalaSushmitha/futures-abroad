@@ -101,6 +101,22 @@
             background: #E8F5E9;
             color: #2E7D32;
         }
+        .btn-app-redirect {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 10px 24px;
+            background: #6C3CE1;
+            color: white;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+        .btn-app-redirect:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(108,60,225,0.3);
+        }
     </style>
 </head>
 <body>
@@ -125,6 +141,10 @@
             <button type="submit" class="btn-submit">Login 🚀</button>
         </form>
         
+        <div style="text-align: center; margin-top: 12px;">
+            <a href="student-app.html" class="btn-app-redirect">🚀 Go to Student App</a>
+        </div>
+        
         <div class="auth-footer">
             <p>Don't have an account? <a href="#" onclick="window.location.href='index.html#signup'">Sign up here</a></p>
             <p style="margin-top:8px;"><a href="index.html">← Back to Home</a></p>
@@ -139,6 +159,7 @@
             signInWithEmailAndPassword,
             doc,
             getDoc,
+            setDoc,
             db
         } from './js/firebase-config.js';
         
@@ -151,7 +172,8 @@
                     window.location.href = 'admin-dashboard.html';
                     return;
                 }
-                window.location.href = 'dashboard.html';
+                // UPDATED: Redirect to student-app.html instead of dashboard.html
+                window.location.href = 'student-app.html';
             }
         });
         
@@ -198,9 +220,10 @@
                 }
                 
                 msgEl.className = 'message-box success';
-                msgEl.textContent = '✅ Login successful! Redirecting...';
+                msgEl.textContent = '✅ Login successful! Redirecting to Student App...';
                 setTimeout(() => {
-                    window.location.href = 'dashboard.html';
+                    // UPDATED: Redirect to student-app.html
+                    window.location.href = 'student-app.html';
                 }, 500);
                 
             } catch (error) {
