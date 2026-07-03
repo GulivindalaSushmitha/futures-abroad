@@ -1,5 +1,6 @@
 // ============================================================
 // js/student-app.js - Complete Phases 1, 2, 3
+// (Updated for Beautiful Design)
 // ============================================================
 
 import { 
@@ -291,6 +292,7 @@ const step3Review = $('step3-profile-review');
 const quizQuestion = $('quizQuestion');
 const quizOptions = $('quizOptions');
 const quizProgress = $('quizProgress');
+const quizProgressFill = $('quizProgressFill');
 const quizNextBtn = $('quizNextBtn');
 const interestProfileDisplay = $('interestProfileDisplay');
 const confirmProfileBtn = $('confirmProfileBtn');
@@ -302,7 +304,6 @@ const interestProfileDisplay2 = $('interestProfileDisplay2');
 const refreshActivitiesBtn = $('refreshActivitiesBtn');
 const filterType = $('filterType');
 const filterCost = $('filterCost');
-const filterDuration = $('filterDuration');
 const applyFiltersBtn = $('applyFiltersBtn');
 
 // Phase 3
@@ -325,7 +326,7 @@ const logoutBtn = $('logoutBtn');
 onAuthStateChanged(auth, async (user) => {
     if (user) {
         state.user = user;
-        userNameDisplay.textContent = user.email;
+        userNameDisplay.textContent = `👋 ${user.email}`;
         document.getElementById('studentEmail').value = user.email;
         document.getElementById('studentEmail').disabled = true;
         
@@ -431,28 +432,43 @@ function renderQuestion() {
         return;
     }
     
-    quizProgress.textContent = `Question ${state.currentQuestion + 1} of ${quizQuestions.length}`;
-    quizQuestion.textContent = q.question;
+    const totalQuestions = quizQuestions.length;
+    const progress = ((state.currentQuestion + 1) / totalQuestions) * 100;
     
-    quizOptions.innerHTML = '';
+    if (quizProgress) {
+        quizProgress.textContent = `Question ${state.currentQuestion + 1} of ${totalQuestions}`;
+    }
+    if (quizProgressFill) {
+        quizProgressFill.style.width = `${progress}%`;
+    }
+    if (quizQuestion) {
+        quizQuestion.textContent = q.question;
+    }
+    if (quizOptions) {
+        quizOptions.innerHTML = '';
+        
+        q.options.forEach(option => {
+            const btn = document.createElement('button');
+            btn.className = 'quiz-option';
+            btn.textContent = option;
+            btn.dataset.value = option;
+            btn.addEventListener('click', () => selectQuizOption(btn));
+            quizOptions.appendChild(btn);
+        });
+    }
     
-    q.options.forEach(option => {
-        const btn = document.createElement('button');
-        btn.className = 'quiz-option';
-        btn.textContent = option;
-        btn.dataset.value = option;
-        btn.addEventListener('click', () => selectQuizOption(btn));
-        quizOptions.appendChild(btn);
-    });
-    
-    quizNextBtn.disabled = true;
+    if (quizNextBtn) {
+        quizNextBtn.disabled = true;
+    }
 }
 
 function selectQuizOption(selectedBtn) {
     // Deselect all
     document.querySelectorAll('.quiz-option').forEach(el => el.classList.remove('selected'));
     selectedBtn.classList.add('selected');
-    quizNextBtn.disabled = false;
+    if (quizNextBtn) {
+        quizNextBtn.disabled = false;
+    }
     
     // Store selected value
     const answer = selectedBtn.dataset.value;
@@ -462,25 +478,27 @@ function selectQuizOption(selectedBtn) {
     state.interests = [...state.interests, ...tags];
 }
 
-quizNextBtn.addEventListener('click', () => {
-    const selected = document.querySelector('.quiz-option.selected');
-    if (!selected) return;
-    
-    state.currentQuestion++;
-    if (state.currentQuestion < quizQuestions.length) {
-        renderQuestion();
-    } else {
-        finishQuiz();
-    }
-});
+if (quizNextBtn) {
+    quizNextBtn.addEventListener('click', () => {
+        const selected = document.querySelector('.quiz-option.selected');
+        if (!selected) return;
+        
+        state.currentQuestion++;
+        if (state.currentQuestion < quizQuestions.length) {
+            renderQuestion();
+        } else {
+            finishQuiz();
+        }
+    });
+}
 
 function finishQuiz() {
     // Deduplicate interests
     state.interests = [...new Set(state.interests)];
     
     // Show profile review
-    step2Quiz.style.display = 'none';
-    step3Review.style.display = 'block';
+    if (step2Quiz) step2Quiz.style.display = 'none';
+    if (step3Review) step3Review.style.display = 'block';
     renderInterestProfile();
 }
 
@@ -488,39 +506,45 @@ function finishQuiz() {
 function renderInterestProfile() {
     const tags = state.interests.slice(0, 6); // Top 6 interests
     
-    interestProfileDisplay.innerHTML = tags.map(tag => `
-        <div class="interest-tag">
-            ${tag}
-            <span class="explanation"> — ${tagExplanations[tag] || 'This interest opens up many exciting career paths and university opportunities.'}</span>
-        </div>
-    `).join('');
+    if (interestProfileDisplay) {
+        interestProfileDisplay.innerHTML = tags.map(tag => `
+            <div class="interest-tag-modern">
+                ${tag}
+                <span class="explanation">${tagExplanations[tag] || 'This interest opens up many exciting career paths and university opportunities.'}</span>
+            </div>
+        `).join('');
+    }
 }
 
-confirmProfileBtn.addEventListener('click', async () => {
-    // Save interests to Firestore
-    try {
-        const docRef = doc(db, 'students', state.user.uid);
-        await updateDoc(docRef, {
-            interests: state.interests,
-            updatedAt: serverTimestamp()
-        });
-        
-        // Move to Phase 2
-        showPhase('phase2');
-        await loadActivities();
-    } catch (error) {
-        console.error('Error saving interests:', error);
-        alert('Failed to save interests. Please try again.');
-    }
-});
+if (confirmProfileBtn) {
+    confirmProfileBtn.addEventListener('click', async () => {
+        // Save interests to Firestore
+        try {
+            const docRef = doc(db, 'students', state.user.uid);
+            await updateDoc(docRef, {
+                interests: state.interests,
+                updatedAt: serverTimestamp()
+            });
+            
+            // Move to Phase 2
+            showPhase('phase2');
+            await loadActivities();
+        } catch (error) {
+            console.error('Error saving interests:', error);
+            alert('Failed to save interests. Please try again.');
+        }
+    });
+}
 
-editProfileBtn.addEventListener('click', () => {
-    // Go back to quiz
-    step3Review.style.display = 'none';
-    step2Quiz.style.display = 'block';
-    state.currentQuestion = quizQuestions.length - 1;
-    renderQuestion();
-});
+if (editProfileBtn) {
+    editProfileBtn.addEventListener('click', () => {
+        // Go back to quiz
+        if (step3Review) step3Review.style.display = 'none';
+        if (step2Quiz) step2Quiz.style.display = 'block';
+        state.currentQuestion = quizQuestions.length - 1;
+        renderQuestion();
+    });
+}
 
 // ========================================
 // PHASE 2: CURATED ACTIVITY RECOMMENDATIONS
@@ -528,16 +552,20 @@ editProfileBtn.addEventListener('click', () => {
 
 async function loadActivities() {
     // Show loading state
-    activityGrid.innerHTML = `
-        <div style="grid-column: 1/-1; text-align: center; padding: 40px;">
-            <div style="font-size: 40px;">⏳</div>
-            <p style="color: #666;">Loading activities...</p>
-        </div>
-    `;
+    if (activityGrid) {
+        activityGrid.innerHTML = `
+            <div style="grid-column: 1/-1; text-align: center; padding: 40px;">
+                <div style="font-size: 40px;">⏳</div>
+                <p style="color: #666;">Loading activities...</p>
+            </div>
+        `;
+    }
     
     // Display interests
     const interestsDisplay = state.interests.slice(0, 5).join(' • ');
-    interestProfileDisplay2.textContent = `Your Interests: ${interestsDisplay}`;
+    if (interestProfileDisplay2) {
+        interestProfileDisplay2.textContent = `🎯 ${interestsDisplay}`;
+    }
     
     try {
         // Try to load from Firestore first
@@ -568,9 +596,8 @@ async function loadActivities() {
 }
 
 function applyFilters() {
-    const type = filterType.value;
-    const cost = filterCost.value;
-    const duration = filterDuration.value;
+    const type = filterType ? filterType.value : 'all';
+    const cost = filterCost ? filterCost.value : 'all';
     const grade = state.studentProfile?.grade || 10;
     const interests = state.interests;
     
@@ -583,16 +610,6 @@ function applyFilters() {
         
         // Cost filter
         if (cost !== 'all' && activity.cost !== cost) return false;
-        
-        // Duration filter
-        if (duration !== 'all') {
-            const dur = activity.duration || '';
-            if (duration === '1-3 days' && !dur.includes('day')) return false;
-            if (duration === '1 week' && !dur.includes('week')) return false;
-            if (duration === '2 weeks' && !dur.includes('2 weeks')) return false;
-            if (duration === '1 month' && !dur.includes('month')) return false;
-            if (duration === '2+ months' && !dur.includes('months')) return false;
-        }
         
         return true;
     });
@@ -620,6 +637,8 @@ function applyFilters() {
 }
 
 function renderActivityCards(activities) {
+    if (!activityGrid) return;
+    
     if (!activities || activities.length === 0) {
         activityGrid.innerHTML = `
             <div style="grid-column: 1/-1; text-align: center; padding: 40px; background: #f8f4ff; border-radius: 20px;">
@@ -634,30 +653,32 @@ function renderActivityCards(activities) {
     const isRegistered = (id) => state.registeredActivities.includes(id);
     
     activityGrid.innerHTML = activities.map((activity, index) => `
-        <div class="activity-card" style="animation: fadeIn 0.5s ease ${index * 0.08}s both;">
-            <div>
-                <span class="activity-badge">${activity.type}</span>
-                <span class="match-badge">${activity.matchScore > 0.5 ? '🔥 Top Match' : '💡 Good Fit'}</span>
+        <div class="activity-card-modern" style="animation: fadeIn 0.5s ease ${index * 0.08}s both;">
+            <div class="card-header">
+                <span class="card-badge-modern ${activity.matchScore > 0.5 ? 'card-badge-top' : 'card-badge-good'}">
+                    ${activity.type || 'Activity'}
+                </span>
+                <span class="card-match">${activity.matchScore > 0.5 ? '🔥 Top Match' : '💡 Good Fit'}</span>
             </div>
             <h3>${activity.name}</h3>
-            <div class="activity-meta">
+            <div class="card-meta">
                 <span>⏱️ ${activity.duration || 'N/A'}</span>
                 <span>💰 ${activity.cost || 'Free'}</span>
                 <span>📅 ${activity.deadline || 'Rolling'}</span>
             </div>
-            <div class="activity-rationale">
+            <div class="card-rationale">
                 <strong>✨ Why this fits you:</strong> ${activity.rationale || 'Based on your interests and goals.'}
             </div>
-            <div class="activity-tags">
+            <div class="card-tags">
                 ${(activity.interest_tags || []).slice(0, 3).map(tag => 
                     `<span>#${tag}</span>`
                 ).join('')}
                 ${(activity.interest_tags || []).length > 3 ? 
                     `<span style="color: #888; font-size: 11px;">+${(activity.interest_tags || []).length - 3} more</span>` : ''}
             </div>
-            <div style="margin-top: 12px; display: flex; gap: 8px;">
-                <button onclick="window.viewActivity('${activity.id}')" class="btn-secondary btn-sm" style="flex: 1;">View Details</button>
-                <button onclick="window.startRegistration('${activity.id}')" class="btn-primary btn-sm" style="flex: 1; ${isRegistered(activity.id) ? 'background: #28a745;' : ''}">
+            <div class="card-actions">
+                <button onclick="window.viewActivity('${activity.id}')" class="btn-detail-modern">📖 Details</button>
+                <button onclick="window.startRegistration('${activity.id}')" class="btn-register-modern ${isRegistered(activity.id) ? 'registered' : ''}">
                     ${isRegistered(activity.id) ? '✅ Registered' : '📝 Register'}
                 </button>
             </div>
@@ -668,55 +689,60 @@ function renderActivityCards(activities) {
 // ========================================
 // ACTIVITY DETAIL MODAL
 // ========================================
-window.viewActivity = async function(activityId) {
+window.viewActivity = function(activityId) {
     const activity = state.allActivities.find(a => a.id === activityId);
     if (!activity) return;
     
-    modalContent.innerHTML = `
-        <h2 style="color: #2D1B4E; margin-bottom: 8px;">${activity.name}</h2>
-        <span style="background: #6C3CE1; color: white; padding: 4px 18px; border-radius: 50px; font-size: 14px; display: inline-block; margin-bottom: 15px;">
-            ${activity.type}
-        </span>
-        
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 15px 0; padding: 15px; background: #f8f4ff; border-radius: 16px;">
-            <div><strong>📍 Location:</strong> ${activity.country || 'Global'}</div>
-            <div><strong>⏱️ Duration:</strong> ${activity.duration || 'N/A'}</div>
-            <div><strong>💰 Cost:</strong> ${activity.cost || 'Free'}</div>
-            <div><strong>📅 Deadline:</strong> ${activity.deadline || 'Rolling'}</div>
-            <div style="grid-column: 1/-1;"><strong>🎓 Grades:</strong> ${activity.grade_min || 10} - ${activity.grade_max || 12}</div>
-        </div>
-        
-        <div style="margin: 15px 0;">
-            <h4 style="color: #2D1B4E;">📝 Description</h4>
-            <p style="color: #555; line-height: 1.6;">${activity.description || 'No description available.'}</p>
-        </div>
-        
-        <div style="margin: 15px 0;">
-            <h4 style="color: #2D1B4E;">🎯 Skills You'll Gain</h4>
-            <div style="display: flex; flex-wrap: wrap; gap: 8px;">
-                ${(activity.skills_gained || []).map(skill => 
-                    `<span style="background: #f0e6ff; color: #6C3CE1; padding: 6px 16px; border-radius: 50px; font-size: 14px;">${skill}</span>`
-                ).join('') || '<span style="color: #888;">No skills listed.</span>'}
+    if (modalContent) {
+        modalContent.innerHTML = `
+            <h2 style="color: #1a1a2e; margin-bottom: 8px; font-size: 1.8rem;">${activity.name}</h2>
+            <span style="background: linear-gradient(135deg, #6C3CE1, #a855f7); color: white; padding: 4px 18px; border-radius: 50px; font-size: 14px; display: inline-block; margin-bottom: 15px;">
+                ${activity.type}
+            </span>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 15px 0; padding: 15px; background: #f8f6ff; border-radius: 16px;">
+                <div><strong>📍 Location:</strong> ${activity.country || 'Global'}</div>
+                <div><strong>⏱️ Duration:</strong> ${activity.duration || 'N/A'}</div>
+                <div><strong>💰 Cost:</strong> ${activity.cost || 'Free'}</div>
+                <div><strong>📅 Deadline:</strong> ${activity.deadline || 'Rolling'}</div>
+                <div style="grid-column: 1/-1;"><strong>🎓 Grades:</strong> ${activity.grade_min || 10} - ${activity.grade_max || 12}</div>
             </div>
-        </div>
-        
-        <div style="margin: 15px 0; background: #f8f4ff; border-radius: 16px; padding: 15px;">
-            <h4 style="color: #2D1B4E;">🤖 AI Assistant</h4>
-            <p style="color: #555; font-size: 14px;">Ask about this activity:</p>
-            <div style="display: flex; gap: 10px; margin-top: 10px;">
-                <input type="text" id="aiQuestionInput" placeholder="e.g., Is this right for me?" 
-                       style="flex: 1; padding: 10px 16px; border: 2px solid #e8e0f0; border-radius: 50px; font-family: inherit;">
-                <button onclick="window.askAI('${activity.id}')" class="btn-primary btn-sm">Ask AI</button>
+            
+            <div style="margin: 15px 0;">
+                <h4 style="color: #1a1a2e;">📝 Description</h4>
+                <p style="color: #4a4a6a; line-height: 1.6;">${activity.description || 'No description available.'}</p>
             </div>
-            <div id="aiResponse" style="margin-top: 12px; padding: 12px; background: white; border-radius: 12px; display: none; border-left: 4px solid #6C3CE1;"></div>
-        </div>
-        
-        <button onclick="window.startRegistration('${activity.id}')" class="btn-primary btn-full" style="margin-top: 10px;">
-            📝 Register for This Activity
-        </button>
-    `;
+            
+            <div style="margin: 15px 0;">
+                <h4 style="color: #1a1a2e;">🎯 Skills You'll Gain</h4>
+                <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+                    ${(activity.skills_gained || []).map(skill => 
+                        `<span style="background: #f0e6ff; color: #6C3CE1; padding: 6px 16px; border-radius: 50px; font-size: 14px; font-weight: 600;">${skill}</span>`
+                    ).join('') || '<span style="color: #888;">No skills listed.</span>'}
+                </div>
+            </div>
+            
+            <div style="margin: 15px 0; background: #f8f6ff; border-radius: 16px; padding: 15px;">
+                <h4 style="color: #1a1a2e;">🤖 AI Assistant</h4>
+                <p style="color: #4a4a6a; font-size: 14px;">Ask about this activity:</p>
+                <div style="display: flex; gap: 10px; margin-top: 10px;">
+                    <input type="text" id="aiQuestionInput" placeholder="e.g., Is this right for me?" 
+                           style="flex: 1; padding: 10px 16px; border: 2px solid #e8e4f0; border-radius: 50px; font-family: inherit;">
+                    <button onclick="window.askAI('${activity.id}')" class="btn-primary" style="padding: 10px 24px;">Ask AI</button>
+                </div>
+                <div id="aiResponse" style="margin-top: 12px; padding: 12px; background: white; border-radius: 12px; display: none; border-left: 4px solid #6C3CE1;"></div>
+            </div>
+            
+            <button onclick="window.startRegistration('${activity.id}')" class="btn-primary btn-full" style="margin-top: 10px; width: 100%;">
+                📝 Register for This Activity
+            </button>
+        `;
+    }
     
-    modal.style.display = 'flex';
+    if (modal) {
+        modal.style.display = 'flex';
+        modal.classList.add('active');
+    }
 };
 
 // ========================================
@@ -744,16 +770,18 @@ window.askAI = function(activityId) {
         response = `Great question about ${activity.name}! Here's what I can tell you: This ${activity.type} focuses on ${(activity.interest_tags || []).join(', ')}. It runs for ${activity.duration || 'a specified period'} and is ${activity.cost || 'free'}. If you have more specific questions, feel free to ask!`;
     }
     
-    responseDiv.style.display = 'block';
-    responseDiv.innerHTML = `
-        <div style="display: flex; gap: 10px; align-items: flex-start;">
-            <span style="font-size: 24px;">🤖</span>
-            <div>
-                <strong style="color: #6C3CE1;">AI Response:</strong>
-                <p style="margin-top: 8px; color: #333; line-height: 1.6;">${response}</p>
+    if (responseDiv) {
+        responseDiv.style.display = 'block';
+        responseDiv.innerHTML = `
+            <div style="display: flex; gap: 10px; align-items: flex-start;">
+                <span style="font-size: 24px;">🤖</span>
+                <div>
+                    <strong style="color: #6C3CE1;">AI Response:</strong>
+                    <p style="margin-top: 8px; color: #333; line-height: 1.6;">${response}</p>
+                </div>
             </div>
-        </div>
-    `;
+        `;
+    }
 };
 
 // ========================================
@@ -768,55 +796,59 @@ window.startRegistration = function(activityId) {
     
     state.selectedActivity = activity;
     showPhase('phase3');
-    phase3ActivityName.textContent = `📝 ${activity.name}`;
+    if (phase3ActivityName) {
+        phase3ActivityName.textContent = `📝 ${activity.name}`;
+    }
     
     const isRegistered = state.registeredActivities.includes(activityId);
     
-    phase3Content.innerHTML = `
-        <div class="phase3-content">
-            <div class="activity-summary">
-                <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 10px;">
-                    <span style="background: #6C3CE1; color: white; padding: 4px 14px; border-radius: 50px; font-size: 14px;">${activity.type}</span>
-                    <span style="color: #888;">📅 ${activity.deadline || 'Rolling deadline'}</span>
-                    <span style="color: #888;">💰 ${activity.cost || 'Free'}</span>
+    if (phase3Content) {
+        phase3Content.innerHTML = `
+            <div class="phase3-content">
+                <div class="activity-summary">
+                    <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 10px;">
+                        <span style="background: #6C3CE1; color: white; padding: 4px 14px; border-radius: 50px; font-size: 14px;">${activity.type}</span>
+                        <span style="color: #888;">📅 ${activity.deadline || 'Rolling deadline'}</span>
+                        <span style="color: #888;">💰 ${activity.cost || 'Free'}</span>
+                    </div>
+                    
+                    <div class="readiness-box-modern">
+                        <strong>📋 Your Readiness Summary</strong>
+                        <p style="margin-top: 8px; color: #4a4a6a;">You have a strong interest in ${(activity.interest_tags || []).slice(0, 3).join(', ')}. ${activity.name} is a perfect match to build your skills. Here's your personalized registration checklist to get started.</p>
+                    </div>
                 </div>
                 
-                <div class="readiness-box">
-                    <strong>📋 Your Readiness Summary</strong>
-                    <p style="margin-top: 8px; color: #333;">You have a strong interest in ${(activity.interest_tags || []).slice(0, 3).join(', ')}. ${activity.name} is a perfect match to build your skills. Here's your personalized registration checklist to get started.</p>
-                </div>
-            </div>
-            
-            <div class="checklist-section">
-                <h4 style="color: #2D1B4E; margin-bottom: 10px;">✅ Registration Checklist</h4>
-                <p style="color: #c44536; font-weight: 500; margin-bottom: 15px;">Main Deadline: ${activity.deadline || 'Rolling'}</p>
-                <div id="checklistContainer">
-                    ${(activity.registrationRequirements || []).map((req, index) => `
-                        <div class="checklist-item" id="checklist-${req.id}" data-completed="false">
-                            <input type="checkbox" id="check-${req.id}" onchange="window.toggleChecklist('${req.id}')" ${isRegistered ? 'disabled checked' : ''} />
-                            <div class="checklist-item-content">
-                                <span class="checklist-item-title">${index + 1}. ${req.title}</span>
-                                <span class="checklist-item-desc">${req.description}</span>
-                                <span class="checklist-item-due">📅 Due: ${req.dueDate || 'Before deadline'}</span>
+                <div class="checklist-modern">
+                    <h4 style="color: #1a1a2e; margin-bottom: 10px;">✅ Registration Checklist</h4>
+                    <p style="color: #c44536; font-weight: 500; margin-bottom: 15px;">Main Deadline: ${activity.deadline || 'Rolling'}</p>
+                    <div id="checklistContainer">
+                        ${(activity.registrationRequirements || []).map((req, index) => `
+                            <div class="checklist-item-modern" id="checklist-${req.id}" data-completed="false">
+                                <input type="checkbox" id="check-${req.id}" onchange="window.toggleChecklist('${req.id}')" ${isRegistered ? 'disabled checked' : ''} />
+                                <div class="checklist-item-content">
+                                    <span class="checklist-item-title">${index + 1}. ${req.title}</span>
+                                    <span class="checklist-item-desc">${req.description}</span>
+                                    <span class="checklist-item-due">📅 Due: ${req.dueDate || 'Before deadline'}</span>
+                                </div>
                             </div>
-                        </div>
-                    `).join('')}
+                        `).join('')}
+                    </div>
+                </div>
+                
+                <div class="registration-actions-modern">
+                    ${isRegistered ? `
+                        <p style="color: #28a745; font-weight: 600;">✅ You are already registered for this activity!</p>
+                        <button onclick="window.goToPhase2()" class="btn-secondary">Back to Activities</button>
+                    ` : `
+                        <p style="color: #6b6b8a; margin-bottom: 10px;">Complete all steps above to register</p>
+                        <button id="finalRegisterBtn" class="btn-primary" disabled>Complete all steps to register</button>
+                        <br>
+                        <button onclick="window.goToPhase2()" class="btn-secondary" style="margin-top: 10px;">← Back to Activities</button>
+                    `}
                 </div>
             </div>
-            
-            <div class="registration-actions">
-                ${isRegistered ? `
-                    <p style="color: #28a745; font-weight: 600;">✅ You are already registered for this activity!</p>
-                    <button onclick="window.goToPhase2()" class="btn-secondary">Back to Activities</button>
-                ` : `
-                    <p style="color: #666; margin-bottom: 10px;">Complete all steps above to register</p>
-                    <button id="finalRegisterBtn" class="btn-primary" disabled>Complete all steps to register</button>
-                    <br>
-                    <button onclick="window.goToPhase2()" class="btn-secondary" style="margin-top: 10px;">← Back to Activities</button>
-                `}
-            </div>
-        </div>
-    `;
+        `;
+    }
     
     if (!isRegistered) {
         // Enable register button when all checklist items are checked
@@ -824,15 +856,19 @@ window.startRegistration = function(activityId) {
             const item = document.getElementById(`checklist-${reqId}`);
             const checkbox = document.getElementById(`check-${reqId}`);
             if (checkbox.checked) {
-                item.dataset.completed = 'true';
-                item.classList.add('completed');
+                if (item) {
+                    item.dataset.completed = 'true';
+                    item.classList.add('completed');
+                }
             } else {
-                item.dataset.completed = 'false';
-                item.classList.remove('completed');
+                if (item) {
+                    item.dataset.completed = 'false';
+                    item.classList.remove('completed');
+                }
             }
             
             // Check if all items are completed
-            const allItems = document.querySelectorAll('#checklistContainer .checklist-item');
+            const allItems = document.querySelectorAll('#checklistContainer .checklist-item-modern');
             let allDone = true;
             allItems.forEach(el => {
                 if (el.dataset.completed === 'false') allDone = false;
@@ -887,7 +923,10 @@ window.completeRegistration = async function(activityId) {
 // ========================================
 function showPhase(phaseId) {
     document.querySelectorAll('.phase').forEach(el => el.classList.remove('active'));
-    document.getElementById(phaseId).classList.add('active');
+    const phase = document.getElementById(phaseId);
+    if (phase) {
+        phase.classList.add('active');
+    }
     window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
@@ -899,41 +938,60 @@ window.goToPhase2 = function() {
 // ========================================
 // FILTER HANDLERS
 // ========================================
-applyFiltersBtn.addEventListener('click', applyFilters);
-refreshActivitiesBtn.addEventListener('click', loadActivities);
-backToActivitiesBtn.addEventListener('click', goToPhase2);
+if (applyFiltersBtn) {
+    applyFiltersBtn.addEventListener('click', applyFilters);
+}
+if (refreshActivitiesBtn) {
+    refreshActivitiesBtn.addEventListener('click', loadActivities);
+}
+if (backToActivitiesBtn) {
+    backToActivitiesBtn.addEventListener('click', goToPhase2);
+}
 
 // ========================================
 // MODAL HANDLERS
 // ========================================
-closeModalBtn.addEventListener('click', () => {
-    modal.style.display = 'none';
-});
+if (closeModalBtn) {
+    closeModalBtn.addEventListener('click', () => {
+        if (modal) {
+            modal.style.display = 'none';
+            modal.classList.remove('active');
+        }
+    });
+}
 
-modal.addEventListener('click', (e) => {
-    if (e.target === modal) {
-        modal.style.display = 'none';
-    }
-});
+if (modal) {
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+            modal.style.display = 'none';
+            modal.classList.remove('active');
+        }
+    });
+}
 
 // ========================================
 // LOGOUT
 // ========================================
-logoutBtn.addEventListener('click', async () => {
-    try {
-        await signOut(auth);
-        window.location.href = 'index.html';
-    } catch (error) {
-        console.error('Logout error:', error);
-    }
-});
+if (logoutBtn) {
+    logoutBtn.addEventListener('click', async () => {
+        try {
+            await signOut(auth);
+            window.location.href = 'index.html';
+        } catch (error) {
+            console.error('Logout error:', error);
+        }
+    });
+}
 
 // ========================================
 // KEYBOARD SHORTCUTS
 // ========================================
 document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') {
-        modal.style.display = 'none';
+        if (modal) {
+            modal.style.display = 'none';
+            modal.classList.remove('active');
+        }
     }
 });
 
