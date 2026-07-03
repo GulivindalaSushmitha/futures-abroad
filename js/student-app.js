@@ -35,16 +35,17 @@ const state = {
     allActivities: [],
     filteredActivities: [],
     calendarEvents: [],
-    reminders: []
+    reminders: [],
+    questionHistory: []
 };
 
 // ========================================
 // ========================================
-// PHASE 1: ADAPTIVE QUIZ (Full Spec)
+// PHASE 1: ADAPTIVE QUIZ (FULL SPEC)
 // ========================================
 // ========================================
 
-// Adaptive quiz data with branching
+// ===== ADAPTIVE QUIZ DATA WITH BRANCHING =====
 const quizData = {
     questions: [
         {
@@ -59,7 +60,7 @@ const quizData = {
                 { value: "Business & Economics", next: 'q1_business' }
             ]
         },
-        // Branching follow-up questions (adaptive)
+        // Follow-up questions (adaptive branching)
         {
             id: 'q1_biology',
             question: "What area of biology excites you most?",
@@ -68,7 +69,8 @@ const quizData = {
                 { value: "Research & Lab Work", tags: ['Research', 'Biology'] },
                 { value: "Environmental Science", tags: ['Environment', 'Sustainability'] }
             ],
-            isFollowUp: true
+            isFollowUp: true,
+            parent: 'q1'
         },
         {
             id: 'q1_math',
@@ -78,7 +80,8 @@ const quizData = {
                 { value: "Data & Analytics", tags: ['Data Science', 'Mathematics'] },
                 { value: "Finance & Economics", tags: ['Finance', 'Business'] }
             ],
-            isFollowUp: true
+            isFollowUp: true,
+            parent: 'q1'
         },
         {
             id: 'q1_cs',
@@ -88,7 +91,8 @@ const quizData = {
                 { value: "App Development", tags: ['App Development', 'Technology'] },
                 { value: "Cybersecurity", tags: ['Cybersecurity', 'Technology'] }
             ],
-            isFollowUp: true
+            isFollowUp: true,
+            parent: 'q1'
         },
         {
             id: 'q1_history',
@@ -98,7 +102,8 @@ const quizData = {
                 { value: "Culture & Society", tags: ['History', 'Sociology'] },
                 { value: "International Relations", tags: ['International Relations'] }
             ],
-            isFollowUp: true
+            isFollowUp: true,
+            parent: 'q1'
         },
         {
             id: 'q1_art',
@@ -108,7 +113,8 @@ const quizData = {
                 { value: "Architecture", tags: ['Architecture'] },
                 { value: "Creative Media", tags: ['Creative', 'Film'] }
             ],
-            isFollowUp: true
+            isFollowUp: true,
+            parent: 'q1'
         },
         {
             id: 'q1_business',
@@ -118,7 +124,8 @@ const quizData = {
                 { value: "Finance & Investing", tags: ['Finance'] },
                 { value: "Marketing & Branding", tags: ['Marketing'] }
             ],
-            isFollowUp: true
+            isFollowUp: true,
+            parent: 'q1'
         },
         {
             id: 'q2',
@@ -181,11 +188,10 @@ const quizData = {
             ]
         }
     ],
-    // Maximum 8 questions (adaptive)
-    maxQuestions: 8
+    maxQuestions: 8 // Maximum 8 questions total
 };
 
-// Tag explanations for profile review
+// ===== TAG EXPLANATIONS (Plain Language) =====
 const tagExplanations = {
     "Biology": "You're curious about life and living systems. Leads to medicine, research, or environmental science.",
     "Medicine": "You want to help people through healthcare. Path to becoming a doctor or public health professional.",
@@ -220,29 +226,76 @@ const tagExplanations = {
     "Sociology": "You want to understand human society. Leads to social research, policy, and community work.",
     "Creative Media": "You want to tell stories through media. Connects to film, journalism, and content creation.",
     "Science": "You want to understand how the world works. Foundation for research and innovation.",
-    "Writing": "You express yourself through words. Valuable in academia, law, and media."
+    "Writing": "You express yourself through words. Valuable in academia, law, and media.",
+    "Psychology": "You want to understand the human mind. Leads to therapy, research, and human resources.",
+    "Economics": "You want to understand how resources are managed. Leads to finance, policy, and business.",
+    "Marketing": "You know how to connect with people. Essential for brands, nonprofits, and startups.",
+    "Chemistry": "You're fascinated by how substances interact. Leads to medicine, research, and industry."
 };
 
 // ========================================
 // PHASE 1: QUIZ FUNCTIONS
 // ========================================
 
+let quizState = {
+    currentQuestionId: null,
+    questionIndex: 0,
+    answers: [],
+    interests: [],
+    totalQuestions: 0
+};
+
 function startQuiz() {
-    state.currentQuestion = 0;
+    quizState = {
+        currentQuestionId: 'q1',
+        questionIndex: 0,
+        answers: [],
+        interests: [],
+        totalQuestions: 0
+    };
     state.quizAnswers = [];
     state.interests = [];
     renderAdaptiveQuestion();
 }
 
+function getQuestion(id) {
+    return quizData.questions.find(q => q.id === id);
+}
+
+function getNextQuestionId(currentId, selectedValue) {
+    const current = getQuestion(currentId);
+    if (!current) return null;
+    
+    // Check if this question has a follow-up
+    const option = current.options.find(o => o.value === selectedValue);
+    if (option && option.next) {
+        // Check if we've already used this follow-up
+        const followUp = getQuestion(option.next);
+        if (followUp && !quizState.answers.some(a => a.questionId === option.next)) {
+            return option.next;
+        }
+    }
+    
+    // Find next main question
+    const mainQuestions = quizData.questions.filter(q => !q.isFollowUp);
+    const currentIndex = mainQuestions.findIndex(q => q.id === currentId);
+    if (currentIndex >= 0 && currentIndex < mainQuestions.length - 1) {
+        return mainQuestions[currentIndex + 1].id;
+    }
+    
+    return null;
+}
+
 function renderAdaptiveQuestion() {
-    const q = getCurrentQuestion();
+    const q = getQuestion(quizState.currentQuestionId);
     if (!q) {
         finishQuiz();
         return;
     }
     
-    const totalQuestions = getTotalQuestions();
-    const progress = ((state.currentQuestion + 1) / totalQuestions) * 100;
+    // Count total questions (main + follow-ups used)
+    const totalQuestions = Math.min(quizData.maxQuestions, 8);
+    const currentNum = quizState.answers.length + 1;
     
     const progressEl = document.getElementById('quizProgress');
     const progressFillEl = document.getElementById('quizProgressFill');
@@ -250,7 +303,9 @@ function renderAdaptiveQuestion() {
     const optionsEl = document.getElementById('quizOptions');
     const nextBtn = document.getElementById('quizNextBtn');
     
-    if (progressEl) progressEl.textContent = `Question ${state.currentQuestion + 1} of ${Math.min(totalQuestions, quizData.maxQuestions)}`;
+    const progress = (currentNum / totalQuestions) * 100;
+    
+    if (progressEl) progressEl.textContent = `Question ${currentNum} of ${totalQuestions}`;
     if (progressFillEl) progressFillEl.style.width = `${Math.min(progress, 100)}%`;
     if (questionEl) questionEl.textContent = q.question;
     
@@ -274,30 +329,6 @@ function renderAdaptiveQuestion() {
     }
 }
 
-function getCurrentQuestion() {
-    // If we have a specific question ID, find it
-    if (state.currentQuestionId) {
-        const found = quizData.questions.find(q => q.id === state.currentQuestionId);
-        if (found) return found;
-    }
-    
-    // Otherwise get by index
-    if (state.currentQuestion < quizData.questions.length) {
-        return quizData.questions[state.currentQuestion];
-    }
-    
-    return null;
-}
-
-function getTotalQuestions() {
-    // Count main questions + follow-ups
-    let count = 0;
-    for (const q of quizData.questions) {
-        if (!q.isFollowUp) count++;
-    }
-    return Math.min(count, quizData.maxQuestions);
-}
-
 function selectAdaptiveOption(selectedBtn) {
     document.querySelectorAll('.quiz-option').forEach(el => el.classList.remove('selected'));
     selectedBtn.classList.add('selected');
@@ -307,15 +338,25 @@ function selectAdaptiveOption(selectedBtn) {
     
     // Store answer
     const value = selectedBtn.dataset.value;
+    const tags = selectedBtn.dataset.tags ? JSON.parse(selectedBtn.dataset.tags) : [];
+    
+    quizState.answers.push({
+        questionId: quizState.currentQuestionId,
+        value: value,
+        tags: tags
+    });
+    
+    // Store tags for profile
+    state.interests = [...state.interests, ...tags];
     state.quizAnswers.push(value);
     
-    // Store tags
-    const tags = selectedBtn.dataset.tags ? JSON.parse(selectedBtn.dataset.tags) : [];
-    state.interests = [...state.interests, ...tags];
-    
-    // Store next question ID if exists
+    // Store next question ID
     const nextId = selectedBtn.dataset.next;
-    state.nextQuestionId = nextId;
+    if (nextId) {
+        quizState.nextQuestionId = nextId;
+    } else {
+        quizState.nextQuestionId = null;
+    }
 }
 
 document.getElementById('quizNextBtn')?.addEventListener('click', () => {
@@ -323,38 +364,20 @@ document.getElementById('quizNextBtn')?.addEventListener('click', () => {
     if (!selected) return;
     
     // Check if we have a follow-up question
-    if (state.nextQuestionId) {
-        // Go to follow-up question
-        state.currentQuestionId = state.nextQuestionId;
-        state.nextQuestionId = null;
-        renderAdaptiveQuestion();
-        return;
+    if (quizState.nextQuestionId) {
+        const followUp = getQuestion(quizState.nextQuestionId);
+        if (followUp && !quizState.answers.some(a => a.questionId === quizState.nextQuestionId)) {
+            quizState.currentQuestionId = quizState.nextQuestionId;
+            quizState.nextQuestionId = null;
+            renderAdaptiveQuestion();
+            return;
+        }
     }
     
     // Move to next main question
-    state.currentQuestion++;
-    state.currentQuestionId = null;
-    
-    // Check if we've reached max questions
-    if (state.currentQuestion >= quizData.maxQuestions) {
-        finishQuiz();
-        return;
-    }
-    
-    // Find next non-follow-up question
-    let nextQ = null;
-    let index = state.currentQuestion;
-    while (index < quizData.questions.length) {
-        const q = quizData.questions[index];
-        if (!q.isFollowUp) {
-            nextQ = q;
-            break;
-        }
-        index++;
-    }
-    
-    if (nextQ) {
-        state.currentQuestionId = nextQ.id;
+    const nextId = getNextQuestionId(quizState.currentQuestionId, selected.dataset.value);
+    if (nextId) {
+        quizState.currentQuestionId = nextId;
         renderAdaptiveQuestion();
     } else {
         finishQuiz();
@@ -365,7 +388,7 @@ function finishQuiz() {
     // Deduplicate interests
     state.interests = [...new Set(state.interests)];
     
-    // Infer profile from partial answers if less than 4 tags
+    // If fewer than 4 tags, infer from partial answers
     if (state.interests.length < 4) {
         state.interests = inferProfileFromPartialAnswers(state.quizAnswers);
     }
@@ -376,11 +399,10 @@ function finishQuiz() {
     renderInterestProfile();
 }
 
+// ===== INFER PROFILE FROM PARTIAL ANSWERS (Phase 1) =====
 function inferProfileFromPartialAnswers(answers) {
-    // Fallback tags if quiz is incomplete
     const fallbackTags = ['Leadership', 'Community Service', 'Critical Thinking'];
     
-    // Map common words to tags
     const wordMap = {
         'biology': ['Biology', 'Medicine'],
         'math': ['Mathematics', 'Engineering'],
@@ -397,7 +419,16 @@ function inferProfileFromPartialAnswers(answers) {
         'community': ['Community Service', 'Social Impact'],
         'environment': ['Environment', 'Sustainability'],
         'engineering': ['Engineering'],
-        'science': ['Science', 'Research']
+        'science': ['Science', 'Research'],
+        'psychology': ['Psychology', 'Health'],
+        'economics': ['Economics', 'Business'],
+        'law': ['Law', 'Political Science'],
+        'history': ['History', 'Political Science'],
+        'technology': ['Technology', 'Computer Science'],
+        'ai': ['AI', 'Computer Science'],
+        'health': ['Health', 'Medicine'],
+        'sustainability': ['Sustainability', 'Environment'],
+        'creative': ['Creative', 'Visual Art']
     };
     
     const inferredTags = [];
@@ -414,6 +445,7 @@ function inferProfileFromPartialAnswers(answers) {
     return unique.length >= 2 ? unique : fallbackTags;
 }
 
+// ===== RENDER INTEREST PROFILE =====
 function renderInterestProfile() {
     const tags = state.interests.slice(0, 6);
     const container = document.getElementById('interestProfileDisplay');
@@ -422,7 +454,7 @@ function renderInterestProfile() {
         container.innerHTML = tags.map(tag => `
             <div class="interest-tag-modern">
                 ${tag}
-                <span class="explanation">${tagExplanations[tag] || 'This interest opens up many exciting career paths and university opportunities.'}</span>
+                <span class="explanation">${tagExplanations[tag] || 'This interest opens up many exciting career paths.'}</span>
             </div>
         `).join('');
     }
@@ -434,6 +466,8 @@ document.getElementById('confirmProfileBtn')?.addEventListener('click', async ()
         await updateDoc(docRef, {
             interests: state.interests,
             quizAnswers: state.quizAnswers,
+            profileCompleted: true,
+            onboardingPhase: 2,
             updatedAt: serverTimestamp()
         });
         
@@ -448,8 +482,13 @@ document.getElementById('confirmProfileBtn')?.addEventListener('click', async ()
 document.getElementById('editProfileBtn')?.addEventListener('click', () => {
     document.getElementById('step3-profile-review').style.display = 'none';
     document.getElementById('step2-quiz').style.display = 'block';
-    state.currentQuestion = 0;
-    state.currentQuestionId = null;
+    quizState = {
+        currentQuestionId: 'q1',
+        questionIndex: 0,
+        answers: [],
+        interests: [],
+        totalQuestions: 0
+    };
     renderAdaptiveQuestion();
 });
 
@@ -459,7 +498,7 @@ document.getElementById('editProfileBtn')?.addEventListener('click', () => {
 // ========================================
 // ========================================
 
-// Sample activities (expand with more)
+// ===== SAMPLE ACTIVITIES =====
 const sampleActivities = [
     {
         id: 'act_001',
@@ -473,14 +512,15 @@ const sampleActivities = [
         duration: '3 days',
         deadline: '2026-08-15',
         skills_gained: ['Public Speaking', 'Project Management', 'Research'],
-        description: 'Compete with students across the UAE to solve real-world sustainability challenges.',
+        description: 'Compete with students across the UAE to solve real-world sustainability challenges. Work in teams to develop innovative solutions for a greener future.',
         registration_url: 'https://example.com/register-sustainability',
         rationale: 'This summit is perfect for students passionate about the environment and leadership.',
         registrationRequirements: [
             { id: 'req1', title: 'Personal Statement', description: 'Write 250 words on why sustainability matters to you', dueDate: '2026-08-01' },
             { id: 'req2', title: 'Teacher Recommendation', description: 'Request a recommendation from a science teacher', dueDate: '2026-08-05' },
             { id: 'req3', title: 'Parent Consent Form', description: 'Download, sign, and upload the parent consent form', dueDate: '2026-08-10' }
-        ]
+        ],
+        pastOutcomes: ['2 students went to top 10 global universities', 'Winners presented at COP28']
     },
     {
         id: 'act_002',
@@ -493,7 +533,7 @@ const sampleActivities = [
         cost: 'Paid',
         duration: '4 weeks',
         deadline: '2026-07-30',
-        skills_gained: ['Python', 'Machine Learning', 'Data Analysis'],
+        skills_gained: ['Python', 'Machine Learning', 'Data Analysis', 'Team Collaboration'],
         description: 'Join a leading tech company in Dubai for a hands-on internship working on real AI projects.',
         registration_url: 'https://example.com/register-tech',
         rationale: 'Great opportunity to gain practical tech experience and explore AI careers.',
@@ -501,7 +541,8 @@ const sampleActivities = [
             { id: 'req1', title: 'Resume/CV', description: 'List your tech skills, projects, and experience', dueDate: '2026-07-15' },
             { id: 'req2', title: 'Coding Assessment', description: 'Complete a 1-hour coding challenge in Python', dueDate: '2026-07-20' },
             { id: 'req3', title: 'Video Interview', description: 'Record a 5-min video answering interview questions', dueDate: '2026-07-25' }
-        ]
+        ],
+        pastOutcomes: ['80% of interns got university offers', '3 students published research papers']
     },
     {
         id: 'act_003',
@@ -514,14 +555,15 @@ const sampleActivities = [
         cost: 'Free',
         duration: '2 days',
         deadline: '2026-09-01',
-        skills_gained: ['Team Management', 'Event Planning', 'Communication'],
+        skills_gained: ['Team Management', 'Event Planning', 'Communication', 'Problem Solving'],
         description: 'Learn how to lead community projects and create social impact in your neighborhood.',
         registration_url: 'https://example.com/register-leadership',
         rationale: 'Develops leadership skills essential for university applications and future careers.',
         registrationRequirements: [
             { id: 'req1', title: 'Statement of Interest', description: 'Why do you want to become a community leader?', dueDate: '2026-08-20' },
             { id: 'req2', title: 'Reference Letter', description: 'From a teacher or community leader', dueDate: '2026-08-25' }
-        ]
+        ],
+        pastOutcomes: ['100+ community projects launched', 'Students recognized by UAE Ministry of Education']
     },
     {
         id: 'act_004',
@@ -534,16 +576,17 @@ const sampleActivities = [
         cost: 'Scholarship available',
         duration: '6 weeks',
         deadline: '2026-05-15',
-        skills_gained: ['Lab Skills', 'Scientific Writing', 'Critical Thinking'],
+        skills_gained: ['Lab Skills', 'Scientific Writing', 'Critical Thinking', 'Data Analysis'],
         description: 'An intensive summer research program where you\'ll work in university labs on actual medical research projects.',
         registration_url: 'https://example.com/register-medical',
-        rationale: 'Excellent preparation for medical school applications. You\'ll gain hands-on research experience.',
+        rationale: 'Excellent preparation for medical school applications.',
         registrationRequirements: [
             { id: 'req1', title: 'Research Essay', description: 'Write 500 words on a medical topic of your choice', dueDate: '2026-04-30' },
             { id: 'req2', title: 'Academic Transcript', description: 'Submit your grades in science subjects', dueDate: '2026-05-05' },
             { id: 'req3', title: 'Recommendation Letter', description: 'From a science teacher or mentor', dueDate: '2026-05-10' },
             { id: 'req4', title: 'Parent Permission', description: 'Signed form for international travel', dueDate: '2026-05-12' }
-        ]
+        ],
+        pastOutcomes: ['95% participants got into medical school', 'Research published in student journals']
     },
     {
         id: 'act_005',
@@ -556,7 +599,7 @@ const sampleActivities = [
         cost: 'Free',
         duration: '2 months',
         deadline: '2026-10-01',
-        skills_gained: ['Business Planning', 'Pitching', 'Financial Modeling'],
+        skills_gained: ['Business Planning', 'Pitching', 'Financial Modeling', 'Team Leadership'],
         description: 'Pitch your business idea to a panel of investors from around the world.',
         registration_url: 'https://example.com/register-business',
         rationale: 'Perfect if you\'re interested in business and entrepreneurship.',
@@ -564,7 +607,8 @@ const sampleActivities = [
             { id: 'req1', title: 'Business Pitch Deck', description: 'Create a 5-slide pitch for your business idea', dueDate: '2026-09-15' },
             { id: 'req2', title: 'Financial Plan', description: 'Outline your revenue model and costs', dueDate: '2026-09-20' },
             { id: 'req3', title: 'Team Agreement', description: 'If working in a team, submit a team agreement form', dueDate: '2026-09-25' }
-        ]
+        ],
+        pastOutcomes: ['5 startups funded', 'Winners got mentorship from Fortune 500 CEOs']
     },
     {
         id: 'act_006',
@@ -577,27 +621,26 @@ const sampleActivities = [
         cost: 'Free',
         duration: '1 week',
         deadline: '2026-08-20',
-        skills_gained: ['Portfolio Development', 'Drawing', 'Digital Design'],
+        skills_gained: ['Portfolio Development', 'Drawing', 'Digital Design', 'Creative Thinking'],
         description: 'Build a professional portfolio for art school applications. Work with professional artists and designers.',
         registration_url: 'https://example.com/register-art',
         rationale: 'Essential if you\'re planning to apply to art or design programs.',
         registrationRequirements: [
             { id: 'req1', title: 'Portfolio Samples', description: 'Submit 3-5 samples of your best work', dueDate: '2026-08-10' },
             { id: 'req2', title: 'Artist Statement', description: 'Write 200 words about your artistic vision', dueDate: '2026-08-15' }
-        ]
+        ],
+        pastOutcomes: ['100% participants got into top art schools', 'Portfolios featured in exhibitions']
     }
 ];
 
-// Vector matching - simulate embedding similarity
+// ===== VECTOR MATCHING (Cosine Similarity) =====
 function calculateVectorMatch(studentInterests, activityTags) {
     if (!studentInterests.length || !activityTags.length) return 0;
     
-    // Create a simple vector representation
     const allTags = [...new Set([...studentInterests, ...activityTags])];
     const studentVector = allTags.map(tag => studentInterests.includes(tag) ? 1 : 0);
     const activityVector = allTags.map(tag => activityTags.includes(tag) ? 1 : 0);
     
-    // Calculate cosine similarity
     let dotProduct = 0;
     let studentMagnitude = 0;
     let activityMagnitude = 0;
@@ -610,6 +653,28 @@ function calculateVectorMatch(studentInterests, activityTags) {
     
     if (studentMagnitude === 0 || activityMagnitude === 0) return 0;
     return dotProduct / (Math.sqrt(studentMagnitude) * Math.sqrt(activityMagnitude));
+}
+
+// ===== FUZZY MATCHING (Word similarity) =====
+function fuzzyMatch(word1, word2) {
+    const w1 = word1.toLowerCase();
+    const w2 = word2.toLowerCase();
+    if (w1 === w2) return true;
+    if (w1.includes(w2) || w2.includes(w1)) return true;
+    // Check common prefixes
+    const minLen = Math.min(w1.length, w2.length);
+    if (minLen >= 3 && w1.substring(0, minLen-1) === w2.substring(0, minLen-1)) return true;
+    return false;
+}
+
+function getFuzzyMatches(studentInterests, activityTags) {
+    let matches = 0;
+    for (const s of studentInterests) {
+        for (const t of activityTags) {
+            if (fuzzyMatch(s, t)) matches++;
+        }
+    }
+    return matches;
 }
 
 // ========================================
@@ -659,20 +724,29 @@ function applyFiltersWithVectorMatching() {
     const grade = state.studentProfile?.grade || 10;
     const interests = state.interests;
     const completed = state.completedActivities || [];
+    const registered = state.registeredActivities || [];
     
     let filtered = state.allActivities.filter(activity => {
+        // Grade filter
         if (activity.grade_min > grade || activity.grade_max < grade) return false;
+        // Type filter
         if (type !== 'all' && activity.type !== type) return false;
+        // Cost filter
         if (cost !== 'all' && activity.cost !== cost) return false;
-        // Deprioritise completed activities
+        // DEPRIORITISE: Remove completed activities
         if (completed.includes(activity.id)) return false;
         return true;
     });
     
-    // Calculate vector match scores
+    // Calculate match scores using vector matching + fuzzy matching
     filtered = filtered.map(activity => {
-        const matchScore = calculateVectorMatch(interests, activity.interest_tags || []);
-        return { ...activity, matchScore };
+        // Primary: Vector cosine similarity
+        const vectorScore = calculateVectorMatch(interests, activity.interest_tags || []);
+        // Secondary: Fuzzy matching
+        const fuzzyScore = getFuzzyMatches(interests, activity.interest_tags || []);
+        // Combined score (weighted)
+        const combinedScore = (vectorScore * 0.7) + (Math.min(fuzzyScore / 3, 1) * 0.3);
+        return { ...activity, matchScore: combinedScore };
     });
     
     // Sort by match score
@@ -726,16 +800,135 @@ function renderActivityCards(activities) {
                 ${(activity.interest_tags || []).length > 3 ? 
                     `<span style="color: #888; font-size: 11px;">+${(activity.interest_tags || []).length - 3} more</span>` : ''}
             </div>
+            ${isCompleted(activity.id) ? '<div style="margin-top: 6px; color: #16a34a; font-size: 12px; font-weight: 600;">✅ Previously completed</div>' : ''}
             <div class="card-actions">
                 <button onclick="window.viewActivity('${activity.id}')" class="btn-detail-modern">📖 Details</button>
                 <button onclick="window.startRegistration('${activity.id}')" class="btn-register-modern ${isRegistered(activity.id) ? 'registered' : ''}">
                     ${isRegistered(activity.id) ? '✅ Registered' : '📝 Register'}
                 </button>
             </div>
-            ${isCompleted(activity.id) ? '<div style="margin-top: 8px; color: #6b6b8a; font-size: 12px;">✅ Previously completed</div>' : ''}
         </div>
     `).join('');
 }
+
+// ========================================
+// ACTIVITY DETAIL MODAL (with Past Outcomes)
+// ========================================
+window.viewActivity = function(activityId) {
+    const activity = state.allActivities.find(a => a.id === activityId);
+    if (!activity) return;
+    
+    const modal = document.getElementById('activityDetailModal');
+    const content = document.getElementById('activityDetailContent');
+    
+    if (content) {
+        content.innerHTML = `
+            <h2 style="color: #1a1a2e; margin-bottom: 8px; font-size: 1.8rem;">${activity.name}</h2>
+            <span style="background: linear-gradient(135deg, #6C3CE1, #a855f7); color: white; padding: 4px 18px; border-radius: 50px; font-size: 14px; display: inline-block; margin-bottom: 15px;">
+                ${activity.type}
+            </span>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 15px 0; padding: 15px; background: #f8f6ff; border-radius: 16px;">
+                <div><strong>📍 Location:</strong> ${activity.country || 'Global'}</div>
+                <div><strong>⏱️ Duration:</strong> ${activity.duration || 'N/A'}</div>
+                <div><strong>💰 Cost:</strong> ${activity.cost || 'Free'}</div>
+                <div><strong>📅 Deadline:</strong> ${activity.deadline || 'Rolling'}</div>
+                <div style="grid-column: 1/-1;"><strong>🎓 Grades:</strong> ${activity.grade_min || 10} - ${activity.grade_max || 12}</div>
+            </div>
+            
+            <div style="margin: 15px 0;">
+                <h4 style="color: #1a1a2e;">📝 Description</h4>
+                <p style="color: #4a4a6a; line-height: 1.6;">${activity.description || 'No description available.'}</p>
+            </div>
+            
+            <div style="margin: 15px 0;">
+                <h4 style="color: #1a1a2e;">🎯 Skills You'll Gain</h4>
+                <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+                    ${(activity.skills_gained || []).map(skill => 
+                        `<span style="background: #f0e6ff; color: #6C3CE1; padding: 6px 16px; border-radius: 50px; font-size: 14px; font-weight: 600;">${skill}</span>`
+                    ).join('') || '<span style="color: #888;">No skills listed.</span>'}
+                </div>
+            </div>
+            
+            <!-- ===== PAST OUTCOMES (New) ===== -->
+            ${activity.pastOutcomes ? `
+                <div style="margin: 15px 0; padding: 15px; background: #dcfce7; border-radius: 16px; border-left: 4px solid #16a34a;">
+                    <h4 style="color: #1a1a2e;">🏆 Past Participant Outcomes</h4>
+                    <ul style="margin: 8px 0 0 20px; color: #4a4a6a;">
+                        ${activity.pastOutcomes.map(outcome => `<li>${outcome}</li>`).join('')}
+                    </ul>
+                </div>
+            ` : ''}
+            
+            <div style="margin: 15px 0; background: #f8f6ff; border-radius: 16px; padding: 15px;">
+                <h4 style="color: #1a1a2e;">🤖 AI Assistant</h4>
+                <p style="color: #4a4a6a; font-size: 14px;">Ask about this activity:</p>
+                <div style="display: flex; gap: 10px; margin-top: 10px;">
+                    <input type="text" id="aiQuestionInput" placeholder="e.g., Is this right for me?" 
+                           style="flex: 1; padding: 10px 16px; border: 2px solid #e8e4f0; border-radius: 50px; font-family: inherit;">
+                    <button onclick="window.askAI('${activity.id}')" class="btn-primary" style="padding: 10px 24px;">Ask AI</button>
+                </div>
+                <div id="aiResponse" style="margin-top: 12px; padding: 12px; background: white; border-radius: 12px; display: none; border-left: 4px solid #6C3CE1;"></div>
+            </div>
+            
+            ${activity.registration_url ? `
+                <div style="margin: 15px 0; padding: 15px; background: #f0f7ff; border-radius: 12px; border: 2px dashed #6C3CE1;">
+                    <p style="color: #1a1a2e; font-weight: 600;">🔗 Register on External Platform</p>
+                    <a href="${activity.registration_url}" target="_blank" class="btn-primary" style="display: inline-block; margin-top: 8px; text-decoration: none; padding: 10px 24px;">
+                        Go to Registration →
+                    </a>
+                </div>
+            ` : ''}
+            
+            <button onclick="window.startRegistration('${activity.id}')" class="btn-primary btn-full" style="margin-top: 10px; width: 100%;">
+                📝 Register for This Activity
+            </button>
+        `;
+    }
+    
+    if (modal) {
+        modal.style.display = 'flex';
+        modal.classList.add('active');
+    }
+};
+
+// ========================================
+// AI Q&A (Phase 2)
+// ========================================
+window.askAI = function(activityId) {
+    const activity = state.allActivities.find(a => a.id === activityId);
+    if (!activity) return;
+    
+    const input = document.getElementById('aiQuestionInput');
+    const responseDiv = document.getElementById('aiResponse');
+    const question = input?.value?.trim() || 'Is this right for me?';
+    
+    let response = '';
+    const lowerQ = question.toLowerCase();
+    
+    if (lowerQ.includes('right') || lowerQ.includes('fit') || lowerQ.includes('good')) {
+        response = `Based on your interest in ${(activity.interest_tags || []).slice(0, 3).join(', ')}, ${activity.name} is an excellent match! This activity is designed for Grade ${activity.grade_min}-${activity.grade_max} students and will help you develop ${(activity.skills_gained || []).slice(0, 3).join(', ')}. The ${activity.cost || 'free'} registration and ${activity.duration || 'flexible'} schedule make it very accessible. I'd say this is a great fit for your profile!`;
+    } else if (lowerQ.includes('learn') || lowerQ.includes('gain')) {
+        response = `In ${activity.name}, you will learn: ${(activity.skills_gained || []).join(', ')}. Additionally, you'll gain practical experience in ${(activity.interest_tags || []).slice(0, 3).join(', ')}. Past participants have found this activity to be transformative for their university applications.`;
+    } else if (lowerQ.includes('hard') || lowerQ.includes('difficult') || lowerQ.includes('competition')) {
+        response = `The application for ${activity.name} is competitive but accessible. You'll need to prepare materials like ${(activity.registrationRequirements || []).map(r => r.title).join(', ')}. The deadline is ${activity.deadline || 'rolling'}, so I'd recommend starting at least 2 weeks before. Need help with any part of the application? I can guide you through it!`;
+    } else {
+        response = `Great question about ${activity.name}! Here's what I can tell you: This ${activity.type} focuses on ${(activity.interest_tags || []).join(', ')}. It runs for ${activity.duration || 'a specified period'} and is ${activity.cost || 'free'}. If you have more specific questions, feel free to ask!`;
+    }
+    
+    if (responseDiv) {
+        responseDiv.style.display = 'block';
+        responseDiv.innerHTML = `
+            <div style="display: flex; gap: 10px; align-items: flex-start;">
+                <span style="font-size: 24px;">🤖</span>
+                <div>
+                    <strong style="color: #6C3CE1;">AI Response:</strong>
+                    <p style="margin-top: 8px; color: #333; line-height: 1.6;">${response}</p>
+                </div>
+            </div>
+        `;
+    }
+};
 
 // ========================================
 // ========================================
@@ -774,11 +967,11 @@ window.startRegistration = function(activityId) {
                     </div>
                 </div>
                 
-                <!-- CALENDAR VIEW -->
+                <!-- ===== CALENDAR VIEW (New) ===== -->
                 <div style="background: #f8f6ff; border-radius: 16px; padding: 16px; margin: 16px 0;">
                     <h4 style="color: #1a1a2e; margin-bottom: 10px;">📅 Important Dates</h4>
                     <div id="calendarView">
-                        <div style="display: flex; align-items: center; gap: 12px; padding: 8px 12px; background: white; border-radius: 10px;">
+                        <div style="display: flex; align-items: center; gap: 12px; padding: 8px 12px; background: white; border-radius: 10px; margin-bottom: 6px; border-left: 4px solid #6C3CE1;">
                             <span style="font-size: 24px;">📌</span>
                             <div>
                                 <strong>Registration Deadline</strong>
@@ -786,7 +979,7 @@ window.startRegistration = function(activityId) {
                             </div>
                         </div>
                         ${(activity.registrationRequirements || []).map(req => `
-                            <div style="display: flex; align-items: center; gap: 12px; padding: 8px 12px; background: white; border-radius: 10px; margin-top: 6px;">
+                            <div style="display: flex; align-items: center; gap: 12px; padding: 8px 12px; background: white; border-radius: 10px; margin-top: 6px; border-left: 4px solid #f59e0b;">
                                 <span style="font-size: 20px;">📋</span>
                                 <div>
                                     <strong>${req.title}</strong>
@@ -795,9 +988,16 @@ window.startRegistration = function(activityId) {
                             </div>
                         `).join('')}
                     </div>
+                    
+                    <!-- ===== REMINDER SCHEDULE (New) ===== -->
+                    ${activity.deadline ? `
+                        <div style="margin-top: 12px; padding: 10px 14px; background: #fef3c7; border-radius: 10px;">
+                            <span style="font-size: 14px;">🔔 <strong>Reminders:</strong> You'll receive notifications at 2 weeks, 1 week, 3 days, and 1 day before the deadline.</span>
+                        </div>
+                    ` : ''}
                 </div>
                 
-                <!-- CHECKLIST -->
+                <!-- ===== CHECKLIST ===== -->
                 <div class="checklist-modern">
                     <h4 style="color: #1a1a2e; margin-bottom: 10px;">✅ Registration Checklist</h4>
                     <p style="color: #c44536; font-weight: 500; margin-bottom: 15px;">Main Deadline: ${activity.deadline || 'Rolling'}</p>
@@ -815,19 +1015,19 @@ window.startRegistration = function(activityId) {
                     </div>
                 </div>
                 
-                <!-- EXTERNAL REGISTRATION LINK (Deep-linking) -->
+                <!-- ===== EXTERNAL REGISTRATION LINK (Deep-linking) ===== -->
                 ${activity.registration_url ? `
                     <div style="margin: 16px 0; padding: 16px; background: #f0f7ff; border-radius: 12px; border: 2px dashed #6C3CE1;">
                         <p style="color: #1a1a2e; font-weight: 600;">🔗 Register on External Platform</p>
                         <p style="color: #4a4a6a; font-size: 14px;">Complete your registration on the official platform:</p>
-                        <a href="${activity.registration_url}" target="_blank" class="btn-primary" style="display: inline-block; margin-top: 8px; text-decoration: none;">
+                        <a href="${activity.registration_url}" target="_blank" class="btn-primary" style="display: inline-block; margin-top: 8px; text-decoration: none; padding: 10px 24px;">
                             Go to Registration Page →
                         </a>
                         <p style="color: #888; font-size: 12px; margin-top: 6px;">Your details will be pre-filled where possible.</p>
                     </div>
                 ` : ''}
                 
-                <!-- REGISTRATION ACTIONS -->
+                <!-- ===== REGISTRATION ACTIONS ===== -->
                 <div class="registration-actions-modern">
                     ${isRegistered ? `
                         <p style="color: #28a745; font-weight: 600;">✅ You are already registered for this activity!</p>
@@ -843,7 +1043,7 @@ window.startRegistration = function(activityId) {
         `;
     }
     
-    // Add to calendar
+    // Add to calendar and schedule reminders
     if (!isRegistered) {
         addToCalendar(activity);
         scheduleReminders(activity);
@@ -896,18 +1096,12 @@ function addToCalendar(activity) {
         activityName: activity.name,
         deadline: activity.deadline,
         type: 'registration_deadline',
-        reminderDates: [
-            { days: 14, sent: false, label: '2 weeks' },
-            { days: 7, sent: false, label: '1 week' },
-            { days: 3, sent: false, label: '3 days' },
-            { days: 1, sent: false, label: '1 day' }
-        ],
         createdAt: new Date().toISOString()
     };
     
     state.calendarEvents.push(event);
     
-    // Save to localStorage for demo
+    // Save to localStorage
     try {
         const events = JSON.parse(localStorage.getItem('calendarEvents') || '[]');
         events.push(event);
@@ -916,18 +1110,17 @@ function addToCalendar(activity) {
         console.error('Error saving to calendar:', e);
     }
     
-    console.log(`📅 Added to calendar: ${activity.name}`);
-    console.log(`📅 Deadline: ${activity.deadline}`);
-    
-    // Also add to Firestore if available
+    // Also save to Firestore
     try {
         const docRef = doc(db, 'students', state.user.uid);
         updateDoc(docRef, {
             calendarEvents: arrayUnion(event)
         }).catch(e => console.log('Calendar event saved to localStorage only'));
     } catch (e) {
-        // Fallback - already saved to localStorage
+        // Fallback
     }
+    
+    console.log(`📅 Added to calendar: ${activity.name}, Deadline: ${activity.deadline}`);
 }
 
 // ========================================
@@ -975,7 +1168,7 @@ function scheduleReminders(activity) {
             console.error('Error saving reminder:', e);
         }
         
-        console.log(`⏰ Scheduled ${reminder.label} reminder for ${activity.name}`);
+        console.log(`⏰ Scheduled ${reminder.label} reminder for ${activity.name} on ${reminderDate.toDateString()}`);
     });
 }
 
@@ -998,9 +1191,13 @@ function checkAndSendReminders() {
         
         const reminderDate = new Date(reminder.reminderDate);
         if (reminderDate <= now) {
-            // Send reminder
+            // Send email reminder
             await sendEmailReminder(reminder);
+            // Send push notification
             await sendPushNotification(reminder);
+            
+            // Show toast
+            showReminderToast(`⏰ ${reminder.label} reminder: Register for ${reminder.activityName}`);
             
             // Mark as sent
             reminder.sent = true;
@@ -1018,20 +1215,9 @@ function checkAndSendReminders() {
 // ========================================
 
 async function sendEmailReminder(reminder) {
-    // In production, use SendGrid or similar
     console.log(`📧 Sending email reminder to ${reminder.studentEmail}: ${reminder.label} left for ${reminder.activityName}`);
     
-    // Show browser notification for demo
-    if (Notification.permission === 'granted') {
-        new Notification(`⏰ Reminder: ${reminder.label} left for ${reminder.activityName}`, {
-            body: `Don't forget to complete your registration for ${reminder.activityName}`,
-            icon: 'https://gulivindalasushmitha.github.io/futures-abroad/favicon.ico'
-        });
-    }
-    
     // For demo, show in UI
-    showReminderToast(`⏰ ${reminder.label} reminder: Register for ${reminder.activityName}`);
-    
     return { success: true };
 }
 
@@ -1042,14 +1228,9 @@ async function sendEmailReminder(reminder) {
 async function sendPushNotification(reminder) {
     console.log(`📱 Push notification: ${reminder.label} reminder for ${reminder.activityName}`);
     
-    // Request permission if not granted
-    if (Notification.permission === 'default') {
-        await Notification.requestPermission();
-    }
-    
     if (Notification.permission === 'granted') {
-        new Notification(`📱 ${reminder.activityName}`, {
-            body: `${reminder.label} left to register! Complete your checklist now.`,
+        new Notification(`⏰ ${reminder.label} left for ${reminder.activityName}`, {
+            body: `Don't forget to complete your registration for ${reminder.activityName}`,
             icon: 'https://gulivindalasushmitha.github.io/futures-abroad/favicon.ico'
         });
     }
@@ -1110,10 +1291,8 @@ window.completeRegistration = async function(activityId) {
         
         state.registeredActivities.push(activityId);
         
-        // Show success
         alert(`🎉 Congratulations! You have successfully registered for "${state.selectedActivity.name}"!`);
         
-        // Go back to Phase 2
         goToPhase2();
         await loadActivities();
     } catch (error) {
@@ -1140,117 +1319,6 @@ function showPhase(phaseId) {
 window.goToPhase2 = function() {
     showPhase('phase2');
     loadActivities();
-};
-
-// ========================================
-// VIEW ACTIVITY DETAIL
-// ========================================
-
-window.viewActivity = function(activityId) {
-    const activity = state.allActivities.find(a => a.id === activityId);
-    if (!activity) return;
-    
-    const modal = document.getElementById('activityDetailModal');
-    const content = document.getElementById('activityDetailContent');
-    
-    if (content) {
-        content.innerHTML = `
-            <h2 style="color: #1a1a2e; margin-bottom: 8px; font-size: 1.8rem;">${activity.name}</h2>
-            <span style="background: linear-gradient(135deg, #6C3CE1, #a855f7); color: white; padding: 4px 18px; border-radius: 50px; font-size: 14px; display: inline-block; margin-bottom: 15px;">
-                ${activity.type}
-            </span>
-            
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 15px 0; padding: 15px; background: #f8f6ff; border-radius: 16px;">
-                <div><strong>📍 Location:</strong> ${activity.country || 'Global'}</div>
-                <div><strong>⏱️ Duration:</strong> ${activity.duration || 'N/A'}</div>
-                <div><strong>💰 Cost:</strong> ${activity.cost || 'Free'}</div>
-                <div><strong>📅 Deadline:</strong> ${activity.deadline || 'Rolling'}</div>
-                <div style="grid-column: 1/-1;"><strong>🎓 Grades:</strong> ${activity.grade_min || 10} - ${activity.grade_max || 12}</div>
-            </div>
-            
-            <div style="margin: 15px 0;">
-                <h4 style="color: #1a1a2e;">📝 Description</h4>
-                <p style="color: #4a4a6a; line-height: 1.6;">${activity.description || 'No description available.'}</p>
-            </div>
-            
-            <div style="margin: 15px 0;">
-                <h4 style="color: #1a1a2e;">🎯 Skills You'll Gain</h4>
-                <div style="display: flex; flex-wrap: wrap; gap: 8px;">
-                    ${(activity.skills_gained || []).map(skill => 
-                        `<span style="background: #f0e6ff; color: #6C3CE1; padding: 6px 16px; border-radius: 50px; font-size: 14px; font-weight: 600;">${skill}</span>`
-                    ).join('') || '<span style="color: #888;">No skills listed.</span>'}
-                </div>
-            </div>
-            
-            <div style="margin: 15px 0; background: #f8f6ff; border-radius: 16px; padding: 15px;">
-                <h4 style="color: #1a1a2e;">🤖 AI Assistant</h4>
-                <p style="color: #4a4a6a; font-size: 14px;">Ask about this activity:</p>
-                <div style="display: flex; gap: 10px; margin-top: 10px;">
-                    <input type="text" id="aiQuestionInput" placeholder="e.g., Is this right for me?" 
-                           style="flex: 1; padding: 10px 16px; border: 2px solid #e8e4f0; border-radius: 50px; font-family: inherit;">
-                    <button onclick="window.askAI('${activity.id}')" class="btn-primary" style="padding: 10px 24px;">Ask AI</button>
-                </div>
-                <div id="aiResponse" style="margin-top: 12px; padding: 12px; background: white; border-radius: 12px; display: none; border-left: 4px solid #6C3CE1;"></div>
-            </div>
-            
-            ${activity.registration_url ? `
-                <div style="margin: 15px 0; padding: 15px; background: #f0f7ff; border-radius: 12px; border: 2px dashed #6C3CE1;">
-                    <p style="color: #1a1a2e; font-weight: 600;">🔗 Register on External Platform</p>
-                    <a href="${activity.registration_url}" target="_blank" class="btn-primary" style="display: inline-block; margin-top: 8px; text-decoration: none; padding: 10px 24px;">
-                        Go to Registration →
-                    </a>
-                </div>
-            ` : ''}
-            
-            <button onclick="window.startRegistration('${activity.id}')" class="btn-primary btn-full" style="margin-top: 10px; width: 100%;">
-                📝 Register for This Activity
-            </button>
-        `;
-    }
-    
-    if (modal) {
-        modal.style.display = 'flex';
-        modal.classList.add('active');
-    }
-};
-
-// ========================================
-// AI Q&A (Phase 2)
-// ========================================
-
-window.askAI = function(activityId) {
-    const activity = state.allActivities.find(a => a.id === activityId);
-    if (!activity) return;
-    
-    const input = document.getElementById('aiQuestionInput');
-    const responseDiv = document.getElementById('aiResponse');
-    const question = input?.value?.trim() || 'Is this right for me?';
-    
-    let response = '';
-    const lowerQ = question.toLowerCase();
-    
-    if (lowerQ.includes('right') || lowerQ.includes('fit') || lowerQ.includes('good')) {
-        response = `Based on your interest in ${(activity.interest_tags || []).slice(0, 3).join(', ')}, ${activity.name} is an excellent match! This activity is designed for Grade ${activity.grade_min}-${activity.grade_max} students and will help you develop ${(activity.skills_gained || []).slice(0, 3).join(', ')}. The ${activity.cost || 'free'} registration and ${activity.duration || 'flexible'} schedule make it very accessible. I'd say this is a great fit for your profile!`;
-    } else if (lowerQ.includes('learn') || lowerQ.includes('gain')) {
-        response = `In ${activity.name}, you will learn: ${(activity.skills_gained || []).join(', ')}. Additionally, you'll gain practical experience in ${(activity.interest_tags || []).slice(0, 3).join(', ')}. Past participants have found this activity to be transformative for their university applications.`;
-    } else if (lowerQ.includes('hard') || lowerQ.includes('difficult') || lowerQ.includes('competition')) {
-        response = `The application for ${activity.name} is competitive but accessible. You'll need to prepare materials like ${(activity.registrationRequirements || []).map(r => r.title).join(', ')}. The deadline is ${activity.deadline || 'rolling'}, so I'd recommend starting at least 2 weeks before. Need help with any part of the application? I can guide you through it!`;
-    } else {
-        response = `Great question about ${activity.name}! Here's what I can tell you: This ${activity.type} focuses on ${(activity.interest_tags || []).join(', ')}. It runs for ${activity.duration || 'a specified period'} and is ${activity.cost || 'free'}. If you have more specific questions, feel free to ask!`;
-    }
-    
-    if (responseDiv) {
-        responseDiv.style.display = 'block';
-        responseDiv.innerHTML = `
-            <div style="display: flex; gap: 10px; align-items: flex-start;">
-                <span style="font-size: 24px;">🤖</span>
-                <div>
-                    <strong style="color: #6C3CE1;">AI Response:</strong>
-                    <p style="margin-top: 8px; color: #333; line-height: 1.6;">${response}</p>
-                </div>
-            </div>
-        `;
-    }
 };
 
 // ========================================
@@ -1350,6 +1418,7 @@ async function loadStudentProfile(uid) {
             state.registeredActivities = data.registeredActivities || [];
             state.completedActivities = data.completedActivities || [];
             state.quizAnswers = data.quizAnswers || [];
+            state.calendarEvents = data.calendarEvents || [];
             
             if (state.interests.length > 0) {
                 showPhase('phase2');
@@ -1368,6 +1437,7 @@ async function loadStudentProfile(uid) {
                 registeredActivities: [],
                 completedActivities: [],
                 quizAnswers: [],
+                calendarEvents: [],
                 profileStrength: 0
             });
             state.studentProfile = { email: state.user.email };
@@ -1413,6 +1483,16 @@ document.getElementById('profileForm')?.addEventListener('submit', async (e) => 
 });
 
 // ========================================
+// NOTIFICATION PERMISSION
+// ========================================
+
+if ('Notification' in window && Notification.permission === 'default') {
+    setTimeout(() => {
+        Notification.requestPermission();
+    }, 5000);
+}
+
+// ========================================
 // INITIALIZATION
 // ========================================
 
@@ -1421,8 +1501,10 @@ console.log('📌 Features implemented:');
 console.log('   ✅ Phase 1: Adaptive branching quiz');
 console.log('   ✅ Phase 1: Infer profile from partial answers');
 console.log('   ✅ Phase 2: Vector matching (cosine similarity)');
+console.log('   ✅ Phase 2: Fuzzy matching for tags');
 console.log('   ✅ Phase 2: Deprioritise completed activities');
-console.log('   ✅ Phase 3: In-app calendar');
+console.log('   ✅ Phase 2: Past participant outcomes in detail view');
+console.log('   ✅ Phase 3: In-app calendar with deadlines');
 console.log('   ✅ Phase 3: Email reminders (2w, 1w, 3d, 1d)');
 console.log('   ✅ Phase 3: Push notifications');
 console.log('   ✅ Phase 3: Deep-linking to external forms');
