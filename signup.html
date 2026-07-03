@@ -4,27 +4,33 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Sign Up - Futures Abroad</title>
+    <!-- Firebase SDKs (v9 compat) -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
     <link rel="stylesheet" href="css/style.css" />
-    <link rel="stylesheet" href="css/auth.css" />
     <style>
-        /* Additional styles for better UI */
-        .auth-container {
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background: linear-gradient(135deg, #f5f0ff 0%, #e8e0f5 100%);
+            min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
             padding: 20px;
-            background: linear-gradient(135deg, #f5f0ff 0%, #e8e0f5 100%);
         }
-        .auth-card {
+        .auth-container {
+            max-width: 520px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 40px;
             background: white;
             border-radius: 28px;
-            padding: 40px;
-            max-width: 500px;
-            width: 100%;
             box-shadow: 0 20px 60px rgba(108,60,225,0.15);
         }
         .auth-header {
@@ -235,16 +241,19 @@
             border-radius: 12px;
             margin-bottom: 15px;
             display: none;
+            font-size: 14px;
         }
         .message-box.error {
             display: block;
             background: #FFE8E8;
             color: #C62828;
+            border-left: 4px solid #C62828;
         }
         .message-box.success {
             display: block;
             background: #E8F5E9;
             color: #2E7D32;
+            border-left: 4px solid #2E7D32;
         }
         .btn-app-redirect {
             display: inline-block;
@@ -263,7 +272,7 @@
             box-shadow: 0 4px 15px rgba(108,60,225,0.3);
         }
         @media (max-width: 480px) {
-            .auth-card { padding: 24px; }
+            .auth-container { padding: 24px; }
             .grade-selector { flex-direction: column; }
             .grade-btn { flex: none; }
             .interest-tags { gap: 8px; }
@@ -273,117 +282,140 @@
 </head>
 <body>
     <div class="auth-container">
-        <div class="auth-card">
-            <div class="auth-header">
-                <div class="auth-logo">🚀 Futures <span>Abroad</span></div>
-                <h1>Create Your Account</h1>
-                <p>Start your AI-powered journey to university</p>
+        <div class="auth-header">
+            <div class="auth-logo">🚀 Futures <span>Abroad</span></div>
+            <h1>Create Your Account</h1>
+            <p>Start your AI-powered journey to university</p>
+        </div>
+
+        <form id="signup-form" class="auth-form">
+            <div id="signupMessage" class="message-box"></div>
+            
+            <!-- Step 1: Basic Info -->
+            <div class="form-step active" data-step="1">
+                <div class="step-indicator">Step 1 of 3</div>
+                <h2>About You</h2>
+                <div class="form-group">
+                    <label>Full Name</label>
+                    <input type="text" id="full-name" placeholder="Enter your full name" required />
+                </div>
+                <div class="form-group">
+                    <label>Email Address</label>
+                    <input type="email" id="email" placeholder="student@email.com" required />
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="password" placeholder="Create a strong password" required minlength="8" />
+                    <small>Must be at least 8 characters</small>
+                </div>
+                <button type="button" class="btn-next" onclick="nextStep(2)">Next →</button>
             </div>
 
-            <form id="signup-form" class="auth-form">
-                <div id="signupMessage" class="message-box"></div>
-                
-                <!-- Step 1: Basic Info -->
-                <div class="form-step active" data-step="1">
-                    <div class="step-indicator">Step 1 of 3</div>
-                    <h2>About You</h2>
-                    <div class="form-group">
-                        <label>Full Name</label>
-                        <input type="text" id="full-name" placeholder="Enter your full name" required />
+            <!-- Step 2: Academic Info -->
+            <div class="form-step" data-step="2">
+                <div class="step-indicator">Step 2 of 3</div>
+                <h2>Academic Profile</h2>
+                <div class="form-group">
+                    <label>Grade</label>
+                    <div class="grade-selector">
+                        <button type="button" class="grade-btn" data-grade="10">Grade 10</button>
+                        <button type="button" class="grade-btn active" data-grade="11">Grade 11</button>
+                        <button type="button" class="grade-btn" data-grade="12">Grade 12</button>
                     </div>
-                    <div class="form-group">
-                        <label>Email Address</label>
-                        <input type="email" id="email" placeholder="student@email.com" required />
-                    </div>
-                    <div class="form-group">
-                        <label>Password</label>
-                        <input type="password" id="password" placeholder="Create a strong password" required minlength="8" />
-                        <small>Must be at least 8 characters</small>
-                    </div>
-                    <button type="button" class="btn-next" onclick="nextStep(2)">Next →</button>
+                    <input type="hidden" id="grade" value="11" />
                 </div>
-
-                <!-- Step 2: Academic Info -->
-                <div class="form-step" data-step="2">
-                    <div class="step-indicator">Step 2 of 3</div>
-                    <h2>Academic Profile</h2>
-                    <div class="form-group">
-                        <label>Grade</label>
-                        <div class="grade-selector">
-                            <button type="button" class="grade-btn" data-grade="10">Grade 10</button>
-                            <button type="button" class="grade-btn active" data-grade="11">Grade 11</button>
-                            <button type="button" class="grade-btn" data-grade="12">Grade 12</button>
-                        </div>
-                        <input type="hidden" id="grade" value="11" />
-                    </div>
-                    <div class="form-group">
-                        <label>School Name</label>
-                        <input type="text" id="school" placeholder="Enter your school name" required />
-                    </div>
-                    <div class="form-group">
-                        <label>Country</label>
-                        <select id="country" required>
-                            <option value="">Select your country</option>
-                            <option value="UAE">United Arab Emirates</option>
-                            <option value="Saudi Arabia">Saudi Arabia</option>
-                            <option value="Qatar">Qatar</option>
-                            <option value="Kuwait">Kuwait</option>
-                            <option value="Bahrain">Bahrain</option>
-                            <option value="Oman">Oman</option>
-                            <option value="UK">United Kingdom</option>
-                            <option value="USA">United States</option>
-                            <option value="Canada">Canada</option>
-                            <option value="Australia">Australia</option>
-                            <option value="Other">Other</option>
-                        </select>
-                    </div>
-                    <div class="form-navigation">
-                        <button type="button" class="btn-prev" onclick="prevStep(1)">← Back</button>
-                        <button type="button" class="btn-next" onclick="nextStep(3)">Next →</button>
-                    </div>
+                <div class="form-group">
+                    <label>School Name</label>
+                    <input type="text" id="school" placeholder="Enter your school name" required />
                 </div>
-
-                <!-- Step 3: Interests -->
-                <div class="form-step" data-step="3">
-                    <div class="step-indicator">Step 3 of 3</div>
-                    <h2>Your Interests</h2>
-                    <p class="step-description">Pick a few areas you're curious about (we'll do a deeper quiz next!)</p>
-                    <div class="interest-tags">
-                        <button type="button" class="interest-btn" data-tag="STEM">🔬 STEM</button>
-                        <button type="button" class="interest-btn" data-tag="Medicine & Health">⚕️ Medicine</button>
-                        <button type="button" class="interest-btn" data-tag="Business">💼 Business</button>
-                        <button type="button" class="interest-btn" data-tag="Arts & Design">🎨 Arts & Design</button>
-                        <button type="button" class="interest-btn" data-tag="Humanities">📚 Humanities</button>
-                        <button type="button" class="interest-btn" data-tag="Environment">🌍 Environment</button>
-                        <button type="button" class="interest-btn" data-tag="Technology">💻 Technology</button>
-                        <button type="button" class="interest-btn" data-tag="Leadership & Service">👥 Leadership</button>
-                        <button type="button" class="interest-btn" data-tag="Social Sciences">🧠 Social Sciences</button>
-                    </div>
-                    <input type="hidden" id="selected-interests" value="" />
-                    <div class="form-navigation">
-                        <button type="button" class="btn-prev" onclick="prevStep(2)">← Back</button>
-                        <button type="submit" class="btn-submit">Create Account 🎉</button>
-                    </div>
+                <div class="form-group">
+                    <label>Country</label>
+                    <select id="country" required>
+                        <option value="">Select your country</option>
+                        <option value="UAE">United Arab Emirates</option>
+                        <option value="Saudi Arabia">Saudi Arabia</option>
+                        <option value="Qatar">Qatar</option>
+                        <option value="Kuwait">Kuwait</option>
+                        <option value="Bahrain">Bahrain</option>
+                        <option value="Oman">Oman</option>
+                        <option value="UK">United Kingdom</option>
+                        <option value="USA">United States</option>
+                        <option value="Canada">Canada</option>
+                        <option value="Australia">Australia</option>
+                        <option value="Other">Other</option>
+                    </select>
                 </div>
-            </form>
-
-            <div class="auth-footer">
-                <p>Already have an account? <a href="login.html">Login here</a></p>
-                <p style="margin-top:8px;"><a href="index.html">← Back to Home</a></p>
-                <p style="margin-top:4px; font-size:12px; color:#aaa;">KHDA Permit #633441</p>
+                <div class="form-navigation">
+                    <button type="button" class="btn-prev" onclick="prevStep(1)">← Back</button>
+                    <button type="button" class="btn-next" onclick="nextStep(3)">Next →</button>
+                </div>
             </div>
 
-            <!-- Student App Link -->
-            <div style="text-align: center; margin-top: 16px; padding-top: 16px; border-top: 1px solid #f0ecf8;">
-                <a href="student-app.html" class="btn-app-redirect">🚀 Go to Student App</a>
+            <!-- Step 3: Interests -->
+            <div class="form-step" data-step="3">
+                <div class="step-indicator">Step 3 of 3</div>
+                <h2>Your Interests</h2>
+                <p class="step-description">Pick a few areas you're curious about (we'll do a deeper quiz next!)</p>
+                <div class="interest-tags">
+                    <button type="button" class="interest-btn" data-tag="STEM">🔬 STEM</button>
+                    <button type="button" class="interest-btn" data-tag="Medicine & Health">⚕️ Medicine</button>
+                    <button type="button" class="interest-btn" data-tag="Business">💼 Business</button>
+                    <button type="button" class="interest-btn" data-tag="Arts & Design">🎨 Arts & Design</button>
+                    <button type="button" class="interest-btn" data-tag="Humanities">📚 Humanities</button>
+                    <button type="button" class="interest-btn" data-tag="Environment">🌍 Environment</button>
+                    <button type="button" class="interest-btn" data-tag="Technology">💻 Technology</button>
+                    <button type="button" class="interest-btn" data-tag="Leadership & Service">👥 Leadership</button>
+                    <button type="button" class="interest-btn" data-tag="Social Sciences">🧠 Social Sciences</button>
+                </div>
+                <input type="hidden" id="selected-interests" value="" />
+                <div class="form-navigation">
+                    <button type="button" class="btn-prev" onclick="prevStep(2)">← Back</button>
+                    <button type="submit" class="btn-submit">Create Account 🎉</button>
+                </div>
             </div>
+        </form>
+
+        <div class="auth-footer">
+            <p>Already have an account? <a href="login.html">Login here</a></p>
+            <p style="margin-top:8px;"><a href="index.html">← Back to Home</a></p>
+            <p style="margin-top:4px; font-size:12px; color:#aaa;">KHDA Permit #633441</p>
+        </div>
+
+        <div style="text-align: center; margin-top: 16px; padding-top: 16px; border-top: 1px solid #f0ecf8;">
+            <a href="student-app.html" class="btn-app-redirect">🚀 Go to Student App</a>
         </div>
     </div>
 
+    <!-- ======================================== -->
+    <!-- FIREBASE INITIALIZATION (FIXED) -->
+    <!-- ======================================== -->
     <script>
-        // Firebase config is already loaded from the CDN
-        // Using the global auth and db from firebase-app-compat.js
+        // ============================================================
+        // FIREBASE CONFIGURATION - INITIALIZE HERE!
+        // ============================================================
+        const firebaseConfig = {
+            apiKey: "AIzaSyBGJcOifwfWlGeFsFCXhdC67fyRTBOvfGQ",
+            authDomain: "futures-2.firebaseapp.com",
+            projectId: "futures-2",
+            storageBucket: "futures-2.firebasestorage.app",
+            messagingSenderId: "143399880838",
+            appId: "1:143399880838:web:c2232759fcbc1fa2ed2907"
+        };
 
+        // Initialize Firebase (if not already initialized)
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+            console.log("🔥 Firebase initialized successfully from signup.html!");
+        } else {
+            console.log("🔥 Firebase already initialized.");
+        }
+
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+
+        // ========================================
+        // SIGNUP FORM LOGIC
+        // ========================================
         let currentStep = 1;
         let selectedTags = [];
 
@@ -445,12 +477,13 @@
                 }
 
                 try {
-                    // Create user with Firebase Auth
-                    const userCredential = await firebase.auth().createUserWithEmailAndPassword(email, password);
+                    console.log('📝 Creating user with email:', email);
+                    const userCredential = await auth.createUserWithEmailAndPassword(email, password);
                     const user = userCredential.user;
+                    console.log('✅ User created:', user.uid);
 
                     // Save student profile to Firestore
-                    await firebase.firestore().collection('students').doc(user.uid).set({
+                    await db.collection('students').doc(user.uid).set({
                         uid: user.uid,
                         name: name,
                         email: email,
@@ -468,21 +501,24 @@
                         createdAt: firebase.firestore.FieldValue.serverTimestamp(),
                         updatedAt: firebase.firestore.FieldValue.serverTimestamp()
                     });
+                    console.log('✅ Profile saved to Firestore');
 
                     msgEl.className = 'message-box success';
                     msgEl.textContent = '✅ Account created successfully! Redirecting to Student App...';
 
-                    // UPDATED: Redirect to student-app.html instead of quiz.html
                     setTimeout(() => {
                         window.location.href = 'student-app.html';
                     }, 800);
 
                 } catch (error) {
-                    console.error('Signup error:', error);
+                    console.error('❌ Signup error:', error.code, error.message);
                     msgEl.className = 'message-box error';
                     if (error.code === 'auth/email-already-in-use') {
-                        msgEl.textContent = '❌ This email is already registered. Please <a href="login.html" style="color:#6C3CE1;">login</a> instead.';
-                        msgEl.innerHTML = msgEl.textContent; // Allow HTML
+                        msgEl.innerHTML = '❌ This email is already registered. Please <a href="login.html" style="color:#6C3CE1;">login</a> instead.';
+                    } else if (error.code === 'auth/weak-password') {
+                        msgEl.textContent = '❌ Password is too weak. Please use at least 8 characters.';
+                    } else if (error.code === 'auth/invalid-email') {
+                        msgEl.textContent = '❌ Invalid email address. Please check and try again.';
                     } else {
                         msgEl.textContent = '❌ Signup failed: ' + error.message;
                     }
