@@ -1,0 +1,171 @@
+/* css/activity-registration.css */
+.registration-main {
+    background: #ffffff;
+    padding: 30px 35px;
+    border-radius: 16px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    margin: 30px auto;
+    max-width: 850px;
+}
+
+.activity-summary {
+    border-bottom: 1px solid #e9edf2;
+    padding-bottom: 20px;
+    margin-bottom: 25px;
+}
+
+.activity-summary h1 {
+    font-size: 1rem;
+    font-weight: 400;
+    color: #6c7a8e;
+    margin-bottom: 4px;
+}
+
+.activity-summary h2 {
+    font-size: 1.9rem;
+    color: #1a2b4c;
+    margin-bottom: 6px;
+}
+
+.activity-type {
+    color: #4a5a72;
+    background: #eef2f7;
+    display: inline-block;
+    padding: 3px 14px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    margin-bottom: 15px;
+}
+
+.readiness-summary {
+    background: #f8faff;
+    padding: 15px 20px;
+    border-radius: 12px;
+    border-left: 4px solid #0077b6;
+}
+
+.readiness-summary h3 {
+    font-size: 1rem;
+    color: #1a2b4c;
+}
+
+.readiness-summary p {
+    color: #2c3e5a;
+}
+
+.checklist-section {
+    margin: 25px 0 30px 0;
+}
+
+.checklist-section h3 {
+    font-size: 1.3rem;
+    margin-bottom: 5px;
+}
+
+.deadline-info {
+    color: #c44536;
+    font-weight: 500;
+    margin-bottom: 20px;
+}
+
+#checklist-container {
+    list-style: none;
+    padding: 0;
+}
+
+#checklist-container li {
+    background: #f9fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    padding: 15px 20px;
+    margin-bottom: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    transition: background-color 0.2s ease;
+}
+
+#checklist-container li.completed {
+    background: #eaf9ed;
+    border-color: #a3d8b0;
+    opacity: 0.85;
+}
+
+.checklist-item-checkbox {
+    margin-right: 15px;
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+}
+
+.checklist-item-content {
+    flex: 1;
+}
+
+.checklist-item-title {
+    font-weight: 600;
+    color: #1a2b4c;
+    display: block;
+}
+
+.checklist-item-desc {
+    font-size: 0.9rem;
+    color: #5a6c82;
+}
+
+.checklist-item-due {
+    font-size: 0.8rem;
+    background: #eef2f7;
+    padding: 2px 12px;
+    border-radius: 20px;
+    color: #3a4b62;
+    margin-left: 10px;
+}
+
+.registration-actions {
+    border-top: 1px solid #e9edf2;
+    padding-top: 25px;
+    text-align: center;
+}
+
+.registration-note {
+    color: #5a6c82;
+    margin-bottom: 15px;
+}
+
+.btn {
+    padding: 10px 30px;
+    font-size: 1rem;
+    font-weight: 600;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-decoration: none;
+    display: inline-block;
+    margin: 0 8px;
+}
+
+.btn-primary {
+    background-color: #0077b6;
+    color: white;
+    border: none;
+}
+
+.btn-primary:hover {
+    background-color: #005f8a;
+}
+
+.btn-primary:disabled {
+    background-color: #b0c4d9;
+    cursor: not-allowed;
+}
+
+.btn-secondary {
+    background-color: transparent;
+    color: #0077b6;
+    border: 2px solid #0077b6;
+}
+
+.btn-secondary:hover {
+    background-color: #e5f0fa;
+}
