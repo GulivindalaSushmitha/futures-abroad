@@ -4,6 +4,10 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Sign Up - Futures Abroad</title>
+    <!-- ===== FIREBASE SDKs - LOAD FIRST ===== -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
     <link rel="stylesheet" href="css/style.css" />
     <style>
         * {
@@ -382,15 +386,11 @@
     </div>
 
     <!-- ======================================== -->
-    <!-- FIREBASE SETUP - COMPLETE FIX -->
+    <!-- FIREBASE INITIALIZATION - COMPLETE -->
     <!-- ======================================== -->
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
-
     <script>
         // ============================================================
-        // FIREBASE CONFIGURATION - MUST BE HERE!
+        // FIREBASE CONFIGURATION - YOUR CONFIG
         // ============================================================
         const firebaseConfig = {
             apiKey: "AIzaSyBGJcOifwfWlGeFsFCXhdC67fyRTBOvfGQ",
@@ -401,15 +401,29 @@
             appId: "1:143399880838:web:c2232759fcbc1fa2ed2907"
         };
 
-        // Initialize Firebase - THIS IS THE KEY FIX!
-        if (!firebase.apps.length) {
+        // ============================================================
+        // INITIALIZE FIREBASE - THE FIX!
+        // ============================================================
+        // Check if Firebase is already initialized to avoid errors
+        if (typeof firebase !== 'undefined' && !firebase.apps.length) {
             firebase.initializeApp(firebaseConfig);
-            console.log("🔥 Firebase initialized from signup.html!");
+            console.log("🔥 Firebase initialized successfully from signup.html!");
+        } else if (typeof firebase === 'undefined') {
+            console.error("❌ Firebase SDK not loaded! Check your internet connection.");
+            alert("Firebase SDK failed to load. Please check your internet connection and refresh.");
+        } else {
+            console.log("🔥 Firebase already initialized.");
         }
 
-        // Now we can safely use auth and firestore
-        const auth = firebase.auth();
-        const db = firebase.firestore();
+        // Get Firebase services
+        let auth, db;
+        try {
+            auth = firebase.auth();
+            db = firebase.firestore();
+            console.log("✅ Firebase Auth and Firestore ready!");
+        } catch (error) {
+            console.error("❌ Error getting Firebase services:", error);
+        }
 
         // ========================================
         // SIGNUP FORM LOGIC
@@ -418,6 +432,8 @@
         let selectedTags = [];
 
         document.addEventListener('DOMContentLoaded', function() {
+            console.log("📄 Signup page loaded!");
+
             // Grade buttons
             document.querySelectorAll('.grade-btn').forEach(btn => {
                 btn.addEventListener('click', function() {
@@ -444,6 +460,13 @@
             // Form submission
             document.getElementById('signup-form').addEventListener('submit', async function(e) {
                 e.preventDefault();
+
+                // Check if Firebase is ready
+                if (!auth || !db) {
+                    alert("❌ Firebase is not ready. Please refresh the page and try again.");
+                    return;
+                }
+
                 const name = document.getElementById('full-name').value.trim();
                 const email = document.getElementById('email').value.trim();
                 const password = document.getElementById('password').value;
@@ -458,6 +481,7 @@
                 msgEl.className = 'message-box';
                 msgEl.textContent = '';
 
+                // Validation
                 if (!name || !email || !password || !school || !country) {
                     msgEl.className = 'message-box error';
                     msgEl.textContent = '⚠️ Please fill in all fields';
@@ -514,9 +538,11 @@
                     if (error.code === 'auth/email-already-in-use') {
                         msgEl.innerHTML = '❌ This email is already registered. Please <a href="login.html" style="color:#6C3CE1;">login</a> instead.';
                     } else if (error.code === 'auth/weak-password') {
-                        msgEl.textContent = '❌ Password is too weak. Please use at least 8 characters.';
+                        msgEl.textContent = '❌ Password is too weak. Please use at least 8 characters with letters and numbers.';
                     } else if (error.code === 'auth/invalid-email') {
                         msgEl.textContent = '❌ Invalid email address. Please check and try again.';
+                    } else if (error.code === 'auth/network-request-failed') {
+                        msgEl.textContent = '❌ Network error. Please check your internet connection.';
                     } else {
                         msgEl.textContent = '❌ Signup failed: ' + error.message;
                     }
@@ -524,6 +550,9 @@
             });
         });
 
+        // ========================================
+        // STEP NAVIGATION
+        // ========================================
         function nextStep(step) {
             if (step > 3) step = 3;
             currentStep = step;
