@@ -229,7 +229,6 @@ const tagExplanations = {
     "Writing": "You express yourself through words. Valuable in academia, law, and media.",
     "Psychology": "You want to understand the human mind. Leads to therapy, research, and human resources.",
     "Economics": "You want to understand how resources are managed. Leads to finance, policy, and business.",
-    "Marketing": "You know how to connect with people. Essential for brands, nonprofits, and startups.",
     "Chemistry": "You're fascinated by how substances interact. Leads to medicine, research, and industry."
 };
 
