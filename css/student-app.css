@@ -2,7 +2,6 @@
    css/student-app.css - Complete Styles for Phases 1, 2, 3
    ============================================================ */
 
-/* ===== BASE ===== */
 .app-header {
     background: white;
     border-bottom: 1px solid #e8e0f0;
@@ -39,7 +38,6 @@
     padding: 20px;
 }
 
-/* ===== PHASES ===== */
 .phase {
     display: none;
     animation: fadeIn 0.5s ease;
@@ -61,7 +59,6 @@
     to { opacity: 1; transform: translateY(0); }
 }
 
-/* ===== PHASE 1: ONBOARDING ===== */
 #phase1 h1 {
     font-size: 2.2rem;
     color: #2D1B4E;
@@ -103,7 +100,6 @@
     border-color: #6C3CE1;
 }
 
-/* ===== QUIZ STYLES ===== */
 .quiz-header {
     margin-bottom: 20px;
 }
@@ -182,7 +178,6 @@
     justify-content: flex-end;
 }
 
-/* ===== INTEREST PROFILE ===== */
 .interest-profile {
     display: flex;
     flex-wrap: wrap;
@@ -211,7 +206,6 @@
     margin-top: 20px;
 }
 
-/* ===== PHASE 2: ACTIVITIES ===== */
 .phase2-header {
     display: flex;
     justify-content: space-between;
@@ -340,7 +334,6 @@
     font-weight: 600;
 }
 
-/* ===== PHASE 3: REGISTRATION ===== */
 .phase3-header {
     display: flex;
     align-items: center;
@@ -354,11 +347,7 @@
     margin: 0;
 }
 
-.phase3-content .activity-summary {
-    margin-bottom: 25px;
-}
-
-.phase3-content .readiness-box {
+.readiness-box {
     background: #f8f4ff;
     border-radius: 12px;
     padding: 16px 20px;
@@ -366,7 +355,7 @@
     margin: 15px 0;
 }
 
-.phase3-content .readiness-box strong {
+.readiness-box strong {
     color: #6C3CE1;
 }
 
@@ -424,7 +413,6 @@
     border-top: 1px solid #e8e0f0;
 }
 
-/* ===== MODAL ===== */
 .modal {
     display: none;
     position: fixed;
@@ -463,7 +451,6 @@
     color: #333;
 }
 
-/* ===== BUTTONS ===== */
 .btn-primary {
     background: #6C3CE1;
     color: white;
@@ -530,46 +517,32 @@
     color: #6C3CE1;
 }
 
-/* ===== RESPONSIVE ===== */
 @media (max-width: 768px) {
     .phase-container {
         padding: 20px;
     }
-    
     #phase1 h1 {
         font-size: 1.6rem;
     }
-    
     .activity-grid {
         grid-template-columns: 1fr;
     }
-    
     .filters-section {
         flex-direction: column;
     }
-    
     .filter-select {
         width: 100%;
     }
-    
     .phase2-header {
         flex-direction: column;
         gap: 10px;
     }
-    
     .profile-actions {
         flex-direction: column;
     }
-    
     .profile-actions .btn-primary,
     .profile-actions .btn-secondary {
         width: 100%;
         text-align: center;
     }
 }
-
-/* ===== UTILITY ===== */
-.text-center { text-align: center; }
-.mt-20 { margin-top: 20px; }
-.mb-10 { margin-bottom: 10px; }
-.hidden { display: none; }
