@@ -164,7 +164,8 @@ function renderActivityCards(activities) {
                     `<span style="font-size: 12px; color: #888;">+${(activity.interest_tags || []).length - 3} more</span>` : ''}
             </div>
             
-            <button onclick="event.stopPropagation(); registerForActivity('${activity.id}')" 
+            <!-- UPDATED: Register button now navigates to Phase 3 page -->
+            <button onclick="event.stopPropagation(); navigateToPhase3('${activity.id}')" 
                     class="btn-primary" style="width: 100%; margin-top: 15px; padding: 12px; font-size: 14px;">
                 📝 Register Now
             </button>
@@ -189,6 +190,23 @@ function renderActivityCards(activities) {
         `;
         document.head.appendChild(style);
     }
+}
+
+// ========================================
+// NAVIGATE TO PHASE 3 - ACTIVITY REGISTRATION
+// ========================================
+function navigateToPhase3(activityId) {
+    // Check if user is logged in
+    const user = auth.currentUser;
+    if (!user) {
+        alert('Please log in first to register for activities.');
+        // You can redirect to login page or show login modal
+        window.location.href = 'login.html';
+        return;
+    }
+    
+    // Navigate to Phase 3 page with the activity ID
+    window.location.href = `activity-registration.html?id=${activityId}`;
 }
 
 // ========================================
@@ -254,7 +272,8 @@ async function showActivityDetail(activityId) {
                 <div id="aiResponse" style="margin-top: 12px; padding: 12px; background: white; border-radius: 12px; display: none; border-left: 4px solid #6C3CE1;"></div>
             </div>
             
-            <button onclick="registerForActivity('${activity.id}')" 
+            <!-- UPDATED: Register button in modal now navigates to Phase 3 -->
+            <button onclick="navigateToPhase3('${activity.id}')" 
                     class="btn-primary" style="width: 100%; padding: 16px; font-size: 18px; margin-top: 10px;">
                 📝 Register for This Activity
             </button>
@@ -344,31 +363,12 @@ async function askAIAboutActivity(activityId) {
 }
 
 // ========================================
-// REGISTER FOR ACTIVITY
+// REGISTER FOR ACTIVITY - DEPRECATED: Now using navigateToPhase3
 // ========================================
 async function registerForActivity(activityId) {
-    const user = auth.currentUser;
-    if (!user) {
-        alert('Please log in first to register for activities.');
-        openModal('login');
-        return;
-    }
-    
-    try {
-        // Update student's registered activities in Firestore
-        await db.collection('students').doc(user.uid).update({
-            registered_activities: firebase.firestore.FieldValue.arrayUnion(activityId)
-        });
-        
-        alert('✅ You have successfully registered for this activity! Check your portfolio for details.');
-        closeActivityDetail();
-        
-        // Reload activities to update status
-        loadActivities();
-    } catch (error) {
-        console.error('Error registering for activity:', error);
-        alert('Unable to register. Please try again.');
-    }
+    // This function is now deprecated but kept for backward compatibility
+    // It now redirects to Phase 3
+    navigateToPhase3(activityId);
 }
 
 // ========================================
@@ -590,6 +590,7 @@ window.showActivityDetail = showActivityDetail;
 window.closeActivityDetail = closeActivityDetail;
 window.askAIAboutActivity = askAIAboutActivity;
 window.registerForActivity = registerForActivity;
+window.navigateToPhase3 = navigateToPhase3; // NEW: Phase 3 navigation function
 window.filterActivities = filterActivities;
 window.refreshRecommendations = refreshRecommendations;
 window.showActivityFeed = showActivityFeed;
@@ -597,3 +598,4 @@ window.seedActivities = seedActivities;
 
 console.log('🎯 Phase 2: Activity Recommendations loaded!');
 console.log('📌 Use seedActivities() to add sample activities to Firestore.');
+console.log('🚀 Phase 3 integration ready! Click "Register Now" to start registration.');
