@@ -9,18 +9,279 @@
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
     <link rel="stylesheet" href="css/style.css" />
     <link rel="stylesheet" href="css/auth.css" />
+    <style>
+        /* Additional styles for better UI */
+        .auth-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            background: linear-gradient(135deg, #f5f0ff 0%, #e8e0f5 100%);
+        }
+        .auth-card {
+            background: white;
+            border-radius: 28px;
+            padding: 40px;
+            max-width: 500px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(108,60,225,0.15);
+        }
+        .auth-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .auth-logo {
+            font-size: 28px;
+            font-weight: 800;
+            color: #2D1B4E;
+        }
+        .auth-logo span { color: #6C3CE1; }
+        .auth-header h1 {
+            font-size: 26px;
+            color: #2D1B4E;
+            margin: 8px 0 4px;
+        }
+        .auth-header p {
+            color: #888;
+            font-size: 15px;
+        }
+        .form-step {
+            display: none;
+            animation: fadeIn 0.4s ease;
+        }
+        .form-step.active {
+            display: block;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .step-indicator {
+            font-size: 13px;
+            font-weight: 600;
+            color: #6C3CE1;
+            margin-bottom: 8px;
+        }
+        .form-step h2 {
+            font-size: 20px;
+            color: #2D1B4E;
+            margin-bottom: 16px;
+        }
+        .step-description {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 16px;
+        }
+        .form-group {
+            margin-bottom: 16px;
+        }
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: #2D1B4E;
+            font-size: 14px;
+        }
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 14px 18px;
+            border: 2px solid #E8E0F0;
+            border-radius: 14px;
+            font-size: 15px;
+            font-family: 'Quicksand', sans-serif;
+            transition: border 0.3s;
+            background: #faf8ff;
+        }
+        .form-group input:focus,
+        .form-group select:focus {
+            border-color: #6C3CE1;
+            outline: none;
+            background: white;
+            box-shadow: 0 0 0 4px rgba(108,60,225,0.08);
+        }
+        .form-group small {
+            color: #888;
+            font-size: 12px;
+            display: block;
+            margin-top: 4px;
+        }
+
+        .grade-selector {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .grade-btn {
+            padding: 10px 24px;
+            border: 2px solid #E8E0F0;
+            border-radius: 50px;
+            background: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: 'Quicksand', sans-serif;
+            font-size: 14px;
+            flex: 1;
+            min-width: 80px;
+        }
+        .grade-btn:hover {
+            border-color: #6C3CE1;
+            background: #f5f0ff;
+        }
+        .grade-btn.active {
+            background: #6C3CE1;
+            color: white;
+            border-color: #6C3CE1;
+        }
+
+        .interest-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 12px 0;
+        }
+        .interest-btn {
+            padding: 10px 20px;
+            border: 2px solid #E8E0F0;
+            border-radius: 50px;
+            background: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: 'Quicksand', sans-serif;
+            font-size: 14px;
+        }
+        .interest-btn:hover {
+            border-color: #6C3CE1;
+            background: #f5f0ff;
+        }
+        .interest-btn.selected {
+            background: #6C3CE1;
+            color: white;
+            border-color: #6C3CE1;
+        }
+
+        .form-navigation {
+            display: flex;
+            gap: 12px;
+            margin-top: 20px;
+        }
+        .btn-prev {
+            padding: 12px 24px;
+            background: transparent;
+            border: 2px solid #E8E0F0;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: 'Quicksand', sans-serif;
+            transition: all 0.3s;
+            flex: 1;
+        }
+        .btn-prev:hover {
+            border-color: #6C3CE1;
+            background: #f5f0ff;
+        }
+        .btn-next {
+            padding: 12px 24px;
+            background: #6C3CE1;
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-weight: 700;
+            cursor: pointer;
+            font-family: 'Quicksand', sans-serif;
+            transition: all 0.3s;
+            flex: 1;
+        }
+        .btn-next:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(108,60,225,0.3);
+        }
+        .btn-submit {
+            padding: 12px 24px;
+            background: linear-gradient(135deg, #6C3CE1, #a855f7);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 16px;
+            cursor: pointer;
+            font-family: 'Quicksand', sans-serif;
+            transition: all 0.3s;
+            flex: 1;
+        }
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(108,60,225,0.35);
+        }
+
+        .auth-footer {
+            text-align: center;
+            margin-top: 20px;
+            color: #888;
+            font-size: 14px;
+        }
+        .auth-footer a {
+            color: #6C3CE1;
+            font-weight: 600;
+            text-decoration: none;
+        }
+        .auth-footer a:hover { text-decoration: underline; }
+
+        .message-box {
+            padding: 12px 16px;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            display: none;
+        }
+        .message-box.error {
+            display: block;
+            background: #FFE8E8;
+            color: #C62828;
+        }
+        .message-box.success {
+            display: block;
+            background: #E8F5E9;
+            color: #2E7D32;
+        }
+        .btn-app-redirect {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 10px 24px;
+            background: #6C3CE1;
+            color: white;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+        .btn-app-redirect:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(108,60,225,0.3);
+        }
+        @media (max-width: 480px) {
+            .auth-card { padding: 24px; }
+            .grade-selector { flex-direction: column; }
+            .grade-btn { flex: none; }
+            .interest-tags { gap: 8px; }
+            .interest-btn { font-size: 13px; padding: 8px 16px; }
+        }
+    </style>
 </head>
 <body>
     <div class="auth-container">
         <div class="auth-card">
             <div class="auth-header">
-                <div class="auth-logo">🚀 Futures Abroad</div>
+                <div class="auth-logo">🚀 Futures <span>Abroad</span></div>
                 <h1>Create Your Account</h1>
                 <p>Start your AI-powered journey to university</p>
             </div>
 
             <form id="signup-form" class="auth-form">
-                <div id="signupMessage" style="display:none; padding:10px; border-radius:10px; margin-bottom:10px;"></div>
+                <div id="signupMessage" class="message-box"></div>
                 
                 <!-- Step 1: Basic Info -->
                 <div class="form-step active" data-step="1">
@@ -36,7 +297,7 @@
                     </div>
                     <div class="form-group">
                         <label>Password</label>
-                        <input type="password" id="password" placeholder="Create a strong password" required />
+                        <input type="password" id="password" placeholder="Create a strong password" required minlength="8" />
                         <small>Must be at least 8 characters</small>
                     </div>
                     <button type="button" class="btn-next" onclick="nextStep(2)">Next →</button>
@@ -108,19 +369,26 @@
 
             <div class="auth-footer">
                 <p>Already have an account? <a href="login.html">Login here</a></p>
+                <p style="margin-top:8px;"><a href="index.html">← Back to Home</a></p>
+                <p style="margin-top:4px; font-size:12px; color:#aaa;">KHDA Permit #633441</p>
             </div>
-        </div>
-        <div class="auth-illustration">
-            <div id="signup-animation"></div>
+
+            <!-- Student App Link -->
+            <div style="text-align: center; margin-top: 16px; padding-top: 16px; border-top: 1px solid #f0ecf8;">
+                <a href="student-app.html" class="btn-app-redirect">🚀 Go to Student App</a>
+            </div>
         </div>
     </div>
 
-    <script src="js/firebase-config.js"></script>
     <script>
+        // Firebase config is already loaded from the CDN
+        // Using the global auth and db from firebase-app-compat.js
+
         let currentStep = 1;
         let selectedTags = [];
 
         document.addEventListener('DOMContentLoaded', function() {
+            // Grade buttons
             document.querySelectorAll('.grade-btn').forEach(btn => {
                 btn.addEventListener('click', function() {
                     document.querySelectorAll('.grade-btn').forEach(b => b.classList.remove('active'));
@@ -129,6 +397,7 @@
                 });
             });
 
+            // Interest buttons
             document.querySelectorAll('.interest-btn').forEach(btn => {
                 btn.addEventListener('click', function() {
                     this.classList.toggle('selected');
@@ -142,6 +411,7 @@
                 });
             });
 
+            // Form submission
             document.getElementById('signup-form').addEventListener('submit', async function(e) {
                 e.preventDefault();
                 const name = document.getElementById('full-name').value.trim();
@@ -154,33 +424,33 @@
 
                 const msgEl = document.getElementById('signupMessage');
 
+                // Reset message
+                msgEl.className = 'message-box';
+                msgEl.textContent = '';
+
                 if (!name || !email || !password || !school || !country) {
-                    msgEl.style.display = 'block';
-                    msgEl.style.background = '#FFE8E8';
-                    msgEl.style.color = '#C62828';
+                    msgEl.className = 'message-box error';
                     msgEl.textContent = '⚠️ Please fill in all fields';
                     return;
                 }
                 if (password.length < 8) {
-                    msgEl.style.display = 'block';
-                    msgEl.style.background = '#FFE8E8';
-                    msgEl.style.color = '#C62828';
+                    msgEl.className = 'message-box error';
                     msgEl.textContent = '⚠️ Password must be at least 8 characters';
                     return;
                 }
                 if (interests.length < 2) {
-                    msgEl.style.display = 'block';
-                    msgEl.style.background = '#FFE8E8';
-                    msgEl.style.color = '#C62828';
+                    msgEl.className = 'message-box error';
                     msgEl.textContent = '⚠️ Please select at least 2 interests';
                     return;
                 }
 
                 try {
-                    const userCredential = await auth.createUserWithEmailAndPassword(email, password);
+                    // Create user with Firebase Auth
+                    const userCredential = await firebase.auth().createUserWithEmailAndPassword(email, password);
                     const user = userCredential.user;
 
-                    await db.collection('students').doc(user.uid).set({
+                    // Save student profile to Firestore
+                    await firebase.firestore().collection('students').doc(user.uid).set({
                         uid: user.uid,
                         name: name,
                         email: email,
@@ -189,20 +459,33 @@
                         country: country,
                         interests: interests,
                         profileCompleted: false,
-                        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                        quizAnswers: [],
+                        registeredActivities: [],
+                        completedActivities: [],
+                        calendarEvents: [],
                         onboardingPhase: 1,
                         profileStrength: 0,
-                        activities: [],
-                        portfolio: [],
-                        universityShortlist: []
+                        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
                     });
 
-                    window.location.href = 'quiz.html?uid=' + user.uid;
+                    msgEl.className = 'message-box success';
+                    msgEl.textContent = '✅ Account created successfully! Redirecting to Student App...';
+
+                    // UPDATED: Redirect to student-app.html instead of quiz.html
+                    setTimeout(() => {
+                        window.location.href = 'student-app.html';
+                    }, 800);
+
                 } catch (error) {
-                    msgEl.style.display = 'block';
-                    msgEl.style.background = '#FFE8E8';
-                    msgEl.style.color = '#C62828';
-                    msgEl.textContent = '❌ Signup failed: ' + error.message;
+                    console.error('Signup error:', error);
+                    msgEl.className = 'message-box error';
+                    if (error.code === 'auth/email-already-in-use') {
+                        msgEl.textContent = '❌ This email is already registered. Please <a href="login.html" style="color:#6C3CE1;">login</a> instead.';
+                        msgEl.innerHTML = msgEl.textContent; // Allow HTML
+                    } else {
+                        msgEl.textContent = '❌ Signup failed: ' + error.message;
+                    }
                 }
             });
         });
@@ -223,6 +506,7 @@
             document.querySelectorAll('.form-step').forEach((el, index) => {
                 el.classList.toggle('active', index + 1 === currentStep);
             });
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
     </script>
 </body>
