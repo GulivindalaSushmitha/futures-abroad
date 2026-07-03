@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Futures Abroad - Student App</title>
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/student-app.css" />
+</head>
+<body>
+    <!-- App Header -->
+    <header class="app-header">
+        <div class="container">
+            <div class="logo">Futures Abroad</div>
+            <nav>
+                <span id="userNameDisplay" style="color: #6C3CE1; font-weight: 600;"></span>
+                <button id="logoutBtn" class="btn-outline">Logout</button>
+            </nav>
+        </div>
+    </header>
+
+    <main class="app-main">
+        <!-- ======================================== -->
+        <!-- PHASE 1: ONBOARDING & INTEREST DISCOVERY -->
+        <!-- ======================================== -->
+        <section id="phase1" class="phase active">
+            <div class="container phase-container">
+                <h1>🚀 Welcome to Futures Abroad</h1>
+                <p class="subtitle">Let's discover your interests and build your future</p>
+                
+                <!-- Step 1: Basic Profile -->
+                <div id="step1-profile">
+                    <form id="profileForm">
+                        <div class="form-group">
+                            <label>Full Name</label>
+                            <input type="text" id="studentName" placeholder="Enter your full name" required />
+                        </div>
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input type="email" id="studentEmail" placeholder="Enter your email" required disabled />
+                        </div>
+                        <div class="form-group">
+                            <label>Grade</label>
+                            <select id="studentGrade" required>
+                                <option value="">Select your grade</option>
+                                <option value="10">Grade 10</option>
+                                <option value="11">Grade 11</option>
+                                <option value="12">Grade 12</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>School Name</label>
+                            <input type="text" id="studentSchool" placeholder="Enter your school name" />
+                        </div>
+                        <div class="form-group">
+                            <label>Country</label>
+                            <input type="text" id="studentCountry" placeholder="Enter your country" />
+                        </div>
+                        <button type="submit" class="btn-primary btn-full">Start Interest Quiz →</button>
+                    </form>
+                </div>
+
+                <!-- Step 2: AI Interest Quiz (Chat-style) -->
+                <div id="step2-quiz" style="display: none;">
+                    <div class="quiz-header">
+                        <h2>🧠 Let's Understand Your Interests</h2>
+                        <p class="quiz-progress" id="quizProgress">Question 1 of 6</p>
+                    </div>
+                    <div class="chat-container" id="chatContainer">
+                        <div class="chat-message bot">
+                            <div class="avatar">🤖</div>
+                            <div class="message-content">
+                                <p id="quizQuestion">What subject do you look forward to most at school?</p>
+                                <div id="quizOptions" class="quiz-options"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="quiz-controls">
+                        <button id="quizNextBtn" class="btn-primary" disabled>Next →</button>
+                    </div>
+                </div>
+
+                <!-- Step 3: Interest Profile Review -->
+                <div id="step3-profile-review" style="display: none;">
+                    <h2>🎯 Your Interest Profile</h2>
+                    <p class="subtitle">Based on your answers, we've identified your key interest areas:</p>
+                    <div id="interestProfileDisplay" class="interest-profile"></div>
+                    <div class="profile-actions">
+                        <button id="confirmProfileBtn" class="btn-primary">✅ Confirm Profile</button>
+                        <button id="editProfileBtn" class="btn-secondary">✏️ Edit Interests</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ======================================== -->
+        <!-- PHASE 2: CURATED ACTIVITY RECOMMENDATIONS -->
+        <!-- ======================================== -->
+        <section id="phase2" class="phase">
+            <div class="container phase-container">
+                <div class="phase2-header">
+                    <div>
+                        <h2>🎯 Recommended Activities For You</h2>
+                        <p id="interestProfileDisplay2" class="interests-tags"></p>
+                    </div>
+                    <div class="phase2-actions">
+                        <button id="refreshActivitiesBtn" class="btn-secondary btn-sm">🔄 Refresh</button>
+                    </div>
+                </div>
+
+                <!-- Filters -->
+                <div class="filters-section">
+                    <select id="filterType" class="filter-select">
+                        <option value="all">All Types</option>
+                        <option value="competition">Competitions</option>
+                        <option value="internship">Internships</option>
+                        <option value="volunteering">Volunteering</option>
+                        <option value="course">Courses</option>
+                        <option value="workshop">Workshops</option>
+                        <option value="research">Research</option>
+                    </select>
+                    <select id="filterCost" class="filter-select">
+                        <option value="all">All Costs</option>
+                        <option value="Free">Free</option>
+                        <option value="Paid">Paid</option>
+                        <option value="Scholarship available">Scholarship</option>
+                    </select>
+                    <select id="filterDuration" class="filter-select">
+                        <option value="all">All Durations</option>
+                        <option value="1-3 days">1-3 days</option>
+                        <option value="1 week">1 week</option>
+                        <option value="2 weeks">2 weeks</option>
+                        <option value="1 month">1 month</option>
+                        <option value="2+ months">2+ months</option>
+                    </select>
+                    <button id="applyFiltersBtn" class="btn-secondary btn-sm">Apply Filters</button>
+                </div>
+
+                <!-- Activity Cards Grid -->
+                <div id="activityCardsGrid" class="activity-grid"></div>
+            </div>
+        </section>
+
+        <!-- ======================================== -->
+        <!-- PHASE 3: ACTIVITY SELECTION & REGISTRATION -->
+        <!-- ======================================== -->
+        <section id="phase3" class="phase">
+            <div class="container phase-container">
+                <div class="phase3-header">
+                    <button id="backToActivitiesBtn" class="btn-secondary btn-sm">← Back to Activities</button>
+                    <h2 id="phase3ActivityName">📝 Activity Registration</h2>
+                </div>
+                <div id="phase3Content"></div>
+            </div>
+        </section>
+
+        <!-- ======================================== -->
+        <!-- ACTIVITY DETAIL MODAL (Phase 2) -->
+        <!-- ======================================== -->
+        <div id="activityDetailModal" class="modal">
+            <div class="modal-content">
+                <span class="modal-close" id="closeModalBtn">&times;</span>
+                <div id="activityDetailContent"></div>
+            </div>
+        </div>
+    </main>
+
+    <script type="module">
+        // Import all the phase logic
+        import './js/student-app.js';
+    </script>
+</body>
+</html>
