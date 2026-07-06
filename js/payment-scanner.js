@@ -27,14 +27,15 @@ document.addEventListener('DOMContentLoaded', () => {
                     💳 Payment window opened. 
                     <br>After completing payment, click the <strong>"Confirm Payment"</strong> button below.
                 `;
-                statusEl.style.color = '#667eea';
+                statusEl.style.color = '#6C3CE1';
+                statusEl.style.background = '#f0e6ff';
+                statusEl.style.border = '1px solid #6C3CE1';
             }
 
             // Show the manual confirmation button
             const confirmBtn = document.getElementById('manualConfirmBtn');
             if (confirmBtn) {
                 confirmBtn.style.display = 'inline-block';
-                confirmBtn.style.animation = 'pulse 1.5s infinite';
             }
         });
     }
@@ -46,7 +47,9 @@ document.addEventListener('DOMContentLoaded', () => {
             const statusEl = document.getElementById('scannerStatus');
             if (statusEl) {
                 statusEl.innerHTML = '✅ Payment confirmed successfully!';
-                statusEl.style.color = '#2ecc71';
+                statusEl.style.color = '#22c55e';
+                statusEl.style.background = '#e8f5e9';
+                statusEl.style.border = '1px solid #22c55e';
             }
 
             // Create payment details
@@ -69,7 +72,9 @@ document.addEventListener('DOMContentLoaded', () => {
             const statusEl = document.getElementById('scannerStatus');
             if (statusEl) {
                 statusEl.textContent = '📤 QR Code uploaded and verified!';
-                statusEl.style.color = '#2ecc71';
+                statusEl.style.color = '#22c55e';
+                statusEl.style.background = '#e8f5e9';
+                statusEl.style.border = '1px solid #22c55e';
             }
 
             const paymentDetails = {
@@ -90,7 +95,9 @@ document.addEventListener('DOMContentLoaded', () => {
             const statusEl = document.getElementById('scannerStatus');
             if (statusEl) {
                 statusEl.textContent = '📷 QR Code scanned successfully!';
-                statusEl.style.color = '#2ecc71';
+                statusEl.style.color = '#22c55e';
+                statusEl.style.background = '#e8f5e9';
+                statusEl.style.border = '1px solid #22c55e';
             }
 
             const paymentDetails = {
@@ -104,19 +111,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 });
-
-// ============================================================
-// Add pulse animation for the confirm button
-// ============================================================
-const style = document.createElement('style');
-style.textContent = `
-    @keyframes pulse {
-        0% { transform: scale(1); }
-        50% { transform: scale(1.05); box-shadow: 0 0 20px rgba(46, 204, 113, 0.4); }
-        100% { transform: scale(1); }
-    }
-`;
-document.head.appendChild(style);
 
 // ============================================================
 // Exports
