@@ -201,7 +201,7 @@
         </section>
 
         <!-- ============================================================
-        PHASE 4 - Complete Activity Section (THIS IS WHAT WAS MISSING)
+        PHASE 4 - Complete Activity Section (THIS IS THE FIX)
         ============================================================ -->
         <section class="phase4-section">
             <h3>🎯 After Completing This Activity</h3>
@@ -209,7 +209,7 @@
                 Once you've finished this activity, mark it as complete. You'll be prompted to reflect on your experience,
                 which will be saved to your portfolio and may be used for university essays.
             </p>
-            
+
             <div style="display: flex; gap: 1rem; flex-wrap: wrap; align-items: center;">
                 <button id="completeActivityBtn" class="btn btn-success">
                     ✅ Mark Activity as Complete
@@ -218,7 +218,7 @@
                     After completion, you'll be prompted to reflect on your experience.
                 </span>
             </div>
-            
+
             <div id="phase4-status" style="margin-top: 0.75rem; font-size: 0.9rem; color: #666; display: none;"></div>
         </section>
 
@@ -239,9 +239,9 @@
         document.addEventListener('DOMContentLoaded', () => {
             const completeBtn = document.getElementById('completeActivityBtn');
             const statusEl = document.getElementById('phase4-status');
-            
+
             if (!completeBtn) return;
-            
+
             onAuthStateChanged(auth, (user) => {
                 if (!user) {
                     completeBtn.disabled = true;
@@ -254,27 +254,27 @@
                     }
                 }
             });
-            
+
             completeBtn.addEventListener('click', async () => {
                 const user = auth.currentUser;
                 if (!user) {
                     alert('Please log in first.');
                     return;
                 }
-                
+
                 const activityName = document.getElementById('activity-name')?.textContent || 'Activity';
                 const activityType = document.getElementById('activity-type')?.textContent?.toLowerCase() || 'default';
                 const duration = document.getElementById('activity-duration')?.textContent || 'N/A';
-                
+
                 const urlParams = new URLSearchParams(window.location.search);
                 const activityId = urlParams.get('id') || 'unknown';
-                
+
                 const skills = getSkillsFromPage();
                 const note = prompt('Add a brief note about your experience (optional):');
-                
+
                 completeBtn.textContent = '⏳ Processing...';
                 completeBtn.disabled = true;
-                
+
                 const success = await markActivityComplete(
                     activityId,
                     activityName,
@@ -283,12 +283,12 @@
                     skills || [],
                     note || ''
                 );
-                
+
                 if (success) {
                     completeBtn.textContent = '✅ Completed!';
                     completeBtn.style.background = '#16a34a';
                     completeBtn.style.cursor = 'default';
-                    
+
                     if (statusEl) {
                         statusEl.style.display = 'block';
                         statusEl.style.color = '#22c55e';
