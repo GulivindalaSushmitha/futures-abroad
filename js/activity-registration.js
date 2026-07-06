@@ -1,5 +1,5 @@
 // ============================================================
-// js/activity-registration.js - Phase 3 + 4 (FIXED)
+// js/activity-registration.js - Phase 3 + 4 (COMPLETE)
 // ============================================================
 
 import { 
@@ -85,7 +85,7 @@ function displayActivitySummary(activity, userInterests) {
 function renderChecklist(requirements) {
     if (!checklistContainer) return;
     checklistContainer.innerHTML = '';
-    
+
     if (!requirements || requirements.length === 0) {
         checklistContainer.innerHTML = '<li style="padding:10px;color:#888;">No specific requirements for this activity.</li>';
         return;
@@ -93,51 +93,40 @@ function renderChecklist(requirements) {
 
     requirements.forEach((req, index) => {
         const listItem = document.createElement('li');
+        listItem.className = 'checklist-item';
         listItem.id = `checklist-item-${req.id || index}`;
         listItem.dataset.completed = 'false';
-        listItem.style.cssText = `
-            display: flex; align-items: flex-start; gap: 12px;
-            padding: 12px 16px; margin-bottom: 8px;
-            background: #f8f9fa; border-radius: 10px;
-            border-left: 4px solid #6C3CE1;
-            transition: all 0.3s;
-        `;
 
+        // Checkbox
         const checkbox = document.createElement('input');
         checkbox.type = 'checkbox';
-        checkbox.className = 'checklist-item-checkbox';
+        checkbox.className = 'checkbox';
         checkbox.id = `checkbox-${req.id || index}`;
-        checkbox.style.cssText = `
-            margin-top: 2px; width: 18px; height: 18px;
-            cursor: pointer; accent-color: #6C3CE1;
-            flex-shrink: 0;
-        `;
         checkbox.addEventListener('change', function(e) {
             if (e.target.checked) {
                 listItem.dataset.completed = 'true';
-                listItem.style.background = '#e8f5e9';
-                listItem.style.borderLeftColor = '#22c55e';
+                listItem.classList.add('completed');
             } else {
                 listItem.dataset.completed = 'false';
-                listItem.style.background = '#f8f9fa';
-                listItem.style.borderLeftColor = '#6C3CE1';
+                listItem.classList.remove('completed');
             }
             updateRegistrationButtonState();
         });
 
+        // Content
         const contentDiv = document.createElement('div');
-        contentDiv.style.cssText = 'flex:1;';
+        contentDiv.className = 'content';
 
         const titleSpan = document.createElement('div');
-        titleSpan.style.cssText = 'font-weight:700;font-size:1rem;color:#2D1B4E;';
+        titleSpan.className = 'title';
         titleSpan.textContent = `${index + 1}. ${req.title || 'Requirement'}`;
 
         const descSpan = document.createElement('div');
-        descSpan.style.cssText = 'color:#666;font-size:0.9rem;margin:2px 0;';
+        descSpan.className = 'desc';
         descSpan.textContent = req.description || '';
 
         const dueSpan = document.createElement('div');
-        dueSpan.style.cssText = 'color:#888;font-size:0.8rem;';
+        dueSpan.className = 'due';
         dueSpan.textContent = req.dueDate ? `📅 Due: ${req.dueDate}` : '';
 
         contentDiv.appendChild(titleSpan);
@@ -155,7 +144,7 @@ function renderChecklist(requirements) {
 // ============================================================
 function updateRegistrationButtonState() {
     if (!markRegisteredBtn) return;
-    const allItems = document.querySelectorAll('#checklist-container li');
+    const allItems = document.querySelectorAll('.checklist-item');
     let allCompleted = true;
     allItems.forEach(item => {
         if (item.dataset.completed === 'false') {
@@ -183,22 +172,22 @@ async function handleRegistrationComplete(activityId) {
     try {
         const userRef = doc(db, COLLECTIONS.users, user.uid);
         const userDoc = await getDoc(userRef);
-        
+
         if (userDoc.exists()) {
             const userData = userDoc.data();
             const registered = userData.registered_activities || [];
-            
+
             if (!registered.includes(activityId)) {
                 await updateDoc(userRef, {
                     registered_activities: arrayUnion(activityId)
                 });
-                
+
                 markRegisteredBtn.textContent = '✅ Registered!';
                 markRegisteredBtn.disabled = true;
                 markRegisteredBtn.style.background = '#22c55e';
-                
+
                 alert('🎉 Congratulations! You have successfully registered for this activity!');
-                
+
                 // Show Phase 4 section
                 const phase4Section = document.querySelector('.phase4-section');
                 if (phase4Section) {
@@ -254,6 +243,7 @@ function setupPhase4Button() {
                 completeBtn.textContent = '✅ Completed!';
                 completeBtn.style.background = '#16a34a';
                 completeBtn.style.opacity = '1';
+                completeBtn.disabled = false;
                 
                 if (statusEl) {
                     statusEl.style.display = 'block';
@@ -347,3 +337,5 @@ document.addEventListener('DOMContentLoaded', function() {
     initPhase3();
     setupPhase4Button();
 });
+
+console.log('✅ activity-registration.js loaded successfully!');
