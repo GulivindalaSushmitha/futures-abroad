@@ -1,0 +1,408 @@
+<!-- university-shortlist.html - Phase 5: University Shortlist -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Your University Shortlist - Futures Abroad</title>
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/university.css" />
+    <style>
+        /* ============================================================
+           Additional Styles for University Shortlist
+           ============================================================ */
+        .navbar {
+            background: white;
+            padding: 15px 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+        }
+        .navbar .nav-logo {
+            font-size: 22px;
+            font-weight: 800;
+            color: #2D1B4E;
+            text-decoration: none;
+        }
+        .navbar .nav-logo span {
+            color: #6C3CE1;
+        }
+        .navbar .nav-links {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+        .navbar .nav-links a {
+            text-decoration: none;
+            color: #555;
+            font-weight: 600;
+            padding: 8px 16px;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+        .navbar .nav-links a:hover {
+            background: #f0e6ff;
+            color: #6C3CE1;
+        }
+        .navbar .nav-links a.active {
+            background: #6C3CE1;
+            color: white;
+        }
+        .navbar .nav-links .logout-link {
+            color: #e74c3c;
+        }
+        .navbar .nav-links .logout-link:hover {
+            background: #fde8e8;
+        }
+
+        /* Loading Spinner */
+        .loading-spinner {
+            text-align: center;
+            padding: 3rem;
+        }
+        .loading-spinner .spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid #f0e6ff;
+            border-top: 4px solid #6C3CE1;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+            background: #f8f9fa;
+            border-radius: 16px;
+        }
+        .empty-state .empty-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+        .empty-state h3 {
+            font-size: 1.5rem;
+            color: #2D1B4E;
+            margin-bottom: 0.5rem;
+        }
+        .empty-state p {
+            color: #666;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        /* University Card Enhancements */
+        .university-card .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 0.25rem;
+        }
+        .university-card .university-name {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #2D1B4E;
+        }
+        .university-card .university-meta {
+            color: #666;
+            font-size: 0.9rem;
+            margin: 0.25rem 0 0.5rem;
+        }
+        .university-card .university-meta span {
+            margin-right: 0.75rem;
+        }
+        .university-card .type-badge {
+            display: inline-block;
+            padding: 0.2rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            flex-shrink: 0;
+        }
+        .type-badge.reach { background: #fde8e8; color: #c0392b; }
+        .type-badge.target { background: #fef5e7; color: #d68910; }
+        .type-badge.safety { background: #eafaf1; color: #1a7a3a; }
+
+        .university-card .programs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.4rem;
+            margin: 0.5rem 0;
+        }
+        .university-card .program-tag {
+            background: #f0f4ff;
+            padding: 0.15rem 0.6rem;
+            border-radius: 12px;
+            font-size: 0.7rem;
+            color: #6C3CE1;
+            font-weight: 500;
+        }
+
+        .university-card .ai-rationale {
+            background: #f8f9ff;
+            border-radius: 8px;
+            padding: 0.75rem;
+            margin-top: 0.75rem;
+            font-size: 0.9rem;
+            color: #444;
+            border-left: 3px solid #6C3CE1;
+            line-height: 1.5;
+        }
+        .university-card .ai-rationale .ai-icon {
+            font-size: 1.1rem;
+            margin-right: 0.3rem;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            background: linear-gradient(135deg, #6C3CE1 0%, #a855f7 100%);
+            border-radius: 16px;
+            padding: 2.5rem;
+            color: white;
+            text-align: center;
+            margin-top: 2.5rem;
+        }
+        .cta-section h2 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+        .cta-section p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            margin-bottom: 1.5rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .cta-section .cta-button {
+            background: white;
+            color: #6C3CE1;
+            border: none;
+            padding: 1rem 3rem;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .cta-section .cta-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .navbar {
+                flex-wrap: wrap;
+                gap: 10px;
+                padding: 12px 16px;
+            }
+            .navbar .nav-links {
+                flex-wrap: wrap;
+                gap: 8px;
+            }
+            .navbar .nav-links a {
+                font-size: 14px;
+                padding: 6px 12px;
+            }
+            .cta-section {
+                padding: 1.5rem;
+            }
+            .cta-section h2 {
+                font-size: 1.5rem;
+            }
+            .university-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ===== NAVBAR ===== -->
+    <nav class="navbar">
+        <a href="index.html" class="nav-logo">🚀 Futures <span>Abroad</span></a>
+        <div class="nav-links">
+            <a href="dashboard.html">Dashboard</a>
+            <a href="portfolio.html">Portfolio</a>
+            <a href="student-app.html">Activities</a>
+            <a href="university-shortlist.html" class="active">🏛️ Universities</a>
+            <a href="futures-abroad-enroll.html" style="background:#6C3CE1;color:white;border-radius:50px;">🚀 Enroll</a>
+            <a href="#" id="logoutBtn" class="logout-link">Logout</a>
+        </div>
+    </nav>
+
+    <!-- ===== MAIN CONTENT ===== -->
+    <main class="university-container" style="padding-top: 100px;">
+        
+        <!-- Header -->
+        <div class="university-header">
+            <h1>🎯 Your University Shortlist</h1>
+            <p>Personalized university recommendations based on your profile and interests</p>
+        </div>
+
+        <!-- Filter Bar -->
+        <div class="filter-bar">
+            <button class="filter-btn active" data-filter="all">All</button>
+            <button class="filter-btn" data-filter="reach">🚀 Reach</button>
+            <button class="filter-btn" data-filter="target">🎯 Target</button>
+            <button class="filter-btn" data-filter="safety">🛡️ Safety</button>
+        </div>
+
+        <!-- Shortlist Container -->
+        <div id="shortlistContainer">
+            <div class="loading-spinner">
+                <div class="spinner"></div>
+                <p style="color:#888;">Loading your personalized shortlist...</p>
+            </div>
+        </div>
+
+        <!-- Phase 6 CTA - Primary Conversion Point -->
+        <div class="cta-section">
+            <h2>🚀 Ready to Turn This Shortlist into a Real Application?</h2>
+            <p>Get 1-on-1 guidance from our expert counselors. We'll help you build a winning application strategy.</p>
+            <button id="futuresAbroadCTA" class="cta-button">
+                👋 Book Your First Session
+            </button>
+            <p style="margin-top:1rem;font-size:0.85rem;opacity:0.7;">
+                No commitment required. First session is completely free.
+            </p>
+        </div>
+
+        <!-- Footer Navigation -->
+        <div style="display:flex;justify-content:center;gap:1rem;flex-wrap:wrap;margin-top:2rem;padding-top:1.5rem;border-top:1px solid #eee;">
+            <a href="dashboard.html" style="color:#6C3CE1;text-decoration:none;font-weight:600;">📊 Dashboard</a>
+            <a href="portfolio.html" style="color:#6C3CE1;text-decoration:none;font-weight:600;">📂 Portfolio</a>
+            <a href="futures-abroad-enroll.html" style="color:#6C3CE1;text-decoration:none;font-weight:600;">🚀 Enroll Now</a>
+        </div>
+    </main>
+
+    <!-- ============================================================
+    JAVASCRIPT
+    ============================================================ -->
+    <script type="module">
+        // Import Firebase and University logic
+        import { 
+            auth, 
+            onAuthStateChanged, 
+            signOut,
+            db,
+            doc,
+            getDoc,
+            COLLECTIONS
+        } from './js/firebase-config.js';
+        import { renderUniversityShortlist, filterShortlist } from './js/university.js';
+
+        // ============================================================
+        // LOGOUT
+        // ============================================================
+        document.getElementById('logoutBtn')?.addEventListener('click', async (e) => {
+            e.preventDefault();
+            try {
+                await signOut(auth);
+                window.location.href = 'login.html';
+            } catch (error) {
+                console.error('Logout error:', error);
+            }
+        });
+
+        // ============================================================
+        // AUTH STATE - Load page when user is logged in
+        // ============================================================
+        onAuthStateChanged(auth, async (user) => {
+            if (!user) {
+                window.location.href = 'login.html';
+                return;
+            }
+
+            // Check if user has completed profile
+            try {
+                const userDoc = await getDoc(doc(db, COLLECTIONS.users, user.uid));
+                const userData = userDoc.exists() ? userDoc.data() : {};
+                
+                // If no interests, redirect to quiz
+                if (!userData.interests || userData.interests.length === 0) {
+                    const container = document.getElementById('shortlistContainer');
+                    container.innerHTML = `
+                        <div class="empty-state">
+                            <div class="empty-icon">🧭</div>
+                            <h3>Take the Quiz First</h3>
+                            <p>Complete the interest discovery quiz to get personalized university recommendations.</p>
+                            <a href="quiz.html" style="display:inline-block;margin-top:1rem;background:#6C3CE1;color:white;padding:0.75rem 2rem;border-radius:50px;text-decoration:none;font-weight:600;">
+                                📝 Take Quiz
+                            </a>
+                        </div>
+                    `;
+                    return;
+                }
+
+                // Render the shortlist
+                await renderUniversityShortlist();
+
+            } catch (error) {
+                console.error('Error checking user profile:', error);
+                const container = document.getElementById('shortlistContainer');
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-icon">⚠️</div>
+                        <h3>Error Loading Profile</h3>
+                        <p>Please refresh the page or try again later.</p>
+                    </div>
+                `;
+            }
+        });
+
+        // ============================================================
+        // FILTER BUTTONS
+        // ============================================================
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                filterShortlist(btn.dataset.filter);
+            });
+        });
+
+        // ============================================================
+        // CTA BUTTON - Navigate to Phase 6
+        // ============================================================
+        document.getElementById('futuresAbroadCTA')?.addEventListener('click', () => {
+            window.location.href = 'futures-abroad-enroll.html';
+        });
+
+        // ============================================================
+        // Check if user is enrolled (show/hide CTA)
+        // ============================================================
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                try {
+                    const userDoc = await getDoc(doc(db, COLLECTIONS.users, user.uid));
+                    const userData = userDoc.exists() ? userDoc.data() : {};
+                    
+                    // If already enrolled, hide the CTA
+                    if (userData.isEnrolled) {
+                        const ctaSection = document.querySelector('.cta-section');
+                        if (ctaSection) {
+                            ctaSection.style.display = 'none';
+                        }
+                    }
+                } catch (error) {
+                    console.error('Error checking enrollment status:', error);
+                }
+            }
+        });
+    </script>
+
+</body>
+</html>
