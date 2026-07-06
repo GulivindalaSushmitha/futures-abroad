@@ -1,13 +1,14 @@
 // ============================================================
-// js/activity-registration.js - Phase 3 + 4
+// js/activity-registration.js - Phase 3 + 4 (FIXED)
 // ============================================================
 
 import { 
     auth, db, COLLECTIONS,
-    doc, getDoc, getDocs, updateDoc, arrayUnion,
-    collection, query, where, addDoc, serverTimestamp,
+    doc, getDoc, updateDoc, arrayUnion,
     onAuthStateChanged, signOut
 } from './firebase-config.js';
+
+import { markActivityComplete } from './reflection.js';
 
 // ============================================================
 // DOM Elements
@@ -66,22 +67,23 @@ async function getUserProfile(userId) {
 // Display Activity Summary
 // ============================================================
 function displayActivitySummary(activity, userInterests) {
-    activityNameEl.textContent = activity.name || 'Activity';
-    activityTypeEl.textContent = activity.type || 'General';
-    activityDurationEl.textContent = activity.duration || 'N/A';
-    mainDeadlineEl.textContent = activity.deadline || 'Rolling';
+    if (activityNameEl) activityNameEl.textContent = activity.name || 'Activity';
+    if (activityTypeEl) activityTypeEl.textContent = activity.type || 'General';
+    if (activityDurationEl) activityDurationEl.textContent = activity.duration || 'N/A';
+    if (mainDeadlineEl) mainDeadlineEl.textContent = activity.deadline || 'Rolling';
 
-    // Personalized readiness summary
     const interests = userInterests || ['exploration'];
     const interestString = Array.isArray(interests) ? interests.join(', ') : interests;
-    readinessTextEl.textContent = `Based on your interest in ${interestString}, this activity is a great match! 
-        Complete the checklist below to register and start building your profile.`;
+    if (readinessTextEl) {
+        readinessTextEl.textContent = `Based on your interest in ${interestString}, this activity is a great match! Complete the checklist below to register and start building your profile.`;
+    }
 }
 
 // ============================================================
 // Render Checklist
 // ============================================================
 function renderChecklist(requirements) {
+    if (!checklistContainer) return;
     checklistContainer.innerHTML = '';
     
     if (!requirements || requirements.length === 0) {
@@ -101,7 +103,6 @@ function renderChecklist(requirements) {
             transition: all 0.3s;
         `;
 
-        // Checkbox
         const checkbox = document.createElement('input');
         checkbox.type = 'checkbox';
         checkbox.className = 'checklist-item-checkbox';
@@ -111,7 +112,7 @@ function renderChecklist(requirements) {
             cursor: pointer; accent-color: #6C3CE1;
             flex-shrink: 0;
         `;
-        checkbox.addEventListener('change', (e) => {
+        checkbox.addEventListener('change', function(e) {
             if (e.target.checked) {
                 listItem.dataset.completed = 'true';
                 listItem.style.background = '#e8f5e9';
@@ -124,7 +125,6 @@ function renderChecklist(requirements) {
             updateRegistrationButtonState();
         });
 
-        // Content
         const contentDiv = document.createElement('div');
         contentDiv.style.cssText = 'flex:1;';
 
@@ -154,6 +154,7 @@ function renderChecklist(requirements) {
 // Update Registration Button State
 // ============================================================
 function updateRegistrationButtonState() {
+    if (!markRegisteredBtn) return;
     const allItems = document.querySelectorAll('#checklist-container li');
     let allCompleted = true;
     allItems.forEach(item => {
@@ -171,7 +172,7 @@ function updateRegistrationButtonState() {
 // Handle Registration Complete (Phase 3)
 // ============================================================
 async function handleRegistrationComplete(activityId) {
-    if (markRegisteredBtn.disabled) return;
+    if (!markRegisteredBtn || markRegisteredBtn.disabled) return;
 
     const user = auth.currentUser;
     if (!user) {
@@ -214,68 +215,15 @@ async function handleRegistrationComplete(activityId) {
 }
 
 // ============================================================
-// Initialize Phase 3
-// ============================================================
-async function initPhase3() {
-    const activityId = getActivityIdFromURL();
-    if (!activityId) {
-        alert('No activity selected. Please choose an activity first.');
-        window.location.href = 'student-app.html';
-        return;
-    }
-
-    // Check if user is logged in
-    onAuthStateChanged(auth, async (user) => {
-        if (!user) {
-            window.location.href = 'login.html';
-            return;
-        }
-
-        // Get activity data
-        const activity = await fetchActivityData(activityId);
-        if (!activity) {
-            alert('Activity not found. Please try again.');
-            window.location.href = 'student-app.html';
-            return;
-        }
-
-        // Get user profile
-        const userProfile = await getUserProfile(user.uid);
-        const interests = userProfile?.interests || [];
-
-        // Display
-        displayActivitySummary(activity, interests);
-        renderChecklist(activity.registrationRequirements || []);
-        updateRegistrationButtonState();
-
-        // Check if already registered
-        const registered = userProfile?.registered_activities || [];
-        if (registered.includes(activityId)) {
-            markRegisteredBtn.textContent = '✅ Already Registered';
-            markRegisteredBtn.disabled = true;
-            markRegisteredBtn.style.background = '#22c55e';
-        }
-
-        // Event listener for registration button
-        markRegisteredBtn.addEventListener('click', () => handleRegistrationComplete(activityId));
-    });
-}
-
-// ============================================================
-// Handle Phase 4 - Complete Activity (Imported from reflection.js)
-// ============================================================
-import { markActivityComplete } from './reflection.js';
-
-// ============================================================
 // Setup Phase 4 Complete Button
 // ============================================================
-document.addEventListener('DOMContentLoaded', () => {
+function setupPhase4Button() {
     const completeBtn = document.getElementById('completeActivityBtn');
     const statusEl = document.getElementById('phase4-status');
     
     if (!completeBtn) return;
 
-    completeBtn.addEventListener('click', async () => {
+    completeBtn.addEventListener('click', async function() {
         const user = auth.currentUser;
         if (!user) {
             alert('Please log in first.');
@@ -325,12 +273,64 @@ document.addEventListener('DOMContentLoaded', () => {
             alert('Error completing activity. Please try again.');
         }
     });
-});
+}
+
+// ============================================================
+// Initialize Phase 3
+// ============================================================
+async function initPhase3() {
+    const activityId = getActivityIdFromURL();
+    if (!activityId) {
+        alert('No activity selected. Please choose an activity first.');
+        window.location.href = 'student-app.html';
+        return;
+    }
+
+    // Check if user is logged in
+    onAuthStateChanged(auth, async function(user) {
+        if (!user) {
+            window.location.href = 'login.html';
+            return;
+        }
+
+        // Get activity data
+        const activity = await fetchActivityData(activityId);
+        if (!activity) {
+            alert('Activity not found. Please try again.');
+            window.location.href = 'student-app.html';
+            return;
+        }
+
+        // Get user profile
+        const userProfile = await getUserProfile(user.uid);
+        const interests = userProfile?.interests || [];
+
+        // Display
+        displayActivitySummary(activity, interests);
+        renderChecklist(activity.registrationRequirements || []);
+        updateRegistrationButtonState();
+
+        // Check if already registered
+        const registered = userProfile?.registered_activities || [];
+        if (registered.includes(activityId)) {
+            markRegisteredBtn.textContent = '✅ Already Registered';
+            markRegisteredBtn.disabled = true;
+            markRegisteredBtn.style.background = '#22c55e';
+        }
+
+        // Event listener for registration button
+        if (markRegisteredBtn) {
+            markRegisteredBtn.addEventListener('click', function() {
+                handleRegistrationComplete(activityId);
+            });
+        }
+    });
+}
 
 // ============================================================
 // Logout Handler
 // ============================================================
-document.getElementById('logout-link')?.addEventListener('click', async (e) => {
+document.getElementById('logout-link')?.addEventListener('click', async function(e) {
     e.preventDefault();
     try {
         await signOut(auth);
@@ -341,6 +341,9 @@ document.getElementById('logout-link')?.addEventListener('click', async (e) => {
 });
 
 // ============================================================
-// Initialize
+// Initialize Everything
 // ============================================================
-document.addEventListener('DOMContentLoaded', initPhase3);
+document.addEventListener('DOMContentLoaded', function() {
+    initPhase3();
+    setupPhase4Button();
+});
