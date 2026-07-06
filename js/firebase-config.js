@@ -1,5 +1,5 @@
 // ============================================================
-// js/firebase-config.js - Firebase Configuration (UPDATED)
+// js/firebase-config.js - Firebase Configuration (COMPLETE)
 // ============================================================
 
 // Import Firebase SDKs (using v9 modular SDK)
@@ -24,8 +24,9 @@ import {
     query, 
     where,
     deleteDoc,
-    addDoc,           // <-- ADDED: For adding activities
-    serverTimestamp   // <-- ADDED: For timestamps
+    addDoc,
+    serverTimestamp,
+    writeBatch
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 // Your web app's Firebase configuration
@@ -43,7 +44,22 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-// Export for use in other files
+// ============================================================
+// COLLECTION NAMES - Centralized for easy reference
+// ============================================================
+const COLLECTIONS = {
+    users: "users",
+    activities: "activities",
+    studentPortfolio: "studentPortfolio",    // Phase 4
+    universities: "universities",            // Phase 5
+    enrollments: "enrollments",              // Phase 6
+    counselorTasks: "counselorTasks",        // Phase 6
+    payments: "payments"                     // Phase 6
+};
+
+// ============================================================
+// Export everything
+// ============================================================
 export { 
     // Auth
     auth, 
@@ -65,8 +81,12 @@ export {
     query, 
     where,
     deleteDoc,
-    addDoc,           // <-- ADDED
-    serverTimestamp   // <-- ADDED
+    addDoc,
+    serverTimestamp,
+    writeBatch,
+    
+    // Collections
+    COLLECTIONS
 };
 
 console.log("🔥 Firebase initialized successfully!");
