@@ -6,254 +6,109 @@
     <title>Activity Registration | Futures Abroad</title>
     <link rel="stylesheet" href="css/style.css" />
     <link rel="stylesheet" href="css/activity-registration.css" />
-    <style>
-        .main-header {
-            background: white;
-            padding: 15px 30px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            z-index: 1000;
-        }
-        .main-header .logo a {
-            font-size: 22px;
-            font-weight: 800;
-            color: #2D1B4E;
-            text-decoration: none;
-        }
-        .main-header .logo a span {
-            color: #6C3CE1;
-        }
-        .main-header nav {
-            display: flex;
-            gap: 15px;
-            align-items: center;
-        }
-        .main-header nav a {
-            text-decoration: none;
-            color: #555;
-            font-weight: 600;
-            padding: 8px 16px;
-            border-radius: 8px;
-            transition: all 0.3s;
-        }
-        .main-header nav a:hover {
-            background: #f0e6ff;
-            color: #6C3CE1;
-        }
-        .main-header nav #logout-link {
-            color: #e74c3c;
-        }
-        .main-header nav #logout-link:hover {
-            background: #fde8e8;
-        }
-        .registration-main {
-            padding-top: 100px;
-            max-width: 900px;
-            margin: 0 auto;
-            padding-left: 20px;
-            padding-right: 20px;
-            padding-bottom: 40px;
-        }
-        .btn-success {
-            background: #22c55e;
-            color: white;
-            border: none;
-            padding: 0.85rem 2rem;
-            border-radius: 50px;
-            font-weight: 700;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: all 0.3s;
-            font-family: 'Quicksand', sans-serif;
-        }
-        .btn-success:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(34, 197, 94, 0.4);
-        }
-        .btn-success:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-            transform: none;
-        }
-        .btn-primary {
-            background: #6C3CE1;
-            color: white;
-            border: none;
-            padding: 0.85rem 2rem;
-            border-radius: 50px;
-            font-weight: 700;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: all 0.3s;
-            font-family: 'Quicksand', sans-serif;
-            text-decoration: none;
-            display: inline-block;
-        }
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(108, 60, 225, 0.3);
-        }
-        .btn-secondary {
-            background: transparent;
-            color: #6C3CE1;
-            border: 2px solid #6C3CE1;
-            padding: 0.85rem 2rem;
-            border-radius: 50px;
-            font-weight: 700;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: all 0.3s;
-            font-family: 'Quicksand', sans-serif;
-            text-decoration: none;
-            display: inline-block;
-        }
-        .btn-secondary:hover {
-            background: #6C3CE1;
-            color: white;
-        }
-        .phase4-section {
-            margin-top: 2.5rem;
-            padding-top: 2rem;
-            border-top: 2px dashed #e0e0e0;
-        }
-        .phase4-section h3 {
-            font-size: 1.3rem;
-            color: #2D1B4E;
-            margin-bottom: 0.3rem;
-        }
-        .quick-nav {
-            margin-top: 2rem;
-            padding-top: 1.5rem;
-            border-top: 1px solid #eee;
-            display: flex;
-            gap: 0.75rem;
-            flex-wrap: wrap;
-        }
-        @media (max-width: 768px) {
-            .main-header {
-                flex-wrap: wrap;
-                gap: 10px;
-                padding: 12px 16px;
-            }
-            .main-header nav {
-                flex-wrap: wrap;
-                gap: 8px;
-            }
-            .main-header nav a {
-                font-size: 14px;
-                padding: 6px 12px;
-            }
-            .registration-main {
-                padding-top: 140px;
-                padding-left: 16px;
-                padding-right: 16px;
-            }
-        }
-    </style>
 </head>
 <body>
     <!-- Header -->
-    <header class="main-header">
-        <div class="logo">
-            <a href="index.html">Futures <span>Abroad</span></a>
+    <header style="background:white;padding:15px 30px;box-shadow:0 2px 10px rgba(0,0,0,0.08);display:flex;justify-content:space-between;align-items:center;position:fixed;top:0;left:0;right:0;z-index:1000;flex-wrap:wrap;gap:10px;">
+        <div style="font-size:22px;font-weight:800;color:#2D1B4E;">
+            <a href="index.html" style="text-decoration:none;color:#2D1B4E;">Futures <span style="color:#6C3CE1;">Abroad</span></a>
         </div>
-        <nav>
-            <a href="dashboard.html">Dashboard</a>
-            <a href="portfolio.html">My Portfolio</a>
-            <a href="university-shortlist.html">Universities</a>
-            <a href="#" id="logout-link">Logout</a>
+        <nav style="display:flex;gap:15px;align-items:center;flex-wrap:wrap;">
+            <a href="dashboard.html" style="text-decoration:none;color:#555;font-weight:600;padding:8px 16px;border-radius:8px;">Dashboard</a>
+            <a href="portfolio.html" style="text-decoration:none;color:#555;font-weight:600;padding:8px 16px;border-radius:8px;">My Portfolio</a>
+            <a href="university-shortlist.html" style="text-decoration:none;color:#555;font-weight:600;padding:8px 16px;border-radius:8px;">Universities</a>
+            <a href="#" id="logout-link" style="text-decoration:none;color:#e74c3c;font-weight:600;padding:8px 16px;border-radius:8px;">Logout</a>
         </nav>
     </header>
 
-    <main class="container registration-main">
-        <!-- Activity Summary Section -->
-        <section class="activity-summary">
+    <main style="padding-top:100px;max-width:900px;margin:0 auto;padding-left:20px;padding-right:20px;padding-bottom:40px;">
+        
+        <!-- Activity Summary -->
+        <section>
             <h1>You're registering for:</h1>
             <h2 id="activity-name">Loading...</h2>
-            <p class="activity-type">Type: <span id="activity-type">--</span></p>
-            <p class="activity-duration">Duration: <span id="activity-duration">--</span></p>
-            <div class="readiness-summary">
+            <p>Type: <span id="activity-type">--</span></p>
+            <p>Duration: <span id="activity-duration">--</span></p>
+            <div style="background:#f8f4ff;padding:15px;border-radius:12px;margin:15px 0;">
                 <h3>📋 Your Readiness Summary</h3>
                 <p id="readiness-text">Loading your personalised registration guide...</p>
             </div>
         </section>
 
-        <!-- Checklist Section -->
-        <section class="checklist-section">
+        <!-- Checklist -->
+        <section>
             <h3>✅ Registration Checklist</h3>
-            <p class="deadline-info">Main Deadline: <span id="main-deadline">--</span></p>
-            <ul id="checklist-container">
-                <!-- Checklist items will be inserted here by JavaScript -->
-            </ul>
+            <p>Main Deadline: <span id="main-deadline">--</span></p>
+            <ul id="checklist-container" style="list-style:none;padding:0;"></ul>
         </section>
 
-        <!-- Action Buttons - Phase 3 Registration -->
-        <section class="registration-actions">
-            <p class="registration-note">Complete all steps in the checklist to enable registration.</p>
-            <button id="mark-registered-btn" class="btn btn-primary" disabled>Mark as Registered</button>
-            <a href="portfolio.html" class="btn btn-secondary">View My Portfolio</a>
+        <!-- Phase 3: Register Button -->
+        <section style="margin:20px 0;padding:20px;background:#f8f9fa;border-radius:12px;text-align:center;">
+            <p style="color:#666;">Complete all steps in the checklist to enable registration.</p>
+            <button id="mark-registered-btn" style="background:#6C3CE1;color:white;border:none;padding:12px 30px;border-radius:50px;font-weight:700;font-size:16px;cursor:pointer;opacity:0.6;" disabled>Mark as Registered</button>
+            <a href="portfolio.html" style="display:inline-block;margin-left:10px;padding:12px 30px;border:2px solid #6C3CE1;color:#6C3CE1;border-radius:50px;font-weight:700;text-decoration:none;">View My Portfolio</a>
         </section>
 
         <!-- ============================================================
-        PHASE 4 - Complete Activity Section (THIS IS THE FIX)
+        PHASE 4 - Complete Activity Section (FIXED)
         ============================================================ -->
-        <section class="phase4-section">
-            <h3>🎯 After Completing This Activity</h3>
-            <p style="color: #666; margin-bottom: 1rem;">
+        <section style="margin-top:40px;padding-top:30px;border-top:2px dashed #e0e0e0;">
+            <h3 style="font-size:1.3rem;color:#2D1B4E;">🎯 After Completing This Activity</h3>
+            <p style="color:#666;margin-bottom:15px;">
                 Once you've finished this activity, mark it as complete. You'll be prompted to reflect on your experience,
                 which will be saved to your portfolio and may be used for university essays.
             </p>
-
-            <div style="display: flex; gap: 1rem; flex-wrap: wrap; align-items: center;">
-                <button id="completeActivityBtn" class="btn btn-success">
+            
+            <div style="display:flex;gap:15px;flex-wrap:wrap;align-items:center;">
+                <button id="completeActivityBtn" style="background:#22c55e;color:white;border:none;padding:14px 32px;border-radius:50px;font-weight:700;font-size:16px;cursor:pointer;">
                     ✅ Mark Activity as Complete
                 </button>
-                <span style="color: #888; font-size: 0.85rem;">
+                <span style="color:#888;font-size:0.85rem;">
                     After completion, you'll be prompted to reflect on your experience.
                 </span>
             </div>
-
-            <div id="phase4-status" style="margin-top: 0.75rem; font-size: 0.9rem; color: #666; display: none;"></div>
+            
+            <div id="phase4-status" style="margin-top:12px;font-size:0.9rem;color:#666;display:none;"></div>
         </section>
 
         <!-- Quick Navigation -->
-        <section class="quick-nav">
-            <a href="dashboard.html" class="btn btn-secondary">📊 Dashboard</a>
-            <a href="student-app.html" class="btn btn-secondary">🎯 Find More Activities</a>
-            <a href="university-shortlist.html" class="btn btn-secondary">🏛️ University Shortlist</a>
-            <a href="futures-abroad-enroll.html" class="btn btn-primary" style="background: linear-gradient(135deg, #00b09b, #96c93d);">🚀 Enroll Now</a>
+        <section style="margin-top:30px;padding-top:20px;border-top:1px solid #eee;display:flex;gap:10px;flex-wrap:wrap;">
+            <a href="dashboard.html" style="padding:10px 24px;border:2px solid #6C3CE1;color:#6C3CE1;border-radius:50px;font-weight:600;text-decoration:none;">📊 Dashboard</a>
+            <a href="student-app.html" style="padding:10px 24px;border:2px solid #6C3CE1;color:#6C3CE1;border-radius:50px;font-weight:600;text-decoration:none;">🎯 Find More Activities</a>
+            <a href="university-shortlist.html" style="padding:10px 24px;border:2px solid #6C3CE1;color:#6C3CE1;border-radius:50px;font-weight:600;text-decoration:none;">🏛️ University Shortlist</a>
+            <a href="futures-abroad-enroll.html" style="padding:10px 24px;background:linear-gradient(135deg,#00b09b,#96c93d);color:white;border:none;border-radius:50px;font-weight:600;text-decoration:none;">🚀 Enroll Now</a>
         </section>
     </main>
 
     <script type="module">
-        import './js/activity-registration.js';
+        // Import Firebase and other modules
+        import { auth, onAuthStateChanged, signOut } from './js/firebase-config.js';
         import { markActivityComplete } from './js/reflection.js';
-        import { auth, onAuthStateChanged } from './js/firebase-config.js';
 
+        // Logout
+        document.getElementById('logout-link')?.addEventListener('click', async (e) => {
+            e.preventDefault();
+            try {
+                await signOut(auth);
+                window.location.href = 'login.html';
+            } catch (error) {
+                console.error('Logout error:', error);
+            }
+        });
+
+        // Check if user is logged in
+        onAuthStateChanged(auth, (user) => {
+            if (!user) {
+                window.location.href = 'login.html';
+            }
+        });
+
+        // Handle Complete Activity Button
         document.addEventListener('DOMContentLoaded', () => {
             const completeBtn = document.getElementById('completeActivityBtn');
             const statusEl = document.getElementById('phase4-status');
-
+            
             if (!completeBtn) return;
-
-            onAuthStateChanged(auth, (user) => {
-                if (!user) {
-                    completeBtn.disabled = true;
-                    completeBtn.style.opacity = '0.6';
-                    completeBtn.style.cursor = 'not-allowed';
-                    if (statusEl) {
-                        statusEl.style.display = 'block';
-                        statusEl.style.color = '#e74c3c';
-                        statusEl.textContent = '⚠️ Please log in to mark activities as complete.';
-                    }
-                }
-            });
 
             completeBtn.addEventListener('click', async () => {
                 const user = auth.currentUser;
@@ -262,59 +117,55 @@
                     return;
                 }
 
+                // Get activity details from the page
                 const activityName = document.getElementById('activity-name')?.textContent || 'Activity';
                 const activityType = document.getElementById('activity-type')?.textContent?.toLowerCase() || 'default';
                 const duration = document.getElementById('activity-duration')?.textContent || 'N/A';
-
+                
                 const urlParams = new URLSearchParams(window.location.search);
                 const activityId = urlParams.get('id') || 'unknown';
-
-                const skills = getSkillsFromPage();
+                
                 const note = prompt('Add a brief note about your experience (optional):');
-
+                
                 completeBtn.textContent = '⏳ Processing...';
                 completeBtn.disabled = true;
-
-                const success = await markActivityComplete(
-                    activityId,
-                    activityName,
-                    activityType,
-                    duration,
-                    skills || [],
-                    note || ''
-                );
-
-                if (success) {
-                    completeBtn.textContent = '✅ Completed!';
-                    completeBtn.style.background = '#16a34a';
-                    completeBtn.style.cursor = 'default';
-
-                    if (statusEl) {
-                        statusEl.style.display = 'block';
-                        statusEl.style.color = '#22c55e';
-                        statusEl.innerHTML = '✅ Activity marked as complete! Check your <a href="portfolio.html" style="color:#6C3CE1;font-weight:600;">portfolio</a> to see your reflections.';
+                completeBtn.style.opacity = '0.6';
+                
+                try {
+                    const success = await markActivityComplete(
+                        activityId,
+                        activityName,
+                        activityType,
+                        duration,
+                        [],
+                        note || ''
+                    );
+                    
+                    if (success) {
+                        completeBtn.textContent = '✅ Completed!';
+                        completeBtn.style.background = '#16a34a';
+                        completeBtn.style.cursor = 'default';
+                        completeBtn.style.opacity = '1';
+                        
+                        if (statusEl) {
+                            statusEl.style.display = 'block';
+                            statusEl.style.color = '#22c55e';
+                            statusEl.innerHTML = '✅ Activity marked as complete! Check your <a href="portfolio.html" style="color:#6C3CE1;font-weight:600;">portfolio</a> to see your reflections.';
+                        }
+                    } else {
+                        completeBtn.textContent = '✅ Mark Activity as Complete';
+                        completeBtn.disabled = false;
+                        completeBtn.style.opacity = '1';
                     }
-                } else {
+                } catch (error) {
+                    console.error('Error completing activity:', error);
                     completeBtn.textContent = '✅ Mark Activity as Complete';
                     completeBtn.disabled = false;
+                    completeBtn.style.opacity = '1';
+                    alert('Error completing activity. Please try again.');
                 }
             });
         });
-
-        function getSkillsFromPage() {
-            const skillsElements = document.querySelectorAll('.skill-tag, .skills-list span, .skill-item');
-            if (skillsElements.length > 0) {
-                return Array.from(skillsElements).map(el => el.textContent.trim());
-            }
-            const skillsContainer = document.getElementById('skills-container');
-            if (skillsContainer) {
-                const items = skillsContainer.querySelectorAll('span, .tag');
-                if (items.length > 0) {
-                    return Array.from(items).map(el => el.textContent.trim());
-                }
-            }
-            return [];
-        }
     </script>
 </body>
 </html>
