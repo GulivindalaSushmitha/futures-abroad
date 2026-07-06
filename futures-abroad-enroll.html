@@ -20,6 +20,8 @@
             left: 0;
             right: 0;
             z-index: 1000;
+            flex-wrap: wrap;
+            gap: 10px;
         }
         .navbar .nav-logo {
             font-size: 22px;
@@ -34,6 +36,7 @@
             display: flex;
             gap: 15px;
             align-items: center;
+            flex-wrap: wrap;
         }
         .navbar .nav-links a {
             text-decoration: none;
@@ -53,6 +56,158 @@
         .navbar .nav-links .logout-link:hover {
             background: #fde8e8;
         }
+        .enrollment-container {
+            padding-top: 100px;
+            max-width: 900px;
+            margin: 0 auto;
+            padding-left: 20px;
+            padding-right: 20px;
+            padding-bottom: 40px;
+        }
+        .enrollment-header {
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+        .enrollment-header h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #6C3CE1, #a855f7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .enrollment-header p {
+            color: #666;
+            font-size: 1.1rem;
+        }
+        .program-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2.5rem;
+        }
+        .program-card {
+            background: white;
+            border-radius: 16px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+            border: 2px solid transparent;
+            transition: all 0.3s;
+            cursor: pointer;
+            text-align: center;
+        }
+        .program-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+        }
+        .program-card.selected {
+            border-color: #6C3CE1;
+            background: #f8f9ff;
+        }
+        .program-card .program-icon {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+        .program-card .program-name {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #2D1B4E;
+        }
+        .program-card .program-price {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: #6C3CE1;
+            margin: 0.5rem 0;
+        }
+        .program-card .program-price small {
+            font-size: 0.8rem;
+            font-weight: 400;
+            color: #888;
+        }
+        .program-card .program-features {
+            list-style: none;
+            padding: 0;
+            margin: 0.75rem 0;
+            text-align: left;
+        }
+        .program-card .program-features li {
+            padding: 0.3rem 0;
+            font-size: 0.9rem;
+            color: #555;
+        }
+        .program-card .program-features li::before {
+            content: "✅ ";
+        }
+        .program-card .popular-badge {
+            display: inline-block;
+            background: #ffd700;
+            color: #333;
+            padding: 0.2rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            margin-top: 0.5rem;
+        }
+        .enrollment-form {
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+            margin-top: 1.5rem;
+        }
+        .enrollment-form .form-group {
+            margin-bottom: 1.25rem;
+        }
+        .enrollment-form label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 0.4rem;
+            font-size: 0.95rem;
+            color: #333;
+        }
+        .enrollment-form input,
+        .enrollment-form select,
+        .enrollment-form textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+            font-family: 'Quicksand', sans-serif;
+        }
+        .enrollment-form input:focus,
+        .enrollment-form select:focus,
+        .enrollment-form textarea:focus {
+            border-color: #6C3CE1;
+            outline: none;
+        }
+        .enrollment-form .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+        .payment-btn {
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(135deg, #6C3CE1, #a855f7);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: 'Quicksand', sans-serif;
+        }
+        .payment-btn:hover {
+            transform: scale(1.02);
+            box-shadow: 0 4px 16px rgba(108, 60, 225, 0.4);
+        }
+        .payment-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
         @media (max-width: 768px) {
             .navbar {
                 flex-wrap: wrap;
@@ -66,6 +221,15 @@
             .navbar .nav-links a {
                 font-size: 14px;
                 padding: 6px 12px;
+            }
+            .enrollment-form .form-row {
+                grid-template-columns: 1fr;
+            }
+            .program-grid {
+                grid-template-columns: 1fr;
+            }
+            .enrollment-header h1 {
+                font-size: 1.8rem;
             }
         }
     </style>
@@ -81,7 +245,7 @@
         </div>
     </nav>
 
-    <main class="enrollment-container" style="padding-top: 100px;">
+    <main class="enrollment-container">
         <div class="enrollment-header">
             <h1>🚀 Join Futures Abroad</h1>
             <p>Select your program and start your journey to university admission</p>
@@ -128,7 +292,7 @@
         <!-- Enrollment Form -->
         <div id="formSection">
             <form id="enrollmentForm" class="enrollment-form">
-                <h3 style="margin-bottom:1rem;">📝 Your Information</h3>
+                <h3 style="margin-bottom:1rem;color:#2D1B4E;">📝 Your Information</h3>
                 
                 <div class="form-row">
                     <div class="form-group">
