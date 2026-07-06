@@ -56,6 +56,29 @@
         .navbar .nav-links .logout-link:hover {
             background: #fde8e8;
         }
+        .enrollment-container {
+            padding-top: 100px;
+            max-width: 900px;
+            margin: 0 auto;
+            padding-left: 20px;
+            padding-right: 20px;
+            padding-bottom: 40px;
+        }
+        .enrollment-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        .enrollment-header h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #6C3CE1, #a855f7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .enrollment-header p {
+            color: #666;
+            font-size: 1.1rem;
+        }
         .payment-btn {
             background: #6C3CE1;
             color: white;
@@ -88,6 +111,12 @@
             transform: translateY(-2px);
             box-shadow: 0 4px 15px rgba(34, 197, 94, 0.4);
         }
+        .payment-options-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
         @media (max-width: 768px) {
             .navbar {
                 flex-wrap: wrap;
@@ -103,7 +132,7 @@
                 padding: 6px 12px;
             }
             .payment-options-grid {
-                grid-template-columns: 1fr !important;
+                grid-template-columns: 1fr;
             }
         }
     </style>
@@ -119,20 +148,17 @@
         </div>
     </nav>
 
-    <main class="enrollment-container" style="padding-top: 100px; max-width: 900px; margin: 0 auto; padding-left: 20px; padding-right: 20px; padding-bottom: 40px;">
-        <div class="enrollment-header" style="text-align:center;margin-bottom:2rem;">
-            <h1 style="font-size:2.5rem;font-weight:800;background:linear-gradient(135deg,#6C3CE1,#a855f7);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">💳 Complete Your Payment</h1>
-            <p style="color:#666;font-size:1.1rem;">Choose your payment method below</p>
+    <main class="enrollment-container">
+        <div class="enrollment-header">
+            <h1>💳 Complete Your Payment</h1>
+            <p>Choose your payment method below</p>
         </div>
 
-        <!-- Payment Summary -->
         <div id="paymentSummary" style="background:#f8f9ff;border-radius:12px;padding:1.5rem;margin-bottom:2rem;text-align:center;border:1px solid #e0d4ff;">
             <!-- Filled by JavaScript -->
         </div>
 
-        <!-- Payment Options -->
-        <div class="payment-options-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-bottom:2rem;">
-            <!-- Option 1: Pay with Nomod -->
+        <div class="payment-options-grid">
             <div style="background:white;border-radius:16px;padding:2rem;box-shadow:0 2px 12px rgba(0,0,0,0.08);text-align:center;border:2px solid #6C3CE1;">
                 <div style="font-size:3rem;margin-bottom:0.5rem;">💳</div>
                 <h3 style="margin-bottom:0.5rem;color:#2D1B4E;">Pay with Nomod</h3>
@@ -142,7 +168,6 @@
                 </button>
             </div>
 
-            <!-- Option 2: Manual Confirmation -->
             <div style="background:white;border-radius:16px;padding:2rem;box-shadow:0 2px 12px rgba(0,0,0,0.08);text-align:center;">
                 <div style="font-size:3rem;margin-bottom:0.5rem;">✅</div>
                 <h3 style="margin-bottom:0.5rem;color:#2D1B4E;">Confirm Manually</h3>
@@ -153,12 +178,10 @@
             </div>
         </div>
 
-        <!-- Scanner Status -->
         <div id="scannerStatus" style="text-align:center;padding:1rem;background:#f8f9fa;border-radius:8px;font-weight:500;min-height:3rem;color:#888;border:1px solid #eee;">
             Choose a payment method above
         </div>
 
-        <!-- Alternative Methods (Simulated for testing) -->
         <details style="margin-top:2rem;text-align:center;color:#888;font-size:0.85rem;">
             <summary style="cursor:pointer;font-weight:600;color:#6C3CE1;">🔄 Alternative Payment Methods (For Testing)</summary>
             <div style="margin-top:1rem;display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;">
@@ -179,19 +202,18 @@
         import { auth, signOut } from './js/firebase-config.js';
         import { getProgramPrice } from './js/enrollment.js';
         
-        const enrollmentData = window._enrollmentData || {};
-        const program = enrollmentData.program || 'grade10';
-        const price = getProgramPrice(program);
+        var enrollmentData = window._enrollmentData || {};
+        var program = enrollmentData.program || 'grade10';
+        var price = getProgramPrice(program);
         
-        document.getElementById('paymentSummary').innerHTML = `
-            <h3 style="margin-bottom:0.5rem;color:#2D1B4E;">📋 Enrollment Summary</h3>
-            <p><strong>Program:</strong> ${program.replace('grade', 'Grade ')}</p>
-            <p><strong>Student:</strong> ${enrollmentData.fullName || 'Student'}</p>
-            <p><strong>Email:</strong> ${enrollmentData.email || 'N/A'}</p>
-            <p><strong>Total:</strong> <span style="font-size:1.8rem;color:#6C3CE1;font-weight:700;">AED ${price}</span></p>
-        `;
+        document.getElementById('paymentSummary').innerHTML = 
+            '<h3 style="margin-bottom:0.5rem;color:#2D1B4E;">📋 Enrollment Summary</h3>' +
+            '<p><strong>Program:</strong> ' + program.replace('grade', 'Grade ') + '</p>' +
+            '<p><strong>Student:</strong> ' + (enrollmentData.fullName || 'Student') + '</p>' +
+            '<p><strong>Email:</strong> ' + (enrollmentData.email || 'N/A') + '</p>' +
+            '<p><strong>Total:</strong> <span style="font-size:1.8rem;color:#6C3CE1;font-weight:700;">AED ' + price + '</span></p>';
         
-        document.getElementById('logoutBtn')?.addEventListener('click', async () => {
+        document.getElementById('logoutBtn')?.addEventListener('click', async function() {
             await signOut(auth);
             window.location.href = 'login.html';
         });
