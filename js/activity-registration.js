@@ -1,24 +1,16 @@
 // ============================================================
-// js/activity-registration.js - Phase 3 + 4 (FIXED)
+// js/activity-registration.js - Phase 3 + 4 (COMPLETE)
 // ============================================================
 
 import { 
-    auth, 
-    db, 
-    COLLECTIONS,
-    doc, 
-    getDoc, 
-    updateDoc, 
-    arrayUnion,
-    onAuthStateChanged, 
-    signOut
+    auth, db, COLLECTIONS,
+    doc, getDoc, updateDoc, arrayUnion,
+    onAuthStateChanged, signOut
 } from './firebase-config.js';
 
 import { markActivityComplete } from './reflection.js';
 
-// ============================================================
 // DOM Elements
-// ============================================================
 var activityNameEl = document.getElementById('activity-name');
 var activityTypeEl = document.getElementById('activity-type');
 var activityDurationEl = document.getElementById('activity-duration');
@@ -27,17 +19,11 @@ var readinessTextEl = document.getElementById('readiness-text');
 var checklistContainer = document.getElementById('checklist-container');
 var markRegisteredBtn = document.getElementById('mark-registered-btn');
 
-// ============================================================
-// Get Activity ID from URL
-// ============================================================
 function getActivityIdFromURL() {
     var params = new URLSearchParams(window.location.search);
     return params.get('id');
 }
 
-// ============================================================
-// Fetch Activity from Firestore
-// ============================================================
 async function fetchActivityData(activityId) {
     try {
         var activityRef = doc(db, COLLECTIONS.activities, activityId);
@@ -52,9 +38,6 @@ async function fetchActivityData(activityId) {
     }
 }
 
-// ============================================================
-// Get User Profile
-// ============================================================
 async function getUserProfile(userId) {
     try {
         var userRef = doc(db, COLLECTIONS.users, userId);
@@ -69,22 +52,11 @@ async function getUserProfile(userId) {
     }
 }
 
-// ============================================================
-// Display Activity Summary
-// ============================================================
 function displayActivitySummary(activity, userInterests) {
-    if (activityNameEl) {
-        activityNameEl.textContent = activity.name || 'Activity';
-    }
-    if (activityTypeEl) {
-        activityTypeEl.textContent = activity.type || 'General';
-    }
-    if (activityDurationEl) {
-        activityDurationEl.textContent = activity.duration || 'N/A';
-    }
-    if (mainDeadlineEl) {
-        mainDeadlineEl.textContent = activity.deadline || 'Rolling';
-    }
+    if (activityNameEl) activityNameEl.textContent = activity.name || 'Activity';
+    if (activityTypeEl) activityTypeEl.textContent = activity.type || 'General';
+    if (activityDurationEl) activityDurationEl.textContent = activity.duration || 'N/A';
+    if (mainDeadlineEl) mainDeadlineEl.textContent = activity.deadline || 'Rolling';
 
     var interests = userInterests || ['exploration'];
     var interestString = Array.isArray(interests) ? interests.join(', ') : interests;
@@ -93,13 +65,8 @@ function displayActivitySummary(activity, userInterests) {
     }
 }
 
-// ============================================================
-// Render Checklist
-// ============================================================
 function renderChecklist(requirements) {
-    if (!checklistContainer) {
-        return;
-    }
+    if (!checklistContainer) return;
     checklistContainer.innerHTML = '';
 
     if (!requirements || requirements.length === 0) {
@@ -153,13 +120,8 @@ function renderChecklist(requirements) {
     });
 }
 
-// ============================================================
-// Update Registration Button State
-// ============================================================
 function updateRegistrationButtonState() {
-    if (!markRegisteredBtn) {
-        return;
-    }
+    if (!markRegisteredBtn) return;
     var allItems = document.querySelectorAll('.checklist-item');
     var allCompleted = true;
     allItems.forEach(function(item) {
@@ -173,13 +135,8 @@ function updateRegistrationButtonState() {
     markRegisteredBtn.style.opacity = allCompleted ? '1' : '0.6';
 }
 
-// ============================================================
-// Handle Registration Complete (Phase 3)
-// ============================================================
 async function handleRegistrationComplete(activityId) {
-    if (!markRegisteredBtn || markRegisteredBtn.disabled) {
-        return;
-    }
+    if (!markRegisteredBtn || markRegisteredBtn.disabled) return;
 
     var user = auth.currentUser;
     if (!user) {
@@ -220,16 +177,11 @@ async function handleRegistrationComplete(activityId) {
     }
 }
 
-// ============================================================
-// Setup Phase 4 Complete Button
-// ============================================================
 function setupPhase4Button() {
     var completeBtn = document.getElementById('completeActivityBtn');
     var statusEl = document.getElementById('phase4-status');
     
-    if (!completeBtn) {
-        return;
-    }
+    if (!completeBtn) return;
 
     completeBtn.addEventListener('click', async function() {
         var user = auth.currentUser;
@@ -284,9 +236,6 @@ function setupPhase4Button() {
     });
 }
 
-// ============================================================
-// Initialize Phase 3
-// ============================================================
 async function initPhase3() {
     var activityId = getActivityIdFromURL();
     if (!activityId) {
@@ -330,9 +279,6 @@ async function initPhase3() {
     });
 }
 
-// ============================================================
-// Logout Handler
-// ============================================================
 document.addEventListener('DOMContentLoaded', function() {
     var logoutLink = document.getElementById('logout-link');
     if (logoutLink) {
@@ -346,12 +292,6 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     }
-});
-
-// ============================================================
-// Initialize Everything
-// ============================================================
-document.addEventListener('DOMContentLoaded', function() {
     initPhase3();
     setupPhase4Button();
 });
