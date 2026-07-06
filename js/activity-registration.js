@@ -1,118 +1,145 @@
-// js/activity-registration.js
+// ============================================================
+// js/activity-registration.js - Phase 3 + 4
+// ============================================================
 
-// --- Mock Data (This would come from your database/Firebase) ---
-// In your real app, you would fetch this based on the activityId from the URL.
-const mockActivities = {
-    'act_001': {
-        id: 'act_001',
-        name: 'Global Youth Sustainability Summit',
-        type: 'Conference & Workshop',
-        mainDeadline: 'October 31, 2026',
-        registrationRequirements: [
-            {
-                id: 'req_1',
-                title: 'Personal Statement Draft',
-                description: 'Keep it under 250 words. Focus on why this activity aligns with your goals.',
-                dueDate: 'October 15, 2026',
-            },
-            {
-                id: 'req_2',
-                title: 'Teacher Recommendation Request',
-                description: 'Request a recommendation from a science or humanities teacher.',
-                dueDate: 'October 20, 2026',
-            },
-            {
-                id: 'req_3',
-                title: 'Parent Permission Form',
-                description: 'Download, sign, and upload the parental consent form.',
-                dueDate: 'October 25, 2026',
-            },
-            {
-                id: 'req_4',
-                title: 'Registration Fee Payment',
-                description: 'Pay the registration fee online. Scholarships are available.',
-                dueDate: 'October 28, 2026',
-            },
-        ]
-    },
-    // Add more activities here as needed
-};
+import { 
+    auth, db, COLLECTIONS,
+    doc, getDoc, getDocs, updateDoc, arrayUnion,
+    collection, query, where, addDoc, serverTimestamp,
+    onAuthStateChanged, signOut
+} from './firebase-config.js';
 
-// --- DOM Elements ---
+// ============================================================
+// DOM Elements
+// ============================================================
 const activityNameEl = document.getElementById('activity-name');
 const activityTypeEl = document.getElementById('activity-type');
+const activityDurationEl = document.getElementById('activity-duration');
 const mainDeadlineEl = document.getElementById('main-deadline');
 const readinessTextEl = document.getElementById('readiness-text');
 const checklistContainer = document.getElementById('checklist-container');
 const markRegisteredBtn = document.getElementById('mark-registered-btn');
 
-// --- Helper Functions ---
-
-/** Gets the activityId from the URL query parameters. */
+// ============================================================
+// Get Activity ID from URL
+// ============================================================
 function getActivityIdFromURL() {
     const params = new URLSearchParams(window.location.search);
     return params.get('id');
 }
 
-/** Simulates fetching activity data based on an ID. */
-function fetchActivityData(activityId) {
-    // In your real app, this would be a Firebase call:
-    // return getDoc(doc(db, 'activities', activityId));
-    return new Promise((resolve) => {
-        setTimeout(() => {
-            resolve(mockActivities[activityId] || null);
-        }, 300);
-    });
+// ============================================================
+// Fetch Activity from Firestore
+// ============================================================
+async function fetchActivityData(activityId) {
+    try {
+        const activityRef = doc(db, COLLECTIONS.activities, activityId);
+        const activityDoc = await getDoc(activityRef);
+        if (activityDoc.exists()) {
+            return { id: activityDoc.id, ...activityDoc.data() };
+        }
+        return null;
+    } catch (error) {
+        console.error('Error fetching activity:', error);
+        return null;
+    }
 }
 
-// --- Core Functions ---
-
-/** Displays the activity summary on the page. */
-function displayActivitySummary(activity) {
-    activityNameEl.textContent = activity.name;
-    activityTypeEl.textContent = activity.type;
-    mainDeadlineEl.textContent = activity.mainDeadline;
-    // Personalised readiness summary (based on spec)
-    readinessTextEl.textContent = `You have a strong interest in Environment & Leadership, as shown by your profile. The ${activity.name} is a perfect match to build your leadership skills. Here is your personalized checklist to guide you through registration.`;
+// ============================================================
+// Get User Profile
+// ============================================================
+async function getUserProfile(userId) {
+    try {
+        const userRef = doc(db, COLLECTIONS.users, userId);
+        const userDoc = await getDoc(userRef);
+        if (userDoc.exists()) {
+            return userDoc.data();
+        }
+        return null;
+    } catch (error) {
+        console.error('Error fetching user:', error);
+        return null;
+    }
 }
 
-/** Generates and renders the checklist from the activity's requirements. */
+// ============================================================
+// Display Activity Summary
+// ============================================================
+function displayActivitySummary(activity, userInterests) {
+    activityNameEl.textContent = activity.name || 'Activity';
+    activityTypeEl.textContent = activity.type || 'General';
+    activityDurationEl.textContent = activity.duration || 'N/A';
+    mainDeadlineEl.textContent = activity.deadline || 'Rolling';
+
+    // Personalized readiness summary
+    const interests = userInterests || ['exploration'];
+    const interestString = Array.isArray(interests) ? interests.join(', ') : interests;
+    readinessTextEl.textContent = `Based on your interest in ${interestString}, this activity is a great match! 
+        Complete the checklist below to register and start building your profile.`;
+}
+
+// ============================================================
+// Render Checklist
+// ============================================================
 function renderChecklist(requirements) {
-    checklistContainer.innerHTML = ''; // Clear previous list
+    checklistContainer.innerHTML = '';
+    
     if (!requirements || requirements.length === 0) {
-        checklistContainer.innerHTML = '<li>No specific requirements for this activity.</li>';
+        checklistContainer.innerHTML = '<li style="padding:10px;color:#888;">No specific requirements for this activity.</li>';
         return;
     }
 
     requirements.forEach((req, index) => {
         const listItem = document.createElement('li');
-        listItem.id = `checklist-item-${req.id}`;
+        listItem.id = `checklist-item-${req.id || index}`;
         listItem.dataset.completed = 'false';
+        listItem.style.cssText = `
+            display: flex; align-items: flex-start; gap: 12px;
+            padding: 12px 16px; margin-bottom: 8px;
+            background: #f8f9fa; border-radius: 10px;
+            border-left: 4px solid #6C3CE1;
+            transition: all 0.3s;
+        `;
 
         // Checkbox
         const checkbox = document.createElement('input');
         checkbox.type = 'checkbox';
         checkbox.className = 'checklist-item-checkbox';
-        checkbox.id = `checkbox-${req.id}`;
-        checkbox.addEventListener('change', (e) => handleChecklistChange(e, listItem));
+        checkbox.id = `checkbox-${req.id || index}`;
+        checkbox.style.cssText = `
+            margin-top: 2px; width: 18px; height: 18px;
+            cursor: pointer; accent-color: #6C3CE1;
+            flex-shrink: 0;
+        `;
+        checkbox.addEventListener('change', (e) => {
+            if (e.target.checked) {
+                listItem.dataset.completed = 'true';
+                listItem.style.background = '#e8f5e9';
+                listItem.style.borderLeftColor = '#22c55e';
+            } else {
+                listItem.dataset.completed = 'false';
+                listItem.style.background = '#f8f9fa';
+                listItem.style.borderLeftColor = '#6C3CE1';
+            }
+            updateRegistrationButtonState();
+        });
 
-        // Content Div
+        // Content
         const contentDiv = document.createElement('div');
-        contentDiv.className = 'checklist-item-content';
+        contentDiv.style.cssText = 'flex:1;';
 
-        const titleSpan = document.createElement('span');
-        titleSpan.className = 'checklist-item-title';
-        titleSpan.textContent = `${index + 1}. ${req.title}`;
+        const titleSpan = document.createElement('div');
+        titleSpan.style.cssText = 'font-weight:700;font-size:1rem;color:#2D1B4E;';
+        titleSpan.textContent = `${index + 1}. ${req.title || 'Requirement'}`;
 
-        const descSpan = document.createElement('span');
-        descSpan.className = 'checklist-item-desc';
-        descSpan.textContent = req.description;
+        const descSpan = document.createElement('div');
+        descSpan.style.cssText = 'color:#666;font-size:0.9rem;margin:2px 0;';
+        descSpan.textContent = req.description || '';
 
-        const dueSpan = document.createElement('span');
-        dueSpan.className = 'checklist-item-due';
-        dueSpan.textContent = `Due: ${req.dueDate}`;
+        const dueSpan = document.createElement('div');
+        dueSpan.style.cssText = 'color:#888;font-size:0.8rem;';
+        dueSpan.textContent = req.dueDate ? `📅 Due: ${req.dueDate}` : '';
 
-        // Assemble the list item
         contentDiv.appendChild(titleSpan);
         contentDiv.appendChild(descSpan);
         contentDiv.appendChild(dueSpan);
@@ -123,19 +150,9 @@ function renderChecklist(requirements) {
     });
 }
 
-/** Handles a change in a checklist item's checkbox state. */
-function handleChecklistChange(event, listItem) {
-    if (event.target.checked) {
-        listItem.dataset.completed = 'true';
-        listItem.classList.add('completed');
-    } else {
-        listItem.dataset.completed = 'false';
-        listItem.classList.remove('completed');
-    }
-    updateRegistrationButtonState();
-}
-
-/** Enables or disables the "Mark as Registered" button based on checklist completion. */
+// ============================================================
+// Update Registration Button State
+// ============================================================
 function updateRegistrationButtonState() {
     const allItems = document.querySelectorAll('#checklist-container li');
     let allCompleted = true;
@@ -147,51 +164,183 @@ function updateRegistrationButtonState() {
 
     markRegisteredBtn.disabled = !allCompleted;
     markRegisteredBtn.textContent = allCompleted ? '✅ Mark as Registered' : 'Complete all steps to register';
+    markRegisteredBtn.style.opacity = allCompleted ? '1' : '0.6';
 }
 
-/** Handles the final registration action. */
-function handleRegistrationComplete(activityId) {
+// ============================================================
+// Handle Registration Complete (Phase 3)
+// ============================================================
+async function handleRegistrationComplete(activityId) {
     if (markRegisteredBtn.disabled) return;
 
-    // --- Save registration status ---
-    // In your real app, you would update Firestore here.
-    // Example: await updateDoc(doc(db, 'users', userId), { registeredActivities: arrayUnion(activityId) });
-    
-    // Using localStorage as a simple simulation for the prototype
-    const registeredActivities = JSON.parse(localStorage.getItem('registeredActivities') || '[]');
-    if (!registeredActivities.includes(activityId)) {
-        registeredActivities.push(activityId);
-        localStorage.setItem('registeredActivities', JSON.stringify(registeredActivities));
+    const user = auth.currentUser;
+    if (!user) {
+        alert('Please log in first.');
+        return;
     }
 
-    alert(`🎉 Congratulations! You have successfully registered for this activity!`);
-    // Redirect to portfolio page after successful registration
-    window.location.href = 'portfolio.html';
+    try {
+        const userRef = doc(db, COLLECTIONS.users, user.uid);
+        const userDoc = await getDoc(userRef);
+        
+        if (userDoc.exists()) {
+            const userData = userDoc.data();
+            const registered = userData.registered_activities || [];
+            
+            if (!registered.includes(activityId)) {
+                await updateDoc(userRef, {
+                    registered_activities: arrayUnion(activityId)
+                });
+                
+                markRegisteredBtn.textContent = '✅ Registered!';
+                markRegisteredBtn.disabled = true;
+                markRegisteredBtn.style.background = '#22c55e';
+                
+                alert('🎉 Congratulations! You have successfully registered for this activity!');
+                
+                // Show Phase 4 section
+                const phase4Section = document.querySelector('.phase4-section');
+                if (phase4Section) {
+                    phase4Section.style.display = 'block';
+                }
+            } else {
+                alert('You are already registered for this activity.');
+            }
+        }
+    } catch (error) {
+        console.error('Error registering:', error);
+        alert('Error registering. Please try again.');
+    }
 }
 
-// --- Initialize Phase 3 ---
+// ============================================================
+// Initialize Phase 3
+// ============================================================
 async function initPhase3() {
     const activityId = getActivityIdFromURL();
     if (!activityId) {
         alert('No activity selected. Please choose an activity first.');
-        window.location.href = 'activities.html';
+        window.location.href = 'student-app.html';
         return;
     }
 
-    const activity = await fetchActivityData(activityId);
-    if (!activity) {
-        alert('Activity not found. Please try again.');
-        window.location.href = 'activities.html';
-        return;
-    }
+    // Check if user is logged in
+    onAuthStateChanged(auth, async (user) => {
+        if (!user) {
+            window.location.href = 'login.html';
+            return;
+        }
 
-    displayActivitySummary(activity);
-    renderChecklist(activity.registrationRequirements);
-    updateRegistrationButtonState(); // Ensure button is disabled initially
+        // Get activity data
+        const activity = await fetchActivityData(activityId);
+        if (!activity) {
+            alert('Activity not found. Please try again.');
+            window.location.href = 'student-app.html';
+            return;
+        }
 
-    // Add event listener for the final registration button
-    markRegisteredBtn.addEventListener('click', () => handleRegistrationComplete(activityId));
+        // Get user profile
+        const userProfile = await getUserProfile(user.uid);
+        const interests = userProfile?.interests || [];
+
+        // Display
+        displayActivitySummary(activity, interests);
+        renderChecklist(activity.registrationRequirements || []);
+        updateRegistrationButtonState();
+
+        // Check if already registered
+        const registered = userProfile?.registered_activities || [];
+        if (registered.includes(activityId)) {
+            markRegisteredBtn.textContent = '✅ Already Registered';
+            markRegisteredBtn.disabled = true;
+            markRegisteredBtn.style.background = '#22c55e';
+        }
+
+        // Event listener for registration button
+        markRegisteredBtn.addEventListener('click', () => handleRegistrationComplete(activityId));
+    });
 }
 
-// Run the script when the page is ready
+// ============================================================
+// Handle Phase 4 - Complete Activity (Imported from reflection.js)
+// ============================================================
+import { markActivityComplete } from './reflection.js';
+
+// ============================================================
+// Setup Phase 4 Complete Button
+// ============================================================
+document.addEventListener('DOMContentLoaded', () => {
+    const completeBtn = document.getElementById('completeActivityBtn');
+    const statusEl = document.getElementById('phase4-status');
+    
+    if (!completeBtn) return;
+
+    completeBtn.addEventListener('click', async () => {
+        const user = auth.currentUser;
+        if (!user) {
+            alert('Please log in first.');
+            return;
+        }
+
+        const activityName = document.getElementById('activity-name')?.textContent || 'Activity';
+        const activityType = document.getElementById('activity-type')?.textContent?.toLowerCase() || 'default';
+        const duration = document.getElementById('activity-duration')?.textContent || 'N/A';
+        const activityId = getActivityIdFromURL() || 'unknown';
+        const note = prompt('Add a brief note about your experience (optional):');
+        
+        completeBtn.textContent = '⏳ Processing...';
+        completeBtn.disabled = true;
+        completeBtn.style.opacity = '0.6';
+        
+        try {
+            const success = await markActivityComplete(
+                activityId,
+                activityName,
+                activityType,
+                duration,
+                [],
+                note || ''
+            );
+            
+            if (success) {
+                completeBtn.textContent = '✅ Completed!';
+                completeBtn.style.background = '#16a34a';
+                completeBtn.style.opacity = '1';
+                
+                if (statusEl) {
+                    statusEl.style.display = 'block';
+                    statusEl.style.color = '#22c55e';
+                    statusEl.innerHTML = '✅ Activity marked as complete! Check your <a href="portfolio.html" style="color:#6C3CE1;font-weight:600;">portfolio</a> to see your reflections.';
+                }
+            } else {
+                completeBtn.textContent = '✅ Mark Activity as Complete';
+                completeBtn.disabled = false;
+                completeBtn.style.opacity = '1';
+            }
+        } catch (error) {
+            console.error('Error completing activity:', error);
+            completeBtn.textContent = '✅ Mark Activity as Complete';
+            completeBtn.disabled = false;
+            completeBtn.style.opacity = '1';
+            alert('Error completing activity. Please try again.');
+        }
+    });
+});
+
+// ============================================================
+// Logout Handler
+// ============================================================
+document.getElementById('logout-link')?.addEventListener('click', async (e) => {
+    e.preventDefault();
+    try {
+        await signOut(auth);
+        window.location.href = 'login.html';
+    } catch (error) {
+        console.error('Logout error:', error);
+    }
+});
+
+// ============================================================
+// Initialize
+// ============================================================
 document.addEventListener('DOMContentLoaded', initPhase3);
