@@ -18,6 +18,7 @@
             <nav>
                 <a href="dashboard.html">Dashboard</a>
                 <a href="portfolio.html">My Portfolio</a>
+                <a href="university-shortlist.html">Universities</a>
                 <a href="#" id="logout-link">Logout</a>
             </nav>
         </div>
@@ -29,6 +30,7 @@
             <h1>You're registering for:</h1>
             <h2 id="activity-name">Loading...</h2>
             <p class="activity-type">Type: <span id="activity-type">--</span></p>
+            <p class="activity-duration">Duration: <span id="activity-duration">--</span></p>
             <div class="readiness-summary">
                 <h3>📋 Your Readiness Summary</h3>
                 <p id="readiness-text">Loading your personalised registration guide...</p>
@@ -44,17 +46,248 @@
             </ul>
         </section>
 
-        <!-- Action Buttons -->
+        <!-- Action Buttons - Phase 3 Registration -->
         <section class="registration-actions">
             <p class="registration-note">Complete all steps in the checklist to enable registration.</p>
             <button id="mark-registered-btn" class="btn btn-primary" disabled>Mark as Registered</button>
             <a href="portfolio.html" class="btn btn-secondary">View My Portfolio</a>
         </section>
+
+        <!-- ============================================================
+        PHASE 4 - Complete Activity Section (NEW)
+        ============================================================ -->
+        <section class="phase4-section" style="
+            margin-top: 2.5rem;
+            padding-top: 2rem;
+            border-top: 2px dashed #e0e0e0;
+        ">
+            <h3>🎯 After Completing This Activity</h3>
+            <p style="color: #666; margin-bottom: 1rem;">
+                Once you've finished this activity, mark it as complete. You'll be prompted to reflect on your experience,
+                which will be saved to your portfolio and may be used for university essays.
+            </p>
+            
+            <div style="display: flex; gap: 1rem; flex-wrap: wrap; align-items: center;">
+                <!-- Complete Activity Button (Phase 4) -->
+                <button id="completeActivityBtn" class="btn btn-success" style="
+                    padding: 0.85rem 2rem;
+                    background: #22c55e;
+                    color: white;
+                    border: none;
+                    border-radius: 50px;
+                    font-weight: 700;
+                    font-size: 1rem;
+                    cursor: pointer;
+                    transition: all 0.3s;
+                    font-family: 'Quicksand', sans-serif;
+                ">
+                    ✅ Mark Activity as Complete
+                </button>
+                <span style="color: #888; font-size: 0.85rem;">
+                    After completion, you'll be prompted to reflect on your experience.
+                </span>
+            </div>
+            
+            <!-- Status message for Phase 4 -->
+            <div id="phase4-status" style="margin-top: 0.75rem; font-size: 0.9rem; color: #666; display: none;">
+                <!-- Filled by JavaScript -->
+            </div>
+        </section>
+
+        <!-- Quick Navigation -->
+        <section style="
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid #eee;
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+        ">
+            <a href="dashboard.html" class="btn btn-secondary" style="text-decoration: none;">📊 Dashboard</a>
+            <a href="student-app.html" class="btn btn-secondary" style="text-decoration: none;">🎯 Find More Activities</a>
+            <a href="university-shortlist.html" class="btn btn-secondary" style="text-decoration: none;">🏛️ University Shortlist</a>
+            <a href="futures-abroad-enroll.html" class="btn btn-primary" style="text-decoration: none; background: linear-gradient(135deg, #00b09b, #96c93d);">🚀 Enroll Now</a>
+        </section>
     </main>
 
     <script type="module">
-        // Import the phase 3 logic
+        // Import the phase 3 logic (existing)
         import './js/activity-registration.js';
+        
+        // Import Phase 4 logic (NEW)
+        import { markActivityComplete } from './js/reflection.js';
+        import { auth, onAuthStateChanged } from './js/firebase-config.js';
+
+        // ============================================================
+        // PHASE 4 - Complete Activity Button Handler
+        // ============================================================
+        document.addEventListener('DOMContentLoaded', () => {
+            const completeBtn = document.getElementById('completeActivityBtn');
+            const statusEl = document.getElementById('phase4-status');
+            
+            if (!completeBtn) return;
+            
+            // Check if user is logged in
+            onAuthStateChanged(auth, (user) => {
+                if (!user) {
+                    completeBtn.disabled = true;
+                    completeBtn.style.opacity = '0.6';
+                    completeBtn.style.cursor = 'not-allowed';
+                    if (statusEl) {
+                        statusEl.style.display = 'block';
+                        statusEl.style.color = '#e74c3c';
+                        statusEl.textContent = '⚠️ Please log in to mark activities as complete.';
+                    }
+                }
+            });
+            
+            // Handle click
+            completeBtn.addEventListener('click', async () => {
+                const user = auth.currentUser;
+                if (!user) {
+                    alert('Please log in first.');
+                    return;
+                }
+                
+                // Get activity details from the page
+                const activityName = document.getElementById('activity-name')?.textContent || 'Activity';
+                const activityType = document.getElementById('activity-type')?.textContent?.toLowerCase() || 'default';
+                const duration = document.getElementById('activity-duration')?.textContent || 'N/A';
+                
+                // Get activity ID from URL
+                const urlParams = new URLSearchParams(window.location.search);
+                const activityId = urlParams.get('id') || 'unknown';
+                
+                // Get skills from the page (if displayed)
+                const skills = getSkillsFromPage();
+                
+                // Ask for optional note
+                const note = prompt('Add a brief note about your experience (optional):');
+                
+                // Show loading state
+                completeBtn.textContent = '⏳ Processing...';
+                completeBtn.disabled = true;
+                
+                // Call the markActivityComplete function from reflection.js
+                const success = await markActivityComplete(
+                    activityId,
+                    activityName,
+                    activityType,
+                    duration,
+                    skills || [],
+                    note || ''
+                );
+                
+                if (success) {
+                    // Update button state
+                    completeBtn.textContent = '✅ Completed!';
+                    completeBtn.style.background = '#16a34a';
+                    completeBtn.style.cursor = 'default';
+                    
+                    // Show status message
+                    if (statusEl) {
+                        statusEl.style.display = 'block';
+                        statusEl.style.color = '#22c55e';
+                        statusEl.innerHTML = '✅ Activity marked as complete! Check your <a href="portfolio.html" style="color:#6C3CE1;font-weight:600;">portfolio</a> to see your reflections.';
+                    }
+                    
+                    // Update the registration button if needed
+                    const regBtn = document.getElementById('mark-registered-btn');
+                    if (regBtn && !regBtn.disabled) {
+                        // If already registered, we can also mark complete
+                    }
+                } else {
+                    // Reset button on error
+                    completeBtn.textContent = '✅ Mark Activity as Complete';
+                    completeBtn.disabled = false;
+                }
+            });
+        });
+
+        // ============================================================
+        // Helper Function - Get Skills from Page
+        // ============================================================
+        function getSkillsFromPage() {
+            // Try to find skills from the page
+            const skillsElements = document.querySelectorAll('.skill-tag, .skills-list span, .skill-item');
+            if (skillsElements.length > 0) {
+                return Array.from(skillsElements).map(el => el.textContent.trim());
+            }
+            
+            // Alternative: look for a skills container
+            const skillsContainer = document.getElementById('skills-container');
+            if (skillsContainer) {
+                const items = skillsContainer.querySelectorAll('span, .tag');
+                if (items.length > 0) {
+                    return Array.from(items).map(el => el.textContent.trim());
+                }
+            }
+            
+            // Return empty array if no skills found
+            return [];
+        }
     </script>
+
+    <!-- Add styles for the new Phase 4 section -->
+    <style>
+        .btn-success {
+            background: #22c55e;
+            color: white;
+            border: none;
+            padding: 0.85rem 2rem;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: 'Quicksand', sans-serif;
+        }
+        .btn-success:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(34, 197, 94, 0.4);
+        }
+        .btn-success:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+        .btn-primary {
+            background: #6C3CE1;
+            color: white;
+            border: none;
+            padding: 0.85rem 2rem;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: 'Quicksand', sans-serif;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(108, 60, 225, 0.3);
+        }
+        .btn-secondary {
+            background: transparent;
+            color: #6C3CE1;
+            border: 2px solid #6C3CE1;
+            padding: 0.85rem 2rem;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: 'Quicksand', sans-serif;
+        }
+        .btn-secondary:hover {
+            background: #6C3CE1;
+            color: white;
+        }
+        .phase4-section h3 {
+            font-size: 1.3rem;
+            color: #2D1B4E;
+            margin-bottom: 0.3rem;
+        }
+    </style>
 </body>
 </html>
