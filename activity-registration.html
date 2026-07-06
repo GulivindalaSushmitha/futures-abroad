@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="css/style.css" />
     <link rel="stylesheet" href="css/activity-registration.css" />
     <style>
+        /* ===== HEADER ===== */
         .main-header {
             background: white;
             padding: 15px 30px;
@@ -55,6 +56,8 @@
         .main-header nav #logout-link:hover {
             background: #fde8e8;
         }
+
+        /* ===== MAIN CONTENT ===== */
         .registration-main {
             padding-top: 100px;
             max-width: 900px;
@@ -63,6 +66,8 @@
             padding-right: 20px;
             padding-bottom: 40px;
         }
+
+        /* ===== BUTTONS ===== */
         .btn-success {
             background: #22c55e;
             color: white;
@@ -79,6 +84,12 @@
             transform: translateY(-2px);
             box-shadow: 0 4px 15px rgba(34, 197, 94, 0.4);
         }
+        .btn-success:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
         .btn-primary {
             background: #6C3CE1;
             color: white;
@@ -102,6 +113,7 @@
             cursor: not-allowed;
             transform: none;
         }
+
         .btn-secondary {
             background: transparent;
             color: #6C3CE1;
@@ -120,6 +132,7 @@
             background: #6C3CE1;
             color: white;
         }
+
         .btn-enroll {
             background: linear-gradient(135deg, #00b09b, #96c93d);
             color: white;
@@ -138,6 +151,8 @@
             transform: translateY(-2px);
             box-shadow: 0 4px 15px rgba(0, 176, 155, 0.4);
         }
+
+        /* ===== PHASE 4 SECTION ===== */
         .phase4-section {
             margin-top: 40px;
             padding-top: 30px;
@@ -148,6 +163,8 @@
             color: #2D1B4E;
             margin-bottom: 0.3rem;
         }
+
+        /* ===== QUICK NAVIGATION ===== */
         .quick-nav {
             margin-top: 30px;
             padding-top: 20px;
@@ -155,7 +172,15 @@
             display: flex;
             gap: 10px;
             flex-wrap: wrap;
+            justify-content: center;
         }
+        .quick-nav a {
+            flex: 0 1 auto;
+            min-width: 140px;
+            text-align: center;
+        }
+
+        /* ===== CHECKLIST ITEMS ===== */
         .checklist-item {
             display: flex;
             align-items: flex-start;
@@ -196,6 +221,8 @@
             color: #888;
             font-size: 0.8rem;
         }
+
+        /* ===== RESPONSIVE ===== */
         @media (max-width: 768px) {
             .main-header {
                 flex-wrap: wrap;
@@ -226,6 +253,8 @@
     </style>
 </head>
 <body>
+
+    <!-- ===== HEADER ===== -->
     <header class="main-header">
         <div class="logo">
             <a href="index.html">Futures <span>Abroad</span></a>
@@ -238,8 +267,10 @@
         </nav>
     </header>
 
+    <!-- ===== MAIN CONTENT ===== -->
     <main class="registration-main">
-        <!-- Activity Summary -->
+
+        <!-- ===== ACTIVITY SUMMARY ===== -->
         <section>
             <h1>You're registering for:</h1>
             <h2 id="activity-name">Loading...</h2>
@@ -251,14 +282,14 @@
             </div>
         </section>
 
-        <!-- Checklist -->
+        <!-- ===== CHECKLIST ===== -->
         <section>
             <h3>✅ Registration Checklist</h3>
             <p>Main Deadline: <span id="main-deadline">--</span></p>
             <ul id="checklist-container" style="list-style:none;padding:0;"></ul>
         </section>
 
-        <!-- Phase 3: Register Button -->
+        <!-- ===== PHASE 3: REGISTER BUTTON ===== -->
         <section style="margin:20px 0;padding:20px;background:#f8f9fa;border-radius:12px;text-align:center;">
             <p style="color:#666;">Complete all steps in the checklist to enable registration.</p>
             <button id="mark-registered-btn" class="btn-primary" disabled>Complete all steps to register</button>
@@ -285,15 +316,352 @@
             <div id="phase4-status" style="margin-top:12px;font-size:0.9rem;color:#666;display:none;"></div>
         </section>
 
-        <!-- Quick Navigation -->
+        <!-- ============================================================
+        QUICK NAVIGATION - All 6 Phases (THIS IS WHAT WAS MISSING!)
+        ============================================================ -->
         <section class="quick-nav">
             <a href="dashboard.html" class="btn-secondary">📊 Dashboard</a>
             <a href="student-app.html" class="btn-secondary">🎯 Find More Activities</a>
             <a href="university-shortlist.html" class="btn-secondary">🏛️ University Shortlist</a>
             <a href="futures-abroad-enroll.html" class="btn-enroll">🚀 Enroll Now</a>
         </section>
+
     </main>
 
-    <script type="module" src="js/activity-registration.js"></script>
+    <!-- ============================================================
+    JAVASCRIPT
+    ============================================================ -->
+    <script type="module">
+        // ============================================================
+        // IMPORTS
+        // ============================================================
+        import { 
+            auth, db, COLLECTIONS,
+            doc, getDoc, updateDoc, arrayUnion,
+            onAuthStateChanged, signOut
+        } from './js/firebase-config.js';
+        import { markActivityComplete } from './js/reflection.js';
+
+        // ============================================================
+        // DOM Elements
+        // ============================================================
+        const activityNameEl = document.getElementById('activity-name');
+        const activityTypeEl = document.getElementById('activity-type');
+        const activityDurationEl = document.getElementById('activity-duration');
+        const mainDeadlineEl = document.getElementById('main-deadline');
+        const readinessTextEl = document.getElementById('readiness-text');
+        const checklistContainer = document.getElementById('checklist-container');
+        const markRegisteredBtn = document.getElementById('mark-registered-btn');
+
+        // ============================================================
+        // Get Activity ID from URL
+        // ============================================================
+        function getActivityIdFromURL() {
+            const params = new URLSearchParams(window.location.search);
+            return params.get('id');
+        }
+
+        // ============================================================
+        // Fetch Activity from Firestore
+        // ============================================================
+        async function fetchActivityData(activityId) {
+            try {
+                const activityRef = doc(db, COLLECTIONS.activities, activityId);
+                const activityDoc = await getDoc(activityRef);
+                if (activityDoc.exists()) {
+                    return { id: activityDoc.id, ...activityDoc.data() };
+                }
+                return null;
+            } catch (error) {
+                console.error('Error fetching activity:', error);
+                return null;
+            }
+        }
+
+        // ============================================================
+        // Get User Profile
+        // ============================================================
+        async function getUserProfile(userId) {
+            try {
+                const userRef = doc(db, COLLECTIONS.users, userId);
+                const userDoc = await getDoc(userRef);
+                if (userDoc.exists()) {
+                    return userDoc.data();
+                }
+                return null;
+            } catch (error) {
+                console.error('Error fetching user:', error);
+                return null;
+            }
+        }
+
+        // ============================================================
+        // Display Activity Summary
+        // ============================================================
+        function displayActivitySummary(activity, userInterests) {
+            if (activityNameEl) activityNameEl.textContent = activity.name || 'Activity';
+            if (activityTypeEl) activityTypeEl.textContent = activity.type || 'General';
+            if (activityDurationEl) activityDurationEl.textContent = activity.duration || 'N/A';
+            if (mainDeadlineEl) mainDeadlineEl.textContent = activity.deadline || 'Rolling';
+
+            const interests = userInterests || ['exploration'];
+            const interestString = Array.isArray(interests) ? interests.join(', ') : interests;
+            if (readinessTextEl) {
+                readinessTextEl.textContent = 'Based on your interest in ' + interestString + ', this activity is a great match! Complete the checklist below to register and start building your profile.';
+            }
+        }
+
+        // ============================================================
+        // Render Checklist
+        // ============================================================
+        function renderChecklist(requirements) {
+            if (!checklistContainer) return;
+            checklistContainer.innerHTML = '';
+
+            if (!requirements || requirements.length === 0) {
+                checklistContainer.innerHTML = '<li style="padding:10px;color:#888;">No specific requirements for this activity.</li>';
+                return;
+            }
+
+            requirements.forEach(function(req, index) {
+                var listItem = document.createElement('li');
+                listItem.className = 'checklist-item';
+                listItem.id = 'checklist-item-' + (req.id || index);
+                listItem.dataset.completed = 'false';
+
+                var checkbox = document.createElement('input');
+                checkbox.type = 'checkbox';
+                checkbox.className = 'checkbox';
+                checkbox.id = 'checkbox-' + (req.id || index);
+                checkbox.addEventListener('change', function(e) {
+                    if (e.target.checked) {
+                        listItem.dataset.completed = 'true';
+                        listItem.classList.add('completed');
+                    } else {
+                        listItem.dataset.completed = 'false';
+                        listItem.classList.remove('completed');
+                    }
+                    updateRegistrationButtonState();
+                });
+
+                var contentDiv = document.createElement('div');
+                contentDiv.className = 'content';
+
+                var titleSpan = document.createElement('div');
+                titleSpan.className = 'title';
+                titleSpan.textContent = (index + 1) + '. ' + (req.title || 'Requirement');
+
+                var descSpan = document.createElement('div');
+                descSpan.className = 'desc';
+                descSpan.textContent = req.description || '';
+
+                var dueSpan = document.createElement('div');
+                dueSpan.className = 'due';
+                dueSpan.textContent = req.dueDate ? '📅 Due: ' + req.dueDate : '';
+
+                contentDiv.appendChild(titleSpan);
+                contentDiv.appendChild(descSpan);
+                contentDiv.appendChild(dueSpan);
+
+                listItem.appendChild(checkbox);
+                listItem.appendChild(contentDiv);
+                checklistContainer.appendChild(listItem);
+            });
+        }
+
+        // ============================================================
+        // Update Registration Button State
+        // ============================================================
+        function updateRegistrationButtonState() {
+            if (!markRegisteredBtn) return;
+            var allItems = document.querySelectorAll('.checklist-item');
+            var allCompleted = true;
+            allItems.forEach(function(item) {
+                if (item.dataset.completed === 'false') {
+                    allCompleted = false;
+                }
+            });
+
+            markRegisteredBtn.disabled = !allCompleted;
+            markRegisteredBtn.textContent = allCompleted ? '✅ Mark as Registered' : 'Complete all steps to register';
+            markRegisteredBtn.style.opacity = allCompleted ? '1' : '0.6';
+        }
+
+        // ============================================================
+        // Handle Registration Complete (Phase 3)
+        // ============================================================
+        async function handleRegistrationComplete(activityId) {
+            if (!markRegisteredBtn || markRegisteredBtn.disabled) return;
+
+            var user = auth.currentUser;
+            if (!user) {
+                alert('Please log in first.');
+                return;
+            }
+
+            try {
+                var userRef = doc(db, COLLECTIONS.users, user.uid);
+                var userDoc = await getDoc(userRef);
+
+                if (userDoc.exists()) {
+                    var userData = userDoc.data();
+                    var registered = userData.registered_activities || [];
+
+                    if (!registered.includes(activityId)) {
+                        await updateDoc(userRef, {
+                            registered_activities: arrayUnion(activityId)
+                        });
+
+                        markRegisteredBtn.textContent = '✅ Registered!';
+                        markRegisteredBtn.disabled = true;
+                        markRegisteredBtn.style.background = '#22c55e';
+
+                        alert('🎉 Congratulations! You have successfully registered for this activity!');
+
+                        var phase4Section = document.querySelector('.phase4-section');
+                        if (phase4Section) {
+                            phase4Section.style.display = 'block';
+                        }
+                    } else {
+                        alert('You are already registered for this activity.');
+                    }
+                }
+            } catch (error) {
+                console.error('Error registering:', error);
+                alert('Error registering. Please try again.');
+            }
+        }
+
+        // ============================================================
+        // Setup Phase 4 Complete Button
+        // ============================================================
+        function setupPhase4Button() {
+            var completeBtn = document.getElementById('completeActivityBtn');
+            var statusEl = document.getElementById('phase4-status');
+            
+            if (!completeBtn) return;
+
+            completeBtn.addEventListener('click', async function() {
+                var user = auth.currentUser;
+                if (!user) {
+                    alert('Please log in first.');
+                    return;
+                }
+
+                var activityName = document.getElementById('activity-name')?.textContent || 'Activity';
+                var activityType = document.getElementById('activity-type')?.textContent?.toLowerCase() || 'default';
+                var duration = document.getElementById('activity-duration')?.textContent || 'N/A';
+                var activityId = getActivityIdFromURL() || 'unknown';
+                var note = prompt('Add a brief note about your experience (optional):');
+                
+                completeBtn.textContent = '⏳ Processing...';
+                completeBtn.disabled = true;
+                completeBtn.style.opacity = '0.6';
+                
+                try {
+                    var success = await markActivityComplete(
+                        activityId,
+                        activityName,
+                        activityType,
+                        duration,
+                        [],
+                        note || ''
+                    );
+                    
+                    if (success) {
+                        completeBtn.textContent = '✅ Completed!';
+                        completeBtn.style.background = '#16a34a';
+                        completeBtn.style.opacity = '1';
+                        completeBtn.disabled = false;
+                        
+                        if (statusEl) {
+                            statusEl.style.display = 'block';
+                            statusEl.style.color = '#22c55e';
+                            statusEl.innerHTML = '✅ Activity marked as complete! Check your <a href="portfolio.html" style="color:#6C3CE1;font-weight:600;">portfolio</a> to see your reflections.';
+                        }
+                    } else {
+                        completeBtn.textContent = '✅ Mark Activity as Complete';
+                        completeBtn.disabled = false;
+                        completeBtn.style.opacity = '1';
+                    }
+                } catch (error) {
+                    console.error('Error completing activity:', error);
+                    completeBtn.textContent = '✅ Mark Activity as Complete';
+                    completeBtn.disabled = false;
+                    completeBtn.style.opacity = '1';
+                    alert('Error completing activity. Please try again.');
+                }
+            });
+        }
+
+        // ============================================================
+        // Initialize Phase 3
+        // ============================================================
+        async function initPhase3() {
+            var activityId = getActivityIdFromURL();
+            if (!activityId) {
+                alert('No activity selected. Please choose an activity first.');
+                window.location.href = 'student-app.html';
+                return;
+            }
+
+            onAuthStateChanged(auth, async function(user) {
+                if (!user) {
+                    window.location.href = 'login.html';
+                    return;
+                }
+
+                var activity = await fetchActivityData(activityId);
+                if (!activity) {
+                    alert('Activity not found. Please try again.');
+                    window.location.href = 'student-app.html';
+                    return;
+                }
+
+                var userProfile = await getUserProfile(user.uid);
+                var interests = userProfile?.interests || [];
+
+                displayActivitySummary(activity, interests);
+                renderChecklist(activity.registrationRequirements || []);
+                updateRegistrationButtonState();
+
+                var registered = userProfile?.registered_activities || [];
+                if (registered.includes(activityId)) {
+                    markRegisteredBtn.textContent = '✅ Already Registered';
+                    markRegisteredBtn.disabled = true;
+                    markRegisteredBtn.style.background = '#22c55e';
+                }
+
+                if (markRegisteredBtn) {
+                    markRegisteredBtn.addEventListener('click', function() {
+                        handleRegistrationComplete(activityId);
+                    });
+                }
+            });
+        }
+
+        // ============================================================
+        // Logout Handler
+        // ============================================================
+        document.getElementById('logout-link')?.addEventListener('click', async function(e) {
+            e.preventDefault();
+            try {
+                await signOut(auth);
+                window.location.href = 'login.html';
+            } catch (error) {
+                console.error('Logout error:', error);
+            }
+        });
+
+        // ============================================================
+        // Initialize Everything
+        // ============================================================
+        document.addEventListener('DOMContentLoaded', function() {
+            initPhase3();
+            setupPhase4Button();
+        });
+
+        console.log('✅ activity-registration.js loaded successfully!');
+    </script>
 </body>
 </html>
