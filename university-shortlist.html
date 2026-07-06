@@ -291,10 +291,9 @@
     </main>
 
     <!-- ============================================================
-    JAVASCRIPT
+    JAVASCRIPT - WITH type="module"
     ============================================================ -->
     <script type="module">
-        // Import Firebase and University logic
         import { 
             auth, 
             onAuthStateChanged, 
@@ -306,9 +305,7 @@
         } from './js/firebase-config.js';
         import { renderUniversityShortlist, filterShortlist } from './js/university.js';
 
-        // ============================================================
-        // LOGOUT
-        // ============================================================
+        // Logout
         document.getElementById('logoutBtn')?.addEventListener('click', async (e) => {
             e.preventDefault();
             try {
@@ -319,21 +316,17 @@
             }
         });
 
-        // ============================================================
-        // AUTH STATE - Load page when user is logged in
-        // ============================================================
+        // Auth State
         onAuthStateChanged(auth, async (user) => {
             if (!user) {
                 window.location.href = 'login.html';
                 return;
             }
 
-            // Check if user has completed profile
             try {
                 const userDoc = await getDoc(doc(db, COLLECTIONS.users, user.uid));
                 const userData = userDoc.exists() ? userDoc.data() : {};
                 
-                // If no interests, redirect to quiz
                 if (!userData.interests || userData.interests.length === 0) {
                     const container = document.getElementById('shortlistContainer');
                     container.innerHTML = `
@@ -349,7 +342,6 @@
                     return;
                 }
 
-                // Render the shortlist
                 await renderUniversityShortlist();
 
             } catch (error) {
@@ -365,32 +357,25 @@
             }
         });
 
-        // ============================================================
-        // FILTER BUTTONS
-        // ============================================================
+        // Filter Buttons
         document.querySelectorAll('.filter-btn').forEach(btn => {
             btn.addEventListener('click', () => {
                 filterShortlist(btn.dataset.filter);
             });
         });
 
-        // ============================================================
-        // CTA BUTTON - Navigate to Phase 6
-        // ============================================================
+        // CTA Button
         document.getElementById('futuresAbroadCTA')?.addEventListener('click', () => {
             window.location.href = 'futures-abroad-enroll.html';
         });
 
-        // ============================================================
-        // Check if user is enrolled (show/hide CTA)
-        // ============================================================
+        // Check if user is enrolled
         onAuthStateChanged(auth, async (user) => {
             if (user) {
                 try {
                     const userDoc = await getDoc(doc(db, COLLECTIONS.users, user.uid));
                     const userData = userDoc.exists() ? userDoc.data() : {};
                     
-                    // If already enrolled, hide the CTA
                     if (userData.isEnrolled) {
                         const ctaSection = document.querySelector('.cta-section');
                         if (ctaSection) {
