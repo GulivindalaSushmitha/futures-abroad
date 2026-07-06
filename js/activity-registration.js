@@ -1,5 +1,5 @@
 // ============================================================
-// js/activity-registration.js - Phase 3 + 4 (FIXED)
+// js/activity-registration.js - Phase 3 + 4 (COMPLETE)
 // ============================================================
 
 import { 
@@ -186,6 +186,7 @@ async function handleRegistrationComplete(activityId) {
 
                 alert('🎉 Congratulations! You have successfully registered for this activity!');
 
+                // Show Phase 4 section
                 var phase4Section = document.querySelector('.phase4-section');
                 if (phase4Section) {
                     phase4Section.style.display = 'block';
