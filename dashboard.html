@@ -535,3 +535,91 @@
                     activitiesList.innerHTML = '';
                     const uniqueIds = [...new Set(registeredActivities)];
                     for (const activityId of uniqueIds) {
+                        try {
+                            const activityDoc = await getDoc(doc(db, 'activities', activityId));
+                            if (activityDoc.exists()) {
+                                const actData = activityDoc.data();
+                                const div = document.createElement('div');
+                                div.className = 'registered-activity-item';
+                                div.innerHTML = `
+                                    <span>${actData.name || activityId}</span>
+                                    <span class="status">✅ Registered</span>
+                                `;
+                                activitiesList.appendChild(div);
+                            }
+                        } catch (e) {
+                            console.error('Error fetching activity:', e);
+                        }
+                    }
+                }
+                
+            } catch (error) {
+                console.error('Error loading dashboard:', error);
+            }
+        }
+
+        function updatePhaseBadges(currentPhase, grade) {
+            const phases = [
+                { id: 'phase1', key: 'phase1-badge', link: 'quiz.html' },
+                { id: 'phase2', key: 'phase2-badge', link: 'student-app.html' },
+                { id: 'phase3', key: 'phase3-badge', link: 'activity-registration.html' },
+                { id: 'phase4', key: 'phase4-badge', link: 'portfolio.html' },
+                { id: 'phase5', key: 'phase5-badge', link: 'university-shortlist.html' },
+                { id: 'phase6', key: 'phase6-badge', link: 'futures-abroad-enroll.html' }
+            ];
+            
+            let maxAccessiblePhase = currentPhase;
+            if (grade === 10) maxAccessiblePhase = Math.min(currentPhase, 4);
+            if (grade === 11) maxAccessiblePhase = Math.min(currentPhase, 5);
+            if (grade === 12) maxAccessiblePhase = currentPhase;
+            
+            phases.forEach((phase, index) => {
+                const badge = document.getElementById(phase.key);
+                const card = document.getElementById(phase.id + '-card');
+                const phaseNum = index + 1;
+                
+                if (!badge) return;
+                badge.classList.remove('active', 'completed', 'locked');
+                
+                if (phaseNum < currentPhase) {
+                    badge.textContent = '✅ Completed';
+                    badge.classList.add('completed');
+                } else if (phaseNum === currentPhase) {
+                    badge.textContent = '📍 Current';
+                    badge.classList.add('active');
+                } else if (phaseNum <= maxAccessiblePhase) {
+                    badge.textContent = '🔓 Available';
+                } else {
+                    badge.textContent = '🔒 Locked';
+                    badge.classList.add('locked');
+                    if (card) {
+                        card.style.opacity = '0.6';
+                        card.style.cursor = 'not-allowed';
+                        card.addEventListener('click', (e) => {
+                            e.preventDefault();
+                            alert(`Complete Phase ${phaseNum - 1} first to unlock this phase.`);
+                        });
+                    }
+                }
+            });
+        }
+
+        onAuthStateChanged(auth, async (user) => {
+            if (!user) {
+                window.location.href = 'login.html';
+                return;
+            }
+            await loadDashboard(user);
+        });
+
+        window.logoutUser = async function() {
+            try {
+                await signOut(auth);
+                window.location.href = 'index.html';
+            } catch (error) {
+                console.error('Logout error:', error);
+            }
+        };
+    </script>
+</body>
+</html>
