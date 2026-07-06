@@ -20,6 +20,8 @@
             left: 0;
             right: 0;
             z-index: 1000;
+            flex-wrap: wrap;
+            gap: 10px;
         }
         .navbar .nav-logo {
             font-size: 22px;
@@ -34,6 +36,7 @@
             display: flex;
             gap: 15px;
             align-items: center;
+            flex-wrap: wrap;
         }
         .navbar .nav-links a {
             text-decoration: none;
@@ -52,6 +55,25 @@
         }
         .navbar .nav-links .logout-link:hover {
             background: #fde8e8;
+        }
+        .success-container {
+            text-align: center;
+            padding: 4rem 2rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .success-container .success-icon {
+            font-size: 5rem;
+            margin-bottom: 1rem;
+        }
+        .success-container h1 {
+            font-size: 2.5rem;
+            color: #22c55e;
+            margin-bottom: 0.5rem;
+        }
+        .success-container p {
+            color: #666;
+            font-size: 1.1rem;
         }
         @media (max-width: 768px) {
             .navbar {
@@ -88,7 +110,7 @@
             <p>Welcome to the Futures Abroad program. Your journey to university admission begins now.</p>
             
             <div style="background:#f8f9ff;border-radius:12px;padding:1.5rem;margin:2rem auto;max-width:500px;text-align:left;">
-                <h4 style="margin-bottom:0.5rem;">📋 What's Next?</h4>
+                <h4 style="margin-bottom:0.5rem;color:#2D1B4E;">📋 What's Next?</h4>
                 <ul style="list-style:none;padding:0;">
                     <li style="padding:0.5rem 0;border-bottom:1px solid #eee;">✅ A counselor will contact you within 24 hours</li>
                     <li style="padding:0.5rem 0;border-bottom:1px solid #eee;">✅ Check your email for session scheduling</li>
@@ -110,7 +132,7 @@
     <script type="module">
         import { auth, signOut } from './js/firebase-config.js';
         
-        document.getElementById('logoutBtn')?.addEventListener('click', async () => {
+        document.getElementById('logoutBtn')?.addEventListener('click', async function() {
             await signOut(auth);
             window.location.href = 'login.html';
         });
