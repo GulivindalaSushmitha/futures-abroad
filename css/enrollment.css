@@ -1,0 +1,231 @@
+/* ============================================================
+   css/enrollment.css - Enrollment & Payment (Phase 6)
+   ============================================================ */
+
+.enrollment-container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 2rem 1.5rem;
+}
+
+.enrollment-header {
+    text-align: center;
+    margin-bottom: 2.5rem;
+}
+
+.enrollment-header h1 {
+    font-size: 2.5rem;
+    font-weight: 800;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.enrollment-header p {
+    color: #666;
+    font-size: 1.1rem;
+}
+
+/* ===== Program Cards ===== */
+.program-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2.5rem;
+}
+
+.program-card {
+    background: white;
+    border-radius: 16px;
+    padding: 1.5rem;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+    border: 2px solid transparent;
+    transition: all 0.3s;
+    cursor: pointer;
+    text-align: center;
+}
+
+.program-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+}
+
+.program-card.selected {
+    border-color: #667eea;
+    background: #f8f9ff;
+}
+
+.program-card .program-icon {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.program-card .program-name {
+    font-size: 1.3rem;
+    font-weight: 700;
+}
+
+.program-card .program-price {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: #667eea;
+    margin: 0.5rem 0;
+}
+
+.program-card .program-price small {
+    font-size: 0.8rem;
+    font-weight: 400;
+    color: #888;
+}
+
+.program-card .program-features {
+    list-style: none;
+    padding: 0;
+    margin: 0.75rem 0;
+    text-align: left;
+}
+
+.program-card .program-features li {
+    padding: 0.3rem 0;
+    font-size: 0.9rem;
+    color: #555;
+}
+
+.program-card .program-features li::before {
+    content: "✅ ";
+}
+
+.program-card .popular-badge {
+    display: inline-block;
+    background: #ffd700;
+    color: #333;
+    padding: 0.2rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    margin-top: 0.5rem;
+}
+
+/* ===== Intake Form ===== */
+.enrollment-form {
+    background: white;
+    border-radius: 16px;
+    padding: 2rem;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+    margin-top: 1.5rem;
+}
+
+.enrollment-form .form-group {
+    margin-bottom: 1.25rem;
+}
+
+.enrollment-form label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 0.4rem;
+    font-size: 0.95rem;
+}
+
+.enrollment-form input,
+.enrollment-form select,
+.enrollment-form textarea {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: border-color 0.3s;
+}
+
+.enrollment-form input:focus,
+.enrollment-form select:focus,
+.enrollment-form textarea:focus {
+    border-color: #667eea;
+    outline: none;
+}
+
+.enrollment-form .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+/* ===== Payment Button ===== */
+.payment-btn {
+    width: 100%;
+    padding: 1rem;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.payment-btn:hover {
+    transform: scale(1.02);
+    box-shadow: 0 4px 16px rgba(102, 126, 234, 0.4);
+}
+
+.payment-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* ===== Payment Scanner ===== */
+.scanner-container {
+    text-align: center;
+    padding: 2rem;
+}
+
+.scanner-container .qr-placeholder {
+    width: 200px;
+    height: 200px;
+    border: 2px dashed #ddd;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 1rem auto;
+    font-size: 4rem;
+}
+
+/* ===== Success Page ===== */
+.success-container {
+    text-align: center;
+    padding: 4rem 2rem;
+}
+
+.success-container .success-icon {
+    font-size: 5rem;
+    margin-bottom: 1rem;
+}
+
+.success-container h1 {
+    font-size: 2.5rem;
+    color: #2ecc71;
+    margin-bottom: 0.5rem;
+}
+
+.success-container p {
+    color: #666;
+    font-size: 1.1rem;
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 768px) {
+    .enrollment-form .form-row {
+        grid-template-columns: 1fr;
+    }
+    
+    .program-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .enrollment-header h1 {
+        font-size: 1.8rem;
+    }
+}
