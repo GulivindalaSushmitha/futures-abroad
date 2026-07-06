@@ -20,6 +20,8 @@
             left: 0;
             right: 0;
             z-index: 1000;
+            flex-wrap: wrap;
+            gap: 10px;
         }
         .navbar .nav-logo {
             font-size: 22px;
@@ -34,6 +36,7 @@
             display: flex;
             gap: 15px;
             align-items: center;
+            flex-wrap: wrap;
         }
         .navbar .nav-links a {
             text-decoration: none;
@@ -53,6 +56,38 @@
         .navbar .nav-links .logout-link:hover {
             background: #fde8e8;
         }
+        .payment-btn {
+            background: #6C3CE1;
+            color: white;
+            border: none;
+            padding: 14px 32px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: 'Quicksand', sans-serif;
+        }
+        .payment-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(108, 60, 225, 0.3);
+        }
+        .payment-btn-success {
+            background: #22c55e;
+            color: white;
+            border: none;
+            padding: 14px 32px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: 'Quicksand', sans-serif;
+        }
+        .payment-btn-success:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(34, 197, 94, 0.4);
+        }
         @media (max-width: 768px) {
             .navbar {
                 flex-wrap: wrap;
@@ -66,6 +101,9 @@
             .navbar .nav-links a {
                 font-size: 14px;
                 padding: 6px 12px;
+            }
+            .payment-options-grid {
+                grid-template-columns: 1fr !important;
             }
         }
     </style>
@@ -81,25 +119,25 @@
         </div>
     </nav>
 
-    <main class="enrollment-container" style="padding-top: 100px;">
-        <div class="enrollment-header">
-            <h1>💳 Complete Your Payment</h1>
-            <p>Choose your payment method below</p>
+    <main class="enrollment-container" style="padding-top: 100px; max-width: 900px; margin: 0 auto; padding-left: 20px; padding-right: 20px; padding-bottom: 40px;">
+        <div class="enrollment-header" style="text-align:center;margin-bottom:2rem;">
+            <h1 style="font-size:2.5rem;font-weight:800;background:linear-gradient(135deg,#6C3CE1,#a855f7);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">💳 Complete Your Payment</h1>
+            <p style="color:#666;font-size:1.1rem;">Choose your payment method below</p>
         </div>
 
         <!-- Payment Summary -->
-        <div id="paymentSummary" style="background:#f8f9ff;border-radius:12px;padding:1.5rem;margin-bottom:2rem;text-align:center;">
+        <div id="paymentSummary" style="background:#f8f9ff;border-radius:12px;padding:1.5rem;margin-bottom:2rem;text-align:center;border:1px solid #e0d4ff;">
             <!-- Filled by JavaScript -->
         </div>
 
         <!-- Payment Options -->
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-bottom:2rem;">
+        <div class="payment-options-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-bottom:2rem;">
             <!-- Option 1: Pay with Nomod -->
             <div style="background:white;border-radius:16px;padding:2rem;box-shadow:0 2px 12px rgba(0,0,0,0.08);text-align:center;border:2px solid #6C3CE1;">
                 <div style="font-size:3rem;margin-bottom:0.5rem;">💳</div>
-                <h3 style="margin-bottom:0.5rem;">Pay with Nomod</h3>
+                <h3 style="margin-bottom:0.5rem;color:#2D1B4E;">Pay with Nomod</h3>
                 <p style="color:#666;font-size:0.9rem;">Complete your payment securely via Nomod</p>
-                <button id="payWithNomodBtn" style="margin-top:1rem;padding:0.75rem 2rem;background:#6C3CE1;color:white;border:none;border-radius:8px;font-weight:600;cursor:pointer;font-size:1rem;">
+                <button id="payWithNomodBtn" class="payment-btn" style="margin-top:1rem;">
                     🔗 Go to Payment
                 </button>
             </div>
@@ -107,22 +145,22 @@
             <!-- Option 2: Manual Confirmation -->
             <div style="background:white;border-radius:16px;padding:2rem;box-shadow:0 2px 12px rgba(0,0,0,0.08);text-align:center;">
                 <div style="font-size:3rem;margin-bottom:0.5rem;">✅</div>
-                <h3 style="margin-bottom:0.5rem;">Confirm Manually</h3>
+                <h3 style="margin-bottom:0.5rem;color:#2D1B4E;">Confirm Manually</h3>
                 <p style="color:#666;font-size:0.9rem;">Already paid? Confirm your payment here</p>
-                <button id="manualConfirmBtn" style="margin-top:1rem;padding:0.75rem 2rem;background:#22c55e;color:white;border:none;border-radius:8px;font-weight:600;cursor:pointer;font-size:1rem;display:none;">
+                <button id="manualConfirmBtn" class="payment-btn-success" style="margin-top:1rem;display:none;">
                     ✅ Confirm Payment
                 </button>
             </div>
         </div>
 
         <!-- Scanner Status -->
-        <div id="scannerStatus" style="text-align:center;padding:1rem;background:#f8f9fa;border-radius:8px;font-weight:500;min-height:3rem;color:#888;">
+        <div id="scannerStatus" style="text-align:center;padding:1rem;background:#f8f9fa;border-radius:8px;font-weight:500;min-height:3rem;color:#888;border:1px solid #eee;">
             Choose a payment method above
         </div>
 
         <!-- Alternative Methods (Simulated for testing) -->
         <details style="margin-top:2rem;text-align:center;color:#888;font-size:0.85rem;">
-            <summary style="cursor:pointer;">🔄 Alternative Payment Methods (For Testing)</summary>
+            <summary style="cursor:pointer;font-weight:600;color:#6C3CE1;">🔄 Alternative Payment Methods (For Testing)</summary>
             <div style="margin-top:1rem;display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;">
                 <button id="scanQRBtn" style="padding:0.5rem 1rem;background:#f0f0f0;border:none;border-radius:6px;cursor:pointer;">📷 Simulate QR Scan</button>
                 <button id="uploadQRBtn" style="padding:0.5rem 1rem;background:#f0f0f0;border:none;border-radius:6px;cursor:pointer;">📤 Simulate QR Upload</button>
@@ -131,7 +169,7 @@
 
         <div style="text-align:center;margin-top:2rem;color:#888;font-size:0.85rem;">
             <p>🔒 Your payment is secure. We do not store your payment details.</p>
-            <p>Need help? Contact us at <a href="mailto:vandana@futuresabroad.com">vandana@futuresabroad.com</a></p>
+            <p>Need help? Contact us at <a href="mailto:vandana@futuresabroad.com" style="color:#6C3CE1;">vandana@futuresabroad.com</a></p>
         </div>
     </main>
 
@@ -143,13 +181,14 @@
         
         const enrollmentData = window._enrollmentData || {};
         const program = enrollmentData.program || 'grade10';
+        const price = getProgramPrice(program);
         
         document.getElementById('paymentSummary').innerHTML = `
-            <h3 style="margin-bottom:0.5rem;">📋 Enrollment Summary</h3>
-            <p><strong>Program:</strong> ${program}</p>
+            <h3 style="margin-bottom:0.5rem;color:#2D1B4E;">📋 Enrollment Summary</h3>
+            <p><strong>Program:</strong> ${program.replace('grade', 'Grade ')}</p>
             <p><strong>Student:</strong> ${enrollmentData.fullName || 'Student'}</p>
             <p><strong>Email:</strong> ${enrollmentData.email || 'N/A'}</p>
-            <p><strong>Total:</strong> <span style="font-size:1.8rem;color:#6C3CE1;font-weight:700;">AED ${getProgramPrice(program)}</span></p>
+            <p><strong>Total:</strong> <span style="font-size:1.8rem;color:#6C3CE1;font-weight:700;">AED ${price}</span></p>
         `;
         
         document.getElementById('logoutBtn')?.addEventListener('click', async () => {
