@@ -1,0 +1,149 @@
+<!-- futures-abroad-enroll.html - Phase 6 Entry -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enroll in Futures Abroad - Phase 6</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/enrollment.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">🚀 Futures Abroad</a>
+            <div class="nav-links">
+                <a href="dashboard.html">Dashboard</a>
+                <a href="portfolio.html">Portfolio</a>
+                <a href="university-shortlist.html">Universities</a>
+                <a href="#" id="logoutBtn" style="color:#e74c3c;">Logout</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="enrollment-container">
+        <div class="enrollment-header">
+            <h1>🚀 Join Futures Abroad</h1>
+            <p>Select your program and start your journey to university admission</p>
+        </div>
+
+        <!-- Program Selection -->
+        <div class="program-grid">
+            <div class="program-card" data-program="grade10" data-price="450">
+                <div class="program-icon">🌱</div>
+                <div class="program-name">Grade 10 Foundation</div>
+                <div class="program-price">AED 450 <small>/month</small></div>
+                <ul class="program-features">
+                    <li>Profile progress bar</li>
+                    <li>Activity recommendations</li>
+                    <li>AI-powered guidance</li>
+                </ul>
+                <div class="popular-badge">⭐ Most Popular</div>
+            </div>
+
+            <div class="program-card" data-program="grade11" data-price="650">
+                <div class="program-icon">🎯</div>
+                <div class="program-name">Grade 11 Serious Planning</div>
+                <div class="program-price">AED 650 <small>/month</small></div>
+                <ul class="program-features">
+                    <li>University shortlist</li>
+                    <li>Counselor handoff</li>
+                    <li>1-on-1 mentoring</li>
+                </ul>
+            </div>
+
+            <div class="program-card" data-program="grade12" data-price="999">
+                <div class="program-icon">🎓</div>
+                <div class="program-name">Grade 12 Application Ready</div>
+                <div class="program-price">AED 999 <small>/year</small></div>
+                <ul class="program-features">
+                    <li>Application deadlines</li>
+                    <li>Essay support</li>
+                    <li>Full support package</li>
+                </ul>
+                <div style="font-size:0.7rem;color:#888;margin-top:0.5rem;">Rolling enrollment</div>
+            </div>
+        </div>
+
+        <!-- Enrollment Form -->
+        <div id="formSection">
+            <form id="enrollmentForm" class="enrollment-form">
+                <h3 style="margin-bottom:1rem;">📝 Your Information</h3>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="fullName">Full Name *</label>
+                        <input type="text" id="fullName" name="fullName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email *</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="parentEmail">Parent/Guardian Email *</label>
+                        <input type="email" id="parentEmail" name="parentEmail" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="timezone">Preferred Timezone *</label>
+                        <select id="timezone" name="timezone" required>
+                            <option value="GST">GST (UAE)</option>
+                            <option value="EST">EST (USA East)</option>
+                            <option value="PST">PST (USA West)</option>
+                            <option value="GMT">GMT (UK)</option>
+                            <option value="IST">IST (India)</option>
+                            <option value="AEST">AEST (Australia)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="grade">Grade *</label>
+                        <input type="number" id="grade" name="grade" min="10" max="12" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="school">School</label>
+                        <input type="text" id="school" name="school">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="country">Country *</label>
+                    <input type="text" id="country" name="country" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="notes">Additional Notes (optional)</label>
+                    <textarea id="notes" name="notes" rows="3" placeholder="Any special requests or questions..."></textarea>
+                </div>
+
+                <button type="submit" id="paymentBtn" class="payment-btn" disabled>
+                    💳 Continue to Payment - <span id="selectedProgramName">Select a program</span>
+                </button>
+                <p style="text-align:center;color:#888;font-size:0.85rem;margin-top:0.5rem;">
+                    <span id="selectedPrice">AED 0</span> • Secure payment • No commitment
+                </p>
+            </form>
+        </div>
+
+        <!-- Payment Section (hidden initially, shown after form submit) -->
+        <div id="paymentSection" style="display:none;">
+            <!-- Filled by JavaScript -->
+        </div>
+    </main>
+
+    <script type="module" src="js/firebase-config.js"></script>
+    <script type="module" src="js/enrollment.js"></script>
+    <script type="module">
+        import { auth, signOut } from './js/firebase-config.js';
+        
+        document.getElementById('logoutBtn')?.addEventListener('click', async () => {
+            await signOut(auth);
+            window.location.href = 'login.html';
+        });
+    </script>
+</body>
+</html>
