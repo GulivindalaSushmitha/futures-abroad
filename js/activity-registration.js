@@ -1,11 +1,17 @@
 // ============================================================
-// js/activity-registration.js - Phase 3 + 4 (COMPLETE)
+// js/activity-registration.js - Phase 3 + 4 (FIXED)
 // ============================================================
 
 import { 
-    auth, db, COLLECTIONS,
-    doc, getDoc, updateDoc, arrayUnion,
-    onAuthStateChanged, signOut
+    auth, 
+    db, 
+    COLLECTIONS,
+    doc, 
+    getDoc, 
+    updateDoc, 
+    arrayUnion,
+    onAuthStateChanged, 
+    signOut
 } from './firebase-config.js';
 
 import { markActivityComplete } from './reflection.js';
@@ -13,19 +19,19 @@ import { markActivityComplete } from './reflection.js';
 // ============================================================
 // DOM Elements
 // ============================================================
-const activityNameEl = document.getElementById('activity-name');
-const activityTypeEl = document.getElementById('activity-type');
-const activityDurationEl = document.getElementById('activity-duration');
-const mainDeadlineEl = document.getElementById('main-deadline');
-const readinessTextEl = document.getElementById('readiness-text');
-const checklistContainer = document.getElementById('checklist-container');
-const markRegisteredBtn = document.getElementById('mark-registered-btn');
+var activityNameEl = document.getElementById('activity-name');
+var activityTypeEl = document.getElementById('activity-type');
+var activityDurationEl = document.getElementById('activity-duration');
+var mainDeadlineEl = document.getElementById('main-deadline');
+var readinessTextEl = document.getElementById('readiness-text');
+var checklistContainer = document.getElementById('checklist-container');
+var markRegisteredBtn = document.getElementById('mark-registered-btn');
 
 // ============================================================
 // Get Activity ID from URL
 // ============================================================
 function getActivityIdFromURL() {
-    const params = new URLSearchParams(window.location.search);
+    var params = new URLSearchParams(window.location.search);
     return params.get('id');
 }
 
@@ -34,8 +40,8 @@ function getActivityIdFromURL() {
 // ============================================================
 async function fetchActivityData(activityId) {
     try {
-        const activityRef = doc(db, COLLECTIONS.activities, activityId);
-        const activityDoc = await getDoc(activityRef);
+        var activityRef = doc(db, COLLECTIONS.activities, activityId);
+        var activityDoc = await getDoc(activityRef);
         if (activityDoc.exists()) {
             return { id: activityDoc.id, ...activityDoc.data() };
         }
@@ -51,8 +57,8 @@ async function fetchActivityData(activityId) {
 // ============================================================
 async function getUserProfile(userId) {
     try {
-        const userRef = doc(db, COLLECTIONS.users, userId);
-        const userDoc = await getDoc(userRef);
+        var userRef = doc(db, COLLECTIONS.users, userId);
+        var userDoc = await getDoc(userRef);
         if (userDoc.exists()) {
             return userDoc.data();
         }
@@ -67,13 +73,21 @@ async function getUserProfile(userId) {
 // Display Activity Summary
 // ============================================================
 function displayActivitySummary(activity, userInterests) {
-    if (activityNameEl) activityNameEl.textContent = activity.name || 'Activity';
-    if (activityTypeEl) activityTypeEl.textContent = activity.type || 'General';
-    if (activityDurationEl) activityDurationEl.textContent = activity.duration || 'N/A';
-    if (mainDeadlineEl) mainDeadlineEl.textContent = activity.deadline || 'Rolling';
+    if (activityNameEl) {
+        activityNameEl.textContent = activity.name || 'Activity';
+    }
+    if (activityTypeEl) {
+        activityTypeEl.textContent = activity.type || 'General';
+    }
+    if (activityDurationEl) {
+        activityDurationEl.textContent = activity.duration || 'N/A';
+    }
+    if (mainDeadlineEl) {
+        mainDeadlineEl.textContent = activity.deadline || 'Rolling';
+    }
 
-    const interests = userInterests || ['exploration'];
-    const interestString = Array.isArray(interests) ? interests.join(', ') : interests;
+    var interests = userInterests || ['exploration'];
+    var interestString = Array.isArray(interests) ? interests.join(', ') : interests;
     if (readinessTextEl) {
         readinessTextEl.textContent = 'Based on your interest in ' + interestString + ', this activity is a great match! Complete the checklist below to register and start building your profile.';
     }
@@ -83,7 +97,9 @@ function displayActivitySummary(activity, userInterests) {
 // Render Checklist
 // ============================================================
 function renderChecklist(requirements) {
-    if (!checklistContainer) return;
+    if (!checklistContainer) {
+        return;
+    }
     checklistContainer.innerHTML = '';
 
     if (!requirements || requirements.length === 0) {
@@ -141,7 +157,9 @@ function renderChecklist(requirements) {
 // Update Registration Button State
 // ============================================================
 function updateRegistrationButtonState() {
-    if (!markRegisteredBtn) return;
+    if (!markRegisteredBtn) {
+        return;
+    }
     var allItems = document.querySelectorAll('.checklist-item');
     var allCompleted = true;
     allItems.forEach(function(item) {
@@ -159,7 +177,9 @@ function updateRegistrationButtonState() {
 // Handle Registration Complete (Phase 3)
 // ============================================================
 async function handleRegistrationComplete(activityId) {
-    if (!markRegisteredBtn || markRegisteredBtn.disabled) return;
+    if (!markRegisteredBtn || markRegisteredBtn.disabled) {
+        return;
+    }
 
     var user = auth.currentUser;
     if (!user) {
@@ -186,7 +206,6 @@ async function handleRegistrationComplete(activityId) {
 
                 alert('🎉 Congratulations! You have successfully registered for this activity!');
 
-                // Show Phase 4 section
                 var phase4Section = document.querySelector('.phase4-section');
                 if (phase4Section) {
                     phase4Section.style.display = 'block';
@@ -208,7 +227,9 @@ function setupPhase4Button() {
     var completeBtn = document.getElementById('completeActivityBtn');
     var statusEl = document.getElementById('phase4-status');
     
-    if (!completeBtn) return;
+    if (!completeBtn) {
+        return;
+    }
 
     completeBtn.addEventListener('click', async function() {
         var user = auth.currentUser;
@@ -312,13 +333,18 @@ async function initPhase3() {
 // ============================================================
 // Logout Handler
 // ============================================================
-document.getElementById('logout-link')?.addEventListener('click', async function(e) {
-    e.preventDefault();
-    try {
-        await signOut(auth);
-        window.location.href = 'login.html';
-    } catch (error) {
-        console.error('Logout error:', error);
+document.addEventListener('DOMContentLoaded', function() {
+    var logoutLink = document.getElementById('logout-link');
+    if (logoutLink) {
+        logoutLink.addEventListener('click', async function(e) {
+            e.preventDefault();
+            try {
+                await signOut(auth);
+                window.location.href = 'login.html';
+            } catch (error) {
+                console.error('Logout error:', error);
+            }
+        });
     }
 });
 
