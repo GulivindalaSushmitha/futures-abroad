@@ -1,5 +1,5 @@
 // ============================================================
-// js/activity-registration.js - Phase 3 + 4 (COMPLETE)
+// js/activity-registration.js - Phase 3 + 4 (FIXED)
 // ============================================================
 
 import { 
@@ -75,7 +75,7 @@ function displayActivitySummary(activity, userInterests) {
     const interests = userInterests || ['exploration'];
     const interestString = Array.isArray(interests) ? interests.join(', ') : interests;
     if (readinessTextEl) {
-        readinessTextEl.textContent = `Based on your interest in ${interestString}, this activity is a great match! Complete the checklist below to register and start building your profile.`;
+        readinessTextEl.textContent = 'Based on your interest in ' + interestString + ', this activity is a great match! Complete the checklist below to register and start building your profile.';
     }
 }
 
@@ -91,17 +91,16 @@ function renderChecklist(requirements) {
         return;
     }
 
-    requirements.forEach((req, index) => {
-        const listItem = document.createElement('li');
+    requirements.forEach(function(req, index) {
+        var listItem = document.createElement('li');
         listItem.className = 'checklist-item';
-        listItem.id = `checklist-item-${req.id || index}`;
+        listItem.id = 'checklist-item-' + (req.id || index);
         listItem.dataset.completed = 'false';
 
-        // Checkbox
-        const checkbox = document.createElement('input');
+        var checkbox = document.createElement('input');
         checkbox.type = 'checkbox';
         checkbox.className = 'checkbox';
-        checkbox.id = `checkbox-${req.id || index}`;
+        checkbox.id = 'checkbox-' + (req.id || index);
         checkbox.addEventListener('change', function(e) {
             if (e.target.checked) {
                 listItem.dataset.completed = 'true';
@@ -113,21 +112,20 @@ function renderChecklist(requirements) {
             updateRegistrationButtonState();
         });
 
-        // Content
-        const contentDiv = document.createElement('div');
+        var contentDiv = document.createElement('div');
         contentDiv.className = 'content';
 
-        const titleSpan = document.createElement('div');
+        var titleSpan = document.createElement('div');
         titleSpan.className = 'title';
-        titleSpan.textContent = `${index + 1}. ${req.title || 'Requirement'}`;
+        titleSpan.textContent = (index + 1) + '. ' + (req.title || 'Requirement');
 
-        const descSpan = document.createElement('div');
+        var descSpan = document.createElement('div');
         descSpan.className = 'desc';
         descSpan.textContent = req.description || '';
 
-        const dueSpan = document.createElement('div');
+        var dueSpan = document.createElement('div');
         dueSpan.className = 'due';
-        dueSpan.textContent = req.dueDate ? `📅 Due: ${req.dueDate}` : '';
+        dueSpan.textContent = req.dueDate ? '📅 Due: ' + req.dueDate : '';
 
         contentDiv.appendChild(titleSpan);
         contentDiv.appendChild(descSpan);
@@ -144,9 +142,9 @@ function renderChecklist(requirements) {
 // ============================================================
 function updateRegistrationButtonState() {
     if (!markRegisteredBtn) return;
-    const allItems = document.querySelectorAll('.checklist-item');
-    let allCompleted = true;
-    allItems.forEach(item => {
+    var allItems = document.querySelectorAll('.checklist-item');
+    var allCompleted = true;
+    allItems.forEach(function(item) {
         if (item.dataset.completed === 'false') {
             allCompleted = false;
         }
@@ -163,19 +161,19 @@ function updateRegistrationButtonState() {
 async function handleRegistrationComplete(activityId) {
     if (!markRegisteredBtn || markRegisteredBtn.disabled) return;
 
-    const user = auth.currentUser;
+    var user = auth.currentUser;
     if (!user) {
         alert('Please log in first.');
         return;
     }
 
     try {
-        const userRef = doc(db, COLLECTIONS.users, user.uid);
-        const userDoc = await getDoc(userRef);
+        var userRef = doc(db, COLLECTIONS.users, user.uid);
+        var userDoc = await getDoc(userRef);
 
         if (userDoc.exists()) {
-            const userData = userDoc.data();
-            const registered = userData.registered_activities || [];
+            var userData = userDoc.data();
+            var registered = userData.registered_activities || [];
 
             if (!registered.includes(activityId)) {
                 await updateDoc(userRef, {
@@ -188,8 +186,7 @@ async function handleRegistrationComplete(activityId) {
 
                 alert('🎉 Congratulations! You have successfully registered for this activity!');
 
-                // Show Phase 4 section
-                const phase4Section = document.querySelector('.phase4-section');
+                var phase4Section = document.querySelector('.phase4-section');
                 if (phase4Section) {
                     phase4Section.style.display = 'block';
                 }
@@ -207,30 +204,30 @@ async function handleRegistrationComplete(activityId) {
 // Setup Phase 4 Complete Button
 // ============================================================
 function setupPhase4Button() {
-    const completeBtn = document.getElementById('completeActivityBtn');
-    const statusEl = document.getElementById('phase4-status');
+    var completeBtn = document.getElementById('completeActivityBtn');
+    var statusEl = document.getElementById('phase4-status');
     
     if (!completeBtn) return;
 
     completeBtn.addEventListener('click', async function() {
-        const user = auth.currentUser;
+        var user = auth.currentUser;
         if (!user) {
             alert('Please log in first.');
             return;
         }
 
-        const activityName = document.getElementById('activity-name')?.textContent || 'Activity';
-        const activityType = document.getElementById('activity-type')?.textContent?.toLowerCase() || 'default';
-        const duration = document.getElementById('activity-duration')?.textContent || 'N/A';
-        const activityId = getActivityIdFromURL() || 'unknown';
-        const note = prompt('Add a brief note about your experience (optional):');
+        var activityName = document.getElementById('activity-name')?.textContent || 'Activity';
+        var activityType = document.getElementById('activity-type')?.textContent?.toLowerCase() || 'default';
+        var duration = document.getElementById('activity-duration')?.textContent || 'N/A';
+        var activityId = getActivityIdFromURL() || 'unknown';
+        var note = prompt('Add a brief note about your experience (optional):');
         
         completeBtn.textContent = '⏳ Processing...';
         completeBtn.disabled = true;
         completeBtn.style.opacity = '0.6';
         
         try {
-            const success = await markActivityComplete(
+            var success = await markActivityComplete(
                 activityId,
                 activityName,
                 activityType,
@@ -269,46 +266,40 @@ function setupPhase4Button() {
 // Initialize Phase 3
 // ============================================================
 async function initPhase3() {
-    const activityId = getActivityIdFromURL();
+    var activityId = getActivityIdFromURL();
     if (!activityId) {
         alert('No activity selected. Please choose an activity first.');
         window.location.href = 'student-app.html';
         return;
     }
 
-    // Check if user is logged in
     onAuthStateChanged(auth, async function(user) {
         if (!user) {
             window.location.href = 'login.html';
             return;
         }
 
-        // Get activity data
-        const activity = await fetchActivityData(activityId);
+        var activity = await fetchActivityData(activityId);
         if (!activity) {
             alert('Activity not found. Please try again.');
             window.location.href = 'student-app.html';
             return;
         }
 
-        // Get user profile
-        const userProfile = await getUserProfile(user.uid);
-        const interests = userProfile?.interests || [];
+        var userProfile = await getUserProfile(user.uid);
+        var interests = userProfile?.interests || [];
 
-        // Display
         displayActivitySummary(activity, interests);
         renderChecklist(activity.registrationRequirements || []);
         updateRegistrationButtonState();
 
-        // Check if already registered
-        const registered = userProfile?.registered_activities || [];
+        var registered = userProfile?.registered_activities || [];
         if (registered.includes(activityId)) {
             markRegisteredBtn.textContent = '✅ Already Registered';
             markRegisteredBtn.disabled = true;
             markRegisteredBtn.style.background = '#22c55e';
         }
 
-        // Event listener for registration button
         if (markRegisteredBtn) {
             markRegisteredBtn.addEventListener('click', function() {
                 handleRegistrationComplete(activityId);
