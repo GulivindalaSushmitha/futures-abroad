@@ -117,10 +117,23 @@
             background: #6C3CE1;
             color: white;
         }
+        .phase4-section {
+            margin-top: 2.5rem;
+            padding-top: 2rem;
+            border-top: 2px dashed #e0e0e0;
+        }
         .phase4-section h3 {
             font-size: 1.3rem;
             color: #2D1B4E;
             margin-bottom: 0.3rem;
+        }
+        .quick-nav {
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid #eee;
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
         }
         @media (max-width: 768px) {
             .main-header {
@@ -188,13 +201,9 @@
         </section>
 
         <!-- ============================================================
-        PHASE 4 - Complete Activity Section (NEW)
+        PHASE 4 - Complete Activity Section (THIS IS WHAT WAS MISSING)
         ============================================================ -->
-        <section class="phase4-section" style="
-            margin-top: 2.5rem;
-            padding-top: 2rem;
-            border-top: 2px dashed #e0e0e0;
-        ">
+        <section class="phase4-section">
             <h3>🎯 After Completing This Activity</h3>
             <p style="color: #666; margin-bottom: 1rem;">
                 Once you've finished this activity, mark it as complete. You'll be prompted to reflect on your experience,
@@ -214,14 +223,7 @@
         </section>
 
         <!-- Quick Navigation -->
-        <section style="
-            margin-top: 2rem;
-            padding-top: 1.5rem;
-            border-top: 1px solid #eee;
-            display: flex;
-            gap: 0.75rem;
-            flex-wrap: wrap;
-        ">
+        <section class="quick-nav">
             <a href="dashboard.html" class="btn btn-secondary">📊 Dashboard</a>
             <a href="student-app.html" class="btn btn-secondary">🎯 Find More Activities</a>
             <a href="university-shortlist.html" class="btn btn-secondary">🏛️ University Shortlist</a>
