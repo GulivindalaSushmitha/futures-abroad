@@ -6,9 +6,6 @@
     <title>Dashboard - Futures Abroad</title>
     <link rel="stylesheet" href="css/style.css" />
     <style>
-        /* ============================================================
-           DASHBOARD STYLES - Complete
-           ============================================================ */
         .dashboard-container {
             max-width: 1200px;
             margin: 0 auto;
@@ -39,8 +36,6 @@
             gap: 10px;
             flex-wrap: wrap;
         }
-        
-        /* ===== Buttons ===== */
         .btn-logout {
             padding: 10px 24px;
             background: #FF6B6B;
@@ -75,6 +70,8 @@
             cursor: pointer;
             font-family: 'Quicksand', sans-serif;
             transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
         }
         .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 4px 15px rgba(108,60,225,0.3); }
         .btn-secondary {
@@ -87,6 +84,8 @@
             cursor: pointer;
             font-family: 'Quicksand', sans-serif;
             transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
         }
         .btn-secondary:hover { background: #6C3CE1; color: white; }
         .btn-portfolio {
@@ -99,6 +98,8 @@
             cursor: pointer;
             font-family: 'Quicksand', sans-serif;
             transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
         }
         .btn-portfolio:hover { transform: translateY(-2px); box-shadow: 0 4px 15px rgba(255,217,61,0.4); }
         .btn-app {
@@ -111,6 +112,8 @@
             cursor: pointer;
             font-family: 'Quicksand', sans-serif;
             transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
         }
         .btn-app:hover { transform: translateY(-2px); box-shadow: 0 4px 20px rgba(108,60,225,0.4); }
         .btn-university {
@@ -123,6 +126,8 @@
             cursor: pointer;
             font-family: 'Quicksand', sans-serif;
             transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
         }
         .btn-university:hover { transform: translateY(-2px); box-shadow: 0 4px 20px rgba(247,151,30,0.4); }
         .btn-enroll {
@@ -135,10 +140,11 @@
             cursor: pointer;
             font-family: 'Quicksand', sans-serif;
             transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
         }
         .btn-enroll:hover { transform: translateY(-2px); box-shadow: 0 4px 20px rgba(0,176,155,0.4); }
 
-        /* ===== Dashboard Grid ===== */
         .dashboard-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -168,7 +174,6 @@
             font-weight: 600;
         }
 
-        /* ===== Phase Navigation Cards ===== */
         .phase-nav-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -223,7 +228,6 @@
             color: #888;
         }
 
-        /* ===== Utility ===== */
         .interests-tag {
             display: inline-block;
             padding: 4px 14px;
@@ -275,7 +279,6 @@
             margin: 15px 0;
         }
 
-        /* ===== Responsive ===== */
         @media (max-width: 768px) {
             .dashboard-header {
                 flex-direction: column;
@@ -293,7 +296,7 @@
 </head>
 <body>
     <div class="dashboard-container">
-        <!-- ===== HEADER ===== -->
+        <!-- HEADER -->
         <div class="dashboard-header">
             <div class="logo">🚀 Futures <span>Abroad</span></div>
             <div class="header-actions">
@@ -304,10 +307,10 @@
             </div>
         </div>
 
-        <!-- ===== MAIN CONTENT ===== -->
+        <!-- MAIN CONTENT -->
         <div style="background: white; padding: 30px; border-radius: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.06);">
             
-            <!-- Welcome Section -->
+            <!-- Welcome -->
             <div style="display: flex; align-items: center; gap: 15px; flex-wrap: wrap;">
                 <h1 id="welcome-text" style="margin: 0;">Welcome!</h1>
                 <span class="welcome-badge" id="phase-badge">Phase 1</span>
@@ -315,7 +318,7 @@
             </div>
             <p id="user-email" style="color: #888;">Loading...</p>
 
-            <!-- Stats Cards -->
+            <!-- Stats -->
             <div class="dashboard-grid">
                 <div class="dashboard-card">
                     <div class="number" id="profile-strength">0%</div>
@@ -335,7 +338,7 @@
                 </div>
             </div>
 
-            <!-- Gap Analysis (Grade 10 only) -->
+            <!-- Gap Analysis (Grade 10) -->
             <div id="gap-analysis-container" style="display: none;">
                 <div class="gap-analysis">
                     <strong>📈 Gap Analysis:</strong>
@@ -343,7 +346,7 @@
                 </div>
             </div>
 
-            <!-- University CTA (Grade 11 only) -->
+            <!-- University CTA (Grade 11) -->
             <div id="university-cta-container" style="display: none;">
                 <div style="background: linear-gradient(135deg, #f7971e, #ffd200); border-radius: 12px; padding: 20px; text-align: center; margin: 15px 0;">
                     <h3 style="margin: 0; color: #2D1B4E;">🎯 Ready for University Planning?</h3>
@@ -356,10 +359,10 @@
 
             <!-- Phase 5 CTA (Grade 11) -->
             <div id="phase5-cta" style="display: none; margin: 15px 0;">
-                <div style="background: linear-gradient(135deg, #667eea, #764ba2); border-radius: 12px; padding: 25px; text-align: center; color: white;">
+                <div style="background: linear-gradient(135deg, #6C3CE1, #a855f7); border-radius: 12px; padding: 25px; text-align: center; color: white;">
                     <h3 style="margin: 0;">🚀 Ready to Turn Your Shortlist into a Real Application?</h3>
                     <p style="opacity: 0.9;">Get 1-on-1 guidance from our expert counselors.</p>
-                    <button class="btn-enroll" onclick="window.location.href='futures-abroad-enroll.html'" style="background: white; color: #764ba2;">
+                    <button class="btn-enroll" onclick="window.location.href='futures-abroad-enroll.html'" style="background: white; color: #6C3CE1; border: none; padding: 10px 30px; border-radius: 50px; font-weight: 700; cursor: pointer;">
                         👋 Book Your First Session
                     </button>
                 </div>
@@ -378,50 +381,39 @@
                 </div>
             </div>
 
-            <!-- ===== PHASE NAVIGATION ===== -->
+            <!-- PHASE NAVIGATION -->
             <h3 style="margin-top: 30px;">🗺️ Your Journey - All 6 Phases</h3>
             <div class="phase-nav-grid">
-                <!-- Phase 1 -->
                 <a href="quiz.html" class="phase-nav-card" id="phase1-card">
                     <div class="phase-icon">🧭</div>
                     <div class="phase-title">Phase 1: Onboarding & Discovery</div>
                     <div class="phase-desc">Take the AI quiz to discover your interests</div>
                     <span class="phase-badge" id="phase1-badge">🔒 Not Started</span>
                 </a>
-
-                <!-- Phase 2 -->
                 <a href="student-app.html" class="phase-nav-card" id="phase2-card">
                     <div class="phase-icon">🎯</div>
                     <div class="phase-title">Phase 2: Activity Recommendations</div>
                     <div class="phase-desc">Get personalized activity suggestions</div>
                     <span class="phase-badge" id="phase2-badge">🔒 Not Started</span>
                 </a>
-
-                <!-- Phase 3 -->
                 <a href="activity-registration.html" class="phase-nav-card" id="phase3-card">
                     <div class="phase-icon">📝</div>
                     <div class="phase-title">Phase 3: Activity Registration</div>
                     <div class="phase-desc">Register and track your activities</div>
                     <span class="phase-badge" id="phase3-badge">🔒 Not Started</span>
                 </a>
-
-                <!-- Phase 4 -->
                 <a href="portfolio.html" class="phase-nav-card" id="phase4-card">
                     <div class="phase-icon">📂</div>
                     <div class="phase-title">Phase 4: Portfolio & Reflection</div>
                     <div class="phase-desc">Reflect on your experiences and build portfolio</div>
                     <span class="phase-badge" id="phase4-badge">🔒 Not Started</span>
                 </a>
-
-                <!-- Phase 5 -->
                 <a href="university-shortlist.html" class="phase-nav-card" id="phase5-card">
                     <div class="phase-icon">🏛️</div>
                     <div class="phase-title">Phase 5: University Pathway</div>
                     <div class="phase-desc">Get your personalized university shortlist</div>
                     <span class="phase-badge" id="phase5-badge">🔒 Not Started</span>
                 </a>
-
-                <!-- Phase 6 -->
                 <a href="futures-abroad-enroll.html" class="phase-nav-card" id="phase6-card">
                     <div class="phase-icon">🚀</div>
                     <div class="phase-title">Phase 6: Futures Abroad Handoff</div>
@@ -430,7 +422,7 @@
                 </a>
             </div>
 
-            <!-- Quick Action Buttons -->
+            <!-- Quick Actions -->
             <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-top: 20px; padding-top: 20px; border-top: 1px solid #eee;">
                 <button class="btn-primary" onclick="window.location.href='quiz.html'">📝 Take Quiz</button>
                 <button class="btn-app" onclick="window.location.href='student-app.html'">🎯 Find Activities</button>
@@ -441,9 +433,6 @@
         </div>
     </div>
 
-    <!-- ============================================================
-    JAVASCRIPT - Complete Dashboard Logic
-    ============================================================ -->
     <script type="module">
         import { 
             auth, 
@@ -460,15 +449,11 @@
             COLLECTIONS
         } from './js/firebase-config.js';
 
-        // ============================================================
-        // LOAD DASHBOARD
-        // ============================================================
         async function loadDashboard(user) {
             try {
-                // Get student data
                 const studentDoc = await getDoc(doc(db, 'students', user.uid));
                 let studentData = {};
-                let userGrade = 10; // Default
+                let userGrade = 10;
                 let userInterests = [];
                 let registeredActivities = [];
                 let profileStrength = 0;
@@ -478,10 +463,8 @@
                     userGrade = studentData.grade || 10;
                     userInterests = studentData.interests || [];
                     registeredActivities = studentData.registered_activities || [];
-                    
                     document.getElementById('welcome-text').textContent = `Hello, ${studentData.name || 'Student'}! 👋`;
                 } else {
-                    // Create student profile if missing
                     await setDoc(doc(db, 'students', user.uid), {
                         uid: user.uid,
                         name: user.email.split('@')[0],
@@ -498,13 +481,9 @@
                     document.getElementById('welcome-text').textContent = `Hello, ${user.email.split('@')[0]}! 👋`;
                 }
                 
-                // Update user email
                 document.getElementById('user-email').textContent = `📧 ${user.email}`;
-                
-                // Update grade badge
                 document.getElementById('grade-badge').textContent = `Grade ${userGrade}`;
                 
-                // Calculate profile strength
                 const registeredCount = registeredActivities.length;
                 let strength = 0;
                 if (userInterests.length > 0) strength += 20;
@@ -514,7 +493,6 @@
                 strength = Math.min(strength, 100);
                 profileStrength = strength;
                 
-                // Update UI
                 document.getElementById('profile-strength').textContent = strength + '%';
                 document.getElementById('activity-count').textContent = registeredCount;
                 document.getElementById('quiz-status').textContent = studentData.profileCompleted ? '✅ Done' : '⏳ Pending';
@@ -523,12 +501,10 @@
                 document.getElementById('phase-number').textContent = phase;
                 document.getElementById('phase-badge').textContent = `Phase ${phase}`;
                 
-                // ===== GRADE-BASED LOGIC =====
-                // Gap Analysis (Grade 10)
+                // Grade-based logic
                 if (userGrade === 10) {
                     document.getElementById('gap-analysis-container').style.display = 'block';
                     const gapText = document.getElementById('gap-analysis-text');
-                    
                     const hasInterests = userInterests.length > 0;
                     const hasActivities = registeredCount > 0;
                     
@@ -543,140 +519,19 @@
                     }
                 }
                 
-                // University CTA (Grade 11)
                 if (userGrade === 11) {
                     document.getElementById('university-cta-container').style.display = 'block';
                     document.getElementById('phase5-cta').style.display = 'block';
                 }
                 
-                // ===== Update Phase Badges =====
                 updatePhaseBadges(phase, userGrade);
                 
-                // ===== Interests =====
                 document.getElementById('interests-list').innerHTML = userInterests.length > 0 
                     ? userInterests.map(tag => `<span class="interests-tag">${tag}</span>`).join('')
                     : 'Not set - Take the quiz to discover your interests!';
                 
-                // ===== Registered Activities =====
                 if (registeredCount > 0) {
                     const activitiesList = document.getElementById('activities-list');
                     activitiesList.innerHTML = '';
-                    
                     const uniqueIds = [...new Set(registeredActivities)];
-                    
                     for (const activityId of uniqueIds) {
-                        try {
-                            const activityDoc = await getDoc(doc(db, 'activities', activityId));
-                            if (activityDoc.exists()) {
-                                const actData = activityDoc.data();
-                                const div = document.createElement('div');
-                                div.className = 'registered-activity-item';
-                                div.innerHTML = `
-                                    <span>${actData.name || activityId}</span>
-                                    <span class="status">✅ Registered</span>
-                                `;
-                                activitiesList.appendChild(div);
-                            }
-                        } catch (e) {
-                            console.error('Error fetching activity:', e);
-                        }
-                    }
-                }
-                
-            } catch (error) {
-                console.error('Error loading dashboard:', error);
-            }
-        }
-
-        // ============================================================
-        // UPDATE PHASE BADGES
-        // ============================================================
-        function updatePhaseBadges(currentPhase, grade) {
-            const phases = [
-                { id: 'phase1', key: 'phase1-badge', link: 'quiz.html' },
-                { id: 'phase2', key: 'phase2-badge', link: 'student-app.html' },
-                { id: 'phase3', key: 'phase3-badge', link: 'activity-registration.html' },
-                { id: 'phase4', key: 'phase4-badge', link: 'portfolio.html' },
-                { id: 'phase5', key: 'phase5-badge', link: 'university-shortlist.html' },
-                { id: 'phase6', key: 'phase6-badge', link: 'futures-abroad-enroll.html' }
-            ];
-            
-            // Determine which phases are accessible based on grade
-            let maxAccessiblePhase = currentPhase;
-            
-            // Grade 10: Only up to Phase 4
-            if (grade === 10) {
-                maxAccessiblePhase = Math.min(currentPhase, 4);
-            }
-            // Grade 11: Up to Phase 5 (CTA for Phase 6)
-            if (grade === 11) {
-                maxAccessiblePhase = Math.min(currentPhase, 5);
-            }
-            // Grade 12: All phases
-            if (grade === 12) {
-                maxAccessiblePhase = currentPhase;
-            }
-            
-            phases.forEach((phase, index) => {
-                const badge = document.getElementById(phase.key);
-                const card = document.getElementById(phase.id + '-card');
-                const phaseNum = index + 1;
-                
-                if (!badge) return;
-                
-                // Remove all classes
-                badge.classList.remove('active', 'completed', 'locked');
-                
-                if (phaseNum < currentPhase) {
-                    // Completed
-                    badge.textContent = '✅ Completed';
-                    badge.classList.add('completed');
-                } else if (phaseNum === currentPhase) {
-                    // Active
-                    badge.textContent = '📍 Current';
-                    badge.classList.add('active');
-                } else if (phaseNum <= maxAccessiblePhase) {
-                    // Available but not started
-                    badge.textContent = '🔓 Available';
-                } else {
-                    // Locked
-                    badge.textContent = '🔒 Locked';
-                    badge.classList.add('locked');
-                    // Disable link for locked phases
-                    if (card) {
-                        card.style.opacity = '0.6';
-                        card.style.cursor = 'not-allowed';
-                        card.addEventListener('click', (e) => {
-                            e.preventDefault();
-                            alert(`Complete Phase ${phaseNum - 1} first to unlock this phase.`);
-                        });
-                    }
-                }
-            });
-        }
-
-        // ============================================================
-        // AUTH STATE LISTENER
-        // ============================================================
-        onAuthStateChanged(auth, async (user) => {
-            if (!user) {
-                window.location.href = 'login.html';
-                return;
-            }
-            await loadDashboard(user);
-        });
-
-        // ============================================================
-        // LOGOUT FUNCTION
-        // ============================================================
-        window.logoutUser = async function() {
-            try {
-                await signOut(auth);
-                window.location.href = 'index.html';
-            } catch (error) {
-                console.error('Logout error:', error);
-            }
-        };
-    </script>
-</body>
-</html>
