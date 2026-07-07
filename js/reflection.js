@@ -5,7 +5,7 @@
 import { 
     db, auth, COLLECTIONS,
     collection, doc, getDocs, query, where,
-    addDoc, updateDoc, serverTimestamp 
+    addDoc, updateDoc, serverTimestamp, getDoc
 } from './firebase-config.js';
 
 // ============================================================
@@ -173,7 +173,8 @@ export function showReflectionModal(activityId, activityName, activityType, onCo
         const formData = new FormData(e.target);
         const responses = {};
         questions.forEach((q, index) => {
-            responses[q] = formData.get(`q${index}`) || '';
+            const value = formData.get(`q${index}`) || '';
+            responses[q] = value;
         });
         
         // Save to Firestore
@@ -229,6 +230,15 @@ async function saveReflections(activityId, responses) {
             updatedAt: serverTimestamp()
         });
         
+        // Also save to reflections collection
+        await addDoc(collection(db, 'reflections'), {
+            userId: user.uid,
+            activityId: activityId,
+            responses: responses,
+            timestamp: serverTimestamp(),
+            savedAt: new Date().toISOString()
+        });
+        
         // Show success message
         showToast('✅ Reflections saved! They may be used for your university essays.', 'success');
         
@@ -278,6 +288,12 @@ export async function markActivityComplete(activityId, activityName, activityTyp
             reflectionResponses: {},
             essayPotentialFlag: false,
             createdAt: serverTimestamp()
+        });
+        
+        // Update user profile
+        const userRef = doc(db, COLLECTIONS.users, user.uid);
+        await updateDoc(userRef, {
+            completed_activities: arrayUnion(activityId)
         });
         
         // Show reflection modal
@@ -346,3 +362,8 @@ function showToast(message, type = 'info') {
 // Exports
 // ============================================================
 export { saveReflections, showToast };
+
+// Make functions available globally for inline onclick handlers
+window.showReflectionModal = showReflectionModal;
+window.markActivityComplete = markActivityComplete;
+window.showToast = showToast;
