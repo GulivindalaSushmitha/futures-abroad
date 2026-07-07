@@ -116,6 +116,29 @@
             font-weight: 700;
             margin-top: 10px;
         }
+        .portfolio-card .reflection-preview {
+            background: #f8f4ff;
+            padding: 12px 16px;
+            border-radius: 12px;
+            margin-top: 12px;
+            font-size: 14px;
+            color: #555;
+            border-left: 3px solid #6C3CE1;
+        }
+        .portfolio-card .reflection-preview .reflection-label {
+            font-weight: 700;
+            color: #2D1B4E;
+        }
+        .essay-badge {
+            display: inline-block;
+            background: #f7971e;
+            color: white;
+            padding: 2px 12px;
+            border-radius: 50px;
+            font-size: 11px;
+            font-weight: 700;
+            margin-top: 5px;
+        }
         .empty-state {
             text-align: center;
             padding: 60px 20px;
@@ -191,7 +214,7 @@
         </div>
 
         <h1 style="font-size: 32px; color: #2D1B4E; margin-bottom: 5px;">📂 My Portfolio</h1>
-        <p style="color: #888; margin-bottom: 30px;">All your registered activities and progress</p>
+        <p style="color: #888; margin-bottom: 30px;">All your completed activities and reflections</p>
 
         <div id="portfolio-content">
             <div class="loading">
@@ -203,15 +226,16 @@
 
     <script type="module">
         import { 
-            auth, 
-            db, 
-            onAuthStateChanged, 
-            signOut,
-            doc,
-            getDoc,
-            getDocs,
-            collection
+            auth, db, COLLECTIONS,
+            doc, getDoc, getDocs, collection,
+            onAuthStateChanged, signOut,
+            query, where
         } from './js/firebase-config.js';
+
+        window.logoutUser = async function() {
+            await signOut(auth);
+            window.location.href = 'index.html';
+        };
 
         onAuthStateChanged(auth, async (user) => {
             if (!user) {
@@ -221,92 +245,93 @@
             await loadPortfolio(user);
         });
 
-        window.logoutUser = async function() {
-            await signOut(auth);
-            window.location.href = 'index.html';
-        };
-
         async function loadPortfolio(user) {
             const container = document.getElementById('portfolio-content');
             
             try {
-                const studentDoc = await getDoc(doc(db, 'students', user.uid));
+                // Get portfolio entries
+                const portfolioRef = collection(db, COLLECTIONS.studentPortfolio);
+                const q = query(portfolioRef, where("userId", "==", user.uid));
+                const snapshot = await getDocs(q);
                 
-                if (!studentDoc.exists()) {
+                const activities = [];
+                snapshot.forEach(doc => {
+                    activities.push({ id: doc.id, ...doc.data() });
+                });
+
+                if (activities.length === 0) {
                     container.innerHTML = `
                         <div class="empty-state">
                             <div class="icon">📂</div>
                             <h3>No Portfolio Yet</h3>
-                            <p>Complete your profile and register for activities to build your portfolio.</p>
-                            <button onclick="window.location.href='activities.html'" class="btn-back" style="margin-top: 15px;">🎯 Find Activities</button>
+                            <p>Complete your first activity to start building your portfolio.</p>
+                            <button onclick="window.location.href='student-app.html'" class="btn-back" style="margin-top:15px;">🎯 Find Activities</button>
                         </div>
                     `;
                     return;
                 }
 
-                const studentData = studentDoc.data();
-                const registeredIds = studentData.registered_activities || [];
+                // Sort by date (newest first)
+                activities.sort((a, b) => {
+                    return new Date(b.dateCompleted || 0) - new Date(a.dateCompleted || 0);
+                });
 
-                // REMOVE DUPLICATES using Set
-                const uniqueIds = [...new Set(registeredIds)];
+                // Stats
+                const hasReflections = activities.filter(a => 
+                    a.reflectionResponses && Object.keys(a.reflectionResponses).length > 0
+                );
+                const essayPotential = activities.filter(a => a.essayPotentialFlag);
 
-                if (uniqueIds.length === 0) {
-                    container.innerHTML = `
-                        <div class="empty-state">
-                            <div class="icon">🔍</div>
-                            <h3>No Activities Registered</h3>
-                            <p>You haven't registered for any activities yet. Start exploring now!</p>
-                            <button onclick="window.location.href='activities.html'" class="btn-back" style="margin-top: 15px;">🎯 Explore Activities</button>
-                        </div>
-                    `;
-                    return;
-                }
-
-                // Show stats
                 let html = `
                     <div class="stats-bar">
                         <div class="stat-item">
-                            <span class="num">${uniqueIds.length}</span>
-                            <span class="label">📋 Registered Activities</span>
+                            <span class="num">${activities.length}</span>
+                            <span class="label">📋 Completed Activities</span>
                         </div>
                         <div class="stat-item">
-                            <span class="num">${studentData.profileStrength || 0}%</span>
-                            <span class="label">📊 Profile Strength</span>
+                            <span class="num">${hasReflections.length}</span>
+                            <span class="label">📝 Reflections</span>
                         </div>
                         <div class="stat-item">
-                            <span class="num">${studentData.interests?.length || 0}</span>
-                            <span class="label">🎯 Interests</span>
+                            <span class="num">${essayPotential.length}</span>
+                            <span class="label">📄 Essay Potential</span>
                         </div>
                     </div>
                 `;
 
-                // Show each activity (using unique IDs)
-                for (const activityId of uniqueIds) {
-                    try {
-                        const activityDoc = await getDoc(doc(db, 'activities', activityId));
-                        if (activityDoc.exists()) {
-                            const activity = activityDoc.data();
-                            html += `
-                                <div class="portfolio-card">
-                                    <h3>${activity.name}</h3>
-                                    <div class="meta">
-                                        <span>📌 ${activity.type || 'Activity'}</span>
-                                        <span>⏱️ ${activity.duration || 'N/A'}</span>
-                                        <span>💰 ${activity.cost || 'Free'}</span>
-                                        <span>📍 ${activity.country || 'Global'}</span>
-                                    </div>
-                                    <div class="skills">
-                                        ${(activity.skills_gained || []).map(skill => 
-                                            `<span>${skill}</span>`
-                                        ).join('') || '<span style="background: #eee; color: #888;">No skills listed</span>'}
-                                    </div>
-                                    <span class="status-badge">✅ Registered</span>
+                // Display each activity
+                for (const entry of activities) {
+                    const reflectionCount = entry.reflectionResponses ? 
+                        Object.keys(entry.reflectionResponses).filter(k => entry.reflectionResponses[k]).length : 0;
+                    
+                    html += `
+                        <div class="portfolio-card">
+                            <h3>${entry.activityName || 'Activity'}</h3>
+                            <div class="meta">
+                                <span>📌 ${entry.type || 'General'}</span>
+                                <span>⏱️ ${entry.duration || 'N/A'}</span>
+                                <span>✅ Completed: ${entry.dateCompleted || 'N/A'}</span>
+                            </div>
+                            ${entry.skills && entry.skills.length > 0 ? `
+                                <div class="skills">
+                                    ${entry.skills.map(s => `<span>${s}</span>`).join('')}
                                 </div>
-                            `;
-                        }
-                    } catch (e) {
-                        console.error('Error fetching activity:', e);
-                    }
+                            ` : ''}
+                            ${entry.essayPotentialFlag ? `<span class="essay-badge">📝 Essay Potential</span>` : ''}
+                            ${reflectionCount > 0 ? `
+                                <div class="reflection-preview">
+                                    <div class="reflection-label">📝 ${reflectionCount} Reflection${reflectionCount > 1 ? 's' : ''} Saved</div>
+                                    ${entry.reflectionResponses?.q1 ? `<div style="margin-top:5px;">💬 ${entry.reflectionResponses.q1.substring(0, 100)}${entry.reflectionResponses.q1.length > 100 ? '...' : ''}</div>` : ''}
+                                </div>
+                            ` : `
+                                <div style="margin-top:12px;color:#888;font-size:14px;">
+                                    ⚠️ No reflection saved yet. 
+                                    <a href="post-activity.html?id=${entry.activityId}" style="color:#6C3CE1;font-weight:600;">Add Reflection</a>
+                                </div>
+                            `}
+                            <span class="status-badge">✅ Completed</span>
+                        </div>
+                    `;
                 }
 
                 container.innerHTML = html;
@@ -318,7 +343,7 @@
                         <div class="icon">⚠️</div>
                         <h3>Error Loading Portfolio</h3>
                         <p>${error.message}</p>
-                        <button onclick="location.reload()" class="btn-back" style="margin-top: 15px;">🔄 Try Again</button>
+                        <button onclick="location.reload()" class="btn-back" style="margin-top:15px;">🔄 Try Again</button>
                     </div>
                 `;
             }
