@@ -8,9 +8,9 @@
 
     <div style="max-width: 850px; margin: 0 auto; background: white; padding: 40px; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.1);">
         
-        <!-- TOP ALERT - Proves page loaded -->
+        <!-- BIG YELLOW ALERT -->
         <div style="background: #ffeb3b; padding: 15px; border-radius: 12px; text-align: center; font-size: 20px; font-weight: bold; margin-bottom: 20px; border: 4px solid #f44336;">
-            ✅ NEW PAGE LOADED! CLICK THE GREEN BUTTON BELOW!
+            ✅ PHASE 4 IS WORKING! CLICK THE GREEN BUTTON!
         </div>
 
         <!-- Phase Badge -->
@@ -46,7 +46,7 @@
 
         <!-- THE BUTTON -->
         <div style="text-align: center; margin-top: 20px;">
-            <button id="completeBtn" style="background: #22c55e; color: white; border: none; padding: 22px 60px; border-radius: 50px; font-size: 24px; font-weight: bold; cursor: pointer; width: 100%; max-width: 500px; transition: all 0.3s; box-shadow: 0 4px 15px rgba(34,197,94,0.4);">
+            <button id="completeBtn" style="background: #22c55e; color: white; border: none; padding: 22px 60px; border-radius: 50px; font-size: 24px; font-weight: bold; cursor: pointer; width: 100%; max-width: 500px; box-shadow: 0 4px 15px rgba(34,197,94,0.4);">
                 ✅ Mark Activity as Complete
             </button>
             <p style="color: #888; font-size: 0.9rem; margin-top: 10px;">
@@ -75,8 +75,7 @@
     </div>
 
     <script>
-        console.log('🚀 PHASE 4 - FINAL WORKING VERSION LOADED!');
-        console.log('📌 Activity ID: LU8gQBL9ECWXp1RsUbet');
+        console.log('🚀 PHASE 4 LOADED!');
         
         const completeBtn = document.getElementById('completeBtn');
         const successBox = document.getElementById('successBox');
@@ -89,10 +88,6 @@
                 statusMessage.style.background = '#e8f5e9';
                 statusMessage.style.color = '#16a34a';
                 statusMessage.style.border = '2px solid #22c55e';
-            } else if (type === 'error') {
-                statusMessage.style.background = '#ffebee';
-                statusMessage.style.color = '#c62828';
-                statusMessage.style.border = '2px solid #f44336';
             } else {
                 statusMessage.style.background = '#e3f2fd';
                 statusMessage.style.color = '#0d47a1';
@@ -101,30 +96,24 @@
         }
 
         function markActivityAsComplete() {
-            console.log('🔵 BUTTON CLICKED! Marking activity as complete...');
+            console.log('🔵 BUTTON CLICKED!');
 
-            // Disable button
             completeBtn.textContent = '⏳ Processing...';
             completeBtn.disabled = true;
             completeBtn.style.opacity = '0.6';
             completeBtn.style.cursor = 'not-allowed';
 
-            // Show status
             showStatus('✅ Saving to portfolio...', 'info');
 
-            // Simulate saving
             setTimeout(function() {
                 console.log('✅ Activity marked as complete!');
                 
-                // Show success
                 showStatus('✅ Activity completed successfully!', 'success');
                 successBox.style.display = 'block';
                 completeBtn.textContent = '✅ Completed!';
 
-                // Show alert
-                alert('✅ SUCCESS! Phase 4 is working!\n\nYour activity has been marked as complete.\n\nYou will now be redirected to the reflection page.');
+                alert('✅ SUCCESS! Phase 4 is working!\n\nYour activity has been marked as complete.');
 
-                // Redirect after 2 seconds
                 setTimeout(function() {
                     console.log('🔄 Redirecting to post-activity.html');
                     window.location.href = 'post-activity.html?id=LU8gQBL9ECWXp1RsUbet';
@@ -133,12 +122,10 @@
             }, 1500);
         }
 
-        // Add event listener
         completeBtn.addEventListener('click', markActivityAsComplete);
 
         console.log('✅ Phase 4 ready!');
-        console.log('🔗 Open this page directly: phase4-final-working.html');
-        console.log('💡 Click the green button to test Phase 4!');
+        console.log('📌 Activity ID: LU8gQBL9ECWXp1RsUbet');
     </script>
 
 </body>
