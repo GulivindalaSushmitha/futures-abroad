@@ -5,7 +5,8 @@
 import { 
     auth, db, COLLECTIONS,
     doc, getDoc, getDocs, updateDoc, arrayUnion, arrayRemove,
-    onAuthStateChanged, signOut, addDoc, serverTimestamp
+    onAuthStateChanged, signOut, addDoc, serverTimestamp,
+    query, where, collection
 } from './firebase-config.js';
 
 // DOM Elements
@@ -21,14 +22,9 @@ var completeActivityBtn = document.getElementById('completeActivityBtn');
 var phase4Status = document.getElementById('phase4-status');
 var completionStatus = document.getElementById('completionStatus');
 var completionMessage = document.getElementById('completionMessage');
-var reflectionSection = document.getElementById('reflectionSection');
 var completeActivityContainer = document.getElementById('completeActivityContainer');
-var goToReflectionBtn = document.getElementById('goToReflectionBtn');
 
-// Activity data storage
 var currentActivityId = null;
-var currentActivityData = null;
-var currentUserData = null;
 
 function getActivityIdFromURL() {
     var params = new URLSearchParams(window.location.search);
@@ -176,8 +172,11 @@ async function handleRegistrationComplete(activityId) {
                 alert('🎉 Congratulations! You have successfully registered for this activity!');
 
                 // Show Phase 4 section
-                document.getElementById('phase4Section').style.display = 'block';
-                document.getElementById('phase4Section').scrollIntoView({ behavior: 'smooth' });
+                var phase4Section = document.getElementById('phase4Section');
+                if (phase4Section) {
+                    phase4Section.style.display = 'block';
+                    phase4Section.scrollIntoView({ behavior: 'smooth' });
+                }
 
             } else {
                 alert('You are already registered for this activity.');
@@ -190,20 +189,31 @@ async function handleRegistrationComplete(activityId) {
 }
 
 // ============================================================
-// PHASE 4: Complete Activity & Reflection
+// PHASE 4: Mark Activity as Complete
 // ============================================================
 
 async function markActivityAsComplete() {
+    console.log('🔵 Complete Activity button clicked!');
+    
     var user = auth.currentUser;
     if (!user) {
         alert('Please log in first.');
         return;
     }
 
+    var activityId = getActivityIdFromURL();
+    if (!activityId) {
+        alert('No activity selected.');
+        return;
+    }
+
     var activityName = document.getElementById('activity-name')?.textContent || 'Activity';
     var activityType = document.getElementById('activity-type')?.textContent?.toLowerCase() || 'default';
     var duration = document.getElementById('activity-duration')?.textContent || 'N/A';
-    var activityId = getActivityIdFromURL() || 'unknown';
+
+    // Get activity data for skills
+    var activity = await fetchActivityData(activityId);
+    var skills = activity?.skills_gained || [];
 
     // Disable button during processing
     if (completeActivityBtn) {
@@ -215,36 +225,38 @@ async function markActivityAsComplete() {
     try {
         // Create portfolio entry
         var portfolioEntry = {
+            userId: user.uid,
             activityId: activityId,
             activityName: activityName,
-            activityType: activityType,
+            type: activityType,
             duration: duration,
-            dateCompleted: new Date().toISOString().split('T')[0],
-            skills: currentActivityData?.skills_gained || [],
+            skills: skills,
             studentNote: '',
-            reflectionResponses: [],
+            dateCompleted: new Date().toISOString().split('T')[0],
+            reflectionResponses: {},
             essayPotentialFlag: false,
-            userId: user.uid,
-            timestamp: serverTimestamp()
+            createdAt: serverTimestamp()
         };
 
         // Add to portfolio collection
-        await addDoc(collection(db, COLLECTIONS.studentPortfolio), portfolioEntry);
+        var portfolioRef = collection(db, COLLECTIONS.studentPortfolio);
+        await addDoc(portfolioRef, portfolioEntry);
 
-        // Also add to user's completed activities
+        // Update user profile
         var userRef = doc(db, COLLECTIONS.users, user.uid);
         await updateDoc(userRef, {
             completed_activities: arrayUnion(activityId),
             lastActivityDate: new Date().toISOString()
         });
 
-        // Update profile strength
-        await updateProfileStrength(user.uid);
+        console.log('✅ Activity marked as complete!');
 
         // Show completion status
         if (completionStatus) {
             completionStatus.classList.remove('hidden');
-            completionMessage.textContent = 'Activity "' + activityName + '" has been added to your portfolio!';
+            if (completionMessage) {
+                completionMessage.textContent = 'Activity "' + activityName + '" has been added to your portfolio!';
+            }
         }
 
         // Hide the complete button container
@@ -252,26 +264,21 @@ async function markActivityAsComplete() {
             completeActivityContainer.style.display = 'none';
         }
 
-        // Show reflection section
-        if (reflectionSection) {
-            reflectionSection.classList.remove('hidden');
-            reflectionSection.scrollIntoView({ behavior: 'smooth' });
-        }
-
-        // Store activity info for reflection
-        localStorage.setItem('completedActivityId', activityId);
-        localStorage.setItem('completedActivityName', activityName);
-
+        // Show Phase 4 status
         if (phase4Status) {
             phase4Status.style.display = 'block';
             phase4Status.style.color = '#22c55e';
-            phase4Status.innerHTML = '✅ Activity marked as complete! Answer the reflection questions below to capture your experience.';
+            phase4Status.innerHTML = '✅ Activity marked as complete! Redirecting to Phase 4...';
         }
 
+        // Redirect to Phase 4 page (post-activity.html)
+        setTimeout(function() {
+            window.location.href = 'post-activity.html?id=' + activityId;
+        }, 1500);
+
     } catch (error) {
-        console.error('Error completing activity:', error);
-        alert('Error completing activity. Please try again.');
-    } finally {
+        console.error('❌ Error completing activity:', error);
+        alert('Error completing activity: ' + error.message);
         if (completeActivityBtn) {
             completeActivityBtn.textContent = '✅ Mark Activity as Complete';
             completeActivityBtn.disabled = false;
@@ -280,223 +287,79 @@ async function markActivityAsComplete() {
     }
 }
 
-async function updateProfileStrength(userId) {
+// ============================================================
+// CHECK IF ACTIVITY IS ALREADY COMPLETED
+// ============================================================
+
+async function checkIfActivityCompleted(userId, activityId) {
     try {
-        // Get completed activities
-        var portfolioSnapshot = await getDocs(collection(db, COLLECTIONS.studentPortfolio));
-        var userPortfolio = [];
-        portfolioSnapshot.forEach(doc => {
-            var data = doc.data();
-            if (data.userId === userId) {
-                userPortfolio.push(data);
-            }
-        });
-
-        var count = userPortfolio.length;
-        var strength = 0;
-
-        // Factor 1: Number of activities (max 30 pts)
-        if (count >= 5) strength += 30;
-        else if (count >= 3) strength += 20;
-        else if (count >= 1) strength += 10;
-
-        // Factor 2: Diversity of types (max 20 pts)
-        var types = new Set(userPortfolio.map(a => a.activityType));
-        var typeCount = types.size;
-        if (typeCount >= 4) strength += 20;
-        else if (typeCount >= 3) strength += 15;
-        else if (typeCount >= 2) strength += 10;
-        else if (typeCount >= 1) strength += 5;
-
-        // Factor 3: Recency (max 15 pts)
-        var recent = userPortfolio.filter(a => {
-            var date = new Date(a.dateCompleted);
-            var now = new Date();
-            var diff = (now - date) / (1000 * 60 * 60 * 24 * 30);
-            return diff <= 12; // Within 12 months
-        });
-        if (recent.length > 0) strength += 15;
-
-        // Factor 4: Reflection quality placeholder (max 15 pts)
-        // This will be updated when reflections are saved
-        strength += 10;
-
-        // Factor 5: Leadership indicators placeholder (max 20 pts)
-        var hasLeadership = userPortfolio.some(a => 
-            a.activityType === 'leadership' || 
-            a.activityType === 'volunteering' ||
-            (a.skills && a.skills.some(s => 
-                s.toLowerCase().includes('leadership') || 
-                s.toLowerCase().includes('management')
-            ))
+        var portfolioRef = collection(db, COLLECTIONS.studentPortfolio);
+        var q = query(portfolioRef, 
+            where("userId", "==", userId), 
+            where("activityId", "==", activityId)
         );
-        if (hasLeadership) strength += 20;
-
-        // Cap at 100
-        strength = Math.min(strength, 100);
-
-        // Update user profile
-        var userRef = doc(db, COLLECTIONS.users, userId);
-        await updateDoc(userRef, {
-            profileStrength: strength,
-            completedActivitiesCount: count
-        });
-
-        console.log('📊 Profile strength updated:', strength);
-
-    } catch (error) {
-        console.error('Error updating profile strength:', error);
-    }
-}
-
-// ============================================================
-// SAVE REFLECTION
-// ============================================================
-
-async function saveReflection() {
-    var user = auth.currentUser;
-    if (!user) {
-        alert('Please log in to save your reflection.');
-        return;
-    }
-
-    var reflection1 = document.getElementById('reflection1')?.value || '';
-    var reflection2 = document.getElementById('reflection2')?.value || '';
-    var reflection3 = document.getElementById('reflection3')?.value || '';
-    var activityId = getActivityIdFromURL() || localStorage.getItem('completedActivityId');
-    var activityName = document.getElementById('activity-name')?.textContent || localStorage.getItem('completedActivityName') || 'Activity';
-
-    if (!reflection1 && !reflection2 && !reflection3) {
-        alert('Please answer at least one reflection question before saving.');
-        return;
-    }
-
-    try {
-        // Create reflection object
-        var reflectionData = {
-            activityId: activityId,
-            activityName: activityName,
-            userId: user.uid,
-            responses: [reflection1, reflection2, reflection3],
-            question1: reflection1,
-            question2: reflection2,
-            question3: reflection3,
-            essayPotential: detectEssayPotential(reflection1, reflection2, reflection3),
-            timestamp: serverTimestamp(),
-            savedAt: new Date().toISOString()
-        };
-
-        // Save to reflections collection
-        await addDoc(collection(db, 'reflections'), reflectionData);
-
-        // Update portfolio entry with reflection
-        var portfolioSnapshot = await getDocs(collection(db, COLLECTIONS.studentPortfolio));
-        portfolioSnapshot.forEach(async (doc) => {
-            var data = doc.data();
-            if (data.userId === user.uid && data.activityId === activityId) {
-                await updateDoc(doc.ref, {
-                    reflectionResponses: [reflection1, reflection2, reflection3],
-                    essayPotentialFlag: detectEssayPotential(reflection1, reflection2, reflection3),
-                    studentNote: reflection1 || reflection2 || reflection3
-                });
-            }
-        });
-
-        alert('✅ Reflection saved successfully! Your portfolio has been updated.');
+        var snapshot = await getDocs(q);
         
-        // Navigate to portfolio
-        window.location.href = 'portfolio.html';
-
-    } catch (error) {
-        console.error('Error saving reflection:', error);
-        alert('There was an error saving your reflection. Please try again.');
-    }
-}
-
-function detectEssayPotential(ref1, ref2, ref3) {
-    var allText = (ref1 + ref2 + ref3).toLowerCase();
-    var keywords = ['learned', 'discovered', 'challenge', 'overcame', 'growth', 'impact', 'passion', 'future', 'leadership', 'inspire', 'changed', 'realized', 'goal', 'aspire'];
-    
-    var score = 0;
-    keywords.forEach(function(keyword) {
-        if (allText.includes(keyword)) score++;
-    });
-
-    return score >= 3;
-}
-
-function skipReflection() {
-    if (confirm('You can always add your reflection later from your portfolio. Continue?')) {
-        window.location.href = 'portfolio.html';
-    }
-}
-
-// ============================================================
-// SETUP PHASE 4
-// ============================================================
-
-function setupPhase4() {
-    // Complete activity button
-    if (completeActivityBtn) {
-        completeActivityBtn.addEventListener('click', markActivityAsComplete);
-    }
-
-    // Go to reflection button
-    if (goToReflectionBtn) {
-        goToReflectionBtn.addEventListener('click', function() {
-            if (reflectionSection) {
-                reflectionSection.classList.remove('hidden');
-                reflectionSection.scrollIntoView({ behavior: 'smooth' });
-            }
-        });
-    }
-
-    // Save reflection button
-    var saveBtn = document.getElementById('saveReflectionBtn');
-    if (saveBtn) {
-        saveBtn.addEventListener('click', saveReflection);
-    }
-
-    // Skip reflection button
-    var skipBtn = document.getElementById('skipReflectionBtn');
-    if (skipBtn) {
-        skipBtn.addEventListener('click', skipReflection);
-    }
-
-    // Check if user has already completed this activity
-    checkIfActivityCompleted();
-}
-
-async function checkIfActivityCompleted() {
-    var user = auth.currentUser;
-    if (!user) return;
-
-    var activityId = getActivityIdFromURL();
-    if (!activityId) return;
-
-    try {
-        // Check portfolio for this activity
-        var portfolioSnapshot = await getDocs(collection(db, COLLECTIONS.studentPortfolio));
-        var completed = false;
-        portfolioSnapshot.forEach(doc => {
-            var data = doc.data();
-            if (data.userId === user.uid && data.activityId === activityId) {
-                completed = true;
-            }
-        });
-
-        if (completed) {
-            // Show completion status
+        if (!snapshot.empty) {
+            // Activity is already completed
             if (completionStatus) {
                 completionStatus.classList.remove('hidden');
-                completionMessage.textContent = 'You have already completed this activity!';
+                if (completionMessage) {
+                    completionMessage.textContent = 'You have already completed this activity!';
+                }
             }
             if (completeActivityContainer) {
                 completeActivityContainer.style.display = 'none';
             }
+            if (phase4Status) {
+                phase4Status.style.display = 'block';
+                phase4Status.style.color = '#22c55e';
+                phase4Status.innerHTML = '✅ This activity is already in your portfolio. <a href="portfolio.html" style="color:#6C3CE1;font-weight:600;">View Portfolio</a>';
+            }
+            return true;
         }
+        return false;
     } catch (error) {
         console.error('Error checking activity completion:', error);
+        return false;
+    }
+}
+
+// ============================================================
+// SETUP EVENT LISTENERS
+// ============================================================
+
+function setupEventListeners() {
+    // Complete activity button
+    if (completeActivityBtn) {
+        console.log('🔵 Found completeActivityBtn, adding click listener');
+        completeActivityBtn.addEventListener('click', markActivityAsComplete);
+    } else {
+        console.warn('⚠️ completeActivityBtn not found in DOM');
+    }
+
+    // Mark registered button
+    if (markRegisteredBtn) {
+        markRegisteredBtn.addEventListener('click', function() {
+            var activityId = getActivityIdFromURL();
+            if (activityId) {
+                handleRegistrationComplete(activityId);
+            }
+        });
+    }
+
+    // Logout
+    var logoutLink = document.getElementById('logout-link');
+    if (logoutLink) {
+        logoutLink.addEventListener('click', async function(e) {
+            e.preventDefault();
+            try {
+                await signOut(auth);
+                window.location.href = 'login.html';
+            } catch (error) {
+                console.error('Logout error:', error);
+            }
+        });
     }
 }
 
@@ -504,7 +367,7 @@ async function checkIfActivityCompleted() {
 // INITIALIZATION
 // ============================================================
 
-async function initPhase3() {
+async function initApp() {
     var activityId = getActivityIdFromURL();
     if (!activityId) {
         alert('No activity selected. Please choose an activity first.');
@@ -527,10 +390,7 @@ async function initPhase3() {
             return;
         }
 
-        currentActivityData = activity;
-
         var userProfile = await getUserProfile(user.uid);
-        currentUserData = userProfile;
         var interests = userProfile?.interests || [];
 
         displayActivitySummary(activity, interests);
@@ -539,34 +399,31 @@ async function initPhase3() {
 
         var registered = userProfile?.registered_activities || [];
         if (registered.includes(activityId)) {
-            markRegisteredBtn.textContent = '✅ Already Registered';
-            markRegisteredBtn.disabled = true;
-            markRegisteredBtn.style.background = '#22c55e';
+            if (markRegisteredBtn) {
+                markRegisteredBtn.textContent = '✅ Already Registered';
+                markRegisteredBtn.disabled = true;
+                markRegisteredBtn.style.background = '#22c55e';
+            }
+            // Show Phase 4 section
+            var phase4Section = document.getElementById('phase4Section');
+            if (phase4Section) {
+                phase4Section.style.display = 'block';
+            }
         }
-
-        if (markRegisteredBtn) {
-            markRegisteredBtn.addEventListener('click', function() {
-                handleRegistrationComplete(activityId);
-            });
-        }
+        
+        // Check if activity is already completed
+        await checkIfActivityCompleted(user.uid, activityId);
     });
 }
 
+// ============================================================
+// START APP
+// ============================================================
+
 document.addEventListener('DOMContentLoaded', function() {
-    var logoutLink = document.getElementById('logout-link');
-    if (logoutLink) {
-        logoutLink.addEventListener('click', async function(e) {
-            e.preventDefault();
-            try {
-                await signOut(auth);
-                window.location.href = 'login.html';
-            } catch (error) {
-                console.error('Logout error:', error);
-            }
-        });
-    }
-    initPhase3();
-    setupPhase4();
+    console.log('🚀 activity-registration.js loaded!');
+    setupEventListeners();
+    initApp();
 });
 
-console.log('✅ activity-registration.js loaded successfully!');
+console.log('✅ activity-registration.js initialized!');
