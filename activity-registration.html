@@ -79,6 +79,11 @@
             transform: translateY(-2px);
             box-shadow: 0 4px 15px rgba(34, 197, 94, 0.4);
         }
+        .btn-success:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
         .btn-primary {
             background: #6C3CE1;
             color: white;
@@ -138,29 +143,17 @@
             transform: translateY(-2px);
             box-shadow: 0 4px 15px rgba(0, 176, 155, 0.4);
         }
-        .phase4-section {
-            margin-top: 40px;
-            padding-top: 30px;
-            border-top: 2px dashed #e0e0e0;
-        }
-        .phase4-section h3 {
-            font-size: 1.3rem;
-            color: #2D1B4E;
-            margin-bottom: 0.3rem;
-        }
-        .quick-nav {
-            margin-top: 30px;
-            padding-top: 20px;
-            border-top: 1px solid #eee;
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-        .quick-nav a {
-            flex: 0 1 auto;
-            min-width: 140px;
-            text-align: center;
+        .phase-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 0.3rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 10px;
         }
         .checklist-item {
             display: flex;
@@ -202,17 +195,15 @@
             color: #888;
             font-size: 0.8rem;
         }
-        .phase-badge {
-            display: inline-block;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 0.3rem 1rem;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: 600;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            margin-bottom: 10px;
+        .phase4-section {
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px dashed #e0e0e0;
+        }
+        .phase4-section h3 {
+            font-size: 1.3rem;
+            color: #2D1B4E;
+            margin-bottom: 0.3rem;
         }
         .completion-status {
             background: #f0fdf4;
@@ -231,6 +222,41 @@
         }
         .hidden {
             display: none !important;
+        }
+        .quick-nav {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .quick-nav a {
+            flex: 0 1 auto;
+            min-width: 140px;
+            text-align: center;
+        }
+        .reflection-item {
+            margin: 15px 0;
+        }
+        .reflection-item label {
+            font-weight: 600;
+            display: block;
+            margin-bottom: 5px;
+        }
+        .reflection-item textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 1rem;
+            resize: vertical;
+        }
+        .reflection-item textarea:focus {
+            outline: none;
+            border-color: #6C3CE1;
         }
         @media (max-width: 768px) {
             .main-header {
@@ -307,15 +333,14 @@
         <section style="margin:20px 0;padding:20px;background:#f8f9fa;border-radius:12px;text-align:center;">
             <p style="color:#666;">Complete all steps in the checklist to enable registration.</p>
             <button id="mark-registered-btn" class="btn-primary" disabled>Complete all steps to register</button>
-            <a href="portfolio.html" class="btn-secondary" style="margin-left:10px;">View My Portfolio</a>
         </section>
 
         <!-- ============================================================
-        PHASE 4 - Complete Activity Section (UPDATED)
+        PHASE 4 - Complete Activity Section (THIS WAS MISSING!)
         ============================================================ -->
         <section class="phase4-section" id="phase4Section">
             <span class="phase-badge">Phase 4</span>
-            <h3>🎯 Post-Activity Guidance</h3>
+            <h3>🎯 After Completing This Activity</h3>
             <p style="color:#666;margin-bottom:15px;">
                 Once you've finished this activity, mark it as complete. You'll be prompted to reflect on your experience,
                 which will be saved to your portfolio and may be used for university essays.
@@ -326,12 +351,6 @@
                 <div class="icon">✅</div>
                 <h3>Activity Completed!</h3>
                 <p id="completionMessage">Great job! Your progress has been saved.</p>
-                <div style="margin-top: 15px; display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
-                    <button id="goToReflectionBtn" class="btn-primary">
-                        📝 Reflect on Experience
-                    </button>
-                    <a href="portfolio.html" class="btn-secondary">View Portfolio</a>
-                </div>
             </div>
 
             <!-- Complete Activity Button -->
@@ -345,36 +364,6 @@
             </div>
             
             <div id="phase4-status" style="margin-top:12px;font-size:0.9rem;color:#666;display:none;"></div>
-            
-            <!-- Reflection Section (hidden initially) -->
-            <div id="reflectionSection" class="hidden" style="margin-top: 30px; padding-top: 20px; border-top: 2px solid #f0e6ff;">
-                <h3>📝 Reflection Questions</h3>
-                <p style="color: #666;">Answer these questions to capture your experience for your portfolio.</p>
-                
-                <div class="reflection-item" style="margin: 15px 0;">
-                    <label style="font-weight: 600; display: block; margin-bottom: 5px;">
-                        1. What was the most significant thing you learned or experienced?
-                    </label>
-                    <textarea id="reflection1" rows="3" style="width:100%; padding:12px; border:2px solid #e0e0e0; border-radius:8px; font-family:inherit; font-size:1rem; resize:vertical;"></textarea>
-                </div>
-                <div class="reflection-item" style="margin: 15px 0;">
-                    <label style="font-weight: 600; display: block; margin-bottom: 5px;">
-                        2. How did this activity connect to your interests and future goals?
-                    </label>
-                    <textarea id="reflection2" rows="3" style="width:100%; padding:12px; border:2px solid #e0e0e0; border-radius:8px; font-family:inherit; font-size:1rem; resize:vertical;"></textarea>
-                </div>
-                <div class="reflection-item" style="margin: 15px 0;">
-                    <label style="font-weight: 600; display: block; margin-bottom: 5px;">
-                        3. What skills did you develop, and how might you apply them in the future?
-                    </label>
-                    <textarea id="reflection3" rows="3" style="width:100%; padding:12px; border:2px solid #e0e0e0; border-radius:8px; font-family:inherit; font-size:1rem; resize:vertical;"></textarea>
-                </div>
-                
-                <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-top: 10px;">
-                    <button id="saveReflectionBtn" class="btn-primary">💾 Save Reflection</button>
-                    <button id="skipReflectionBtn" class="btn-secondary">Skip for Now</button>
-                </div>
-            </div>
         </section>
 
         <!-- ============================================================
