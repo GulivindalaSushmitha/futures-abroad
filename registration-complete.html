@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Complete Registration | Futures Abroad</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: Arial, sans-serif; background: #f5f7fa; padding: 20px; padding-top: 80px; }
+        
+        .main-header {
+            background: white;
+            padding: 15px 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .main-header .logo a { font-size: 22px; font-weight: 800; color: #2D1B4E; text-decoration: none; }
+        .main-header .logo a span { color: #6C3CE1; }
+        .main-header nav { display: flex; gap: 15px; align-items: center; flex-wrap: wrap; }
+        .main-header nav a { text-decoration: none; color: #555; font-weight: 600; padding: 8px 16px; border-radius: 8px; transition: all 0.3s; font-size: 14px; }
+        .main-header nav a:hover { background: #f0e6ff; color: #6C3CE1; }
+        .main-header nav #logout-link { color: #e74c3c; }
+        .main-header nav #logout-link:hover { background: #fde8e8; }
+
+        .container { max-width: 850px; margin: 0 auto; }
+        
+        .card {
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .phase-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 4px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+        .phase-badge-green { background: #22c55e; }
+
+        .btn-success {
+            background: #22c55e;
+            color: white;
+            border: none;
+            padding: 18px 50px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: Arial, sans-serif;
+            width: 100%;
+            max-width: 450px;
+        }
+        .btn-success:hover { transform: translateY(-2px); box-shadow: 0 4px 20px rgba(34,197,94,0.4); }
+        .btn-success:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+        .btn-secondary {
+            background: transparent;
+            color: #6C3CE1;
+            border: 2px solid #6C3CE1;
+            padding: 12px 30px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: Arial, sans-serif;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .btn-secondary:hover { background: #6C3CE1; color: white; }
+
+        .btn-enroll {
+            background: linear-gradient(135deg, #00b09b, #96c93d);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: Arial, sans-serif;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .btn-enroll:hover { transform: translateY(-2px); box-shadow: 0 4px 15px rgba(0,176,155,0.4); }
+
+        .registered-badge {
+            background: #22c55e;
+            color: white;
+            padding: 10px 24px;
+            border-radius: 50px;
+            font-weight: 700;
+            display: inline-block;
+            margin: 10px 0;
+            font-size: 18px;
+        }
+
+        .completion-status {
+            background: #f0fdf4;
+            border: 3px solid #22c55e;
+            border-radius: 16px;
+            padding: 24px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        .completion-status .icon { font-size: 56px; }
+        .completion-status h3 { color: #16a34a; margin: 10px 0 5px; font-size: 24px; }
+
+        /* PHASE 4 - BIG AND CLEAR */
+        .phase4-section {
+            border: 3px solid #22c55e;
+            border-radius: 16px;
+            padding: 30px;
+            margin-top: 24px;
+            background: #fafffe;
+            display: block !important;
+        }
+        .phase4-section .phase-badge {
+            background: #22c55e;
+        }
+        .phase4-section h3 {
+            font-size: 28px;
+            color: #2D1B4E;
+            margin-top: 10px;
+        }
+
+        .hidden { display: none !important; }
+        .text-center { text-align: center; }
+
+        .quick-nav {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .quick-nav a { flex: 0 1 auto; min-width: 140px; text-align: center; }
+
+        .button-wrapper {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .activity-detail {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin: 10px 0;
+        }
+        .activity-detail span { font-size: 16px; }
+
+        @media (max-width: 768px) {
+            body { padding-top: 120px; padding-left: 10px; padding-right: 10px; }
+            .main-header { padding: 12px 16px; }
+            .main-header nav a { font-size: 12px; padding: 6px 10px; }
+            .quick-nav { flex-direction: column; align-items: stretch; }
+            .quick-nav a { text-align: center; }
+            .phase4-section { padding: 20px; }
+            .phase4-section h3 { font-size: 22px; }
+            .btn-success { font-size: 16px; padding: 14px 30px; max-width: 100%; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- HEADER -->
+    <header class="main-header">
+        <div class="logo">
+            <a href="index.html">Futures <span>Abroad</span></a>
+        </div>
+        <nav>
+            <a href="dashboard.html">Dashboard</a>
+            <a href="portfolio.html">My Portfolio</a>
+            <a href="university-shortlist.html">Universities</a>
+            <a href="#" id="logout-link">Logout</a>
+        </nav>
+    </header>
+
+    <div class="container">
+
+        <!-- PHASE 3 - Activity Details -->
+        <div class="card">
+            <span class="phase-badge">Phase 3</span>
+            <h2 id="activity-name">Loading...</h2>
+            <div class="activity-detail">
+                <span><strong>Type:</strong> <span id="activity-type">--</span></span>
+                <span><strong>Duration:</strong> <span id="activity-duration">--</span></span>
+                <span><strong>Cost:</strong> <span id="activity-cost">--</span></span>
+            </div>
+            <div style="background: #f8f4ff; padding: 15px; border-radius: 12px; margin-top: 10px;">
+                <strong>📋 Status:</strong>
+                <p id="status-text" style="margin-top: 5px; color: #22c55e; font-size: 18px; font-weight: bold;">✅ You are already registered for this activity!</p>
+            </div>
+        </div>
+
+        <!-- ============================================================
+        PHASE 4 - COMPLETE ACTIVITY
+        ============================================================ -->
+        <div class="phase4-section" id="phase4Section">
+
+            <span class="phase-badge phase-badge-green">Phase 4</span>
+            <h3>🎯 After Completing This Activity</h3>
+            <p style="color: #555; font-size: 18px; margin-bottom: 20px;">
+                Once you've finished this activity, click the green button below to mark it as complete.
+                Your experience will be saved to your portfolio for university applications.
+            </p>
+
+            <!-- Completion Status -->
+            <div id="completionStatus" class="completion-status hidden">
+                <div class="icon">✅</div>
+                <h3>Activity Completed!</h3>
+                <p id="completionMessage" style="font-size: 18px;">Great job! Your progress has been saved.</p>
+            </div>
+
+            <!-- THE BUTTON -->
+            <div id="completeActivityContainer" class="button-wrapper">
+                <button id="completeActivityBtn" class="btn-success">
+                    ✅ Mark Activity as Complete
+                </button>
+                <p style="color: #888; font-size: 0.9rem; margin-top: 10px;">
+                    After completion, you'll be redirected to reflect on your experience.
+                </p>
+            </div>
+
+            <!-- Status messages -->
+            <div id="phase4-status" style="margin-top: 12px; font-size: 1rem; display: none; text-align: center; padding: 15px; background: #e8f5e9; border-radius: 12px;"></div>
+        </div>
+
+        <!-- QUICK NAVIGATION -->
+        <div class="quick-nav">
+            <a href="dashboard.html" class="btn-secondary">📊 Dashboard</a>
+            <a href="student-app.html" class="btn-secondary">🎯 Find More Activities</a>
+            <a href="university-shortlist.html" class="btn-secondary">🏛️ University Shortlist</a>
+            <a href="futures-abroad-enroll.html" class="btn-enroll">🚀 Enroll Now</a>
+        </div>
+
+    </div>
+
+    <!-- ============================================================
+    JAVASCRIPT
+    ============================================================ -->
+    <script type="module">
+        import {
+            auth, db, COLLECTIONS,
+            doc, getDoc, getDocs, updateDoc, arrayUnion,
+            onAuthStateChanged, signOut, addDoc, serverTimestamp,
+            query, where, collection
+        } from './js/firebase-config.js';
+
+        console.log('🚀 registration-complete.js loaded!');
+
+        // DOM Elements
+        const activityNameEl = document.getElementById('activity-name');
+        const activityTypeEl = document.getElementById('activity-type');
+        const activityDurationEl = document.getElementById('activity-duration');
+        const activityCostEl = document.getElementById('activity-cost');
+        const statusText = document.getElementById('status-text');
+        const completeActivityBtn = document.getElementById('completeActivityBtn');
+        const phase4Status = document.getElementById('phase4-status');
+        const completionStatus = document.getElementById('completionStatus');
+        const completionMessage = document.getElementById('completionMessage');
+        const completeActivityContainer = document.getElementById('completeActivityContainer');
+
+        console.log('🔍 completeActivityBtn found:', completeActivityBtn);
+
+        function getActivityIdFromURL() {
+            const params = new URLSearchParams(window.location.search);
+            return params.get('id');
+        }
+
+        async function fetchActivityData(activityId) {
+            try {
+                const activityRef = doc(db, COLLECTIONS.activities, activityId);
+                const activityDoc = await getDoc(activityRef);
+                if (activityDoc.exists()) {
+                    return { id: activityDoc.id, ...activityDoc.data() };
+                }
+                return null;
+            } catch (error) {
+                console.error('Error fetching activity:', error);
+                return null;
+            }
+        }
+
+        async function getUserProfile(userId) {
+            try {
+                const userRef = doc(db, COLLECTIONS.users, userId);
+                const userDoc = await getDoc(userRef);
+                if (userDoc.exists()) {
+                    return userDoc.data();
+                }
+                return null;
+            } catch (error) {
+                console.error('Error fetching user:', error);
+                return null;
+            }
+        }
+
+        function displayActivitySummary(activity) {
+            if (activityNameEl) activityNameEl.textContent = activity.name || 'Activity';
+            if (activityTypeEl) activityTypeEl.textContent = activity.type || 'General';
+            if (activityDurationEl) activityDurationEl.textContent = activity.duration || 'N/A';
+            if (activityCostEl) activityCostEl.textContent = activity.cost || 'Free';
+        }
+
+        // ============================================================
+        // PHASE 4: MARK ACTIVITY AS COMPLETE
+        // ============================================================
+        async function markActivityAsComplete() {
+            console.log('🔵 COMPLETE ACTIVITY BUTTON CLICKED!');
+
+            const user = auth.currentUser;
+            if (!user) {
+                alert('Please log in first.');
+                return;
+            }
+
+            const activityId = getActivityIdFromURL();
+            if (!activityId) {
+                alert('No activity selected.');
+                return;
+            }
+
+            const activityName = document.getElementById('activity-name')?.textContent || 'Activity';
+            const activityType = document.getElementById('activity-type')?.textContent?.toLowerCase() || 'default';
+            const duration = document.getElementById('activity-duration')?.textContent || 'N/A';
+
+            const activity = await fetchActivityData(activityId);
+            const skills = activity?.skills_gained || [];
+
+            if (completeActivityBtn) {
+                completeActivityBtn.textContent = '⏳ Processing...';
+                completeActivityBtn.disabled = true;
+                completeActivityBtn.style.opacity = '0.6';
+            }
+
+            try {
+                // Check if already in portfolio
+                const portfolioRef = collection(db, COLLECTIONS.studentPortfolio);
+                const q = query(portfolioRef,
+                    where("userId", "==", user.uid),
+                    where("activityId", "==", activityId)
+                );
+                const existing = await getDocs(q);
+
+                if (!existing.empty) {
+                    alert('This activity is already in your portfolio!');
+                    if (completeActivityBtn) {
+                        completeActivityBtn.textContent = '✅ Already Completed';
+                        completeActivityBtn.disabled = true;
+                        completeActivityBtn.style.opacity = '0.6';
+                    }
+                    return;
+                }
+
+                // Create portfolio entry
+                const portfolioEntry = {
+                    userId: user.uid,
+                    activityId: activityId,
+                    activityName: activityName,
+                    type: activityType,
+                    duration: duration,
+                    skills: skills,
+                    studentNote: '',
+                    dateCompleted: new Date().toISOString().split('T')[0],
+                    reflectionResponses: {},
+                    essayPotentialFlag: false,
+                    createdAt: serverTimestamp()
+                };
+
+                await addDoc(portfolioRef, portfolioEntry);
+
+                // Update user profile
+                const userRef = doc(db, COLLECTIONS.users, user.uid);
+                await updateDoc(userRef, {
+                    completed_activities: arrayUnion(activityId),
+                    lastActivityDate: new Date().toISOString()
+                });
+
+                console.log('✅ Activity marked as complete!');
+
+                // Show completion status
+                if (completionStatus) {
+                    completionStatus.classList.remove('hidden');
+                    if (completionMessage) {
+                        completionMessage.textContent = 'Activity "' + activityName + '" has been added to your portfolio! 🎉';
+                    }
+                }
+
+                // Hide the complete button
+                if (completeActivityContainer) {
+                    completeActivityContainer.style.display = 'none';
+                }
+
+                if (phase4Status) {
+                    phase4Status.style.display = 'block';
+                    phase4Status.style.background = '#e8f5e9';
+                    phase4Status.style.padding = '15px';
+                    phase4Status.style.borderRadius = '12px';
+                    phase4Status.style.color = '#16a34a';
+                    phase4Status.innerHTML = '✅ Activity marked as complete! Redirecting to Phase 4 reflection page...';
+                }
+
+                setTimeout(function() {
+                    window.location.href = 'post-activity.html?id=' + activityId;
+                }, 1500);
+
+            } catch (error) {
+                console.error('❌ Error completing activity:', error);
+                alert('Error completing activity: ' + error.message);
+                if (completeActivityBtn) {
+                    completeActivityBtn.textContent = '✅ Mark Activity as Complete';
+                    completeActivityBtn.disabled = false;
+                    completeActivityBtn.style.opacity = '1';
+                }
+            }
+        }
+
+        // CHECK IF ACTIVITY IS ALREADY COMPLETED
+        async function checkIfActivityCompleted(userId, activityId) {
+            try {
+                const portfolioRef = collection(db, COLLECTIONS.studentPortfolio);
+                const q = query(portfolioRef,
+                    where("userId", "==", userId),
+                    where("activityId", "==", activityId)
+                );
+                const snapshot = await getDocs(q);
+
+                if (!snapshot.empty) {
+                    if (completionStatus) {
+                        completionStatus.classList.remove('hidden');
+                        if (completionMessage) {
+                            completionMessage.textContent = 'You have already completed this activity! 🎉';
+                        }
+                    }
+                    if (completeActivityContainer) {
+                        completeActivityContainer.style.display = 'none';
+                    }
+                    if (phase4Status) {
+                        phase4Status.style.display = 'block';
+                        phase4Status.style.background = '#e8f5e9';
+                        phase4Status.style.padding = '15px';
+                        phase4Status.style.borderRadius = '12px';
+                        phase4Status.style.color = '#16a34a';
+                        phase4Status.innerHTML = '✅ This activity is already in your portfolio. <a href="portfolio.html" style="color:#6C3CE1;font-weight:600;">View Portfolio</a>';
+                    }
+                    return true;
+                }
+                return false;
+            } catch (error) {
+                console.error('Error checking activity completion:', error);
+                return false;
+            }
+        }
+
+        function setupEventListeners() {
+            if (completeActivityBtn) {
+                console.log('✅ Adding click listener to completeActivityBtn');
+                completeActivityBtn.addEventListener('click', markActivityAsComplete);
+            } else {
+                console.error('❌ completeActivityBtn NOT found!');
+            }
+
+            const logoutLink = document.getElementById('logout-link');
+            if (logoutLink) {
+                logoutLink.addEventListener('click', async function(e) {
+                    e.preventDefault();
+                    try {
+                        await signOut(auth);
+                        window.location.href = 'login.html';
+                    } catch (error) {
+                        console.error('Logout error:', error);
+                    }
+                });
+            }
+        }
+
+        async function initApp() {
+            const activityId = getActivityIdFromURL();
+            if (!activityId) {
+                alert('No activity selected. Please choose an activity first.');
+                setTimeout(function() {
+                    window.location.href = 'student-app.html';
+                }, 1500);
+                return;
+            }
+
+            onAuthStateChanged(auth, async function(user) {
+                if (!user) {
+                    window.location.href = 'login.html';
+                    return;
+                }
+
+                const activity = await fetchActivityData(activityId);
+                if (!activity) {
+                    alert('Activity not found. Please try again.');
+                    setTimeout(function() {
+                        window.location.href = 'student-app.html';
+                    }, 1500);
+                    return;
+                }
+
+                displayActivitySummary(activity);
+                await checkIfActivityCompleted(user.uid, activityId);
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🚀 STARTING...');
+            console.log('🔍 Looking for completeActivityBtn:', document.getElementById('completeActivityBtn'));
+            setupEventListeners();
+            initApp();
+        });
+
+        console.log('✅ Script loaded!');
+    </script>
+
+</body>
+</html>
