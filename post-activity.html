@@ -4,11 +4,16 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Post-Activity Reflection | Futures Abroad</title>
-    <link rel="stylesheet" href="css/style.css" />
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: 'Quicksand', sans-serif; background: #f5f7fa; }
-        
+        body {
+            font-family: 'Quicksand', Arial, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e8ecf1 100%);
+            min-height: 100vh;
+            padding: 20px;
+            padding-top: 80px;
+        }
+
         .main-header {
             background: white;
             padding: 15px 30px;
@@ -31,12 +36,7 @@
             text-decoration: none;
         }
         .main-header .logo a span { color: #6C3CE1; }
-        .main-header nav {
-            display: flex;
-            gap: 15px;
-            align-items: center;
-            flex-wrap: wrap;
-        }
+        .main-header nav { display: flex; gap: 15px; align-items: center; flex-wrap: wrap; }
         .main-header nav a {
             text-decoration: none;
             color: #555;
@@ -50,17 +50,14 @@
         .main-header nav #logout-link { color: #e74c3c; }
         .main-header nav #logout-link:hover { background: #fde8e8; }
 
-        .post-main {
-            padding-top: 100px;
-            max-width: 900px;
+        .container {
+            max-width: 800px;
             margin: 0 auto;
-            padding-left: 20px;
-            padding-right: 20px;
-            padding-bottom: 40px;
         }
+
         .phase-badge {
             display: inline-block;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: #22c55e;
             color: white;
             padding: 4px 16px;
             border-radius: 20px;
@@ -70,31 +67,83 @@
             text-transform: uppercase;
             margin-bottom: 10px;
         }
-        .section-card {
+
+        .reflection-card {
             background: white;
-            border-radius: 16px;
-            padding: 24px;
-            margin-bottom: 24px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            border-radius: 20px;
+            padding: 35px;
+            box-shadow: 0 4px 30px rgba(0,0,0,0.08);
+            margin-bottom: 25px;
         }
-        .section-card h2 { color: #2D1B4E; margin-top: 0; margin-bottom: 8px; }
-        .section-card h3 { color: #2D1B4E; margin-top: 0; margin-bottom: 12px; }
+
+        .reflection-card h2 {
+            color: #2D1B4E;
+            font-size: 28px;
+            margin-bottom: 5px;
+        }
+
+        .reflection-card .subtitle {
+            color: #888;
+            font-size: 16px;
+            margin-bottom: 25px;
+        }
+
+        .question-group {
+            margin-bottom: 25px;
+        }
+
+        .question-group label {
+            display: block;
+            font-weight: 700;
+            color: #2D1B4E;
+            font-size: 17px;
+            margin-bottom: 8px;
+        }
+
+        .question-group textarea {
+            width: 100%;
+            padding: 14px 18px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 15px;
+            font-family: 'Quicksand', Arial, sans-serif;
+            transition: border-color 0.3s;
+            resize: vertical;
+            min-height: 100px;
+            background: #fafafa;
+        }
+
+        .question-group textarea:focus {
+            outline: none;
+            border-color: #6C3CE1;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(108,60,225,0.1);
+        }
+
+        .question-group .hint {
+            color: #999;
+            font-size: 13px;
+            margin-top: 5px;
+        }
 
         .btn-primary {
             background: #6C3CE1;
             color: white;
             border: none;
-            padding: 12px 30px;
+            padding: 14px 40px;
             border-radius: 50px;
             font-weight: 700;
-            font-size: 16px;
+            font-size: 18px;
             cursor: pointer;
             transition: all 0.3s;
-            font-family: 'Quicksand', sans-serif;
-            text-decoration: none;
-            display: inline-block;
+            font-family: 'Quicksand', Arial, sans-serif;
+            width: 100%;
         }
-        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 4px 15px rgba(108, 60, 225, 0.3); }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(108,60,225,0.35);
+        }
+
         .btn-secondary {
             background: transparent;
             color: #6C3CE1;
@@ -105,88 +154,88 @@
             font-size: 16px;
             cursor: pointer;
             transition: all 0.3s;
-            font-family: 'Quicksand', sans-serif;
+            font-family: 'Quicksand', Arial, sans-serif;
             text-decoration: none;
             display: inline-block;
         }
         .btn-secondary:hover { background: #6C3CE1; color: white; }
 
-        .completion-summary {
-            background: #f0fdf4;
-            border: 2px solid #22c55e;
-            border-radius: 12px;
-            padding: 24px;
-            text-align: center;
-            margin-bottom: 24px;
-        }
-        .completion-summary .icon { font-size: 56px; }
-        .completion-summary h3 { color: #16a34a; margin: 10px 0 5px; }
-
-        .reflection-item {
-            margin-bottom: 20px;
-        }
-        .reflection-item label {
-            display: block;
-            font-weight: 600;
-            margin-bottom: 8px;
-            color: #2D1B4E;
-        }
-        .reflection-item textarea {
+        .btn-success {
+            background: #22c55e;
+            color: white;
+            border: none;
+            padding: 14px 40px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 18px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: 'Quicksand', Arial, sans-serif;
             width: 100%;
-            padding: 12px;
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
-            font-family: inherit;
-            font-size: 1rem;
-            resize: vertical;
-            min-height: 80px;
-            transition: border-color 0.3s;
         }
-        .reflection-item textarea:focus {
-            outline: none;
-            border-color: #6C3CE1;
+        .btn-success:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(34,197,94,0.35);
         }
 
-        .strength-bar {
-            background: #e0e0e0;
-            border-radius: 10px;
-            height: 16px;
-            overflow: hidden;
-            margin: 10px 0;
+        .button-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 10px;
+            flex-wrap: wrap;
         }
-        .strength-fill {
-            height: 100%;
-            background: linear-gradient(90deg, #667eea, #764ba2);
-            transition: width 0.8s ease;
-            border-radius: 10px;
-        }
+        .button-group .btn-secondary { flex: 1; text-align: center; }
+        .button-group .btn-success { flex: 2; }
 
-        .gap-list {
-            list-style: none;
-            padding: 0;
+        .success-message {
+            background: #f0fdf4;
+            border: 3px solid #22c55e;
+            border-radius: 16px;
+            padding: 30px;
+            text-align: center;
+            display: none;
         }
-        .gap-list li {
-            padding: 10px 14px;
-            background: #f8f9fa;
-            margin: 5px 0;
-            border-radius: 8px;
-            border-left: 4px solid #6C3CE1;
-        }
+        .success-message .icon { font-size: 56px; }
+        .success-message h3 { color: #16a34a; margin: 10px 0; }
+        .success-message p { color: #555; font-size: 16px; }
 
-        .flex { display: flex; gap: 15px; flex-wrap: wrap; align-items: center; }
-        .text-center { text-align: center; }
-        .hidden { display: none !important; }
-        .mt-20 { margin-top: 20px; }
+        .quick-nav {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .quick-nav a { flex: 0 1 auto; min-width: 140px; text-align: center; }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+        }
+        .loading .spinner {
+            font-size: 40px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
 
         @media (max-width: 768px) {
+            body { padding-top: 120px; padding-left: 10px; padding-right: 10px; }
             .main-header { padding: 12px 16px; }
             .main-header nav a { font-size: 12px; padding: 6px 10px; }
-            .post-main { padding-top: 120px; padding-left: 16px; padding-right: 16px; }
-            .flex { flex-direction: column; }
+            .reflection-card { padding: 20px; }
+            .button-group { flex-direction: column; }
+            .button-group .btn-secondary,
+            .button-group .btn-success { flex: 1; }
         }
     </style>
 </head>
 <body>
+
     <header class="main-header">
         <div class="logo">
             <a href="index.html">Futures <span>Abroad</span></a>
@@ -199,390 +248,279 @@
         </nav>
     </header>
 
-    <main class="post-main">
-        <!-- Phase Badge -->
-        <span class="phase-badge">Phase 4</span>
-        <h1 style="color: #2D1B4E; margin-top: 0;">Post-Activity Guidance</h1>
+    <div class="container">
 
-        <!-- ============================================================
-        COMPLETION SUMMARY
-        ============================================================ -->
-        <div class="completion-summary">
-            <div class="icon">✅</div>
-            <h3>Activity Completed!</h3>
-            <p id="activityNameDisplay" style="font-size: 1.2rem; font-weight: 600; color: #2D1B4E;">Loading...</p>
-            <p style="color: #666;">Great job! Reflect on your experience below.</p>
-        </div>
+        <!-- PHASE 4 - Reflection -->
+        <div class="reflection-card">
+            <span class="phase-badge">Phase 4</span>
+            <h2>📝 Reflect on Your Experience</h2>
+            <p class="subtitle">Answer these questions to build your portfolio and strengthen your profile.</p>
 
-        <!-- ============================================================
-        REFLECTION QUESTIONS
-        ============================================================ -->
-        <div class="section-card">
-            <h3>📝 Reflection Questions</h3>
-            <p style="color: #666; margin-bottom: 16px;">
-                Answer these questions to capture your learning. Your reflections may be used in university essays.
-            </p>
+            <div id="activityInfo" style="background:#f8f4ff;padding:15px;border-radius:12px;margin-bottom:25px;">
+                <p><strong>Activity:</strong> <span id="activityNameDisplay">Loading...</span></p>
+            </div>
 
-            <div id="reflectionQuestions">
-                <div class="reflection-item">
-                    <label>1. What was the most meaningful part of this experience?</label>
-                    <textarea id="reflection1" placeholder="Share your thoughts..."></textarea>
+            <div id="reflectionForm">
+                <div class="question-group">
+                    <label for="reflection1">1. What did you learn from this activity?</label>
+                    <textarea id="reflection1" placeholder="Describe the key skills, knowledge, or insights you gained..."></textarea>
+                    <div class="hint">💡 Think about both technical and soft skills you developed.</div>
                 </div>
-                <div class="reflection-item">
-                    <label>2. What new skills or knowledge did you gain?</label>
-                    <textarea id="reflection2" placeholder="Share your thoughts..."></textarea>
+
+                <div class="question-group">
+                    <label for="reflection2">2. What challenges did you face and how did you overcome them?</label>
+                    <textarea id="reflection2" placeholder="Describe obstacles you encountered and how you handled them..."></textarea>
+                    <div class="hint">💡 This shows resilience and problem-solving ability.</div>
                 </div>
-                <div class="reflection-item">
-                    <label>3. How will this experience help you in the future?</label>
-                    <textarea id="reflection3" placeholder="Share your thoughts..."></textarea>
+
+                <div class="question-group">
+                    <label for="reflection3">3. How has this activity shaped your career or university goals?</label>
+                    <textarea id="reflection3" placeholder="Reflect on how this experience influences your future plans..."></textarea>
+                    <div class="hint">💡 This helps connect your experiences to your long-term goals.</div>
+                </div>
+
+                <div class="button-group">
+                    <button class="btn-secondary" id="skipBtn">⏭️ Skip</button>
+                    <button class="btn-success" id="saveReflectionBtn">💾 Save Reflection</button>
                 </div>
             </div>
 
-            <div class="flex" style="margin-top: 16px;">
-                <button id="saveReflectionBtn" class="btn-primary">💾 Save Reflections</button>
-                <button id="skipReflectionBtn" class="btn-secondary">Skip for Now</button>
-            </div>
-            <div id="reflectionStatus" style="margin-top: 12px; font-size: 0.9rem; display: none;"></div>
-        </div>
-
-        <!-- ============================================================
-        PROFILE STRENGTH
-        ============================================================ -->
-        <div class="section-card">
-            <h3>📊 Your Profile Progress</h3>
-            <div class="strength-bar">
-                <div class="strength-fill" id="strengthFill" style="width: 10%;"></div>
-            </div>
-            <div style="display: flex; justify-content: space-between;">
-                <span id="strengthPercentage">10%</span>
-                <span style="color: #888;">Profile Strength</span>
+            <div class="success-message" id="successMessage">
+                <div class="icon">🎉</div>
+                <h3>Reflection Saved Successfully!</h3>
+                <p>Your portfolio has been updated. This reflection will help you write stronger university applications.</p>
+                <div style="margin-top:20px;display:flex;gap:15px;flex-wrap:wrap;justify-content:center;">
+                    <a href="portfolio.html" class="btn-primary" style="padding:12px 30px;width:auto;">📂 View Portfolio</a>
+                    <a href="university-shortlist.html" class="btn-secondary" style="padding:12px 30px;">🏛️ Phase 5: Universities</a>
+                </div>
             </div>
         </div>
 
-        <!-- ============================================================
-        GAP ANALYSIS
-        ============================================================ -->
-        <div class="section-card">
-            <h3>📈 Growth Opportunities</h3>
-            <ul class="gap-list" id="gapList">
-                <li>Loading your profile analysis...</li>
-            </ul>
-        </div>
-
-        <!-- ============================================================
-        NEXT STEPS
-        ============================================================ -->
-        <div class="section-card">
-            <h3>🚀 What's Next?</h3>
-            <div class="flex">
-                <a href="student-app.html" class="btn-primary">🎯 Find More Activities</a>
-                <a href="portfolio.html" class="btn-secondary">📂 View Portfolio</a>
-                <a href="university-shortlist.html" class="btn-secondary">🏛️ University Shortlist</a>
-            </div>
-        </div>
-
-        <!-- ============================================================
-        GRADE-BASED MILESTONE CTA
-        ============================================================ -->
-        <div class="section-card" id="milestoneCta" style="display: none; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
-            <h3 style="color: white;">🎯 You're Building a Strong Profile!</h3>
-            <p id="milestoneMessage" style="color: rgba(255,255,255,0.9);">Start thinking about your university shortlist and how to stand out.</p>
-            <a href="university-shortlist.html" class="btn-primary" style="background: white; color: #6C3CE1; margin-top: 10px;">
-                Explore University Pathways
-            </a>
-        </div>
-
-        <!-- ============================================================
-        QUICK NAVIGATION
-        ============================================================ -->
-        <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee; display: flex; gap: 10px; flex-wrap: wrap; justify-content: center;">
+        <!-- Navigation -->
+        <div class="quick-nav">
             <a href="dashboard.html" class="btn-secondary">📊 Dashboard</a>
-            <a href="student-app.html" class="btn-secondary">🎯 Find More Activities</a>
+            <a href="portfolio.html" class="btn-secondary">📂 Portfolio</a>
             <a href="university-shortlist.html" class="btn-secondary">🏛️ University Shortlist</a>
-            <a href="futures-abroad-enroll.html" style="background: linear-gradient(135deg, #00b09b, #96c93d); color: white; border: none; padding: 12px 30px; border-radius: 50px; font-weight: 700; font-size: 16px; cursor: pointer; text-decoration: none; display: inline-block;">🚀 Enroll Now</a>
         </div>
-    </main>
+
+    </div>
 
     <script type="module">
-        // ============================================================
-        // post-activity.js (Inline Version)
-        // ============================================================
-        
         import { 
             auth, db, COLLECTIONS,
-            doc, getDoc, getDocs, updateDoc, addDoc, serverTimestamp,
+            doc, getDoc, updateDoc, arrayUnion,
             onAuthStateChanged, signOut,
-            query, where, collection
+            query, where, collection, getDocs
         } from './js/firebase-config.js';
-
-        console.log('🚀 post-activity.js loaded!');
 
         // DOM Elements
         const activityNameDisplay = document.getElementById('activityNameDisplay');
         const reflection1 = document.getElementById('reflection1');
         const reflection2 = document.getElementById('reflection2');
         const reflection3 = document.getElementById('reflection3');
-        const saveReflectionBtn = document.getElementById('saveReflectionBtn');
-        const skipReflectionBtn = document.getElementById('skipReflectionBtn');
-        const reflectionStatus = document.getElementById('reflectionStatus');
-        const strengthFill = document.getElementById('strengthFill');
-        const strengthPercentage = document.getElementById('strengthPercentage');
-        const gapList = document.getElementById('gapList');
-        const milestoneCta = document.getElementById('milestoneCta');
-        const milestoneMessage = document.getElementById('milestoneMessage');
+        const saveBtn = document.getElementById('saveReflectionBtn');
+        const skipBtn = document.getElementById('skipBtn');
+        const successMessage = document.getElementById('successMessage');
+        const reflectionForm = document.getElementById('reflectionForm');
 
-        let currentActivityId = null;
-        let currentActivityName = '';
+        let activityId = null;
+        let activityName = '';
 
         function getActivityIdFromURL() {
             const params = new URLSearchParams(window.location.search);
             return params.get('id');
         }
 
-        async function loadActivityData(activityId) {
+        async function loadActivity() {
+            activityId = getActivityIdFromURL();
+            if (!activityId) {
+                alert('No activity selected.');
+                window.location.href = 'dashboard.html';
+                return;
+            }
+
             try {
                 const activityRef = doc(db, COLLECTIONS.activities, activityId);
                 const activityDoc = await getDoc(activityRef);
                 if (activityDoc.exists()) {
                     const data = activityDoc.data();
-                    currentActivityName = data.name || 'Activity';
-                    if (activityNameDisplay) {
-                        activityNameDisplay.textContent = currentActivityName;
-                    }
-                    return data;
+                    activityName = data.name || 'Activity';
+                    activityNameDisplay.textContent = activityName;
+                } else {
+                    activityNameDisplay.textContent = 'Unknown Activity';
                 }
-                return null;
             } catch (error) {
                 console.error('Error loading activity:', error);
-                return null;
+                activityNameDisplay.textContent = 'Error loading activity';
             }
         }
 
-        async function loadProfileStrength(userId) {
+        // Save reflection
+        async function saveReflection() {
+            const user = auth.currentUser;
+            if (!user) {
+                alert('Please log in.');
+                return;
+            }
+
+            const answers = {
+                q1: reflection1.value.trim(),
+                q2: reflection2.value.trim(),
+                q3: reflection3.value.trim()
+            };
+
+            // Check if any answer is provided
+            const hasContent = answers.q1 || answers.q2 || answers.q3;
+            if (!hasContent) {
+                alert('Please write at least one reflection before saving, or click Skip.');
+                return;
+            }
+
+            try {
+                // Get portfolio entry for this activity
+                const portfolioRef = collection(db, COLLECTIONS.studentPortfolio);
+                const q = query(portfolioRef, 
+                    where("userId", "==", user.uid), 
+                    where("activityId", "==", activityId)
+                );
+                const snapshot = await getDocs(q);
+
+                if (snapshot.empty) {
+                    // Create new portfolio entry
+                    await import('./firebase-config.js').then(async ({ addDoc, serverTimestamp }) => {
+                        await addDoc(portfolioRef, {
+                            userId: user.uid,
+                            activityId: activityId,
+                            activityName: activityName,
+                            dateCompleted: new Date().toISOString().split('T')[0],
+                            reflectionResponses: answers,
+                            essayPotentialFlag: checkEssayPotential(answers),
+                            createdAt: serverTimestamp()
+                        });
+                    });
+                } else {
+                    // Update existing portfolio entry
+                    const entryDoc = snapshot.docs[0];
+                    await updateDoc(doc(db, COLLECTIONS.studentPortfolio, entryDoc.id), {
+                        reflectionResponses: answers,
+                        essayPotentialFlag: checkEssayPotential(answers)
+                    });
+                }
+
+                // Update user profile
+                const userRef = doc(db, COLLECTIONS.users, user.uid);
+                await updateDoc(userRef, {
+                    hasReflection: true,
+                    lastReflectionDate: new Date().toISOString()
+                });
+
+                // Show success
+                reflectionForm.style.display = 'none';
+                successMessage.style.display = 'block';
+
+                // Update profile strength
+                await updateProfileStrength(user.uid);
+
+            } catch (error) {
+                console.error('Error saving reflection:', error);
+                alert('Error saving reflection. Please try again.');
+            }
+        }
+
+        function checkEssayPotential(answers) {
+            const keywords = ['learned', 'challenge', 'overcame', 'goal', 'future', 'career', 'university', 'passion', 'discover', 'grow', 'develop', 'inspire'];
+            let score = 0;
+            Object.values(answers).forEach(text => {
+                keywords.forEach(keyword => {
+                    if (text.toLowerCase().includes(keyword)) score++;
+                });
+            });
+            return score >= 5;
+        }
+
+        async function updateProfileStrength(userId) {
             try {
                 const portfolioRef = collection(db, COLLECTIONS.studentPortfolio);
                 const q = query(portfolioRef, where("userId", "==", userId));
                 const snapshot = await getDocs(q);
                 
                 const activities = [];
-                snapshot.forEach(doc => {
-                    activities.push(doc.data());
+                snapshot.forEach(doc => activities.push(doc.data()));
+                
+                let score = 0;
+                const count = Math.min(activities.length, 5);
+                score += (count / 5) * 30;
+                
+                const types = new Set(activities.map(a => a.type));
+                score += (Math.min(types.size, 4) / 4) * 20;
+                
+                const hasReflections = activities.filter(a => 
+                    a.reflectionResponses && Object.keys(a.reflectionResponses).length > 0
+                );
+                const reflectionScore = Math.min(hasReflections.length / 3, 1) * 15;
+                score += reflectionScore;
+                
+                // Check for essay potential
+                const hasEssayPotential = activities.some(a => a.essayPotentialFlag);
+                if (hasEssayPotential) score += 15;
+                
+                // Check for leadership
+                const hasLeadership = activities.some(a => 
+                    a.skills && a.skills.some(s => 
+                        ['leadership', 'initiative', 'management', 'coordinator', 'organizer'].includes(s.toLowerCase())
+                    )
+                );
+                if (hasLeadership) score += 20;
+                
+                const finalScore = Math.min(Math.round(score), 100);
+                
+                // Update user profile with new strength
+                const userRef = doc(db, COLLECTIONS.users, userId);
+                await updateDoc(userRef, {
+                    profileStrength: finalScore
                 });
                 
-                const count = activities.length;
-                let strength = 0;
-                
-                // Calculate strength based on number of activities
-                if (count >= 5) strength = 85;
-                else if (count >= 3) strength = 60;
-                else if (count >= 1) strength = 35;
-                else strength = 10;
-                
-                if (strengthFill) {
-                    strengthFill.style.width = strength + '%';
-                }
-                if (strengthPercentage) {
-                    strengthPercentage.textContent = strength + '%';
-                }
-                
-                // Show gap analysis
-                showGapAnalysis(activities);
-                
-                return strength;
+                return finalScore;
             } catch (error) {
-                console.error('Error loading profile strength:', error);
+                console.error('Error updating profile strength:', error);
                 return 0;
             }
         }
 
-        function showGapAnalysis(activities) {
-            if (!gapList) return;
-            
-            const types = activities.map(a => a.type || 'unknown');
-            const hasLeadership = types.some(t => t === 'leadership' || t === 'volunteering' || t === 'internship');
-            const hasAcademics = types.some(t => t === 'course' || t === 'research' || t === 'competition');
-            const hasVolunteering = types.some(t => t === 'volunteering' || t === 'community');
-            
-            let gaps = [];
-            
-            if (!hasLeadership) {
-                gaps.push('🌟 You have strong academics but no leadership experience yet');
-            }
-            if (!hasVolunteering) {
-                gaps.push('🤝 Consider adding a volunteering activity to diversify your profile');
-            }
-            if (activities.length < 3) {
-                gaps.push('📈 Adding more activities will strengthen your university applications');
-            }
-            if (activities.length > 0 && !hasAcademics) {
-                gaps.push('📚 Consider adding an academic activity like a course or research');
-            }
-            
-            if (gaps.length === 0) {
-                gaps.push('🎉 Great work! Your profile is well-rounded.');
-                gaps.push('💪 Keep building on this momentum!');
-            }
-            
-            gapList.innerHTML = gaps.map(gap => 
-                `<li>${gap}</li>`
-            ).join('');
-        }
-
-        async function saveReflection() {
-            const user = auth.currentUser;
-            if (!user) {
-                alert('Please log in to save your reflection.');
-                return;
-            }
-
-            const r1 = reflection1?.value || '';
-            const r2 = reflection2?.value || '';
-            const r3 = reflection3?.value || '';
-            
-            if (!r1 && !r2 && !r3) {
-                alert('Please answer at least one reflection question before saving.');
-                return;
-            }
-
-            if (saveReflectionBtn) {
-                saveReflectionBtn.textContent = '⏳ Saving...';
-                saveReflectionBtn.disabled = true;
-            }
-
-            try {
-                // Find portfolio entry
-                const portfolioRef = collection(db, COLLECTIONS.studentPortfolio);
-                const q = query(portfolioRef, 
-                    where("userId", "==", user.uid), 
-                    where("activityId", "==", currentActivityId)
-                );
-                const snapshot = await getDocs(q);
-                
-                if (snapshot.empty) {
-                    alert('Portfolio entry not found. Please try again.');
-                    return;
-                }
-                
-                const docRef = snapshot.docs[0].ref;
-                const responses = [r1, r2, r3];
-                const hasEssayPotential = r1.length > 100 || r2.length > 100 || r3.length > 100;
-                
-                await updateDoc(docRef, {
-                    reflectionResponses: responses,
-                    studentNote: r1,
-                    essayPotentialFlag: hasEssayPotential
-                });
-
-                // Save to reflections collection
-                const reflectionsRef = collection(db, 'reflections');
-                await addDoc(reflectionsRef, {
-                    userId: user.uid,
-                    activityId: currentActivityId,
-                    activityName: currentActivityName,
-                    responses: responses,
-                    timestamp: serverTimestamp(),
-                    savedAt: new Date().toISOString()
-                });
-
-                if (reflectionStatus) {
-                    reflectionStatus.style.display = 'block';
-                    reflectionStatus.style.color = '#22c55e';
-                    reflectionStatus.innerHTML = '✅ Reflections saved! They may be used for your university essays.';
-                }
-
-                setTimeout(function() {
-                    window.location.href = 'portfolio.html';
-                }, 1500);
-
-            } catch (error) {
-                console.error('Error saving reflection:', error);
-                alert('Error saving reflection. Please try again.');
-                if (saveReflectionBtn) {
-                    saveReflectionBtn.textContent = '💾 Save Reflections';
-                    saveReflectionBtn.disabled = false;
-                }
-            }
-        }
-
+        // Skip reflection
         function skipReflection() {
-            if (confirm('You can always add your reflection later from your portfolio. Continue?')) {
-                window.location.href = 'portfolio.html';
+            if (confirm('Are you sure you want to skip the reflection? You can always add it later from your portfolio.')) {
+                reflectionForm.style.display = 'none';
+                successMessage.style.display = 'block';
+                successMessage.querySelector('h3').textContent = '⏭️ Reflection Skipped';
+                successMessage.querySelector('p').textContent = 'You can add your reflection later from your portfolio page.';
             }
         }
 
-        async function checkGradeMilestone(userId) {
+        // Logout
+        document.getElementById('logout-link')?.addEventListener('click', async (e) => {
+            e.preventDefault();
             try {
-                const userRef = doc(db, COLLECTIONS.users, userId);
-                const userDoc = await getDoc(userRef);
-                if (userDoc.exists()) {
-                    const userData = userDoc.data();
-                    const grade = userData.grade || '10';
-                    
-                    if (milestoneCta && milestoneMessage) {
-                        if (grade === '11') {
-                            milestoneCta.style.display = 'block';
-                            milestoneMessage.textContent = 'You\'re building a strong profile. Start thinking about your university shortlist.';
-                        } else if (grade === '12') {
-                            milestoneCta.style.display = 'block';
-                            milestoneMessage.textContent = 'You\'re in the final stretch! Focus on your applications and deadlines.';
-                        }
-                    }
-                }
+                await signOut(auth);
+                window.location.href = 'login.html';
             } catch (error) {
-                console.error('Error checking grade milestone:', error);
+                console.error('Logout error:', error);
             }
-        }
-
-        // ===== INITIALIZATION =====
-        async function initPostActivity() {
-            const activityId = getActivityIdFromURL();
-            if (!activityId) {
-                alert('No activity selected.');
-                window.location.href = 'dashboard.html';
-                return;
-            }
-            
-            currentActivityId = activityId;
-
-            onAuthStateChanged(auth, async function(user) {
-                if (!user) {
-                    window.location.href = 'login.html';
-                    return;
-                }
-
-                await loadActivityData(activityId);
-                await loadProfileStrength(user.uid);
-                await checkGradeMilestone(user.uid);
-            });
-
-            // Event listeners
-            if (saveReflectionBtn) {
-                saveReflectionBtn.addEventListener('click', saveReflection);
-            }
-            if (skipReflectionBtn) {
-                skipReflectionBtn.addEventListener('click', skipReflection);
-            }
-
-            // Logout
-            const logoutLink = document.getElementById('logout-link');
-            if (logoutLink) {
-                logoutLink.addEventListener('click', async function(e) {
-                    e.preventDefault();
-                    try {
-                        await signOut(auth);
-                        window.location.href = 'login.html';
-                    } catch (error) {
-                        console.error('Logout error:', error);
-                    }
-                });
-            }
-        }
-
-        document.addEventListener('DOMContentLoaded', function() {
-            initPostActivity();
         });
 
-        console.log('✅ post-activity.js initialized!');
+        // Event Listeners
+        saveBtn?.addEventListener('click', saveReflection);
+        skipBtn?.addEventListener('click', skipReflection);
+
+        // Initialize
+        onAuthStateChanged(auth, async (user) => {
+            if (!user) {
+                window.location.href = 'login.html';
+                return;
+            }
+            await loadActivity();
+        });
     </script>
+
 </body>
 </html>
