@@ -24,6 +24,7 @@ const completionStatus = document.getElementById('completionStatus');
 const completionMessage = document.getElementById('completionMessage');
 const completeActivityContainer = document.getElementById('completeActivityContainer');
 const registeredBadge = document.getElementById('registeredBadge');
+const phase4Section = document.getElementById('phase4Section');
 
 let currentActivityId = null;
 let currentActivityData = null;
@@ -176,18 +177,27 @@ async function handleRegistrationComplete(activityId) {
                     registeredBadge.style.display = 'block';
                 }
 
+                // Show Phase 4 section
+                if (phase4Section) {
+                    phase4Section.style.display = 'block';
+                }
+
                 alert('🎉 Congratulations! You have successfully registered for this activity!');
 
-                // Show Phase 4 section with complete button
-                const phase4Section = document.getElementById('phase4Section');
-                if (phase4Section) {
-                    phase4Section.scrollIntoView({ behavior: 'smooth' });
-                }
+                // Scroll to Phase 4
+                setTimeout(function() {
+                    if (phase4Section) {
+                        phase4Section.scrollIntoView({ behavior: 'smooth' });
+                    }
+                }, 500);
 
             } else {
                 alert('You are already registered for this activity.');
                 if (registeredBadge) {
                     registeredBadge.style.display = 'block';
+                }
+                if (phase4Section) {
+                    phase4Section.style.display = 'block';
                 }
             }
         }
@@ -439,6 +449,10 @@ async function initApp() {
             if (registeredBadge) {
                 registeredBadge.style.display = 'block';
             }
+            // Show Phase 4 section
+            if (phase4Section) {
+                phase4Section.style.display = 'block';
+            }
         }
         
         // Check if activity is already completed
@@ -452,6 +466,7 @@ async function initApp() {
 
 document.addEventListener('DOMContentLoaded', function() {
     console.log('🚀 activity-registration.js loaded!');
+    console.log('🔍 Looking for completeActivityBtn:', document.getElementById('completeActivityBtn'));
     setupEventListeners();
     initApp();
 });
