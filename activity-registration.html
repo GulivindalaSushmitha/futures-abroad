@@ -23,28 +23,10 @@
             flex-wrap: wrap;
             gap: 10px;
         }
-        .main-header .logo a {
-            font-size: 22px;
-            font-weight: 800;
-            color: #2D1B4E;
-            text-decoration: none;
-        }
+        .main-header .logo a { font-size: 22px; font-weight: 800; color: #2D1B4E; text-decoration: none; }
         .main-header .logo a span { color: #6C3CE1; }
-        .main-header nav {
-            display: flex;
-            gap: 15px;
-            align-items: center;
-            flex-wrap: wrap;
-        }
-        .main-header nav a {
-            text-decoration: none;
-            color: #555;
-            font-weight: 600;
-            padding: 8px 16px;
-            border-radius: 8px;
-            transition: all 0.3s;
-            font-size: 14px;
-        }
+        .main-header nav { display: flex; gap: 15px; align-items: center; flex-wrap: wrap; }
+        .main-header nav a { text-decoration: none; color: #555; font-weight: 600; padding: 8px 16px; border-radius: 8px; transition: all 0.3s; font-size: 14px; }
         .main-header nav a:hover { background: #f0e6ff; color: #6C3CE1; }
         .main-header nav #logout-link { color: #e74c3c; }
         .main-header nav #logout-link:hover { background: #fde8e8; }
@@ -96,15 +78,17 @@
             background: #22c55e;
             color: white;
             border: none;
-            padding: 16px 40px;
+            padding: 18px 50px;
             border-radius: 50px;
             font-weight: 700;
-            font-size: 18px;
+            font-size: 20px;
             cursor: pointer;
             transition: all 0.3s;
             font-family: Arial, sans-serif;
+            width: 100%;
+            max-width: 450px;
         }
-        .btn-success:hover { transform: translateY(-2px); box-shadow: 0 4px 15px rgba(34,197,94,0.4); }
+        .btn-success:hover { transform: translateY(-2px); box-shadow: 0 4px 20px rgba(34,197,94,0.4); }
         .btn-success:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
 
         .btn-secondary {
@@ -142,23 +126,24 @@
         .registered-badge {
             background: #22c55e;
             color: white;
-            padding: 8px 20px;
+            padding: 10px 24px;
             border-radius: 50px;
             font-weight: 700;
             display: inline-block;
             margin: 10px 0;
+            font-size: 18px;
         }
 
         .completion-status {
             background: #f0fdf4;
-            border: 2px solid #22c55e;
-            border-radius: 12px;
-            padding: 20px;
+            border: 3px solid #22c55e;
+            border-radius: 16px;
+            padding: 24px;
             margin: 20px 0;
             text-align: center;
         }
-        .completion-status .icon { font-size: 48px; }
-        .completion-status h3 { color: #16a34a; margin: 10px 0 5px; }
+        .completion-status .icon { font-size: 56px; }
+        .completion-status h3 { color: #16a34a; margin: 10px 0 5px; font-size: 24px; }
 
         .checklist-item {
             display: flex;
@@ -178,18 +163,26 @@
         .checklist-item .desc { color: #666; font-size: 0.9rem; margin: 2px 0; }
         .checklist-item .due { color: #888; font-size: 0.8rem; }
 
-        /* PHASE 4 - ALWAYS VISIBLE */
-        #phase4Section {
-            border-top: 3px solid #22c55e;
-            padding-top: 20px;
-            margin-top: 0;
+        /* PHASE 4 - ALWAYS VISIBLE - BIG AND CLEAR */
+        .phase4-section {
+            border: 3px solid #22c55e;
+            border-radius: 16px;
+            padding: 30px;
+            margin-top: 24px;
+            background: #fafffe;
             display: block !important;
+        }
+        .phase4-section .phase-badge {
+            background: #22c55e;
+        }
+        .phase4-section h3 {
+            font-size: 28px;
+            color: #2D1B4E;
+            margin-top: 10px;
         }
 
         .hidden { display: none !important; }
-        .flex { display: flex; gap: 15px; flex-wrap: wrap; align-items: center; }
         .text-center { text-align: center; }
-        .mt-20 { margin-top: 20px; }
 
         .quick-nav {
             margin-top: 30px;
@@ -209,11 +202,9 @@
             margin: 15px 0;
         }
 
-        .big-button {
-            font-size: 20px !important;
-            padding: 18px 50px !important;
-            width: 100%;
-            max-width: 400px;
+        .button-wrapper {
+            text-align: center;
+            margin: 20px 0;
         }
 
         @media (max-width: 768px) {
@@ -222,8 +213,9 @@
             .main-header nav a { font-size: 12px; padding: 6px 10px; }
             .quick-nav { flex-direction: column; align-items: stretch; }
             .quick-nav a { text-align: center; }
-            .flex { flex-direction: column; }
-            .big-button { max-width: 100%; }
+            .phase4-section { padding: 20px; }
+            .phase4-section h3 { font-size: 22px; }
+            .btn-success { font-size: 16px; padding: 14px 30px; max-width: 100%; }
         }
     </style>
 </head>
@@ -274,14 +266,14 @@
         </div>
 
         <!-- ============================================================
-        PHASE 4 - THIS IS WHAT YOU NEED - ALWAYS VISIBLE!
+        PHASE 4 - BIG, CLEAR, AND ALWAYS VISIBLE!
         ============================================================ -->
-        <div class="card" id="phase4Section" style="display: block !important;">
+        <div class="phase4-section" id="phase4Section">
 
             <span class="phase-badge phase-badge-green">Phase 4</span>
             <h3>🎯 After Completing This Activity</h3>
-            <p style="color: #666; margin-bottom: 15px;">
-                Once you've finished this activity, click the button below to mark it as complete.
+            <p style="color: #555; font-size: 18px; margin-bottom: 20px;">
+                Once you've finished this activity, click the green button below to mark it as complete.
                 Your experience will be saved to your portfolio.
             </p>
 
@@ -294,23 +286,21 @@
             <div id="completionStatus" class="completion-status hidden">
                 <div class="icon">✅</div>
                 <h3>Activity Completed!</h3>
-                <p id="completionMessage">Great job! Your progress has been saved.</p>
+                <p id="completionMessage" style="font-size: 18px;">Great job! Your progress has been saved.</p>
             </div>
 
-            <!-- ==========================================================
-            THE "MARK ACTIVITY AS COMPLETE" BUTTON - BIG AND CLEAR!
-            ========================================================== -->
-            <div id="completeActivityContainer" style="margin-top: 15px; text-align: center;">
-                <button id="completeActivityBtn" class="btn-success big-button">
+            <!-- THE BUTTON -->
+            <div id="completeActivityContainer" class="button-wrapper">
+                <button id="completeActivityBtn" class="btn-success">
                     ✅ Mark Activity as Complete
                 </button>
-                <p style="color: #888; font-size: 0.9rem; margin-top: 8px;">
+                <p style="color: #888; font-size: 0.9rem; margin-top: 10px;">
                     After completion, you'll be redirected to reflect on your experience.
                 </p>
             </div>
 
             <!-- Status messages -->
-            <div id="phase4-status" style="margin-top: 12px; font-size: 0.9rem; display: none;"></div>
+            <div id="phase4-status" style="margin-top: 12px; font-size: 1rem; display: none; text-align: center; padding: 15px; background: #e8f5e9; border-radius: 12px;"></div>
         </div>
 
         <!-- QUICK NAVIGATION -->
@@ -324,7 +314,7 @@
     </div>
 
     <!-- ============================================================
-    JAVASCRIPT
+    JAVASCRIPT - FINAL VERSION
     ============================================================ -->
     <script type="module">
         import {
@@ -334,7 +324,7 @@
             query, where, collection
         } from './js/firebase-config.js';
 
-        console.log('🚀 activity-registration.js loaded!');
+        console.log('🚀 FINAL VERSION - Phase 4 loading...');
 
         // DOM Elements
         const activityNameEl = document.getElementById('activity-name');
@@ -351,8 +341,17 @@
         const completionMessage = document.getElementById('completionMessage');
         const completeActivityContainer = document.getElementById('completeActivityContainer');
         const registeredBadge = document.getElementById('registeredBadge');
+        const phase4Section = document.getElementById('phase4Section');
 
+        // ===== CRITICAL: Check if button exists =====
         console.log('🔍 completeActivityBtn found:', completeActivityBtn);
+        console.log('🔍 phase4Section found:', phase4Section);
+
+        if (completeActivityBtn) {
+            console.log('✅ Button exists! Adding click listener...');
+        } else {
+            console.error('❌ Button NOT found! Check HTML.');
+        }
 
         function getActivityIdFromURL() {
             const params = new URLSearchParams(window.location.search);
@@ -517,9 +516,11 @@
             }
         }
 
-        // PHASE 4: Mark Activity as Complete
+        // ============================================================
+        // PHASE 4: MARK ACTIVITY AS COMPLETE
+        // ============================================================
         async function markActivityAsComplete() {
-            console.log('🔵 Complete Activity button clicked!');
+            console.log('🔵 COMPLETE ACTIVITY BUTTON CLICKED!');
 
             const user = auth.currentUser;
             if (!user) {
@@ -591,7 +592,7 @@
                 if (completionStatus) {
                     completionStatus.classList.remove('hidden');
                     if (completionMessage) {
-                        completionMessage.textContent = 'Activity "' + activityName + '" has been added to your portfolio!';
+                        completionMessage.textContent = 'Activity "' + activityName + '" has been added to your portfolio! 🎉';
                     }
                 }
 
@@ -601,8 +602,11 @@
 
                 if (phase4Status) {
                     phase4Status.style.display = 'block';
-                    phase4Status.style.color = '#22c55e';
-                    phase4Status.innerHTML = '✅ Activity marked as complete! Redirecting to Phase 4...';
+                    phase4Status.style.background = '#e8f5e9';
+                    phase4Status.style.padding = '15px';
+                    phase4Status.style.borderRadius = '12px';
+                    phase4Status.style.color = '#16a34a';
+                    phase4Status.innerHTML = '✅ Activity marked as complete! Redirecting to Phase 4 reflection page...';
                 }
 
                 setTimeout(function() {
@@ -642,7 +646,10 @@
                     }
                     if (phase4Status) {
                         phase4Status.style.display = 'block';
-                        phase4Status.style.color = '#22c55e';
+                        phase4Status.style.background = '#e8f5e9';
+                        phase4Status.style.padding = '15px';
+                        phase4Status.style.borderRadius = '12px';
+                        phase4Status.style.color = '#16a34a';
                         phase4Status.innerHTML = '✅ This activity is already in your portfolio. <a href="portfolio.html" style="color:#6C3CE1;font-weight:600;">View Portfolio</a>';
                     }
                     return true;
@@ -655,11 +662,12 @@
         }
 
         function setupEventListeners() {
+            // CRITICAL: Complete activity button
             if (completeActivityBtn) {
-                console.log('✅ completeActivityBtn found! Adding click listener.');
+                console.log('✅ Adding click listener to completeActivityBtn');
                 completeActivityBtn.addEventListener('click', markActivityAsComplete);
             } else {
-                console.error('❌ completeActivityBtn NOT found in DOM!');
+                console.error('❌ completeActivityBtn NOT found!');
             }
 
             if (markRegisteredBtn) {
@@ -734,13 +742,14 @@
         }
 
         document.addEventListener('DOMContentLoaded', function() {
-            console.log('🚀 Starting...');
+            console.log('🚀 FINAL VERSION STARTING...');
             console.log('🔍 Looking for completeActivityBtn:', document.getElementById('completeActivityBtn'));
+            console.log('🔍 Looking for phase4Section:', document.getElementById('phase4Section'));
             setupEventListeners();
             initApp();
         });
 
-        console.log('✅ Script loaded!');
+        console.log('✅ FINAL VERSION loaded!');
     </script>
 
 </body>
