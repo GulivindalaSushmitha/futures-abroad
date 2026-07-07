@@ -5,8 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Activity Registration | Futures Abroad</title>
     <link rel="stylesheet" href="css/style.css" />
-    <link rel="stylesheet" href="css/activity-registration.css" />
     <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background: #f5f7fa;
+        }
         .main-header {
             background: white;
             padding: 15px 30px;
@@ -44,6 +52,7 @@
             padding: 8px 16px;
             border-radius: 8px;
             transition: all 0.3s;
+            font-size: 14px;
         }
         .main-header nav a:hover {
             background: #f0e6ff;
@@ -63,26 +72,17 @@
             padding-right: 20px;
             padding-bottom: 40px;
         }
-        .btn-success {
-            background: #22c55e;
+        .phase-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
-            border: none;
-            padding: 14px 32px;
-            border-radius: 50px;
+            padding: 4px 16px;
+            border-radius: 20px;
+            font-size: 12px;
             font-weight: 700;
-            font-size: 16px;
-            cursor: pointer;
-            transition: all 0.3s;
-            font-family: 'Quicksand', sans-serif;
-        }
-        .btn-success:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(34, 197, 94, 0.4);
-        }
-        .btn-success:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-            transform: none;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 10px;
         }
         .btn-primary {
             background: #6C3CE1;
@@ -103,6 +103,27 @@
             box-shadow: 0 4px 15px rgba(108, 60, 225, 0.3);
         }
         .btn-primary:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+        .btn-success {
+            background: #22c55e;
+            color: white;
+            border: none;
+            padding: 14px 32px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: 'Quicksand', sans-serif;
+        }
+        .btn-success:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(34, 197, 94, 0.4);
+        }
+        .btn-success:disabled {
             opacity: 0.6;
             cursor: not-allowed;
             transform: none;
@@ -142,18 +163,6 @@
         .btn-enroll:hover {
             transform: translateY(-2px);
             box-shadow: 0 4px 15px rgba(0, 176, 155, 0.4);
-        }
-        .phase-badge {
-            display: inline-block;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 0.3rem 1rem;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: 600;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            margin-bottom: 10px;
         }
         .checklist-item {
             display: flex;
@@ -237,43 +246,50 @@
             min-width: 140px;
             text-align: center;
         }
-        .reflection-item {
-            margin: 15px 0;
+        .section-card {
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
         }
-        .reflection-item label {
-            font-weight: 600;
-            display: block;
-            margin-bottom: 5px;
+        .section-card h2 {
+            color: #2D1B4E;
+            margin-top: 0;
+            margin-bottom: 8px;
         }
-        .reflection-item textarea {
-            width: 100%;
-            padding: 12px;
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
-            font-family: inherit;
-            font-size: 1rem;
-            resize: vertical;
+        .section-card .subtitle {
+            color: #666;
+            margin-bottom: 16px;
         }
-        .reflection-item textarea:focus {
-            outline: none;
-            border-color: #6C3CE1;
+        .registered-badge {
+            background: #22c55e;
+            color: white;
+            padding: 8px 20px;
+            border-radius: 50px;
+            font-weight: 700;
+            display: inline-block;
+            margin: 10px 0;
+        }
+        .mt-20 {
+            margin-top: 20px;
+        }
+        .flex {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            align-items: center;
         }
         @media (max-width: 768px) {
             .main-header {
-                flex-wrap: wrap;
-                gap: 10px;
                 padding: 12px 16px;
             }
-            .main-header nav {
-                flex-wrap: wrap;
-                gap: 8px;
-            }
             .main-header nav a {
-                font-size: 14px;
-                padding: 6px 12px;
+                font-size: 12px;
+                padding: 6px 10px;
             }
             .registration-main {
-                padding-top: 140px;
+                padding-top: 120px;
                 padding-left: 16px;
                 padding-right: 16px;
             }
@@ -283,6 +299,9 @@
             }
             .quick-nav a {
                 text-align: center;
+            }
+            .flex {
+                flex-direction: column;
             }
         }
     </style>
@@ -301,50 +320,53 @@
     </header>
 
     <main class="registration-main">
-        <!-- Phase Badge -->
-        <span class="phase-badge">Phase 3</span>
-        <h1 style="margin-top: 0;">Activity Registration</h1>
-
-        <!-- Activity Summary -->
-        <section>
-            <h2 id="activity-name" style="color: #2D1B4E;">Loading...</h2>
-            <div style="display: flex; gap: 20px; flex-wrap: wrap; margin: 10px 0;">
-                <p><strong>Type:</strong> <span id="activity-type">--</span></p>
-                <p><strong>Duration:</strong> <span id="activity-duration">--</span></p>
-                <p><strong>Cost:</strong> <span id="activity-cost">--</span></p>
+        <!-- ============================================================
+        PHASE 3 - Activity Summary & Registration
+        ============================================================ -->
+        <div class="section-card">
+            <span class="phase-badge">Phase 3</span>
+            <h2 id="activity-name">Loading...</h2>
+            <div class="flex" style="margin: 10px 0;">
+                <span><strong>Type:</strong> <span id="activity-type">--</span></span>
+                <span><strong>Duration:</strong> <span id="activity-duration">--</span></span>
+                <span><strong>Cost:</strong> <span id="activity-cost">--</span></span>
             </div>
             <div style="background:#f8f4ff;padding:15px;border-radius:12px;margin:15px 0;">
-                <h3 style="margin-top: 0;">📋 Your Readiness Summary</h3>
-                <p id="readiness-text" style="margin-bottom: 0;">Loading your personalised registration guide...</p>
+                <strong>📋 Your Readiness Summary</strong>
+                <p id="readiness-text" style="margin-top: 5px; color: #555;">Loading...</p>
             </div>
-        </section>
+        </div>
 
         <!-- Checklist -->
-        <section>
+        <div class="section-card">
             <h3>✅ Registration Checklist</h3>
             <p><strong>Main Deadline:</strong> <span id="main-deadline">--</span></p>
             <div style="font-size: 0.9rem; color: #666; margin: 10px 0;">
                 💡 You'll receive notifications at 2 weeks, 1 week, 3 days, and 1 day before the deadline.
             </div>
             <ul id="checklist-container" style="list-style:none;padding:0;"></ul>
-        </section>
 
-        <!-- Phase 3: Register Button -->
-        <section style="margin:20px 0;padding:20px;background:#f8f9fa;border-radius:12px;text-align:center;">
-            <p style="color:#666;">Complete all steps in the checklist to enable registration.</p>
-            <button id="mark-registered-btn" class="btn-primary" disabled>Complete all steps to register</button>
-        </section>
+            <div style="margin-top:20px;padding-top:20px;border-top:1px solid #eee;text-align:center;">
+                <p style="color:#666;margin-bottom:12px;">Complete all steps in the checklist to enable registration.</p>
+                <button id="mark-registered-btn" class="btn-primary" disabled>Complete all steps to register</button>
+            </div>
+        </div>
 
         <!-- ============================================================
-        PHASE 4 - Complete Activity Section (THIS WAS MISSING!)
+        PHASE 4 - Complete Activity Section (VISIBLE BY DEFAULT)
         ============================================================ -->
-        <section class="phase4-section" id="phase4Section">
+        <div class="section-card phase4-section" id="phase4Section">
             <span class="phase-badge">Phase 4</span>
             <h3>🎯 After Completing This Activity</h3>
             <p style="color:#666;margin-bottom:15px;">
                 Once you've finished this activity, mark it as complete. You'll be prompted to reflect on your experience,
                 which will be saved to your portfolio and may be used for university essays.
             </p>
+            
+            <!-- Registered Badge -->
+            <div id="registeredBadge" style="display:none;">
+                <div class="registered-badge">✅ You are already registered for this activity!</div>
+            </div>
             
             <!-- Completion Status (hidden initially) -->
             <div id="completionStatus" class="completion-status hidden">
@@ -354,27 +376,29 @@
             </div>
 
             <!-- Complete Activity Button -->
-            <div id="completeActivityContainer" style="display:flex;gap:15px;flex-wrap:wrap;align-items:center;">
-                <button id="completeActivityBtn" class="btn-success">
-                    ✅ Mark Activity as Complete
-                </button>
-                <span style="color:#888;font-size:0.85rem;">
-                    After completion, you'll be prompted to reflect on your experience.
-                </span>
+            <div id="completeActivityContainer">
+                <div class="flex">
+                    <button id="completeActivityBtn" class="btn-success">
+                        ✅ Mark Activity as Complete
+                    </button>
+                    <span style="color:#888;font-size:0.85rem;">
+                        After completion, you can reflect on your experience.
+                    </span>
+                </div>
             </div>
             
-            <div id="phase4-status" style="margin-top:12px;font-size:0.9rem;color:#666;display:none;"></div>
-        </section>
+            <div id="phase4-status" style="margin-top:12px;font-size:0.9rem;display:none;"></div>
+        </div>
 
         <!-- ============================================================
         QUICK NAVIGATION - All 6 Phases
         ============================================================ -->
-        <section class="quick-nav">
+        <div class="quick-nav">
             <a href="dashboard.html" class="btn-secondary">📊 Dashboard</a>
             <a href="student-app.html" class="btn-secondary">🎯 Find More Activities</a>
             <a href="university-shortlist.html" class="btn-secondary">🏛️ University Shortlist</a>
             <a href="futures-abroad-enroll.html" class="btn-enroll">🚀 Enroll Now</a>
-        </section>
+        </div>
     </main>
 
     <script type="module" src="js/activity-registration.js"></script>
