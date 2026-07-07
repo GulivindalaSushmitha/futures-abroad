@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Activity Registration | Futures Abroad</title>
+    <link rel="stylesheet" href="css/activity-registration.css" />
     <style>
         * {
             box-sizing: border-box;
@@ -11,7 +12,7 @@
             padding: 0;
         }
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Quicksand', Arial, sans-serif;
             background: #f5f7fa;
             padding: 20px;
             padding-top: 80px;
@@ -64,9 +65,12 @@
         .main-header nav #logout-link {
             color: #e74c3c;
         }
+        .main-header nav #logout-link:hover {
+            background: #fde8e8;
+        }
 
         .container {
-            max-width: 800px;
+            max-width: 850px;
             margin: 0 auto;
         }
 
@@ -74,7 +78,7 @@
         .card {
             background: white;
             border-radius: 16px;
-            padding: 24px;
+            padding: 28px;
             margin-bottom: 24px;
             box-shadow: 0 2px 10px rgba(0,0,0,0.05);
         }
@@ -82,11 +86,13 @@
             color: #2D1B4E;
             margin-top: 0;
             margin-bottom: 8px;
+            font-size: 1.8rem;
         }
         .card h3 {
             color: #2D1B4E;
             margin-top: 0;
             margin-bottom: 12px;
+            font-size: 1.3rem;
         }
 
         .phase-badge {
@@ -100,6 +106,9 @@
             letter-spacing: 1px;
             text-transform: uppercase;
             margin-bottom: 10px;
+        }
+        .phase-badge-green {
+            background: #22c55e;
         }
 
         /* Checklist */
@@ -155,7 +164,7 @@
             font-size: 16px;
             cursor: pointer;
             transition: all 0.3s;
-            font-family: Arial, sans-serif;
+            font-family: 'Quicksand', Arial, sans-serif;
             text-decoration: none;
             display: inline-block;
         }
@@ -179,7 +188,7 @@
             font-size: 16px;
             cursor: pointer;
             transition: all 0.3s;
-            font-family: Arial, sans-serif;
+            font-family: 'Quicksand', Arial, sans-serif;
         }
         .btn-success:hover {
             transform: translateY(-2px);
@@ -201,7 +210,7 @@
             font-size: 16px;
             cursor: pointer;
             transition: all 0.3s;
-            font-family: Arial, sans-serif;
+            font-family: 'Quicksand', Arial, sans-serif;
             text-decoration: none;
             display: inline-block;
         }
@@ -236,12 +245,12 @@
             margin: 10px 0 5px;
         }
 
-        /* Phase 4 Section - Make sure this is VISIBLE! */
+        /* Phase 4 Section - ALWAYS VISIBLE */
         #phase4Section {
-            border-top: 3px solid #6C3CE1;
+            border-top: 3px solid #22c55e;
             padding-top: 24px;
             margin-top: 0;
-            display: block !important; /* FORCE VISIBLE */
+            display: block !important;
         }
 
         .hidden {
@@ -279,6 +288,32 @@
             text-align: center;
         }
 
+        .btn-enroll {
+            background: linear-gradient(135deg, #00b09b, #96c93d);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: 'Quicksand', Arial, sans-serif;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .btn-enroll:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0, 176, 155, 0.4);
+        }
+
+        .readiness-box {
+            background: #f8f4ff;
+            padding: 15px;
+            border-radius: 12px;
+            margin: 15px 0;
+        }
+
         @media (max-width: 768px) {
             body {
                 padding-top: 120px;
@@ -301,6 +336,12 @@
             }
             .flex {
                 flex-direction: column;
+            }
+            .card {
+                padding: 16px;
+            }
+            .card h2 {
+                font-size: 1.4rem;
             }
         }
     </style>
@@ -333,7 +374,7 @@
                 <span><strong>Duration:</strong> <span id="activity-duration">--</span></span>
                 <span><strong>Cost:</strong> <span id="activity-cost">--</span></span>
             </div>
-            <div style="background: #f8f4ff; padding: 15px; border-radius: 12px;">
+            <div class="readiness-box">
                 <strong>📋 Your Readiness Summary</strong>
                 <p id="readiness-text" style="margin-top: 5px; color: #555;">Loading...</p>
             </div>
@@ -357,11 +398,11 @@
         </div>
 
         <!-- ============================================================
-        PHASE 4 - COMPLETE ACTIVITY - THIS IS THE FIX!
+        PHASE 4 - COMPLETE ACTIVITY - ALWAYS VISIBLE
         ============================================================ -->
-        <div class="card" id="phase4Section" style="display: block !important; border-top: 3px solid #6C3CE1;">
+        <div class="card" id="phase4Section">
 
-            <span class="phase-badge" style="background: #22c55e;">Phase 4</span>
+            <span class="phase-badge phase-badge-green">Phase 4</span>
             <h3 style="color: #2D1B4E;">🎯 After Completing This Activity</h3>
             <p style="color: #666; margin-bottom: 15px;">
                 Once you've finished this activity, mark it as complete. Your experience will be saved to your portfolio.
@@ -381,9 +422,8 @@
 
             <!-- ==========================================================
             THE "MARK ACTIVITY AS COMPLETE" BUTTON
-            THIS IS WHAT YOU WERE MISSING!
             ========================================================== -->
-            <div id="completeActivityContainer" style="margin-top: 15px;">
+            <div id="completeActivityContainer">
                 <div class="flex">
                     <button id="completeActivityBtn" class="btn-success" style="font-size: 18px; padding: 16px 40px;">
                         ✅ Mark Activity as Complete
@@ -405,13 +445,13 @@
             <a href="dashboard.html" class="btn-secondary">📊 Dashboard</a>
             <a href="student-app.html" class="btn-secondary">🎯 Find More Activities</a>
             <a href="university-shortlist.html" class="btn-secondary">🏛️ University Shortlist</a>
-            <a href="futures-abroad-enroll.html" style="background: linear-gradient(135deg, #00b09b, #96c93d); color: white; border: none; padding: 12px 30px; border-radius: 50px; font-weight: 700; font-size: 16px; cursor: pointer; text-decoration: none; display: inline-block;">🚀 Enroll Now</a>
+            <a href="futures-abroad-enroll.html" class="btn-enroll">🚀 Enroll Now</a>
         </div>
 
     </div>
 
     <!-- ============================================================
-    JAVASCRIPT - Inline for Simplicity
+    JAVASCRIPT
     ============================================================ -->
     <script type="module">
         // ============================================================
@@ -445,6 +485,7 @@
 
         // Log to confirm elements exist
         console.log('🔍 completeActivityBtn found:', completeActivityBtn);
+        console.log('🔍 phase4Section found:', phase4Section);
 
         // ===== Helper Functions =====
         function getActivityIdFromURL() {
@@ -597,11 +638,6 @@
                             registeredBadge.style.display = 'block';
                         }
 
-                        // Show Phase 4 section
-                        if (phase4Section) {
-                            phase4Section.style.display = 'block !important';
-                        }
-
                         alert('🎉 Congratulations! You have successfully registered for this activity!');
 
                         // Scroll to Phase 4
@@ -615,9 +651,6 @@
                         alert('You are already registered for this activity.');
                         if (registeredBadge) {
                             registeredBadge.style.display = 'block';
-                        }
-                        if (phase4Section) {
-                            phase4Section.style.display = 'block !important';
                         }
                     }
                 }
@@ -850,9 +883,6 @@
                     if (registeredBadge) {
                         registeredBadge.style.display = 'block';
                     }
-                    if (phase4Section) {
-                        phase4Section.style.display = 'block !important';
-                    }
                 }
 
                 // Check if activity is already completed
@@ -864,6 +894,7 @@
         document.addEventListener('DOMContentLoaded', function() {
             console.log('🚀 Starting...');
             console.log('🔍 Looking for completeActivityBtn:', document.getElementById('completeActivityBtn'));
+            console.log('🔍 Looking for phase4Section:', document.getElementById('phase4Section'));
             setupEventListeners();
             initApp();
         });
