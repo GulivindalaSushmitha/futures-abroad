@@ -202,6 +202,36 @@
             color: #888;
             font-size: 0.8rem;
         }
+        .phase-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 0.3rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+        .completion-status {
+            background: #f0fdf4;
+            border: 2px solid #22c55e;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        .completion-status .icon {
+            font-size: 48px;
+        }
+        .completion-status h3 {
+            color: #16a34a;
+            margin: 10px 0 5px;
+        }
+        .hidden {
+            display: none !important;
+        }
         @media (max-width: 768px) {
             .main-header {
                 flex-wrap: wrap;
@@ -245,22 +275,31 @@
     </header>
 
     <main class="registration-main">
+        <!-- Phase Badge -->
+        <span class="phase-badge">Phase 3</span>
+        <h1 style="margin-top: 0;">Activity Registration</h1>
+
         <!-- Activity Summary -->
         <section>
-            <h1>You're registering for:</h1>
-            <h2 id="activity-name">Loading...</h2>
-            <p>Type: <span id="activity-type">--</span></p>
-            <p>Duration: <span id="activity-duration">--</span></p>
+            <h2 id="activity-name" style="color: #2D1B4E;">Loading...</h2>
+            <div style="display: flex; gap: 20px; flex-wrap: wrap; margin: 10px 0;">
+                <p><strong>Type:</strong> <span id="activity-type">--</span></p>
+                <p><strong>Duration:</strong> <span id="activity-duration">--</span></p>
+                <p><strong>Cost:</strong> <span id="activity-cost">--</span></p>
+            </div>
             <div style="background:#f8f4ff;padding:15px;border-radius:12px;margin:15px 0;">
-                <h3>📋 Your Readiness Summary</h3>
-                <p id="readiness-text">Loading your personalised registration guide...</p>
+                <h3 style="margin-top: 0;">📋 Your Readiness Summary</h3>
+                <p id="readiness-text" style="margin-bottom: 0;">Loading your personalised registration guide...</p>
             </div>
         </section>
 
         <!-- Checklist -->
         <section>
             <h3>✅ Registration Checklist</h3>
-            <p>Main Deadline: <span id="main-deadline">--</span></p>
+            <p><strong>Main Deadline:</strong> <span id="main-deadline">--</span></p>
+            <div style="font-size: 0.9rem; color: #666; margin: 10px 0;">
+                💡 You'll receive notifications at 2 weeks, 1 week, 3 days, and 1 day before the deadline.
+            </div>
             <ul id="checklist-container" style="list-style:none;padding:0;"></ul>
         </section>
 
@@ -272,15 +311,31 @@
         </section>
 
         <!-- ============================================================
-        PHASE 4 - Complete Activity Section
+        PHASE 4 - Complete Activity Section (UPDATED)
         ============================================================ -->
-        <section class="phase4-section">
-            <h3>🎯 After Completing This Activity</h3>
+        <section class="phase4-section" id="phase4Section">
+            <span class="phase-badge">Phase 4</span>
+            <h3>🎯 Post-Activity Guidance</h3>
             <p style="color:#666;margin-bottom:15px;">
                 Once you've finished this activity, mark it as complete. You'll be prompted to reflect on your experience,
                 which will be saved to your portfolio and may be used for university essays.
             </p>
-            <div style="display:flex;gap:15px;flex-wrap:wrap;align-items:center;">
+            
+            <!-- Completion Status (hidden initially) -->
+            <div id="completionStatus" class="completion-status hidden">
+                <div class="icon">✅</div>
+                <h3>Activity Completed!</h3>
+                <p id="completionMessage">Great job! Your progress has been saved.</p>
+                <div style="margin-top: 15px; display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
+                    <button id="goToReflectionBtn" class="btn-primary">
+                        📝 Reflect on Experience
+                    </button>
+                    <a href="portfolio.html" class="btn-secondary">View Portfolio</a>
+                </div>
+            </div>
+
+            <!-- Complete Activity Button -->
+            <div id="completeActivityContainer" style="display:flex;gap:15px;flex-wrap:wrap;align-items:center;">
                 <button id="completeActivityBtn" class="btn-success">
                     ✅ Mark Activity as Complete
                 </button>
@@ -288,7 +343,38 @@
                     After completion, you'll be prompted to reflect on your experience.
                 </span>
             </div>
+            
             <div id="phase4-status" style="margin-top:12px;font-size:0.9rem;color:#666;display:none;"></div>
+            
+            <!-- Reflection Section (hidden initially) -->
+            <div id="reflectionSection" class="hidden" style="margin-top: 30px; padding-top: 20px; border-top: 2px solid #f0e6ff;">
+                <h3>📝 Reflection Questions</h3>
+                <p style="color: #666;">Answer these questions to capture your experience for your portfolio.</p>
+                
+                <div class="reflection-item" style="margin: 15px 0;">
+                    <label style="font-weight: 600; display: block; margin-bottom: 5px;">
+                        1. What was the most significant thing you learned or experienced?
+                    </label>
+                    <textarea id="reflection1" rows="3" style="width:100%; padding:12px; border:2px solid #e0e0e0; border-radius:8px; font-family:inherit; font-size:1rem; resize:vertical;"></textarea>
+                </div>
+                <div class="reflection-item" style="margin: 15px 0;">
+                    <label style="font-weight: 600; display: block; margin-bottom: 5px;">
+                        2. How did this activity connect to your interests and future goals?
+                    </label>
+                    <textarea id="reflection2" rows="3" style="width:100%; padding:12px; border:2px solid #e0e0e0; border-radius:8px; font-family:inherit; font-size:1rem; resize:vertical;"></textarea>
+                </div>
+                <div class="reflection-item" style="margin: 15px 0;">
+                    <label style="font-weight: 600; display: block; margin-bottom: 5px;">
+                        3. What skills did you develop, and how might you apply them in the future?
+                    </label>
+                    <textarea id="reflection3" rows="3" style="width:100%; padding:12px; border:2px solid #e0e0e0; border-radius:8px; font-family:inherit; font-size:1rem; resize:vertical;"></textarea>
+                </div>
+                
+                <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-top: 10px;">
+                    <button id="saveReflectionBtn" class="btn-primary">💾 Save Reflection</button>
+                    <button id="skipReflectionBtn" class="btn-secondary">Skip for Now</button>
+                </div>
+            </div>
         </section>
 
         <!-- ============================================================
