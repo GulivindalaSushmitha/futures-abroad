@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Post-Activity Reflection - Futures Abroad</title>
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/post-activity.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+</head>
+<body>
+    <header class="app-header">
+        <div class="container">
+            <div class="logo">
+                <a href="index.html">Futures Abroad</a>
+            </div>
+            <nav class="app-nav">
+                <a href="dashboard.html">Dashboard</a>
+                <a href="portfolio.html">Portfolio</a>
+                <a href="activities.html">Activities</a>
+                <button id="logoutBtn" class="btn-logout">Logout</button>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <!-- Phase 4: Post-Activity Guidance -->
+        <section class="phase-section" id="phase4">
+            <div class="phase-header">
+                <span class="phase-badge">Phase 4</span>
+                <h1>Reflect & Grow</h1>
+                <p class="phase-subtitle">Great job completing your activity! Let's capture what you learned.</p>
+            </div>
+
+            <!-- Activity Completion Summary -->
+            <div class="completion-summary" id="completionSummary">
+                <div class="summary-card">
+                    <div class="completion-icon">✅</div>
+                    <h2>Activity Completed!</h2>
+                    <p id="activityNameDisplay">Loading activity...</p>
+                    <p class="completion-date" id="completionDate">Completed: Today</p>
+                </div>
+            </div>
+
+            <!-- Reflection Prompts -->
+            <div class="reflection-section">
+                <h2>Reflection Questions</h2>
+                <p class="reflection-instructions">
+                    Answer these questions to capture your experience. Your responses will help build your portfolio and future essays.
+                </p>
+
+                <form id="reflectionForm">
+                    <div class="reflection-item">
+                        <label for="reflection1">
+                            <span class="question-number">1.</span>
+                            What was the most significant thing you learned or experienced during this activity?
+                        </label>
+                        <textarea id="reflection1" rows="4" placeholder="Share your key takeaways..."></textarea>
+                    </div>
+
+                    <div class="reflection-item">
+                        <label for="reflection2">
+                            <span class="question-number">2.</span>
+                            How did this activity connect to your interests and future goals?
+                        </label>
+                        <textarea id="reflection2" rows="4" placeholder="Describe the connection to your journey..."></textarea>
+                    </div>
+
+                    <div class="reflection-item">
+                        <label for="reflection3">
+                            <span class="question-number">3.</span>
+                            What skills did you develop, and how might you apply them in the future?
+                        </label>
+                        <textarea id="reflection3" rows="4" placeholder="List skills gained and future applications..."></textarea>
+                    </div>
+
+                    <div class="reflection-actions">
+                        <button type="button" id="saveReflectionBtn" class="btn-primary">Save Reflection</button>
+                        <button type="button" id="skipReflectionBtn" class="btn-secondary">Skip for Now</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Profile Strength & Next Steps -->
+            <div class="next-steps-section">
+                <h2>Your Profile Progress</h2>
+                <div class="profile-strength">
+                    <div class="strength-bar">
+                        <div class="strength-fill" id="strengthFill" style="width: 45%"></div>
+                    </div>
+                    <div class="strength-info">
+                        <span id="strengthPercentage">45%</span>
+                        <span class="strength-label">Profile Strength</span>
+                    </div>
+                </div>
+
+                <div class="gap-analysis" id="gapAnalysis">
+                    <h3>Growth Opportunities</h3>
+                    <ul id="gapList">
+                        <li>You have strong academics but no leadership experience yet</li>
+                        <li>Consider adding a volunteering activity to diversify your profile</li>
+                    </ul>
+                </div>
+
+                <div class="next-steps">
+                    <h3>What's Next?</h3>
+                    <div class="next-actions">
+                        <a href="activities.html" class="btn-primary">
+                            Find More Activities
+                        </a>
+                        <a href="portfolio.html" class="btn-secondary">
+                            View Portfolio
+                        </a>
+                        <a href="dashboard.html" class="btn-secondary">
+                            Dashboard
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Grade-Based CTA (Appears based on user grade) -->
+            <div class="milestone-cta" id="milestoneCta" style="display: none;">
+                <div class="cta-card">
+                    <h3>🎯 You're Building a Strong Profile!</h3>
+                    <p id="milestoneMessage">
+                        Start thinking about your university shortlist and how to stand out.
+                    </p>
+                    <a href="university-shortlist.html" class="btn-primary">
+                        Explore University Pathways
+                    </a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script src="js/firebase-config.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/post-activity.js"></script>
+</body>
+</html>
