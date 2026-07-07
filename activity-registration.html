@@ -4,20 +4,20 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Activity Registration | Futures Abroad</title>
-    <link rel="stylesheet" href="css/style.css" />
     <style>
-        /* ===== RESET & BASE ===== */
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
         }
         body {
-            font-family: 'Quicksand', sans-serif;
+            font-family: Arial, sans-serif;
             background: #f5f7fa;
+            padding: 20px;
+            padding-top: 80px;
         }
-        
-        /* ===== HEADER ===== */
+
+        /* Header */
         .main-header {
             background: white;
             padding: 15px 30px;
@@ -64,21 +64,31 @@
         .main-header nav #logout-link {
             color: #e74c3c;
         }
-        .main-header nav #logout-link:hover {
-            background: #fde8e8;
-        }
-        
-        /* ===== MAIN CONTENT ===== */
-        .registration-main {
-            padding-top: 100px;
-            max-width: 900px;
+
+        .container {
+            max-width: 800px;
             margin: 0 auto;
-            padding-left: 20px;
-            padding-right: 20px;
-            padding-bottom: 40px;
         }
-        
-        /* ===== BADGES ===== */
+
+        /* Cards */
+        .card {
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        .card h2 {
+            color: #2D1B4E;
+            margin-top: 0;
+            margin-bottom: 8px;
+        }
+        .card h3 {
+            color: #2D1B4E;
+            margin-top: 0;
+            margin-bottom: 12px;
+        }
+
         .phase-badge {
             display: inline-block;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -91,121 +101,8 @@
             text-transform: uppercase;
             margin-bottom: 10px;
         }
-        .registered-badge {
-            background: #22c55e;
-            color: white;
-            padding: 8px 20px;
-            border-radius: 50px;
-            font-weight: 700;
-            display: inline-block;
-            margin: 10px 0;
-        }
-        
-        /* ===== BUTTONS ===== */
-        .btn-primary {
-            background: #6C3CE1;
-            color: white;
-            border: none;
-            padding: 12px 30px;
-            border-radius: 50px;
-            font-weight: 700;
-            font-size: 16px;
-            cursor: pointer;
-            transition: all 0.3s;
-            font-family: 'Quicksand', sans-serif;
-            text-decoration: none;
-            display: inline-block;
-        }
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(108, 60, 225, 0.3);
-        }
-        .btn-primary:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-            transform: none;
-        }
-        
-        .btn-success {
-            background: #22c55e;
-            color: white;
-            border: none;
-            padding: 14px 32px;
-            border-radius: 50px;
-            font-weight: 700;
-            font-size: 16px;
-            cursor: pointer;
-            transition: all 0.3s;
-            font-family: 'Quicksand', sans-serif;
-        }
-        .btn-success:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(34, 197, 94, 0.4);
-        }
-        .btn-success:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-            transform: none;
-        }
-        
-        .btn-secondary {
-            background: transparent;
-            color: #6C3CE1;
-            border: 2px solid #6C3CE1;
-            padding: 12px 30px;
-            border-radius: 50px;
-            font-weight: 700;
-            font-size: 16px;
-            cursor: pointer;
-            transition: all 0.3s;
-            font-family: 'Quicksand', sans-serif;
-            text-decoration: none;
-            display: inline-block;
-        }
-        .btn-secondary:hover {
-            background: #6C3CE1;
-            color: white;
-        }
-        
-        .btn-enroll {
-            background: linear-gradient(135deg, #00b09b, #96c93d);
-            color: white;
-            border: none;
-            padding: 12px 30px;
-            border-radius: 50px;
-            font-weight: 700;
-            font-size: 16px;
-            cursor: pointer;
-            transition: all 0.3s;
-            font-family: 'Quicksand', sans-serif;
-            text-decoration: none;
-            display: inline-block;
-        }
-        .btn-enroll:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(0, 176, 155, 0.4);
-        }
-        
-        /* ===== CARDS ===== */
-        .section-card {
-            background: white;
-            border-radius: 16px;
-            padding: 24px;
-            margin-bottom: 24px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-        }
-        .section-card h2 {
-            color: #2D1B4E;
-            margin-top: 0;
-            margin-bottom: 8px;
-        }
-        .section-card h3 {
-            color: #2D1B4E;
-            margin-top: 0;
-            margin-bottom: 12px;
-        }
-        
-        /* ===== CHECKLIST ===== */
+
+        /* Checklist */
         .checklist-item {
             display: flex;
             align-items: flex-start;
@@ -246,13 +143,83 @@
             color: #888;
             font-size: 0.8rem;
         }
-        
-        /* ===== PHASE 4 SECTION ===== */
-        .phase4-section {
-            border-top: 2px dashed #e0e0e0;
-            padding-top: 24px;
-            margin-top: 0;
+
+        /* Buttons */
+        .btn-primary {
+            background: #6C3CE1;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: Arial, sans-serif;
+            text-decoration: none;
+            display: inline-block;
         }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(108, 60, 225, 0.3);
+        }
+        .btn-primary:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-success {
+            background: #22c55e;
+            color: white;
+            border: none;
+            padding: 14px 32px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: Arial, sans-serif;
+        }
+        .btn-success:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(34, 197, 94, 0.4);
+        }
+        .btn-success:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: #6C3CE1;
+            border: 2px solid #6C3CE1;
+            padding: 12px 30px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: Arial, sans-serif;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .btn-secondary:hover {
+            background: #6C3CE1;
+            color: white;
+        }
+
+        .registered-badge {
+            background: #22c55e;
+            color: white;
+            padding: 8px 20px;
+            border-radius: 50px;
+            font-weight: 700;
+            display: inline-block;
+            margin: 10px 0;
+        }
+
         .completion-status {
             background: #f0fdf4;
             border: 2px solid #22c55e;
@@ -268,11 +235,35 @@
             color: #16a34a;
             margin: 10px 0 5px;
         }
+
+        /* Phase 4 Section - Make sure this is VISIBLE! */
+        #phase4Section {
+            border-top: 3px solid #6C3CE1;
+            padding-top: 24px;
+            margin-top: 0;
+            display: block !important; /* FORCE VISIBLE */
+        }
+
         .hidden {
             display: none !important;
         }
-        
-        /* ===== QUICK NAV ===== */
+
+        .flex {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        .text-center {
+            text-align: center;
+        }
+        .mt-10 {
+            margin-top: 10px;
+        }
+        .mt-20 {
+            margin-top: 20px;
+        }
+
         .quick-nav {
             margin-top: 30px;
             padding-top: 20px;
@@ -287,39 +278,19 @@
             min-width: 140px;
             text-align: center;
         }
-        
-        /* ===== UTILITY ===== */
-        .flex {
-            display: flex;
-            gap: 15px;
-            flex-wrap: wrap;
-            align-items: center;
-        }
-        .text-center {
-            text-align: center;
-        }
-        .text-muted {
-            color: #888;
-            font-size: 0.9rem;
-        }
-        .mt-10 { margin-top: 10px; }
-        .mt-20 { margin-top: 20px; }
-        .mb-10 { margin-bottom: 10px; }
-        .mb-20 { margin-bottom: 20px; }
-        
-        /* ===== RESPONSIVE ===== */
+
         @media (max-width: 768px) {
+            body {
+                padding-top: 120px;
+                padding-left: 10px;
+                padding-right: 10px;
+            }
             .main-header {
                 padding: 12px 16px;
             }
             .main-header nav a {
                 font-size: 12px;
                 padding: 6px 10px;
-            }
-            .registration-main {
-                padding-top: 120px;
-                padding-left: 16px;
-                padding-right: 16px;
             }
             .quick-nav {
                 flex-direction: column;
@@ -335,6 +306,7 @@
     </style>
 </head>
 <body>
+
     <!-- ===== HEADER ===== -->
     <header class="main-header">
         <div class="logo">
@@ -348,20 +320,20 @@
         </nav>
     </header>
 
-    <main class="registration-main">
-        
+    <div class="container">
+
         <!-- ============================================================
-        PHASE 3 - Activity Summary
+        PHASE 3 - Activity Details
         ============================================================ -->
-        <div class="section-card">
+        <div class="card">
             <span class="phase-badge">Phase 3</span>
             <h2 id="activity-name">Loading...</h2>
-            <div class="flex" style="margin: 10px 0;">
+            <div style="display: flex; gap: 20px; flex-wrap: wrap; margin: 10px 0;">
                 <span><strong>Type:</strong> <span id="activity-type">--</span></span>
                 <span><strong>Duration:</strong> <span id="activity-duration">--</span></span>
                 <span><strong>Cost:</strong> <span id="activity-cost">--</span></span>
             </div>
-            <div style="background:#f8f4ff;padding:15px;border-radius:12px;margin:15px 0;">
+            <div style="background: #f8f4ff; padding: 15px; border-radius: 12px;">
                 <strong>📋 Your Readiness Summary</strong>
                 <p id="readiness-text" style="margin-top: 5px; color: #555;">Loading...</p>
             </div>
@@ -370,38 +342,37 @@
         <!-- ============================================================
         PHASE 3 - Registration Checklist
         ============================================================ -->
-        <div class="section-card">
+        <div class="card">
             <h3>✅ Registration Checklist</h3>
             <p><strong>Main Deadline:</strong> <span id="main-deadline">--</span></p>
             <div style="font-size: 0.9rem; color: #666; margin: 10px 0;">
                 💡 You'll receive notifications at 2 weeks, 1 week, 3 days, and 1 day before the deadline.
             </div>
-            <ul id="checklist-container" style="list-style:none;padding:0;"></ul>
+            <ul id="checklist-container" style="list-style: none; padding: 0;"></ul>
 
-            <div style="margin-top:20px;padding-top:20px;border-top:1px solid #eee;text-align:center;">
-                <p style="color:#666;margin-bottom:12px;">Complete all steps in the checklist to enable registration.</p>
+            <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid #eee; text-align: center;">
+                <p style="color: #666; margin-bottom: 12px;">Complete all steps in the checklist to enable registration.</p>
                 <button id="mark-registered-btn" class="btn-primary" disabled>Complete all steps to register</button>
             </div>
         </div>
 
         <!-- ============================================================
-        PHASE 4 - COMPLETE ACTIVITY SECTION
-        THIS IS WHAT YOU WERE MISSING!
+        PHASE 4 - COMPLETE ACTIVITY - THIS IS THE FIX!
         ============================================================ -->
-        <div class="section-card phase4-section" id="phase4Section">
-            <span class="phase-badge">Phase 4</span>
-            <h3>🎯 After Completing This Activity</h3>
-            <p style="color:#666;margin-bottom:15px;">
-                Once you've finished this activity, mark it as complete. You'll be prompted to reflect on your experience,
-                which will be saved to your portfolio and may be used for university essays.
+        <div class="card" id="phase4Section" style="display: block !important; border-top: 3px solid #6C3CE1;">
+
+            <span class="phase-badge" style="background: #22c55e;">Phase 4</span>
+            <h3 style="color: #2D1B4E;">🎯 After Completing This Activity</h3>
+            <p style="color: #666; margin-bottom: 15px;">
+                Once you've finished this activity, mark it as complete. Your experience will be saved to your portfolio.
             </p>
-            
-            <!-- Registered Badge (shows when registered) -->
-            <div id="registeredBadge" style="display:none;">
+
+            <!-- Registered Badge -->
+            <div id="registeredBadge" style="display: none;">
                 <div class="registered-badge">✅ You are already registered for this activity!</div>
             </div>
-            
-            <!-- Completion Status (hidden initially) -->
+
+            <!-- Completion Status -->
             <div id="completionStatus" class="completion-status hidden">
                 <div class="icon">✅</div>
                 <h3>Activity Completed!</h3>
@@ -409,44 +380,44 @@
             </div>
 
             <!-- ==========================================================
-            THE "MARK ACTIVITY AS COMPLETE" BUTTON - THIS IS THE FIX!
+            THE "MARK ACTIVITY AS COMPLETE" BUTTON
+            THIS IS WHAT YOU WERE MISSING!
             ========================================================== -->
-            <div id="completeActivityContainer">
+            <div id="completeActivityContainer" style="margin-top: 15px;">
                 <div class="flex">
-                    <button id="completeActivityBtn" class="btn-success">
+                    <button id="completeActivityBtn" class="btn-success" style="font-size: 18px; padding: 16px 40px;">
                         ✅ Mark Activity as Complete
                     </button>
-                    <span style="color:#888;font-size:0.85rem;">
+                    <span style="color: #888; font-size: 0.9rem;">
                         After completion, you can reflect on your experience.
                     </span>
                 </div>
             </div>
-            
+
             <!-- Status messages -->
-            <div id="phase4-status" style="margin-top:12px;font-size:0.9rem;display:none;"></div>
+            <div id="phase4-status" style="margin-top: 12px; font-size: 0.9rem; display: none;"></div>
         </div>
 
         <!-- ============================================================
-        QUICK NAVIGATION - All 6 Phases
+        QUICK NAVIGATION
         ============================================================ -->
         <div class="quick-nav">
             <a href="dashboard.html" class="btn-secondary">📊 Dashboard</a>
             <a href="student-app.html" class="btn-secondary">🎯 Find More Activities</a>
             <a href="university-shortlist.html" class="btn-secondary">🏛️ University Shortlist</a>
-            <a href="futures-abroad-enroll.html" class="btn-enroll">🚀 Enroll Now</a>
+            <a href="futures-abroad-enroll.html" style="background: linear-gradient(135deg, #00b09b, #96c93d); color: white; border: none; padding: 12px 30px; border-radius: 50px; font-weight: 700; font-size: 16px; cursor: pointer; text-decoration: none; display: inline-block;">🚀 Enroll Now</a>
         </div>
-        
-    </main>
+
+    </div>
 
     <!-- ============================================================
-    JAVASCRIPT - Phase 3 + 4 Logic
+    JAVASCRIPT - Inline for Simplicity
     ============================================================ -->
     <script type="module">
         // ============================================================
-        // activity-registration.js (Inline Version)
+        // Firebase Imports
         // ============================================================
-        
-        import { 
+        import {
             auth, db, COLLECTIONS,
             doc, getDoc, getDocs, updateDoc, arrayUnion,
             onAuthStateChanged, signOut, addDoc, serverTimestamp,
@@ -472,7 +443,8 @@
         const registeredBadge = document.getElementById('registeredBadge');
         const phase4Section = document.getElementById('phase4Section');
 
-        let currentActivityId = null;
+        // Log to confirm elements exist
+        console.log('🔍 completeActivityBtn found:', completeActivityBtn);
 
         // ===== Helper Functions =====
         function getActivityIdFromURL() {
@@ -627,7 +599,7 @@
 
                         // Show Phase 4 section
                         if (phase4Section) {
-                            phase4Section.style.display = 'block';
+                            phase4Section.style.display = 'block !important';
                         }
 
                         alert('🎉 Congratulations! You have successfully registered for this activity!');
@@ -645,7 +617,7 @@
                             registeredBadge.style.display = 'block';
                         }
                         if (phase4Section) {
-                            phase4Section.style.display = 'block';
+                            phase4Section.style.display = 'block !important';
                         }
                     }
                 }
@@ -658,7 +630,7 @@
         // ===== PHASE 4: Mark Activity as Complete =====
         async function markActivityAsComplete() {
             console.log('🔵 Complete Activity button clicked!');
-            
+
             const user = auth.currentUser;
             if (!user) {
                 alert('Please log in first.');
@@ -688,12 +660,12 @@
             try {
                 // Check if already in portfolio
                 const portfolioRef = collection(db, COLLECTIONS.studentPortfolio);
-                const q = query(portfolioRef, 
-                    where("userId", "==", user.uid), 
+                const q = query(portfolioRef,
+                    where("userId", "==", user.uid),
                     where("activityId", "==", activityId)
                 );
                 const existing = await getDocs(q);
-                
+
                 if (!existing.empty) {
                     alert('This activity is already in your portfolio!');
                     if (completeActivityBtn) {
@@ -750,7 +722,7 @@
                     phase4Status.innerHTML = '✅ Activity marked as complete! Redirecting to Phase 4...';
                 }
 
-                // Redirect to Phase 4 page (post-activity.html)
+                // Redirect to Phase 4 page
                 setTimeout(function() {
                     window.location.href = 'post-activity.html?id=' + activityId;
                 }, 1500);
@@ -770,12 +742,12 @@
         async function checkIfActivityCompleted(userId, activityId) {
             try {
                 const portfolioRef = collection(db, COLLECTIONS.studentPortfolio);
-                const q = query(portfolioRef, 
-                    where("userId", "==", userId), 
+                const q = query(portfolioRef,
+                    where("userId", "==", userId),
                     where("activityId", "==", activityId)
                 );
                 const snapshot = await getDocs(q);
-                
+
                 if (!snapshot.empty) {
                     if (completionStatus) {
                         completionStatus.classList.remove('hidden');
@@ -804,10 +776,10 @@
         function setupEventListeners() {
             // Complete activity button
             if (completeActivityBtn) {
-                console.log('🔵 Found completeActivityBtn, adding click listener');
+                console.log('✅ completeActivityBtn found! Adding click listener.');
                 completeActivityBtn.addEventListener('click', markActivityAsComplete);
             } else {
-                console.warn('⚠️ completeActivityBtn not found in DOM');
+                console.error('❌ completeActivityBtn NOT found in DOM!');
             }
 
             // Mark registered button
@@ -846,8 +818,6 @@
                 return;
             }
 
-            currentActivityId = activityId;
-
             onAuthStateChanged(auth, async function(user) {
                 if (!user) {
                     window.location.href = 'login.html';
@@ -880,12 +850,11 @@
                     if (registeredBadge) {
                         registeredBadge.style.display = 'block';
                     }
-                    // Show Phase 4 section
                     if (phase4Section) {
-                        phase4Section.style.display = 'block';
+                        phase4Section.style.display = 'block !important';
                     }
                 }
-                
+
                 // Check if activity is already completed
                 await checkIfActivityCompleted(user.uid, activityId);
             });
@@ -893,12 +862,14 @@
 
         // ===== START =====
         document.addEventListener('DOMContentLoaded', function() {
+            console.log('🚀 Starting...');
             console.log('🔍 Looking for completeActivityBtn:', document.getElementById('completeActivityBtn'));
             setupEventListeners();
             initApp();
         });
 
-        console.log('✅ activity-registration.js initialized!');
+        console.log('✅ Script loaded!');
     </script>
+
 </body>
 </html>
