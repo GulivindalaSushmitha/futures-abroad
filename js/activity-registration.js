@@ -9,6 +9,14 @@ import {
     query, where, collection
 } from './firebase-config.js';
 
+// Import from reflection.js
+import { 
+    REFLECTION_QUESTIONS,
+    markActivityComplete,
+    saveReflections,
+    showToast
+} from './reflection.js';
+
 // DOM Elements
 var activityNameEl = document.getElementById('activity-name');
 var activityTypeEl = document.getElementById('activity-type');
@@ -169,7 +177,7 @@ async function handleRegistrationComplete(activityId) {
                 markRegisteredBtn.disabled = true;
                 markRegisteredBtn.style.background = '#22c55e';
 
-                alert('🎉 Congratulations! You have successfully registered for this activity!');
+                showToast('🎉 Congratulations! You have successfully registered for this activity!', 'success');
 
                 // Show Phase 4 section
                 var phase4Section = document.getElementById('phase4Section');
@@ -179,12 +187,12 @@ async function handleRegistrationComplete(activityId) {
                 }
 
             } else {
-                alert('You are already registered for this activity.');
+                showToast('You are already registered for this activity.', 'info');
             }
         }
     } catch (error) {
         console.error('Error registering:', error);
-        alert('Error registering. Please try again.');
+        showToast('Error registering. Please try again.', 'error');
     }
 }
 
@@ -197,13 +205,13 @@ async function markActivityAsComplete() {
     
     var user = auth.currentUser;
     if (!user) {
-        alert('Please log in first.');
+        showToast('Please log in first.', 'error');
         return;
     }
 
     var activityId = getActivityIdFromURL();
     if (!activityId) {
-        alert('No activity selected.');
+        showToast('No activity selected.', 'error');
         return;
     }
 
@@ -223,62 +231,49 @@ async function markActivityAsComplete() {
     }
 
     try {
-        // Create portfolio entry
-        var portfolioEntry = {
-            userId: user.uid,
-            activityId: activityId,
-            activityName: activityName,
-            type: activityType,
-            duration: duration,
-            skills: skills,
-            studentNote: '',
-            dateCompleted: new Date().toISOString().split('T')[0],
-            reflectionResponses: {},
-            essayPotentialFlag: false,
-            createdAt: serverTimestamp()
-        };
+        // Call markActivityComplete from reflection.js
+        var result = await markActivityComplete(activityId, activityName, activityType, duration, skills, '');
+        
+        console.log('✅ markActivityComplete result:', result);
 
-        // Add to portfolio collection
-        var portfolioRef = collection(db, COLLECTIONS.studentPortfolio);
-        await addDoc(portfolioRef, portfolioEntry);
+        if (result) {
+            // Show completion status
+            if (completionStatus) {
+                completionStatus.classList.remove('hidden');
+                if (completionMessage) {
+                    completionMessage.textContent = 'Activity "' + activityName + '" has been added to your portfolio!';
+                }
+            }
 
-        // Update user profile
-        var userRef = doc(db, COLLECTIONS.users, user.uid);
-        await updateDoc(userRef, {
-            completed_activities: arrayUnion(activityId),
-            lastActivityDate: new Date().toISOString()
-        });
+            // Hide the complete button container
+            if (completeActivityContainer) {
+                completeActivityContainer.style.display = 'none';
+            }
 
-        console.log('✅ Activity marked as complete!');
+            // Show Phase 4 status
+            if (phase4Status) {
+                phase4Status.style.display = 'block';
+                phase4Status.style.color = '#22c55e';
+                phase4Status.innerHTML = '✅ Activity marked as complete! Redirecting to Phase 4...';
+            }
 
-        // Show completion status
-        if (completionStatus) {
-            completionStatus.classList.remove('hidden');
-            if (completionMessage) {
-                completionMessage.textContent = 'Activity "' + activityName + '" has been added to your portfolio!';
+            // Redirect to Phase 4 page (post-activity.html) after short delay
+            setTimeout(function() {
+                window.location.href = 'post-activity.html?id=' + activityId;
+            }, 1500);
+
+        } else {
+            // If markActivityComplete returned false but didn't throw error
+            if (completeActivityBtn) {
+                completeActivityBtn.textContent = '✅ Mark Activity as Complete';
+                completeActivityBtn.disabled = false;
+                completeActivityBtn.style.opacity = '1';
             }
         }
 
-        // Hide the complete button container
-        if (completeActivityContainer) {
-            completeActivityContainer.style.display = 'none';
-        }
-
-        // Show Phase 4 status
-        if (phase4Status) {
-            phase4Status.style.display = 'block';
-            phase4Status.style.color = '#22c55e';
-            phase4Status.innerHTML = '✅ Activity marked as complete! Redirecting to Phase 4...';
-        }
-
-        // Redirect to Phase 4 page (post-activity.html)
-        setTimeout(function() {
-            window.location.href = 'post-activity.html?id=' + activityId;
-        }, 1500);
-
     } catch (error) {
         console.error('❌ Error completing activity:', error);
-        alert('Error completing activity: ' + error.message);
+        showToast('Error completing activity: ' + error.message, 'error');
         if (completeActivityBtn) {
             completeActivityBtn.textContent = '✅ Mark Activity as Complete';
             completeActivityBtn.disabled = false;
@@ -305,7 +300,7 @@ async function checkIfActivityCompleted(userId, activityId) {
             if (completionStatus) {
                 completionStatus.classList.remove('hidden');
                 if (completionMessage) {
-                    completionMessage.textContent = 'You have already completed this activity!';
+                    completionMessage.textContent = 'You have already completed this activity! 🎉';
                 }
             }
             if (completeActivityContainer) {
@@ -370,8 +365,10 @@ function setupEventListeners() {
 async function initApp() {
     var activityId = getActivityIdFromURL();
     if (!activityId) {
-        alert('No activity selected. Please choose an activity first.');
-        window.location.href = 'student-app.html';
+        showToast('No activity selected. Please choose an activity first.', 'error');
+        setTimeout(function() {
+            window.location.href = 'student-app.html';
+        }, 1500);
         return;
     }
 
@@ -385,8 +382,10 @@ async function initApp() {
 
         var activity = await fetchActivityData(activityId);
         if (!activity) {
-            alert('Activity not found. Please try again.');
-            window.location.href = 'student-app.html';
+            showToast('Activity not found. Please try again.', 'error');
+            setTimeout(function() {
+                window.location.href = 'student-app.html';
+            }, 1500);
             return;
         }
 
