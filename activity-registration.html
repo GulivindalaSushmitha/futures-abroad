@@ -4,21 +4,10 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Activity Registration | Futures Abroad</title>
-    <link rel="stylesheet" href="css/activity-registration.css" />
     <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-        body {
-            font-family: 'Quicksand', Arial, sans-serif;
-            background: #f5f7fa;
-            padding: 20px;
-            padding-top: 80px;
-        }
-
-        /* Header */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: Arial, sans-serif; background: #f5f7fa; padding: 20px; padding-top: 80px; }
+        
         .main-header {
             background: white;
             padding: 15px 30px;
@@ -40,9 +29,7 @@
             color: #2D1B4E;
             text-decoration: none;
         }
-        .main-header .logo a span {
-            color: #6C3CE1;
-        }
+        .main-header .logo a span { color: #6C3CE1; }
         .main-header nav {
             display: flex;
             gap: 15px;
@@ -58,42 +45,21 @@
             transition: all 0.3s;
             font-size: 14px;
         }
-        .main-header nav a:hover {
-            background: #f0e6ff;
-            color: #6C3CE1;
-        }
-        .main-header nav #logout-link {
-            color: #e74c3c;
-        }
-        .main-header nav #logout-link:hover {
-            background: #fde8e8;
-        }
+        .main-header nav a:hover { background: #f0e6ff; color: #6C3CE1; }
+        .main-header nav #logout-link { color: #e74c3c; }
+        .main-header nav #logout-link:hover { background: #fde8e8; }
 
-        .container {
-            max-width: 850px;
-            margin: 0 auto;
-        }
-
-        /* Cards */
+        .container { max-width: 850px; margin: 0 auto; }
+        
         .card {
             background: white;
             border-radius: 16px;
-            padding: 28px;
+            padding: 24px;
             margin-bottom: 24px;
             box-shadow: 0 2px 10px rgba(0,0,0,0.05);
         }
-        .card h2 {
-            color: #2D1B4E;
-            margin-top: 0;
-            margin-bottom: 8px;
-            font-size: 1.8rem;
-        }
-        .card h3 {
-            color: #2D1B4E;
-            margin-top: 0;
-            margin-bottom: 12px;
-            font-size: 1.3rem;
-        }
+        .card h2 { color: #2D1B4E; margin-top: 0; margin-bottom: 8px; }
+        .card h3 { color: #2D1B4E; margin-top: 0; margin-bottom: 12px; }
 
         .phase-badge {
             display: inline-block;
@@ -107,53 +73,8 @@
             text-transform: uppercase;
             margin-bottom: 10px;
         }
-        .phase-badge-green {
-            background: #22c55e;
-        }
+        .phase-badge-green { background: #22c55e; }
 
-        /* Checklist */
-        .checklist-item {
-            display: flex;
-            align-items: flex-start;
-            gap: 12px;
-            padding: 12px 16px;
-            margin-bottom: 8px;
-            background: #f8f9fa;
-            border-radius: 10px;
-            border-left: 4px solid #6C3CE1;
-            transition: all 0.3s;
-        }
-        .checklist-item.completed {
-            background: #e8f5e9;
-            border-left-color: #22c55e;
-        }
-        .checklist-item .checkbox {
-            margin-top: 2px;
-            width: 18px;
-            height: 18px;
-            cursor: pointer;
-            accent-color: #6C3CE1;
-            flex-shrink: 0;
-        }
-        .checklist-item .content {
-            flex: 1;
-        }
-        .checklist-item .title {
-            font-weight: 700;
-            font-size: 1rem;
-            color: #2D1B4E;
-        }
-        .checklist-item .desc {
-            color: #666;
-            font-size: 0.9rem;
-            margin: 2px 0;
-        }
-        .checklist-item .due {
-            color: #888;
-            font-size: 0.8rem;
-        }
-
-        /* Buttons */
         .btn-primary {
             background: #6C3CE1;
             color: white;
@@ -164,41 +85,27 @@
             font-size: 16px;
             cursor: pointer;
             transition: all 0.3s;
-            font-family: 'Quicksand', Arial, sans-serif;
+            font-family: Arial, sans-serif;
             text-decoration: none;
             display: inline-block;
         }
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(108, 60, 225, 0.3);
-        }
-        .btn-primary:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-            transform: none;
-        }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 4px 15px rgba(108,60,225,0.3); }
+        .btn-primary:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
 
         .btn-success {
             background: #22c55e;
             color: white;
             border: none;
-            padding: 14px 32px;
+            padding: 16px 40px;
             border-radius: 50px;
             font-weight: 700;
-            font-size: 16px;
+            font-size: 18px;
             cursor: pointer;
             transition: all 0.3s;
-            font-family: 'Quicksand', Arial, sans-serif;
+            font-family: Arial, sans-serif;
         }
-        .btn-success:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(34, 197, 94, 0.4);
-        }
-        .btn-success:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-            transform: none;
-        }
+        .btn-success:hover { transform: translateY(-2px); box-shadow: 0 4px 15px rgba(34,197,94,0.4); }
+        .btn-success:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
 
         .btn-secondary {
             background: transparent;
@@ -210,14 +117,27 @@
             font-size: 16px;
             cursor: pointer;
             transition: all 0.3s;
-            font-family: 'Quicksand', Arial, sans-serif;
+            font-family: Arial, sans-serif;
             text-decoration: none;
             display: inline-block;
         }
-        .btn-secondary:hover {
-            background: #6C3CE1;
+        .btn-secondary:hover { background: #6C3CE1; color: white; }
+
+        .btn-enroll {
+            background: linear-gradient(135deg, #00b09b, #96c93d);
             color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: Arial, sans-serif;
+            text-decoration: none;
+            display: inline-block;
         }
+        .btn-enroll:hover { transform: translateY(-2px); box-shadow: 0 4px 15px rgba(0,176,155,0.4); }
 
         .registered-badge {
             background: #22c55e;
@@ -237,41 +157,39 @@
             margin: 20px 0;
             text-align: center;
         }
-        .completion-status .icon {
-            font-size: 48px;
-        }
-        .completion-status h3 {
-            color: #16a34a;
-            margin: 10px 0 5px;
-        }
+        .completion-status .icon { font-size: 48px; }
+        .completion-status h3 { color: #16a34a; margin: 10px 0 5px; }
 
-        /* Phase 4 Section - ALWAYS VISIBLE */
+        .checklist-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 12px 16px;
+            margin-bottom: 8px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border-left: 4px solid #6C3CE1;
+            transition: all 0.3s;
+        }
+        .checklist-item.completed { background: #e8f5e9; border-left-color: #22c55e; }
+        .checklist-item .checkbox { margin-top: 2px; width: 18px; height: 18px; cursor: pointer; accent-color: #6C3CE1; flex-shrink: 0; }
+        .checklist-item .content { flex: 1; }
+        .checklist-item .title { font-weight: 700; font-size: 1rem; color: #2D1B4E; }
+        .checklist-item .desc { color: #666; font-size: 0.9rem; margin: 2px 0; }
+        .checklist-item .due { color: #888; font-size: 0.8rem; }
+
+        /* PHASE 4 - ALWAYS VISIBLE */
         #phase4Section {
             border-top: 3px solid #22c55e;
-            padding-top: 24px;
+            padding-top: 20px;
             margin-top: 0;
             display: block !important;
         }
 
-        .hidden {
-            display: none !important;
-        }
-
-        .flex {
-            display: flex;
-            gap: 15px;
-            flex-wrap: wrap;
-            align-items: center;
-        }
-        .text-center {
-            text-align: center;
-        }
-        .mt-10 {
-            margin-top: 10px;
-        }
-        .mt-20 {
-            margin-top: 20px;
-        }
+        .hidden { display: none !important; }
+        .flex { display: flex; gap: 15px; flex-wrap: wrap; align-items: center; }
+        .text-center { text-align: center; }
+        .mt-20 { margin-top: 20px; }
 
         .quick-nav {
             margin-top: 30px;
@@ -282,30 +200,7 @@
             flex-wrap: wrap;
             justify-content: center;
         }
-        .quick-nav a {
-            flex: 0 1 auto;
-            min-width: 140px;
-            text-align: center;
-        }
-
-        .btn-enroll {
-            background: linear-gradient(135deg, #00b09b, #96c93d);
-            color: white;
-            border: none;
-            padding: 12px 30px;
-            border-radius: 50px;
-            font-weight: 700;
-            font-size: 16px;
-            cursor: pointer;
-            transition: all 0.3s;
-            font-family: 'Quicksand', Arial, sans-serif;
-            text-decoration: none;
-            display: inline-block;
-        }
-        .btn-enroll:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(0, 176, 155, 0.4);
-        }
+        .quick-nav a { flex: 0 1 auto; min-width: 140px; text-align: center; }
 
         .readiness-box {
             background: #f8f4ff;
@@ -314,41 +209,27 @@
             margin: 15px 0;
         }
 
+        .big-button {
+            font-size: 20px !important;
+            padding: 18px 50px !important;
+            width: 100%;
+            max-width: 400px;
+        }
+
         @media (max-width: 768px) {
-            body {
-                padding-top: 120px;
-                padding-left: 10px;
-                padding-right: 10px;
-            }
-            .main-header {
-                padding: 12px 16px;
-            }
-            .main-header nav a {
-                font-size: 12px;
-                padding: 6px 10px;
-            }
-            .quick-nav {
-                flex-direction: column;
-                align-items: stretch;
-            }
-            .quick-nav a {
-                text-align: center;
-            }
-            .flex {
-                flex-direction: column;
-            }
-            .card {
-                padding: 16px;
-            }
-            .card h2 {
-                font-size: 1.4rem;
-            }
+            body { padding-top: 120px; padding-left: 10px; padding-right: 10px; }
+            .main-header { padding: 12px 16px; }
+            .main-header nav a { font-size: 12px; padding: 6px 10px; }
+            .quick-nav { flex-direction: column; align-items: stretch; }
+            .quick-nav a { text-align: center; }
+            .flex { flex-direction: column; }
+            .big-button { max-width: 100%; }
         }
     </style>
 </head>
 <body>
 
-    <!-- ===== HEADER ===== -->
+    <!-- HEADER -->
     <header class="main-header">
         <div class="logo">
             <a href="index.html">Futures <span>Abroad</span></a>
@@ -363,9 +244,7 @@
 
     <div class="container">
 
-        <!-- ============================================================
-        PHASE 3 - Activity Details
-        ============================================================ -->
+        <!-- PHASE 3 -->
         <div class="card">
             <span class="phase-badge">Phase 3</span>
             <h2 id="activity-name">Loading...</h2>
@@ -380,9 +259,7 @@
             </div>
         </div>
 
-        <!-- ============================================================
-        PHASE 3 - Registration Checklist
-        ============================================================ -->
+        <!-- CHECKLIST -->
         <div class="card">
             <h3>✅ Registration Checklist</h3>
             <p><strong>Main Deadline:</strong> <span id="main-deadline">--</span></p>
@@ -390,7 +267,6 @@
                 💡 You'll receive notifications at 2 weeks, 1 week, 3 days, and 1 day before the deadline.
             </div>
             <ul id="checklist-container" style="list-style: none; padding: 0;"></ul>
-
             <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid #eee; text-align: center;">
                 <p style="color: #666; margin-bottom: 12px;">Complete all steps in the checklist to enable registration.</p>
                 <button id="mark-registered-btn" class="btn-primary" disabled>Complete all steps to register</button>
@@ -398,14 +274,15 @@
         </div>
 
         <!-- ============================================================
-        PHASE 4 - COMPLETE ACTIVITY - ALWAYS VISIBLE
+        PHASE 4 - THIS IS WHAT YOU NEED - ALWAYS VISIBLE!
         ============================================================ -->
-        <div class="card" id="phase4Section">
+        <div class="card" id="phase4Section" style="display: block !important;">
 
             <span class="phase-badge phase-badge-green">Phase 4</span>
-            <h3 style="color: #2D1B4E;">🎯 After Completing This Activity</h3>
+            <h3>🎯 After Completing This Activity</h3>
             <p style="color: #666; margin-bottom: 15px;">
-                Once you've finished this activity, mark it as complete. Your experience will be saved to your portfolio.
+                Once you've finished this activity, click the button below to mark it as complete.
+                Your experience will be saved to your portfolio.
             </p>
 
             <!-- Registered Badge -->
@@ -421,26 +298,22 @@
             </div>
 
             <!-- ==========================================================
-            THE "MARK ACTIVITY AS COMPLETE" BUTTON
+            THE "MARK ACTIVITY AS COMPLETE" BUTTON - BIG AND CLEAR!
             ========================================================== -->
-            <div id="completeActivityContainer">
-                <div class="flex">
-                    <button id="completeActivityBtn" class="btn-success" style="font-size: 18px; padding: 16px 40px;">
-                        ✅ Mark Activity as Complete
-                    </button>
-                    <span style="color: #888; font-size: 0.9rem;">
-                        After completion, you can reflect on your experience.
-                    </span>
-                </div>
+            <div id="completeActivityContainer" style="margin-top: 15px; text-align: center;">
+                <button id="completeActivityBtn" class="btn-success big-button">
+                    ✅ Mark Activity as Complete
+                </button>
+                <p style="color: #888; font-size: 0.9rem; margin-top: 8px;">
+                    After completion, you'll be redirected to reflect on your experience.
+                </p>
             </div>
 
             <!-- Status messages -->
             <div id="phase4-status" style="margin-top: 12px; font-size: 0.9rem; display: none;"></div>
         </div>
 
-        <!-- ============================================================
-        QUICK NAVIGATION
-        ============================================================ -->
+        <!-- QUICK NAVIGATION -->
         <div class="quick-nav">
             <a href="dashboard.html" class="btn-secondary">📊 Dashboard</a>
             <a href="student-app.html" class="btn-secondary">🎯 Find More Activities</a>
@@ -454,9 +327,6 @@
     JAVASCRIPT
     ============================================================ -->
     <script type="module">
-        // ============================================================
-        // Firebase Imports
-        // ============================================================
         import {
             auth, db, COLLECTIONS,
             doc, getDoc, getDocs, updateDoc, arrayUnion,
@@ -466,7 +336,7 @@
 
         console.log('🚀 activity-registration.js loaded!');
 
-        // ===== DOM Elements =====
+        // DOM Elements
         const activityNameEl = document.getElementById('activity-name');
         const activityTypeEl = document.getElementById('activity-type');
         const activityDurationEl = document.getElementById('activity-duration');
@@ -481,13 +351,9 @@
         const completionMessage = document.getElementById('completionMessage');
         const completeActivityContainer = document.getElementById('completeActivityContainer');
         const registeredBadge = document.getElementById('registeredBadge');
-        const phase4Section = document.getElementById('phase4Section');
 
-        // Log to confirm elements exist
         console.log('🔍 completeActivityBtn found:', completeActivityBtn);
-        console.log('🔍 phase4Section found:', phase4Section);
 
-        // ===== Helper Functions =====
         function getActivityIdFromURL() {
             const params = new URLSearchParams(window.location.search);
             return params.get('id');
@@ -521,7 +387,6 @@
             }
         }
 
-        // ===== Display Functions =====
         function displayActivitySummary(activity, userInterests) {
             if (activityNameEl) activityNameEl.textContent = activity.name || 'Activity';
             if (activityTypeEl) activityTypeEl.textContent = activity.type || 'General';
@@ -532,7 +397,7 @@
             const interests = userInterests || ['exploration'];
             const interestString = Array.isArray(interests) ? interests.join(', ') : interests;
             if (readinessTextEl) {
-                readinessTextEl.textContent = 'Based on your interest in ' + interestString + ', this activity is a great match! Complete the checklist below to register.';
+                readinessTextEl.textContent = 'Based on your interest in ' + interestString + ', this activity is a great match!';
             }
         }
 
@@ -606,7 +471,7 @@
             markRegisteredBtn.style.opacity = allCompleted ? '1' : '0.6';
         }
 
-        // ===== PHASE 3: Registration =====
+        // PHASE 3: Registration
         async function handleRegistrationComplete(activityId) {
             if (!markRegisteredBtn || markRegisteredBtn.disabled) return;
 
@@ -633,19 +498,11 @@
                         markRegisteredBtn.disabled = true;
                         markRegisteredBtn.style.background = '#22c55e';
 
-                        // Show registered badge
                         if (registeredBadge) {
                             registeredBadge.style.display = 'block';
                         }
 
                         alert('🎉 Congratulations! You have successfully registered for this activity!');
-
-                        // Scroll to Phase 4
-                        setTimeout(function() {
-                            if (phase4Section) {
-                                phase4Section.scrollIntoView({ behavior: 'smooth' });
-                            }
-                        }, 500);
 
                     } else {
                         alert('You are already registered for this activity.');
@@ -660,7 +517,7 @@
             }
         }
 
-        // ===== PHASE 4: Mark Activity as Complete =====
+        // PHASE 4: Mark Activity as Complete
         async function markActivityAsComplete() {
             console.log('🔵 Complete Activity button clicked!');
 
@@ -683,7 +540,6 @@
             const activity = await fetchActivityData(activityId);
             const skills = activity?.skills_gained || [];
 
-            // Disable button during processing
             if (completeActivityBtn) {
                 completeActivityBtn.textContent = '⏳ Processing...';
                 completeActivityBtn.disabled = true;
@@ -691,7 +547,6 @@
             }
 
             try {
-                // Check if already in portfolio
                 const portfolioRef = collection(db, COLLECTIONS.studentPortfolio);
                 const q = query(portfolioRef,
                     where("userId", "==", user.uid),
@@ -709,7 +564,6 @@
                     return;
                 }
 
-                // Create portfolio entry
                 const portfolioEntry = {
                     userId: user.uid,
                     activityId: activityId,
@@ -726,7 +580,6 @@
 
                 await addDoc(portfolioRef, portfolioEntry);
 
-                // Update user profile
                 const userRef = doc(db, COLLECTIONS.users, user.uid);
                 await updateDoc(userRef, {
                     completed_activities: arrayUnion(activityId),
@@ -735,7 +588,6 @@
 
                 console.log('✅ Activity marked as complete!');
 
-                // Show completion status
                 if (completionStatus) {
                     completionStatus.classList.remove('hidden');
                     if (completionMessage) {
@@ -743,19 +595,16 @@
                     }
                 }
 
-                // Hide the complete button container
                 if (completeActivityContainer) {
                     completeActivityContainer.style.display = 'none';
                 }
 
-                // Show Phase 4 status
                 if (phase4Status) {
                     phase4Status.style.display = 'block';
                     phase4Status.style.color = '#22c55e';
                     phase4Status.innerHTML = '✅ Activity marked as complete! Redirecting to Phase 4...';
                 }
 
-                // Redirect to Phase 4 page
                 setTimeout(function() {
                     window.location.href = 'post-activity.html?id=' + activityId;
                 }, 1500);
@@ -771,7 +620,7 @@
             }
         }
 
-        // ===== CHECK IF ACTIVITY IS ALREADY COMPLETED =====
+        // CHECK IF ACTIVITY IS ALREADY COMPLETED
         async function checkIfActivityCompleted(userId, activityId) {
             try {
                 const portfolioRef = collection(db, COLLECTIONS.studentPortfolio);
@@ -805,9 +654,7 @@
             }
         }
 
-        // ===== SETUP EVENT LISTENERS =====
         function setupEventListeners() {
-            // Complete activity button
             if (completeActivityBtn) {
                 console.log('✅ completeActivityBtn found! Adding click listener.');
                 completeActivityBtn.addEventListener('click', markActivityAsComplete);
@@ -815,7 +662,6 @@
                 console.error('❌ completeActivityBtn NOT found in DOM!');
             }
 
-            // Mark registered button
             if (markRegisteredBtn) {
                 markRegisteredBtn.addEventListener('click', function() {
                     const activityId = getActivityIdFromURL();
@@ -825,7 +671,6 @@
                 });
             }
 
-            // Logout
             const logoutLink = document.getElementById('logout-link');
             if (logoutLink) {
                 logoutLink.addEventListener('click', async function(e) {
@@ -840,7 +685,6 @@
             }
         }
 
-        // ===== INITIALIZATION =====
         async function initApp() {
             const activityId = getActivityIdFromURL();
             if (!activityId) {
@@ -885,16 +729,13 @@
                     }
                 }
 
-                // Check if activity is already completed
                 await checkIfActivityCompleted(user.uid, activityId);
             });
         }
 
-        // ===== START =====
         document.addEventListener('DOMContentLoaded', function() {
             console.log('🚀 Starting...');
             console.log('🔍 Looking for completeActivityBtn:', document.getElementById('completeActivityBtn'));
-            console.log('🔍 Looking for phase4Section:', document.getElementById('phase4Section'));
             setupEventListeners();
             initApp();
         });
