@@ -1,219 +1,254 @@
-// post-activity.js - Phase 4: Post-Activity Guidance
+// ============================================================
+// js/post-activity.js - Phase 4: Post-Activity Guidance
+// ============================================================
 
-import { auth, db } from './firebase-config.js';
+import { 
+    auth, db, COLLECTIONS,
+    doc, getDoc, getDocs, updateDoc,
+    onAuthStateChanged, signOut,
+    query, where, collection
+} from './firebase-config.js';
 
-// Initialize when page loads
-document.addEventListener('DOMContentLoaded', async function() {
-    // Check authentication
-    auth.onAuthStateChanged(async (user) => {
-        if (user) {
-            await initializePostActivity(user);
-        } else {
-            window.location.href = 'login.html';
-        }
-    });
+// DOM Elements
+const activityNameDisplay = document.getElementById('activityNameDisplay');
+const reflectionForm = document.getElementById('reflectionForm');
+const saveReflectionBtn = document.getElementById('saveReflectionBtn');
+const skipReflectionBtn = document.getElementById('skipReflectionBtn');
+const profileStrengthFill = document.getElementById('strengthFill');
+const strengthPercentage = document.getElementById('strengthPercentage');
+const gapList = document.getElementById('gapList');
 
-    // Event listeners
-    document.getElementById('saveReflectionBtn')?.addEventListener('click', saveReflection);
-    document.getElementById('skipReflectionBtn')?.addEventListener('click', skipReflection);
-});
+let currentActivityId = null;
+let currentActivityName = '';
 
-async function initializePostActivity(user) {
+function getActivityIdFromURL() {
+    const params = new URLSearchParams(window.location.search);
+    return params.get('id');
+}
+
+async function loadActivityData(activityId) {
     try {
-        // Get completed activity info
-        const activityId = localStorage.getItem('completedActivityId');
-        const activityName = localStorage.getItem('completedActivityName');
-
-        if (activityId && activityName) {
-            document.getElementById('activityNameDisplay').textContent = activityName;
+        const activityRef = doc(db, COLLECTIONS.activities, activityId);
+        const activityDoc = await getDoc(activityRef);
+        if (activityDoc.exists()) {
+            const data = activityDoc.data();
+            currentActivityName = data.name || 'Activity';
+            if (activityNameDisplay) {
+                activityNameDisplay.textContent = currentActivityName;
+            }
+            return data;
         }
-
-        // Set completion date
-        const today = new Date().toISOString().split('T')[0];
-        document.getElementById('completionDate').textContent = `Completed: ${today}`;
-
-        // Load and display profile strength
-        await loadProfileStrength(user.uid);
-
-        // Check grade for milestone CTA
-        await checkGradeMilestone(user.uid);
-
-        // Get gap analysis
-        await loadGapAnalysis(user.uid);
-
+        return null;
     } catch (error) {
-        console.error('Error initializing post-activity:', error);
+        console.error('Error loading activity:', error);
+        return null;
     }
 }
 
 async function loadProfileStrength(userId) {
     try {
-        const userDoc = await db.collection('users').doc(userId).get();
-        const userData = userDoc.data();
-        const strength = userData?.profileStrength || 0;
-
-        // Update strength bar
-        const strengthFill = document.getElementById('strengthFill');
-        const strengthPercentage = document.getElementById('strengthPercentage');
-
-        if (strengthFill && strengthPercentage) {
-            strengthFill.style.width = `${strength}%`;
-            strengthPercentage.textContent = `${strength}%`;
+        const portfolioRef = collection(db, COLLECTIONS.studentPortfolio);
+        const q = query(portfolioRef, where("userId", "==", userId));
+        const snapshot = await getDocs(q);
+        
+        const count = snapshot.size;
+        let strength = 0;
+        
+        if (count >= 5) strength = 85;
+        else if (count >= 3) strength = 60;
+        else if (count >= 1) strength = 35;
+        else strength = 10;
+        
+        if (profileStrengthFill) {
+            profileStrengthFill.style.width = strength + '%';
         }
-
+        if (strengthPercentage) {
+            strengthPercentage.textContent = strength + '%';
+        }
+        
+        // Show gap analysis
+        showGapAnalysis(snapshot);
+        
+        return strength;
     } catch (error) {
         console.error('Error loading profile strength:', error);
+        return 0;
     }
 }
 
-async function loadGapAnalysis(userId) {
-    try {
-        const activitiesSnapshot = await db.collection('users')
-            .doc(userId)
-            .collection('completedActivities')
-            .get();
-
-        const activities = activitiesSnapshot.docs.map(doc => doc.data());
-        const gapList = document.getElementById('gapList');
-
-        if (!gapList) return;
-
-        // Clear existing items
-        gapList.innerHTML = '';
-
-        // Analyze gaps
-        const types = activities.map(a => a.type || 'unknown');
-        const hasLeadership = types.some(t => t.includes('leadership') || t.includes('volunteering'));
-        const hasAcademics = types.some(t => t.includes('course') || t.includes('research'));
-        const hasVolunteering = types.some(t => t.includes('volunteering'));
-
-        let gaps = [];
-
-        if (!hasLeadership) {
-            gaps.push('You have strong academics but no leadership experience yet');
-        }
-        if (!hasVolunteering) {
-            gaps.push('Consider adding a volunteering activity to diversify your profile');
-        }
-        if (activities.length < 3) {
-            gaps.push('Adding more activities will strengthen your university applications');
-        }
-
-        if (gaps.length === 0) {
-            gaps.push('Great work! Your profile is well-rounded.');
-            gaps.push('Keep building on this momentum!');
-        }
-
-        // Add gaps to list
-        gaps.forEach(gap => {
-            const li = document.createElement('li');
-            li.textContent = gap;
-            gapList.appendChild(li);
-        });
-
-    } catch (error) {
-        console.error('Error loading gap analysis:', error);
+function showGapAnalysis(portfolioSnapshot) {
+    if (!gapList) return;
+    
+    const activities = [];
+    portfolioSnapshot.forEach(doc => {
+        activities.push(doc.data());
+    });
+    
+    const types = activities.map(a => a.type || 'unknown');
+    const hasLeadership = types.some(t => t === 'leadership' || t === 'volunteering' || t === 'internship');
+    const hasAcademics = types.some(t => t === 'course' || t === 'research' || t === 'competition');
+    const hasVolunteering = types.some(t => t === 'volunteering' || t === 'community');
+    
+    let gaps = [];
+    
+    if (!hasLeadership) {
+        gaps.push('🌟 You have strong academics but no leadership experience yet');
     }
-}
-
-async function checkGradeMilestone(userId) {
-    try {
-        const userDoc = await db.collection('users').doc(userId).get();
-        const userData = userDoc.data();
-        const grade = userData?.grade || '10';
-
-        const milestoneCta = document.getElementById('milestoneCta');
-        const milestoneMessage = document.getElementById('milestoneMessage');
-
-        if (!milestoneCta || !milestoneMessage) return;
-
-        if (grade === '11') {
-            milestoneCta.style.display = 'block';
-            milestoneMessage.textContent = 'You\'re building a strong profile. Start thinking about your university shortlist.';
-        } else if (grade === '12') {
-            milestoneCta.style.display = 'block';
-            milestoneMessage.textContent = 'You\'re in the final stretch! Focus on your applications and deadlines.';
-        } else {
-            milestoneCta.style.display = 'none';
-        }
-
-    } catch (error) {
-        console.error('Error checking grade milestone:', error);
+    if (!hasVolunteering) {
+        gaps.push('🤝 Consider adding a volunteering activity to diversify your profile');
     }
+    if (activities.length < 3) {
+        gaps.push('📈 Adding more activities will strengthen your university applications');
+    }
+    if (activities.length > 0 && !hasAcademics) {
+        gaps.push('📚 Consider adding an academic activity like a course or research');
+    }
+    
+    if (gaps.length === 0) {
+        gaps.push('🎉 Great work! Your profile is well-rounded.');
+        gaps.push('💪 Keep building on this momentum!');
+    }
+    
+    gapList.innerHTML = gaps.map(gap => 
+        `<li style="padding:10px;background:#f8f9fa;margin:5px 0;border-radius:8px;border-left:4px solid #6C3CE1;">${gap}</li>`
+    ).join('');
 }
 
 async function saveReflection() {
+    const user = auth.currentUser;
+    if (!user) {
+        alert('Please log in to save your reflection.');
+        return;
+    }
+
+    const reflection1 = document.getElementById('reflection1')?.value || '';
+    const reflection2 = document.getElementById('reflection2')?.value || '';
+    const reflection3 = document.getElementById('reflection3')?.value || '';
+    
+    if (!reflection1 && !reflection2 && !reflection3) {
+        alert('Please answer at least one reflection question before saving.');
+        return;
+    }
+
     try {
-        const user = auth.currentUser;
-        if (!user) {
-            alert('Please log in to save your reflection.');
+        // Find portfolio entry
+        const portfolioRef = collection(db, COLLECTIONS.studentPortfolio);
+        const q = query(portfolioRef, 
+            where("userId", "==", user.uid), 
+            where("activityId", "==", currentActivityId)
+        );
+        const snapshot = await getDocs(q);
+        
+        if (snapshot.empty) {
+            alert('Portfolio entry not found. Please try again.');
             return;
         }
+        
+        const docRef = snapshot.docs[0].ref;
+        await updateDoc(docRef, {
+            reflectionResponses: [reflection1, reflection2, reflection3],
+            studentNote: reflection1,
+            essayPotentialFlag: (reflection1.length > 100 || reflection2.length > 100 || reflection3.length > 100)
+        });
 
-        const reflection1 = document.getElementById('reflection1')?.value || '';
-        const reflection2 = document.getElementById('reflection2')?.value || '';
-        const reflection3 = document.getElementById('reflection3')?.value || '';
-
-        const activityId = localStorage.getItem('completedActivityId');
-
-        // Save reflection to portfolio
-        const reflectionData = {
-            activityId: activityId,
-            responses: [reflection1, reflection2, reflection3],
-            timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+        // Also save to reflections collection
+        const reflectionsRef = collection(db, 'reflections');
+        await addDoc(reflectionsRef, {
             userId: user.uid,
-            essayPotential: detectEssayPotential(reflection1, reflection2, reflection3)
-        };
-
-        await db.collection('users')
-            .doc(user.uid)
-            .collection('reflections')
-            .add(reflectionData);
-
-        // Update portfolio entry with reflection
-        const portfolioSnapshot = await db.collection('users')
-            .doc(user.uid)
-            .collection('portfolio')
-            .where('activityId', '==', activityId)
-            .get();
-
-        if (!portfolioSnapshot.empty) {
-            const portfolioDoc = portfolioSnapshot.docs[0];
-            await portfolioDoc.ref.update({
-                reflectionResponses: [reflection1, reflection2, reflection3],
-                essayPotentialFlag: detectEssayPotential(reflection1, reflection2, reflection3)
-            });
-        }
+            activityId: currentActivityId,
+            activityName: currentActivityName,
+            responses: [reflection1, reflection2, reflection3],
+            timestamp: serverTimestamp(),
+            savedAt: new Date().toISOString()
+        });
 
         alert('✅ Reflection saved successfully! Your portfolio has been updated.');
-        
-        // Redirect to portfolio
         window.location.href = 'portfolio.html';
 
     } catch (error) {
         console.error('Error saving reflection:', error);
-        alert('There was an error saving your reflection. Please try again.');
+        alert('Error saving reflection. Please try again.');
     }
 }
 
 function skipReflection() {
-    if (confirm('You can always add your reflection later. Continue to portfolio?')) {
+    if (confirm('You can always add your reflection later from your portfolio. Continue?')) {
         window.location.href = 'portfolio.html';
     }
 }
 
-function detectEssayPotential(ref1, ref2, ref3) {
-    // Simple heuristic to detect if reflection has essay potential
-    const allText = (ref1 + ref2 + ref3).toLowerCase();
-    const keywords = ['learned', 'discovered', 'challenge', 'overcame', 'growth', 'impact', 'passion', 'future', 'leadership', 'inspire'];
+// ============================================================
+// INITIALIZATION
+// ============================================================
+
+async function initPostActivity() {
+    const activityId = getActivityIdFromURL();
+    if (!activityId) {
+        alert('No activity selected.');
+        window.location.href = 'dashboard.html';
+        return;
+    }
     
-    let score = 0;
-    keywords.forEach(keyword => {
-        if (allText.includes(keyword)) score++;
+    currentActivityId = activityId;
+
+    onAuthStateChanged(auth, async function(user) {
+        if (!user) {
+            window.location.href = 'login.html';
+            return;
+        }
+
+        // Load activity data
+        await loadActivityData(activityId);
+        
+        // Load profile strength
+        await loadProfileStrength(user.uid);
+        
+        // Check if user is Grade 11 for milestone
+        const userRef = doc(db, COLLECTIONS.users, user.uid);
+        const userDoc = await getDoc(userRef);
+        if (userDoc.exists()) {
+            const userData = userDoc.data();
+            const grade = userData.grade || '10';
+            
+            const milestoneCta = document.getElementById('milestoneCta');
+            const milestoneMessage = document.getElementById('milestoneMessage');
+            
+            if (milestoneCta && milestoneMessage) {
+                if (grade === '11') {
+                    milestoneCta.style.display = 'block';
+                    milestoneMessage.textContent = 'You\'re building a strong profile. Start thinking about your university shortlist.';
+                } else if (grade === '12') {
+                    milestoneCta.style.display = 'block';
+                    milestoneMessage.textContent = 'You\'re in the final stretch! Focus on your applications and deadlines.';
+                }
+            }
+        }
     });
 
-    return score >= 3; // If at least 3 keywords found, flag for essay
+    // Event listeners
+    if (saveReflectionBtn) {
+        saveReflectionBtn.addEventListener('click', saveReflection);
+    }
+    if (skipReflectionBtn) {
+        skipReflectionBtn.addEventListener('click', skipReflection);
+    }
+
+    // Logout
+    const logoutLink = document.getElementById('logout-link');
+    if (logoutLink) {
+        logoutLink.addEventListener('click', async function(e) {
+            e.preventDefault();
+            try {
+                await signOut(auth);
+                window.location.href = 'login.html';
+            } catch (error) {
+                console.error('Logout error:', error);
+            }
+        });
+    }
 }
 
-// Export for use in other files
-export { saveReflection, skipReflection };
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('🚀 post-activity.js loaded!');
+    initPostActivity();
+});
