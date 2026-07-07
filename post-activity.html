@@ -3,138 +3,586 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Post-Activity Reflection - Futures Abroad</title>
+    <title>Post-Activity Reflection | Futures Abroad</title>
     <link rel="stylesheet" href="css/style.css" />
-    <link rel="stylesheet" href="css/post-activity.css" />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Quicksand', sans-serif; background: #f5f7fa; }
+        
+        .main-header {
+            background: white;
+            padding: 15px 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .main-header .logo a {
+            font-size: 22px;
+            font-weight: 800;
+            color: #2D1B4E;
+            text-decoration: none;
+        }
+        .main-header .logo a span { color: #6C3CE1; }
+        .main-header nav {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .main-header nav a {
+            text-decoration: none;
+            color: #555;
+            font-weight: 600;
+            padding: 8px 16px;
+            border-radius: 8px;
+            transition: all 0.3s;
+            font-size: 14px;
+        }
+        .main-header nav a:hover { background: #f0e6ff; color: #6C3CE1; }
+        .main-header nav #logout-link { color: #e74c3c; }
+        .main-header nav #logout-link:hover { background: #fde8e8; }
+
+        .post-main {
+            padding-top: 100px;
+            max-width: 900px;
+            margin: 0 auto;
+            padding-left: 20px;
+            padding-right: 20px;
+            padding-bottom: 40px;
+        }
+        .phase-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 4px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+        .section-card {
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        .section-card h2 { color: #2D1B4E; margin-top: 0; margin-bottom: 8px; }
+        .section-card h3 { color: #2D1B4E; margin-top: 0; margin-bottom: 12px; }
+
+        .btn-primary {
+            background: #6C3CE1;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: 'Quicksand', sans-serif;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 4px 15px rgba(108, 60, 225, 0.3); }
+        .btn-secondary {
+            background: transparent;
+            color: #6C3CE1;
+            border: 2px solid #6C3CE1;
+            padding: 12px 30px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: 'Quicksand', sans-serif;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .btn-secondary:hover { background: #6C3CE1; color: white; }
+
+        .completion-summary {
+            background: #f0fdf4;
+            border: 2px solid #22c55e;
+            border-radius: 12px;
+            padding: 24px;
+            text-align: center;
+            margin-bottom: 24px;
+        }
+        .completion-summary .icon { font-size: 56px; }
+        .completion-summary h3 { color: #16a34a; margin: 10px 0 5px; }
+
+        .reflection-item {
+            margin-bottom: 20px;
+        }
+        .reflection-item label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #2D1B4E;
+        }
+        .reflection-item textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 1rem;
+            resize: vertical;
+            min-height: 80px;
+            transition: border-color 0.3s;
+        }
+        .reflection-item textarea:focus {
+            outline: none;
+            border-color: #6C3CE1;
+        }
+
+        .strength-bar {
+            background: #e0e0e0;
+            border-radius: 10px;
+            height: 16px;
+            overflow: hidden;
+            margin: 10px 0;
+        }
+        .strength-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            transition: width 0.8s ease;
+            border-radius: 10px;
+        }
+
+        .gap-list {
+            list-style: none;
+            padding: 0;
+        }
+        .gap-list li {
+            padding: 10px 14px;
+            background: #f8f9fa;
+            margin: 5px 0;
+            border-radius: 8px;
+            border-left: 4px solid #6C3CE1;
+        }
+
+        .flex { display: flex; gap: 15px; flex-wrap: wrap; align-items: center; }
+        .text-center { text-align: center; }
+        .hidden { display: none !important; }
+        .mt-20 { margin-top: 20px; }
+
+        @media (max-width: 768px) {
+            .main-header { padding: 12px 16px; }
+            .main-header nav a { font-size: 12px; padding: 6px 10px; }
+            .post-main { padding-top: 120px; padding-left: 16px; padding-right: 16px; }
+            .flex { flex-direction: column; }
+        }
+    </style>
 </head>
 <body>
-    <header class="app-header">
-        <div class="container">
-            <div class="logo">
-                <a href="index.html">Futures Abroad</a>
-            </div>
-            <nav class="app-nav">
-                <a href="dashboard.html">Dashboard</a>
-                <a href="portfolio.html">Portfolio</a>
-                <a href="activities.html">Activities</a>
-                <button id="logoutBtn" class="btn-logout">Logout</button>
-            </nav>
+    <header class="main-header">
+        <div class="logo">
+            <a href="index.html">Futures <span>Abroad</span></a>
         </div>
+        <nav>
+            <a href="dashboard.html">Dashboard</a>
+            <a href="portfolio.html">My Portfolio</a>
+            <a href="university-shortlist.html">Universities</a>
+            <a href="#" id="logout-link">Logout</a>
+        </nav>
     </header>
 
-    <main class="container">
-        <!-- Phase 4: Post-Activity Guidance -->
-        <section class="phase-section" id="phase4">
-            <div class="phase-header">
-                <span class="phase-badge">Phase 4</span>
-                <h1>Reflect & Grow</h1>
-                <p class="phase-subtitle">Great job completing your activity! Let's capture what you learned.</p>
-            </div>
+    <main class="post-main">
+        <!-- Phase Badge -->
+        <span class="phase-badge">Phase 4</span>
+        <h1 style="color: #2D1B4E; margin-top: 0;">Post-Activity Guidance</h1>
 
-            <!-- Activity Completion Summary -->
-            <div class="completion-summary" id="completionSummary">
-                <div class="summary-card">
-                    <div class="completion-icon">✅</div>
-                    <h2>Activity Completed!</h2>
-                    <p id="activityNameDisplay">Loading activity...</p>
-                    <p class="completion-date" id="completionDate">Completed: Today</p>
+        <!-- ============================================================
+        COMPLETION SUMMARY
+        ============================================================ -->
+        <div class="completion-summary">
+            <div class="icon">✅</div>
+            <h3>Activity Completed!</h3>
+            <p id="activityNameDisplay" style="font-size: 1.2rem; font-weight: 600; color: #2D1B4E;">Loading...</p>
+            <p style="color: #666;">Great job! Reflect on your experience below.</p>
+        </div>
+
+        <!-- ============================================================
+        REFLECTION QUESTIONS
+        ============================================================ -->
+        <div class="section-card">
+            <h3>📝 Reflection Questions</h3>
+            <p style="color: #666; margin-bottom: 16px;">
+                Answer these questions to capture your learning. Your reflections may be used in university essays.
+            </p>
+
+            <div id="reflectionQuestions">
+                <div class="reflection-item">
+                    <label>1. What was the most meaningful part of this experience?</label>
+                    <textarea id="reflection1" placeholder="Share your thoughts..."></textarea>
+                </div>
+                <div class="reflection-item">
+                    <label>2. What new skills or knowledge did you gain?</label>
+                    <textarea id="reflection2" placeholder="Share your thoughts..."></textarea>
+                </div>
+                <div class="reflection-item">
+                    <label>3. How will this experience help you in the future?</label>
+                    <textarea id="reflection3" placeholder="Share your thoughts..."></textarea>
                 </div>
             </div>
 
-            <!-- Reflection Prompts -->
-            <div class="reflection-section">
-                <h2>Reflection Questions</h2>
-                <p class="reflection-instructions">
-                    Answer these questions to capture your experience. Your responses will help build your portfolio and future essays.
-                </p>
-
-                <form id="reflectionForm">
-                    <div class="reflection-item">
-                        <label for="reflection1">
-                            <span class="question-number">1.</span>
-                            What was the most significant thing you learned or experienced during this activity?
-                        </label>
-                        <textarea id="reflection1" rows="4" placeholder="Share your key takeaways..."></textarea>
-                    </div>
-
-                    <div class="reflection-item">
-                        <label for="reflection2">
-                            <span class="question-number">2.</span>
-                            How did this activity connect to your interests and future goals?
-                        </label>
-                        <textarea id="reflection2" rows="4" placeholder="Describe the connection to your journey..."></textarea>
-                    </div>
-
-                    <div class="reflection-item">
-                        <label for="reflection3">
-                            <span class="question-number">3.</span>
-                            What skills did you develop, and how might you apply them in the future?
-                        </label>
-                        <textarea id="reflection3" rows="4" placeholder="List skills gained and future applications..."></textarea>
-                    </div>
-
-                    <div class="reflection-actions">
-                        <button type="button" id="saveReflectionBtn" class="btn-primary">Save Reflection</button>
-                        <button type="button" id="skipReflectionBtn" class="btn-secondary">Skip for Now</button>
-                    </div>
-                </form>
+            <div class="flex" style="margin-top: 16px;">
+                <button id="saveReflectionBtn" class="btn-primary">💾 Save Reflections</button>
+                <button id="skipReflectionBtn" class="btn-secondary">Skip for Now</button>
             </div>
+            <div id="reflectionStatus" style="margin-top: 12px; font-size: 0.9rem; display: none;"></div>
+        </div>
 
-            <!-- Profile Strength & Next Steps -->
-            <div class="next-steps-section">
-                <h2>Your Profile Progress</h2>
-                <div class="profile-strength">
-                    <div class="strength-bar">
-                        <div class="strength-fill" id="strengthFill" style="width: 45%"></div>
-                    </div>
-                    <div class="strength-info">
-                        <span id="strengthPercentage">45%</span>
-                        <span class="strength-label">Profile Strength</span>
-                    </div>
-                </div>
-
-                <div class="gap-analysis" id="gapAnalysis">
-                    <h3>Growth Opportunities</h3>
-                    <ul id="gapList">
-                        <li>You have strong academics but no leadership experience yet</li>
-                        <li>Consider adding a volunteering activity to diversify your profile</li>
-                    </ul>
-                </div>
-
-                <div class="next-steps">
-                    <h3>What's Next?</h3>
-                    <div class="next-actions">
-                        <a href="activities.html" class="btn-primary">
-                            Find More Activities
-                        </a>
-                        <a href="portfolio.html" class="btn-secondary">
-                            View Portfolio
-                        </a>
-                        <a href="dashboard.html" class="btn-secondary">
-                            Dashboard
-                        </a>
-                    </div>
-                </div>
+        <!-- ============================================================
+        PROFILE STRENGTH
+        ============================================================ -->
+        <div class="section-card">
+            <h3>📊 Your Profile Progress</h3>
+            <div class="strength-bar">
+                <div class="strength-fill" id="strengthFill" style="width: 10%;"></div>
             </div>
-
-            <!-- Grade-Based CTA (Appears based on user grade) -->
-            <div class="milestone-cta" id="milestoneCta" style="display: none;">
-                <div class="cta-card">
-                    <h3>🎯 You're Building a Strong Profile!</h3>
-                    <p id="milestoneMessage">
-                        Start thinking about your university shortlist and how to stand out.
-                    </p>
-                    <a href="university-shortlist.html" class="btn-primary">
-                        Explore University Pathways
-                    </a>
-                </div>
+            <div style="display: flex; justify-content: space-between;">
+                <span id="strengthPercentage">10%</span>
+                <span style="color: #888;">Profile Strength</span>
             </div>
-        </section>
+        </div>
+
+        <!-- ============================================================
+        GAP ANALYSIS
+        ============================================================ -->
+        <div class="section-card">
+            <h3>📈 Growth Opportunities</h3>
+            <ul class="gap-list" id="gapList">
+                <li>Loading your profile analysis...</li>
+            </ul>
+        </div>
+
+        <!-- ============================================================
+        NEXT STEPS
+        ============================================================ -->
+        <div class="section-card">
+            <h3>🚀 What's Next?</h3>
+            <div class="flex">
+                <a href="student-app.html" class="btn-primary">🎯 Find More Activities</a>
+                <a href="portfolio.html" class="btn-secondary">📂 View Portfolio</a>
+                <a href="university-shortlist.html" class="btn-secondary">🏛️ University Shortlist</a>
+            </div>
+        </div>
+
+        <!-- ============================================================
+        GRADE-BASED MILESTONE CTA
+        ============================================================ -->
+        <div class="section-card" id="milestoneCta" style="display: none; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
+            <h3 style="color: white;">🎯 You're Building a Strong Profile!</h3>
+            <p id="milestoneMessage" style="color: rgba(255,255,255,0.9);">Start thinking about your university shortlist and how to stand out.</p>
+            <a href="university-shortlist.html" class="btn-primary" style="background: white; color: #6C3CE1; margin-top: 10px;">
+                Explore University Pathways
+            </a>
+        </div>
+
+        <!-- ============================================================
+        QUICK NAVIGATION
+        ============================================================ -->
+        <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee; display: flex; gap: 10px; flex-wrap: wrap; justify-content: center;">
+            <a href="dashboard.html" class="btn-secondary">📊 Dashboard</a>
+            <a href="student-app.html" class="btn-secondary">🎯 Find More Activities</a>
+            <a href="university-shortlist.html" class="btn-secondary">🏛️ University Shortlist</a>
+            <a href="futures-abroad-enroll.html" style="background: linear-gradient(135deg, #00b09b, #96c93d); color: white; border: none; padding: 12px 30px; border-radius: 50px; font-weight: 700; font-size: 16px; cursor: pointer; text-decoration: none; display: inline-block;">🚀 Enroll Now</a>
+        </div>
     </main>
 
-    <script src="js/firebase-config.js"></script>
-    <script src="js/auth.js"></script>
-    <script src="js/post-activity.js"></script>
+    <script type="module">
+        // ============================================================
+        // post-activity.js (Inline Version)
+        // ============================================================
+        
+        import { 
+            auth, db, COLLECTIONS,
+            doc, getDoc, getDocs, updateDoc, addDoc, serverTimestamp,
+            onAuthStateChanged, signOut,
+            query, where, collection
+        } from './js/firebase-config.js';
+
+        console.log('🚀 post-activity.js loaded!');
+
+        // DOM Elements
+        const activityNameDisplay = document.getElementById('activityNameDisplay');
+        const reflection1 = document.getElementById('reflection1');
+        const reflection2 = document.getElementById('reflection2');
+        const reflection3 = document.getElementById('reflection3');
+        const saveReflectionBtn = document.getElementById('saveReflectionBtn');
+        const skipReflectionBtn = document.getElementById('skipReflectionBtn');
+        const reflectionStatus = document.getElementById('reflectionStatus');
+        const strengthFill = document.getElementById('strengthFill');
+        const strengthPercentage = document.getElementById('strengthPercentage');
+        const gapList = document.getElementById('gapList');
+        const milestoneCta = document.getElementById('milestoneCta');
+        const milestoneMessage = document.getElementById('milestoneMessage');
+
+        let currentActivityId = null;
+        let currentActivityName = '';
+
+        function getActivityIdFromURL() {
+            const params = new URLSearchParams(window.location.search);
+            return params.get('id');
+        }
+
+        async function loadActivityData(activityId) {
+            try {
+                const activityRef = doc(db, COLLECTIONS.activities, activityId);
+                const activityDoc = await getDoc(activityRef);
+                if (activityDoc.exists()) {
+                    const data = activityDoc.data();
+                    currentActivityName = data.name || 'Activity';
+                    if (activityNameDisplay) {
+                        activityNameDisplay.textContent = currentActivityName;
+                    }
+                    return data;
+                }
+                return null;
+            } catch (error) {
+                console.error('Error loading activity:', error);
+                return null;
+            }
+        }
+
+        async function loadProfileStrength(userId) {
+            try {
+                const portfolioRef = collection(db, COLLECTIONS.studentPortfolio);
+                const q = query(portfolioRef, where("userId", "==", userId));
+                const snapshot = await getDocs(q);
+                
+                const activities = [];
+                snapshot.forEach(doc => {
+                    activities.push(doc.data());
+                });
+                
+                const count = activities.length;
+                let strength = 0;
+                
+                // Calculate strength based on number of activities
+                if (count >= 5) strength = 85;
+                else if (count >= 3) strength = 60;
+                else if (count >= 1) strength = 35;
+                else strength = 10;
+                
+                if (strengthFill) {
+                    strengthFill.style.width = strength + '%';
+                }
+                if (strengthPercentage) {
+                    strengthPercentage.textContent = strength + '%';
+                }
+                
+                // Show gap analysis
+                showGapAnalysis(activities);
+                
+                return strength;
+            } catch (error) {
+                console.error('Error loading profile strength:', error);
+                return 0;
+            }
+        }
+
+        function showGapAnalysis(activities) {
+            if (!gapList) return;
+            
+            const types = activities.map(a => a.type || 'unknown');
+            const hasLeadership = types.some(t => t === 'leadership' || t === 'volunteering' || t === 'internship');
+            const hasAcademics = types.some(t => t === 'course' || t === 'research' || t === 'competition');
+            const hasVolunteering = types.some(t => t === 'volunteering' || t === 'community');
+            
+            let gaps = [];
+            
+            if (!hasLeadership) {
+                gaps.push('🌟 You have strong academics but no leadership experience yet');
+            }
+            if (!hasVolunteering) {
+                gaps.push('🤝 Consider adding a volunteering activity to diversify your profile');
+            }
+            if (activities.length < 3) {
+                gaps.push('📈 Adding more activities will strengthen your university applications');
+            }
+            if (activities.length > 0 && !hasAcademics) {
+                gaps.push('📚 Consider adding an academic activity like a course or research');
+            }
+            
+            if (gaps.length === 0) {
+                gaps.push('🎉 Great work! Your profile is well-rounded.');
+                gaps.push('💪 Keep building on this momentum!');
+            }
+            
+            gapList.innerHTML = gaps.map(gap => 
+                `<li>${gap}</li>`
+            ).join('');
+        }
+
+        async function saveReflection() {
+            const user = auth.currentUser;
+            if (!user) {
+                alert('Please log in to save your reflection.');
+                return;
+            }
+
+            const r1 = reflection1?.value || '';
+            const r2 = reflection2?.value || '';
+            const r3 = reflection3?.value || '';
+            
+            if (!r1 && !r2 && !r3) {
+                alert('Please answer at least one reflection question before saving.');
+                return;
+            }
+
+            if (saveReflectionBtn) {
+                saveReflectionBtn.textContent = '⏳ Saving...';
+                saveReflectionBtn.disabled = true;
+            }
+
+            try {
+                // Find portfolio entry
+                const portfolioRef = collection(db, COLLECTIONS.studentPortfolio);
+                const q = query(portfolioRef, 
+                    where("userId", "==", user.uid), 
+                    where("activityId", "==", currentActivityId)
+                );
+                const snapshot = await getDocs(q);
+                
+                if (snapshot.empty) {
+                    alert('Portfolio entry not found. Please try again.');
+                    return;
+                }
+                
+                const docRef = snapshot.docs[0].ref;
+                const responses = [r1, r2, r3];
+                const hasEssayPotential = r1.length > 100 || r2.length > 100 || r3.length > 100;
+                
+                await updateDoc(docRef, {
+                    reflectionResponses: responses,
+                    studentNote: r1,
+                    essayPotentialFlag: hasEssayPotential
+                });
+
+                // Save to reflections collection
+                const reflectionsRef = collection(db, 'reflections');
+                await addDoc(reflectionsRef, {
+                    userId: user.uid,
+                    activityId: currentActivityId,
+                    activityName: currentActivityName,
+                    responses: responses,
+                    timestamp: serverTimestamp(),
+                    savedAt: new Date().toISOString()
+                });
+
+                if (reflectionStatus) {
+                    reflectionStatus.style.display = 'block';
+                    reflectionStatus.style.color = '#22c55e';
+                    reflectionStatus.innerHTML = '✅ Reflections saved! They may be used for your university essays.';
+                }
+
+                setTimeout(function() {
+                    window.location.href = 'portfolio.html';
+                }, 1500);
+
+            } catch (error) {
+                console.error('Error saving reflection:', error);
+                alert('Error saving reflection. Please try again.');
+                if (saveReflectionBtn) {
+                    saveReflectionBtn.textContent = '💾 Save Reflections';
+                    saveReflectionBtn.disabled = false;
+                }
+            }
+        }
+
+        function skipReflection() {
+            if (confirm('You can always add your reflection later from your portfolio. Continue?')) {
+                window.location.href = 'portfolio.html';
+            }
+        }
+
+        async function checkGradeMilestone(userId) {
+            try {
+                const userRef = doc(db, COLLECTIONS.users, userId);
+                const userDoc = await getDoc(userRef);
+                if (userDoc.exists()) {
+                    const userData = userDoc.data();
+                    const grade = userData.grade || '10';
+                    
+                    if (milestoneCta && milestoneMessage) {
+                        if (grade === '11') {
+                            milestoneCta.style.display = 'block';
+                            milestoneMessage.textContent = 'You\'re building a strong profile. Start thinking about your university shortlist.';
+                        } else if (grade === '12') {
+                            milestoneCta.style.display = 'block';
+                            milestoneMessage.textContent = 'You\'re in the final stretch! Focus on your applications and deadlines.';
+                        }
+                    }
+                }
+            } catch (error) {
+                console.error('Error checking grade milestone:', error);
+            }
+        }
+
+        // ===== INITIALIZATION =====
+        async function initPostActivity() {
+            const activityId = getActivityIdFromURL();
+            if (!activityId) {
+                alert('No activity selected.');
+                window.location.href = 'dashboard.html';
+                return;
+            }
+            
+            currentActivityId = activityId;
+
+            onAuthStateChanged(auth, async function(user) {
+                if (!user) {
+                    window.location.href = 'login.html';
+                    return;
+                }
+
+                await loadActivityData(activityId);
+                await loadProfileStrength(user.uid);
+                await checkGradeMilestone(user.uid);
+            });
+
+            // Event listeners
+            if (saveReflectionBtn) {
+                saveReflectionBtn.addEventListener('click', saveReflection);
+            }
+            if (skipReflectionBtn) {
+                skipReflectionBtn.addEventListener('click', skipReflection);
+            }
+
+            // Logout
+            const logoutLink = document.getElementById('logout-link');
+            if (logoutLink) {
+                logoutLink.addEventListener('click', async function(e) {
+                    e.preventDefault();
+                    try {
+                        await signOut(auth);
+                        window.location.href = 'login.html';
+                    } catch (error) {
+                        console.error('Logout error:', error);
+                    }
+                });
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            initPostActivity();
+        });
+
+        console.log('✅ post-activity.js initialized!');
+    </script>
 </body>
 </html>
