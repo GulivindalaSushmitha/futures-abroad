@@ -5,7 +5,8 @@
 import { 
     db, auth, COLLECTIONS,
     collection, doc, getDocs, query, where,
-    addDoc, updateDoc, serverTimestamp, getDoc
+    addDoc, updateDoc, serverTimestamp, getDoc,
+    arrayUnion  // <-- THIS WAS MISSING!
 } from './firebase-config.js';
 
 // ============================================================
@@ -192,7 +193,7 @@ export function showReflectionModal(activityId, activityName, activityType, onCo
 // ============================================================
 // Save Reflections to Firestore
 // ============================================================
-async function saveReflections(activityId, responses) {
+export async function saveReflections(activityId, responses) {
     const user = auth.currentUser;
     if (!user) {
         showToast('Please log in to save reflections.', 'error');
@@ -272,7 +273,7 @@ export async function markActivityComplete(activityId, activityName, activityTyp
         
         if (!existing.empty) {
             showToast('This activity is already in your portfolio.', 'info');
-            return false;
+            return true; // Return true since it's already completed
         }
         
         // Add to portfolio
@@ -367,3 +368,4 @@ export { saveReflections, showToast };
 window.showReflectionModal = showReflectionModal;
 window.markActivityComplete = markActivityComplete;
 window.showToast = showToast;
+window.REFLECTION_QUESTIONS = REFLECTION_QUESTIONS;
