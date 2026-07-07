@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Phase 4 Test</title>
+    <style>
+        body { font-family: Arial; padding: 40px; background: #f0f4ff; }
+        .container { max-width: 800px; margin: 0 auto; background: white; padding: 40px; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); }
+        .btn { background: #22c55e; color: white; border: none; padding: 20px 50px; border-radius: 50px; font-size: 22px; font-weight: bold; cursor: pointer; }
+        .btn:hover { transform: scale(1.05); }
+        .phase-badge { background: #22c55e; color: white; padding: 4px 16px; border-radius: 20px; display: inline-block; font-size: 14px; }
+        .hidden { display: none; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <span class="phase-badge">Phase 4</span>
+        <h1>🎯 After Completing This Activity</h1>
+        <p style="color: #555; font-size: 18px;">Click the button below to mark this activity as complete.</p>
+        
+        <div style="text-align: center; margin: 30px 0;">
+            <button id="completeBtn" class="btn">✅ Mark Activity as Complete</button>
+        </div>
+        
+        <div id="status" style="display: none; background: #e8f5e9; padding: 20px; border-radius: 12px; text-align: center;">
+            <h2 style="color: #16a34a;">✅ Activity Completed!</h2>
+            <p>Redirecting to reflection page...</p>
+        </div>
+        
+        <p style="text-align: center; color: #888;">
+            <a href="activity-registration.html">← Back to Registration</a>
+        </p>
+    </div>
+
+    <script>
+        document.getElementById('completeBtn').addEventListener('click', function() {
+            document.getElementById('status').style.display = 'block';
+            this.textContent = '⏳ Processing...';
+            this.disabled = true;
+            
+            setTimeout(function() {
+                alert('✅ Phase 4 is working! Now let\'s fix your registration page.');
+                window.location.href = 'post-activity.html?id=test';
+            }, 1500);
+        });
+    </script>
+</body>
+</html>
