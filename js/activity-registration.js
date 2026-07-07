@@ -1,5 +1,5 @@
 // ============================================================
-// js/activity-registration.js - Phase 3 + 4 (FIXED)
+// js/activity-registration.js - Phase 3 + 4 (COMPLETE)
 // ============================================================
 
 import { 
@@ -172,19 +172,16 @@ async function handleRegistrationComplete(activityId) {
                 markRegisteredBtn.disabled = true;
                 markRegisteredBtn.style.background = '#22c55e';
 
-                // Show registered badge
                 if (registeredBadge) {
                     registeredBadge.style.display = 'block';
                 }
 
-                // Show Phase 4 section
                 if (phase4Section) {
                     phase4Section.style.display = 'block';
                 }
 
                 alert('🎉 Congratulations! You have successfully registered for this activity!');
 
-                // Scroll to Phase 4
                 setTimeout(function() {
                     if (phase4Section) {
                         phase4Section.scrollIntoView({ behavior: 'smooth' });
@@ -234,7 +231,6 @@ async function markActivityAsComplete() {
     const activity = await fetchActivityData(activityId);
     const skills = activity?.skills_gained || [];
 
-    // Disable button during processing
     if (completeActivityBtn) {
         completeActivityBtn.textContent = '⏳ Processing...';
         completeActivityBtn.disabled = true;
@@ -275,7 +271,6 @@ async function markActivityAsComplete() {
             createdAt: serverTimestamp()
         };
 
-        // Add to portfolio collection
         await addDoc(portfolioRef, portfolioEntry);
 
         // Update user profile
@@ -287,7 +282,6 @@ async function markActivityAsComplete() {
 
         console.log('✅ Activity marked as complete!');
 
-        // Show completion status
         if (completionStatus) {
             completionStatus.classList.remove('hidden');
             if (completionMessage) {
@@ -295,19 +289,17 @@ async function markActivityAsComplete() {
             }
         }
 
-        // Hide the complete button container
         if (completeActivityContainer) {
             completeActivityContainer.style.display = 'none';
         }
 
-        // Show Phase 4 status
         if (phase4Status) {
             phase4Status.style.display = 'block';
             phase4Status.style.color = '#22c55e';
             phase4Status.innerHTML = '✅ Activity marked as complete! Redirecting to Phase 4...';
         }
 
-        // Redirect to Phase 4 page (post-activity.html)
+        // REDIRECT TO POST-ACTIVITY (Phase 4 Reflection)
         setTimeout(function() {
             window.location.href = 'post-activity.html?id=' + activityId;
         }, 1500);
@@ -337,7 +329,6 @@ async function checkIfActivityCompleted(userId, activityId) {
         const snapshot = await getDocs(q);
         
         if (!snapshot.empty) {
-            // Activity is already completed
             if (completionStatus) {
                 completionStatus.classList.remove('hidden');
                 if (completionMessage) {
@@ -366,7 +357,6 @@ async function checkIfActivityCompleted(userId, activityId) {
 // ============================================================
 
 function setupEventListeners() {
-    // Complete activity button
     if (completeActivityBtn) {
         console.log('🔵 Found completeActivityBtn, adding click listener');
         completeActivityBtn.addEventListener('click', markActivityAsComplete);
@@ -374,7 +364,6 @@ function setupEventListeners() {
         console.warn('⚠️ completeActivityBtn not found in DOM');
     }
 
-    // Mark registered button
     if (markRegisteredBtn) {
         markRegisteredBtn.addEventListener('click', function() {
             const activityId = getActivityIdFromURL();
@@ -384,7 +373,6 @@ function setupEventListeners() {
         });
     }
 
-    // Logout
     const logoutLink = document.getElementById('logout-link');
     if (logoutLink) {
         logoutLink.addEventListener('click', async function(e) {
@@ -449,13 +437,11 @@ async function initApp() {
             if (registeredBadge) {
                 registeredBadge.style.display = 'block';
             }
-            // Show Phase 4 section
             if (phase4Section) {
                 phase4Section.style.display = 'block';
             }
         }
         
-        // Check if activity is already completed
         await checkIfActivityCompleted(user.uid, activityId);
     });
 }
@@ -466,7 +452,6 @@ async function initApp() {
 
 document.addEventListener('DOMContentLoaded', function() {
     console.log('🚀 activity-registration.js loaded!');
-    console.log('🔍 Looking for completeActivityBtn:', document.getElementById('completeActivityBtn'));
     setupEventListeners();
     initApp();
 });
