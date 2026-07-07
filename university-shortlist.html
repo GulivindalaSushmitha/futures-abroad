@@ -346,10 +346,49 @@
         </div>
     </main>
 
+    <!-- ============================================================ -->
+    <!-- SCRIPTS -->
+    <!-- ============================================================ -->
+    
+    <!-- Firebase Config -->
     <script type="module" src="js/firebase-config.js"></script>
+    
+    <!-- University Logic -->
     <script type="module" src="js/university.js"></script>
+    
+    <!-- Main Script - Phase 5 Tracking Added -->
     <script type="module">
         import { auth, onAuthStateChanged, signOut } from './js/firebase-config.js';
+        
+        // ============================================================
+        // PHASE 5 TRACKING: Mark that user has viewed universities
+        // This updates the dashboard phase progress
+        // ============================================================
+        
+        // Mark Phase 5 as viewed
+        localStorage.setItem('viewedUniversities', 'true');
+        console.log('✅ Phase 5: University Shortlist viewed - Dashboard will update');
+        
+        // Also update in Firestore if you want to persist across devices
+        async function markUniversitiesViewed(userId) {
+            try {
+                // Import dynamically to avoid circular imports
+                const { db, doc, updateDoc } = await import('./js/firebase-config.js');
+                const userRef = doc(db, 'users', userId);
+                await updateDoc(userRef, {
+                    viewedUniversities: true,
+                    phase5Viewed: true,
+                    lastUniversityView: new Date().toISOString()
+                });
+                console.log('✅ Phase 5 marked in Firestore');
+            } catch (error) {
+                console.log('⚠️ Could not update Firestore (may not be needed):', error.message);
+            }
+        }
+        
+        // ============================================================
+        // LOGOUT
+        // ============================================================
         
         document.getElementById('logoutBtn')?.addEventListener('click', async (e) => {
             e.preventDefault();
@@ -361,9 +400,29 @@
             }
         });
 
+        // ============================================================
+        // CTA BUTTON - Navigate to Phase 6
+        // ============================================================
+        
         document.getElementById('futuresAbroadCTA')?.addEventListener('click', () => {
             window.location.href = 'futures-abroad-enroll.html';
         });
+
+        // ============================================================
+        // INIT - Mark Phase 5 when user is logged in
+        // ============================================================
+        
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                // Mark Phase 5 as viewed in Firestore for persistence
+                await markUniversitiesViewed(user.uid);
+            } else {
+                // If not logged in, redirect to login
+                // window.location.href = 'login.html';
+            }
+        });
+        
+        console.log('✅ university-shortlist.html loaded with Phase 5 tracking!');
     </script>
 
 </body>
