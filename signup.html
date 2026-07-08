@@ -4,9 +4,6 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Sign Up - Futures Abroad</title>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
     <link rel="stylesheet" href="css/style.css" />
     <style>
         .auth-container {
@@ -195,22 +192,18 @@
         </div>
     </div>
 
-    <script>
+    <script type="module">
         // ============================================================
-        // FIREBASE CONFIG
+        // IMPORTS
         // ============================================================
-        const firebaseConfig = {
-            apiKey: "AIzaSyBGJcOifwfWlGeFsFCXhdC67fyRTBOvfGQ",
-            authDomain: "futures-2.firebaseapp.com",
-            projectId: "futures-2",
-            storageBucket: "futures-2.firebasestorage.app",
-            messagingSenderId: "143399880838",
-            appId: "1:143399880838:web:c2232759fcbc1fa2ed2907"
-        };
-
-        firebase.initializeApp(firebaseConfig);
-        const auth = firebase.auth();
-        const db = firebase.firestore();
+        import { 
+            auth, 
+            db,
+            doc,
+            setDoc,
+            createUserWithEmailAndPassword,
+            serverTimestamp
+        } from './js/firebase-config.js';
 
         // ============================================================
         // SIGNUP FORM
@@ -243,13 +236,13 @@
             
             try {
                 // Create user in Firebase Auth
-                const userCredential = await auth.createUserWithEmailAndPassword(email, password);
+                const userCredential = await createUserWithEmailAndPassword(auth, email, password);
                 const user = userCredential.user;
                 
                 // ============================================================
-                // SAVE STUDENT DATA TO FIRESTORE - THIS MAKES THEM SHOW IN ADMIN
+                // SAVE STUDENT DATA TO FIRESTORE
                 // ============================================================
-                await db.collection('students').doc(user.uid).set({
+                await setDoc(doc(db, 'students', user.uid), {
                     uid: user.uid,
                     name: name,
                     email: email,
@@ -260,18 +253,18 @@
                     profileCompleted: false,
                     onboardingPhase: 1,
                     phase: 'Phase 1',
-                    createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-                    updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+                    createdAt: serverTimestamp(),
+                    updatedAt: serverTimestamp()
                 });
                 
                 // Also save to studentProfiles for backup
-                await db.collection('studentProfiles').doc(user.uid).set({
+                await setDoc(doc(db, 'studentProfiles', user.uid), {
                     name: name,
                     email: email,
                     grade: grade,
                     country: country,
                     school: school || 'Not specified',
-                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                    createdAt: serverTimestamp()
                 });
                 
                 console.log('✅ Student saved to Firestore!');
@@ -282,7 +275,7 @@
                 msgEl.textContent = '✅ Account created! Taking you to the quiz...';
                 
                 // ============================================================
-                // REDIRECT TO QUIZ (Phase 1 as per document)
+                // REDIRECT TO QUIZ
                 // ============================================================
                 setTimeout(() => {
                     window.location.href = 'quiz.html?uid=' + user.uid;
