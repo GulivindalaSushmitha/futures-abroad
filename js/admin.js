@@ -1,26 +1,36 @@
 // ============================================================
-// js/admin.js - Admin Dashboard Logic (FIXED)
+// js/admin.js - Admin Dashboard Logic (FULLY FIXED)
 // ============================================================
 
 const auth = firebase.auth();
 const db = firebase.firestore();
 
+// ============================================================
+// CHECK AUTH STATUS
+// ============================================================
 document.addEventListener('DOMContentLoaded', function() {
     auth.onAuthStateChanged(user => {
         if (user) {
+            // Check if user is admin
             db.collection('admins').doc(user.uid).get().then(doc => {
                 if (doc.exists) {
                     loadDashboard();
                 } else {
-                    auth.signOut();
-                    window.location.href = 'admin-login.html';
+                    auth.signOut().then(() => {
+                        window.location.href = 'admin-login.html';
+                    });
                 }
+            }).catch(() => {
+                auth.signOut().then(() => {
+                    window.location.href = 'admin-login.html';
+                });
             });
         } else {
             window.location.href = 'admin-login.html';
         }
     });
 
+    // Navigation
     document.querySelectorAll('.admin-nav a').forEach(link => {
         link.addEventListener('click', function(e) {
             e.preventDefault();
@@ -33,6 +43,22 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
+// ============================================================
+// LOGOUT - FIXED
+// ============================================================
+window.logout = function() {
+    auth.signOut().then(() => {
+        console.log('✅ Logged out successfully');
+        window.location.href = 'admin-login.html';
+    }).catch((error) => {
+        console.error('❌ Logout error:', error);
+        window.location.href = 'admin-login.html';
+    });
+};
+
+// ============================================================
+// LOAD DASHBOARD
+// ============================================================
 async function loadDashboard() {
     try {
         // Get ALL students
@@ -120,6 +146,9 @@ async function loadDashboard() {
     }
 }
 
+// ============================================================
+// LOAD STUDENTS
+// ============================================================
 async function loadStudents() {
     try {
         const snapshot = await db.collection('students').get();
@@ -170,6 +199,9 @@ async function loadStudents() {
     }
 }
 
+// ============================================================
+// LOAD ACTIVITIES
+// ============================================================
 async function loadActivities() {
     try {
         const snapshot = await db.collection('activities').get();
@@ -218,6 +250,9 @@ async function loadActivities() {
     }
 }
 
+// ============================================================
+// STUDENT FUNCTIONS
+// ============================================================
 function viewStudent(id) {
     window.location.href = `student-detail.html?id=${id}`;
 }
@@ -234,6 +269,9 @@ async function deleteStudent(id) {
     }
 }
 
+// ============================================================
+// ACTIVITY FUNCTIONS
+// ============================================================
 async function deleteActivity(id) {
     if (confirm('⚠️ Are you sure you want to delete this activity?')) {
         try {
@@ -292,12 +330,9 @@ function editActivity(id) {
     }
 }
 
-function logout() {
-    auth.signOut();
-    window.location.href = 'admin-login.html';
-}
-
-// Search and filter
+// ============================================================
+// SEARCH AND FILTER
+// ============================================================
 document.getElementById('search-students')?.addEventListener('input', function() {
     const searchTerm = this.value.toLowerCase();
     document.querySelectorAll('#students-list tr').forEach(row => {
