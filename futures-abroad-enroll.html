@@ -4,19 +4,140 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Phase 6 - Futures Abroad Enrollment</title>
-    <link rel="stylesheet" href="css/enrollment.css">
     <link rel="stylesheet" href="css/student-app.css">
+    <style>
+        .step-progress {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 20px 0 30px 0;
+        }
+        .step-dot {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            background: #e2e8f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: #94a3b8;
+            font-size: 14px;
+            transition: all 0.5s;
+        }
+        .step-dot.active {
+            background: #2563eb;
+            color: white;
+            box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.2);
+        }
+        .step-line {
+            width: 40px;
+            height: 2px;
+            background: #e2e8f0;
+            transition: all 0.5s;
+        }
+        .step-line.active { background: #2563eb; }
+        
+        .handoff-step { margin: 20px 0; animation: fadeIn 0.4s ease; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .program-card {
+            padding: 20px 24px;
+            margin: 10px 0;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: white;
+        }
+        .program-card:hover {
+            border-color: #2563eb;
+            box-shadow: 0 4px 16px rgba(37, 99, 235, 0.1);
+        }
+        .program-card.selected {
+            border-color: #2563eb;
+            background: #eff6ff;
+        }
+        .program-card .price {
+            font-size: 22px;
+            font-weight: 700;
+            color: #2563eb;
+            margin-top: 8px;
+        }
+        
+        .enrollment-success {
+            text-align: center;
+            padding: 40px 20px;
+            animation: fadeIn 0.6s ease;
+        }
+        .success-icon { font-size: 72px; margin-bottom: 20px; display: block; }
+        .enrollment-success h2 { color: #1e293b; font-size: 28px; margin-bottom: 10px; }
+        .next-steps {
+            text-align: left;
+            max-width: 420px;
+            margin: 25px auto;
+            padding: 24px 30px;
+            background: #f8fafc;
+            border-radius: 10px;
+            border: 1px solid #e2e8f0;
+        }
+        .next-steps li { padding: 8px 0; border-bottom: 1px solid #e2e8f0; color: #475569; font-size: 14px; list-style: none; }
+        .next-steps li:last-child { border-bottom: none; }
+        .next-steps li::before { content: '✓ '; color: #22c55e; font-weight: 700; }
+        
+        .phase-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+        }
+        .form-group { margin: 15px 0; }
+        .form-group label { display: block; font-weight: 600; color: #1e293b; margin-bottom: 5px; }
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+        .primary-btn {
+            background: #2563eb;
+            color: white;
+            border: none;
+            padding: 12px 28px;
+            border-radius: 6px;
+            font-size: 15px;
+            cursor: pointer;
+        }
+        .primary-btn:disabled { background: #94a3b8; cursor: not-allowed; }
+        .secondary-btn {
+            background: transparent;
+            color: #2563eb;
+            border: 2px solid #2563eb;
+            padding: 10px 24px;
+            border-radius: 6px;
+            font-size: 15px;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+        .summary-box { background: #f8fafc; padding: 20px; border-radius: 8px; margin: 15px 0; }
+        .profile-details p { margin: 6px 0; }
+        .nav-buttons { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 20px; padding-top: 20px; border-top: 2px solid #e2e8f0; }
+    </style>
 </head>
 <body>
-    <div class="app-container">
-        <!-- Phase Navigation -->
+    <div class="app-container" style="max-width: 1000px; margin: 0 auto; padding: 20px;">
         <div id="phase-navigation"></div>
 
         <div id="phase6-container" class="phase-container">
             <h1>Phase 6: Futures Abroad Enrollment</h1>
-            <p class="subtitle">Complete your enrollment to get personalized guidance from our counselors.</p>
+            <p style="color: #64748b;">Complete your enrollment to get personalized guidance from our counselors.</p>
 
-            <!-- Progress Steps -->
             <div class="step-progress">
                 <span class="step-dot active">1</span>
                 <span class="step-line"></span>
@@ -28,7 +149,7 @@
             </div>
             <p id="step-counter" style="text-align: center; color: #64748b;">Step 1 of 4</p>
 
-            <!-- Step 1: Profile Review -->
+            <!-- Step 1 -->
             <div id="step-1" class="handoff-step" style="display:block;">
                 <h2>Step 1: Review Your Profile</h2>
                 <p>Please review your profile before sharing with counselors.</p>
@@ -36,17 +157,17 @@
                 <button id="next-step-btn" class="primary-btn">Next →</button>
             </div>
 
-            <!-- Step 2: Program Selection -->
+            <!-- Step 2 -->
             <div id="step-2" class="handoff-step" style="display:none;">
                 <h2>Step 2: Choose Your Program</h2>
                 <div class="program-options">
                     <div class="program-card" data-program="grade10-12">
-                        <h3>Grade 10-12 Track</h3>
+                        <h3>📚 Grade 10-12 Track</h3>
                         <p>Complete guidance through Grade 10, 11, and 12</p>
                         <p class="price">$1,200/year</p>
                     </div>
                     <div class="program-card" data-program="grade11-fast">
-                        <h3>Grade 11 Fast-Track</h3>
+                        <h3>⚡ Grade 11 Fast-Track</h3>
                         <p>Intensive preparation for Grade 11-12</p>
                         <p class="price">$1,800/year</p>
                     </div>
@@ -57,22 +178,23 @@
                 </div>
             </div>
 
-            <!-- Step 3: Intake Form -->
+            <!-- Step 3 -->
             <div id="step-3" class="handoff-step" style="display:none;">
                 <h2>Step 3: Complete Intake Form</h2>
-                <div class="form-group" style="margin: 15px 0;">
-                    <label for="parent-email">Parent/Guardian Email:</label>
-                    <input type="email" id="parent-email" placeholder="parent@email.com" style="width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px;" />
+                <div class="form-group">
+                    <label for="parent-email">👨‍👩‍👦 Parent/Guardian Email:</label>
+                    <input type="email" id="parent-email" placeholder="parent@email.com" />
                 </div>
-                <div class="form-group" style="margin: 15px 0;">
-                    <label for="counselor-timezone">Preferred Counselor Timezone:</label>
-                    <select id="counselor-timezone" style="width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px;">
+                <div class="form-group">
+                    <label for="counselor-timezone">🌍 Preferred Counselor Timezone:</label>
+                    <select id="counselor-timezone">
                         <option value="EST">Eastern (EST)</option>
                         <option value="CST">Central (CST)</option>
                         <option value="MST">Mountain (MST)</option>
                         <option value="PST">Pacific (PST)</option>
                         <option value="GMT">GMT</option>
                         <option value="IST">India (IST)</option>
+                        <option value="AEST">Australia (AEST)</option>
                     </select>
                 </div>
                 <div style="margin-top: 20px;">
@@ -81,18 +203,18 @@
                 </div>
             </div>
 
-            <!-- Step 4: Confirmation -->
+            <!-- Step 4 -->
             <div id="step-4" class="handoff-step" style="display:none;">
                 <h2>Step 4: Confirm Enrollment</h2>
                 <p>Review your selections and confirm enrollment.</p>
-                <div class="summary-box" style="background: #f8fafc; padding: 20px; border-radius: 8px; margin: 15px 0;">
+                <div class="summary-box">
                     <p><strong>Program:</strong> <span id="summary-program">Not selected</span></p>
                     <p><strong>Parent Email:</strong> <span id="summary-email">Not provided</span></p>
                     <p><strong>Timezone:</strong> <span id="summary-timezone">Not selected</span></p>
                 </div>
                 <div style="margin-top: 20px;">
                     <button id="prev-step-btn" class="secondary-btn">← Back</button>
-                    <button id="confirm-enrollment" class="primary-btn">Confirm Enrollment ✓</button>
+                    <button id="confirm-enrollment" class="primary-btn">✅ Confirm Enrollment</button>
                 </div>
             </div>
 
@@ -100,14 +222,189 @@
         </div>
     </div>
 
-    <!-- Scripts -->
     <script src="js/phase-navigation.js"></script>
-    <script src="js/phase-detection.js"></script>
-    <script src="phase6-handoff.js"></script>
     <script>
+        // ============================================================
+        // PHASE 6 - COMPLETE CODE
+        // ============================================================
+
+        let enrollmentData = {
+            program: '',
+            parentEmail: '',
+            counselorTimezone: 'EST',
+            step: 1
+        };
+
+        function initPhase6() {
+            try {
+                const student = JSON.parse(localStorage.getItem('studentProfile') || '{}');
+                if (typeof initPhaseNavigation === 'function') initPhaseNavigation();
+                displayStudentProfile(student);
+                setupStepNavigation();
+                showStep(1);
+            } catch (error) {
+                console.log('Error initializing Phase 6:', error);
+            }
+        }
+
+        function displayStudentProfile(student) {
+            const container = document.getElementById('profile-preview');
+            if (!container) return;
+
+            let portfolio = JSON.parse(localStorage.getItem('studentPortfolio') || '[]');
+            let shortlist = JSON.parse(localStorage.getItem('universityShortlist') || '{"reach":[],"target":[],"safety":[]}');
+
+            container.innerHTML = `
+                <div class="profile-details">
+                    <p><strong>Name:</strong> ${student.name || 'Not set'}</p>
+                    <p><strong>Grade:</strong> ${student.grade || 'Not set'}</p>
+                    <p><strong>School:</strong> ${student.school || 'Not set'}</p>
+                    <p><strong>Country:</strong> ${student.country || 'Not set'}</p>
+                    <p><strong>Interests:</strong> ${(student.interests || []).join(', ') || 'Not set'}</p>
+                    <p><strong>Activities Completed:</strong> ${portfolio.length}</p>
+                    <p><strong>Profile Strength:</strong> ${student.profileStrengthScore || 0}%</p>
+                    <p><strong>Universities Shortlisted:</strong> ${(shortlist.reach || []).length + (shortlist.target || []).length + (shortlist.safety || []).length}</p>
+                </div>
+            `;
+        }
+
+        function setupStepNavigation() {
+            document.getElementById('next-step-btn')?.addEventListener('click', nextStep);
+            document.getElementById('prev-step-btn')?.addEventListener('click', prevStep);
+            document.getElementById('confirm-enrollment')?.addEventListener('click', confirmEnrollment);
+
+            document.querySelectorAll('.program-card').forEach(card => {
+                card.addEventListener('click', function() {
+                    document.querySelectorAll('.program-card').forEach(c => c.classList.remove('selected'));
+                    this.classList.add('selected');
+                    enrollmentData.program = this.dataset.program;
+                    document.getElementById('next-step-btn').disabled = false;
+                });
+            });
+        }
+
+        function nextStep() {
+            if (enrollmentData.step === 1) {
+                enrollmentData.step = 2;
+                showStep(2);
+            } else if (enrollmentData.step === 2) {
+                if (!enrollmentData.program) { alert('Please select a program'); return; }
+                enrollmentData.step = 3;
+                showStep(3);
+            } else if (enrollmentData.step === 3) {
+                const parentEmail = document.getElementById('parent-email')?.value;
+                if (!parentEmail || !parentEmail.includes('@')) {
+                    alert('Please enter a valid parent/guardian email');
+                    return;
+                }
+                enrollmentData.parentEmail = parentEmail;
+                enrollmentData.counselorTimezone = document.getElementById('counselor-timezone')?.value || 'EST';
+                enrollmentData.step = 4;
+                showStep(4);
+                updateSummary();
+            }
+        }
+
+        function prevStep() {
+            if (enrollmentData.step > 1) {
+                enrollmentData.step--;
+                showStep(enrollmentData.step);
+            }
+        }
+
+        function showStep(step) {
+            document.querySelectorAll('.handoff-step').forEach(el => el.style.display = 'none');
+            const stepEl = document.getElementById(`step-${step}`);
+            if (stepEl) stepEl.style.display = 'block';
+
+            document.querySelectorAll('.step-dot').forEach((dot, index) => {
+                dot.classList.toggle('active', index + 1 <= step);
+            });
+            document.querySelectorAll('.step-line').forEach((line, index) => {
+                line.classList.toggle('active', index + 1 < step);
+            });
+
+            document.getElementById('prev-step-btn').style.display = step > 1 ? 'inline-block' : 'none';
+            document.getElementById('next-step-btn').style.display = step < 4 ? 'inline-block' : 'none';
+            document.getElementById('confirm-enrollment').style.display = step === 4 ? 'inline-block' : 'none';
+            document.getElementById('step-counter').textContent = `Step ${step} of 4`;
+        }
+
+        function updateSummary() {
+            const programNames = {
+                'grade10-12': 'Grade 10-12 Track ($1,200/year)',
+                'grade11-fast': 'Grade 11 Fast-Track ($1,800/year)'
+            };
+            document.getElementById('summary-program').textContent = programNames[enrollmentData.program] || enrollmentData.program;
+            document.getElementById('summary-email').textContent = enrollmentData.parentEmail || 'Not provided';
+            document.getElementById('summary-timezone').textContent = enrollmentData.counselorTimezone || 'Not selected';
+        }
+
+        function confirmEnrollment() {
+            try {
+                const student = JSON.parse(localStorage.getItem('studentProfile') || '{}');
+                const profileData = generateProfilePDF(student);
+                notifyCounselor(student, profileData);
+                
+                student.enrollmentComplete = true;
+                student.currentPhase = 6;
+                localStorage.setItem('studentProfile', JSON.stringify(student));
+                showEnrollmentSuccess();
+            } catch (error) {
+                console.log('Error confirming enrollment:', error);
+                alert('There was an error. Please try again.');
+            }
+        }
+
+        function generateProfilePDF(student) {
+            let portfolio = JSON.parse(localStorage.getItem('studentPortfolio') || '[]');
+            let shortlist = JSON.parse(localStorage.getItem('universityShortlist') || '{"reach":[],"target":[],"safety":[]}');
+            
+            const profileData = {
+                student: { name: student.name, grade: student.grade, school: student.school, country: student.country },
+                interests: student.interests || [],
+                portfolio: portfolio,
+                universityShortlist: shortlist,
+                profileStrength: student.profileStrengthScore || 0,
+                generatedDate: new Date().toISOString()
+            };
+            localStorage.setItem('profilePDFData', JSON.stringify(profileData));
+            return profileData;
+        }
+
+        function notifyCounselor(student, profileData) {
+            alert(`✅ Counselor has been notified!\n\nWe'll contact you at ${enrollmentData.parentEmail} to schedule your first session.`);
+        }
+
+        function showEnrollmentSuccess() {
+            const container = document.getElementById('phase6-container');
+            if (!container) return;
+
+            container.innerHTML = `
+                <div class="enrollment-success">
+                    <div class="success-icon">🎉</div>
+                    <h2>Welcome to Futures Abroad!</h2>
+                    <p>Your enrollment is complete. A counselor will contact you within 24 hours.</p>
+                    <div class="next-steps">
+                        <h3>What's next?</h3>
+                        <ul>
+                            <li>Review your profile in the dashboard</li>
+                            <li>Check your email for counselor introduction</li>
+                            <li>Prepare for your first session</li>
+                        </ul>
+                    </div>
+                    <button onclick="window.location.href='dashboard.html'" class="primary-btn">
+                        Go to Dashboard
+                    </button>
+                </div>
+            `;
+            document.querySelector('.step-progress').style.display = 'none';
+            document.getElementById('step-counter').style.display = 'none';
+        }
+
         document.addEventListener('DOMContentLoaded', function() {
-            if (typeof initPhaseDetection === 'function') {
-                initPhaseDetection();
+            if (document.getElementById('phase6-container')) {
+                initPhase6();
             }
         });
     </script>
