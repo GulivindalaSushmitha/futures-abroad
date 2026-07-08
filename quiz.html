@@ -34,6 +34,24 @@
             color: #888;
             font-size: 15px;
         }
+        .selected-interests-display {
+            background: #f8f4ff;
+            border-radius: 12px;
+            padding: 10px 16px;
+            margin-bottom: 20px;
+            text-align: center;
+            border: 2px solid #f0e6ff;
+        }
+        .selected-interests-display .tag {
+            display: inline-block;
+            padding: 4px 14px;
+            background: #6C3CE1;
+            color: white;
+            border-radius: 50px;
+            font-size: 13px;
+            font-weight: 600;
+            margin: 3px;
+        }
         .question-container {
             margin-bottom: 25px;
         }
@@ -164,6 +182,12 @@
             color: #C62828;
             border-left: 4px solid #C62828;
         }
+        .message-box.success {
+            display: block;
+            background: #E8F5E9;
+            color: #2E7D32;
+            border-left: 4px solid #2E7D32;
+        }
         @media (max-width: 500px) {
             .quiz-container {
                 margin: 20px 15px;
@@ -187,6 +211,11 @@
             <p id="progressText">Question 1 of 8</p>
         </div>
         
+        <!-- Show selected interests -->
+        <div class="selected-interests-display" id="selectedDisplay">
+            Your interests: <span id="selectedTags"></span>
+        </div>
+        
         <div id="messageBox" class="message-box"></div>
         
         <!-- Questions Area -->
@@ -206,15 +235,15 @@
             </div>
         </div>
         
-        <!-- Results Area (hidden initially) -->
+        <!-- Results Area -->
         <div id="resultArea" style="display:none;">
             <div class="result-container">
                 <div style="font-size:48px;">🎉</div>
                 <h2 style="color:#2D1B4E; margin:10px 0;">Your Interest Profile</h2>
-                <p style="color:#666;">Based on your answers, we've identified these interests:</p>
+                <p style="color:#666;">Based on your selected interests and quiz answers:</p>
                 <div id="interestTags" style="margin:20px 0;"></div>
                 <p style="color:#888; font-size:14px;">These tags will help us recommend the best activities for you.</p>
-                <button class="btn-finish" id="goToAppBtn">🚀 Go to Activities (Phase 2)</button>
+                <button class="btn-finish" id="goToPhase2Btn">🚀 Go to Phase 2 - Activities</button>
             </div>
         </div>
     </div>
@@ -227,12 +256,13 @@
             auth, 
             db,
             doc,
+            getDoc,
             updateDoc,
             serverTimestamp
         } from './js/firebase-config.js';
 
         // ============================================================
-        // QUIZ DATA (8 Questions as per spec)
+        // QUIZ DATA (8 Questions)
         // ============================================================
         const questions = [
             {
@@ -354,10 +384,48 @@
         let selectedAnswers = [];
         let userInterests = [];
         let currentUid = null;
+        let selectedInterests = [];
 
         // Get UID from URL
         const urlParams = new URLSearchParams(window.location.search);
         currentUid = urlParams.get('uid');
+
+        // ============================================================
+        // LOAD SELECTED INTERESTS
+        // ============================================================
+        async function loadSelectedInterests() {
+            if (!currentUid) return;
+            
+            try {
+                const docRef = doc(db, 'students', currentUid);
+                const docSnap = await getDoc(docRef);
+                if (docSnap.exists()) {
+                    const data = docSnap.data();
+                    selectedInterests = data.selectedInterests || [];
+                    
+                    // Display them
+                    const tagsContainer = document.getElementById('selectedTags');
+                    tagsContainer.innerHTML = '';
+                    selectedInterests.forEach(interest => {
+                        const span = document.createElement('span');
+                        span.className = 'tag';
+                        span.textContent = interest;
+                        tagsContainer.appendChild(span);
+                    });
+                    
+                    // Add to userInterests
+                    selectedInterests.forEach(interest => {
+                        if (!userInterests.includes(interest)) {
+                            userInterests.push(interest);
+                        }
+                    });
+                    
+                    console.log('✅ Loaded selected interests:', selectedInterests);
+                }
+            } catch (error) {
+                console.error('Error loading interests:', error);
+            }
+        }
 
         // ============================================================
         // RENDER QUESTION
@@ -374,11 +442,9 @@
             document.getElementById('questionCounter').textContent = `${currentQuestion + 1}/${questions.length}`;
             document.getElementById('progressText').textContent = `Question ${currentQuestion + 1} of ${questions.length}`;
             
-            // Update progress bar
             const progress = ((currentQuestion) / questions.length) * 100;
             document.getElementById('progressFill').style.width = progress + '%';
 
-            // Render options
             const optionsContainer = document.getElementById('optionsContainer');
             optionsContainer.innerHTML = '';
             
@@ -392,17 +458,14 @@
                 optionsContainer.appendChild(btn);
             });
 
-            // Reset next button
             const nextBtn = document.getElementById('nextBtn');
             nextBtn.disabled = true;
             nextBtn.textContent = currentQuestion === questions.length - 1 ? 'Finish →' : 'Next →';
             
-            // Clear any selected state
             document.querySelectorAll('.options button').forEach(btn => {
                 btn.classList.remove('selected');
             });
             
-            // Restore selected answer if exists
             if (selectedAnswers[currentQuestion] !== undefined) {
                 const btns = document.querySelectorAll('.options button');
                 btns.forEach((btn, idx) => {
@@ -420,7 +483,6 @@
         function selectOption(index) {
             selectedAnswers[currentQuestion] = index;
             
-            // Update UI
             document.querySelectorAll('.options button').forEach((btn, idx) => {
                 btn.classList.toggle('selected', idx === index);
             });
@@ -434,12 +496,10 @@
         document.getElementById('nextBtn').addEventListener('click', function() {
             if (this.disabled) return;
             
-            // Save selected answer's tags
             const q = questions[currentQuestion];
             const selectedIndex = selectedAnswers[currentQuestion];
             const selectedText = q.options[selectedIndex];
             
-            // Get tags for this answer
             const tags = tagMapping[selectedText] || [];
             tags.forEach(tag => {
                 if (!userInterests.includes(tag)) {
@@ -460,7 +520,6 @@
         // SHOW RESULTS
         // ============================================================
         async function showResults() {
-            // Hide question area, show results
             document.getElementById('questionArea').style.display = 'none';
             document.getElementById('resultArea').style.display = 'block';
             document.getElementById('progressText').textContent = 'Quiz Complete! 🎉';
@@ -487,7 +546,7 @@
                 tagsContainer.appendChild(span);
             });
             
-            // Save to Firestore if we have UID
+            // Save to Firestore
             if (currentUid) {
                 try {
                     await updateDoc(doc(db, 'students', currentUid), {
@@ -501,53 +560,45 @@
                 } catch (error) {
                     console.error('Error saving quiz:', error);
                 }
-            } else {
-                // Try to get current user
-                auth.onAuthStateChanged(async (user) => {
-                    if (user) {
-                        currentUid = user.uid;
-                        try {
-                            await updateDoc(doc(db, 'students', currentUid), {
-                                interests: sortedInterests,
-                                profileCompleted: true,
-                                quizCompleted: true,
-                                quizCompletedAt: serverTimestamp(),
-                                phase: 'Phase 2'
-                            });
-                            console.log('✅ Quiz results saved!');
-                        } catch (error) {
-                            console.error('Error saving quiz:', error);
-                        }
-                    }
-                });
             }
         }
 
         // ============================================================
-        // GO TO PHASE 2 - ACTIVITIES (CHANGED FROM student-app.html)
+        // GO TO PHASE 2 - ACTIVITIES
         // ============================================================
-        document.getElementById('goToAppBtn').addEventListener('click', function() {
-            // Redirect to Phase 2: Activity Recommendations
+        document.getElementById('goToPhase2Btn').addEventListener('click', function() {
             window.location.href = 'activities.html';
         });
 
         // ============================================================
-        // INIT QUIZ
+        // INIT
         // ============================================================
-        renderQuestion();
-
-        // If no UID, try to get current user
-        if (!currentUid) {
-            auth.onAuthStateChanged(user => {
+        async function init() {
+            // If no UID, try to get from auth
+            if (!currentUid) {
+                const user = auth.currentUser;
                 if (user) {
                     currentUid = user.uid;
                 } else {
-                    document.getElementById('messageBox').className = 'message-box error';
-                    document.getElementById('messageBox').textContent = '⚠️ Please login to save your quiz results.';
+                    auth.onAuthStateChanged(user => {
+                        if (user) {
+                            currentUid = user.uid;
+                            loadSelectedInterests();
+                            renderQuestion();
+                        } else {
+                            document.getElementById('messageBox').className = 'message-box error';
+                            document.getElementById('messageBox').textContent = '⚠️ Please login to continue.';
+                        }
+                    });
+                    return;
                 }
-            });
+            }
+            
+            await loadSelectedInterests();
+            renderQuestion();
         }
 
+        init();
         console.log('✅ Quiz loaded!');
     </script>
 </body>
