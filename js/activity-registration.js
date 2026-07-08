@@ -25,6 +25,7 @@ const completionMessage = document.getElementById('completionMessage');
 const completeActivityContainer = document.getElementById('completeActivityContainer');
 const registeredBadge = document.getElementById('registeredBadge');
 const phase4Section = document.getElementById('phase4Section');
+const phase4Success = document.getElementById('phase4Success');
 
 let currentActivityId = null;
 let currentActivityData = null;
@@ -205,7 +206,7 @@ async function handleRegistrationComplete(activityId) {
 }
 
 // ============================================================
-// PHASE 4: Mark Activity as Complete
+// PHASE 4: Mark Activity as Complete (UPDATED)
 // ============================================================
 
 async function markActivityAsComplete() {
@@ -282,27 +283,33 @@ async function markActivityAsComplete() {
 
         console.log('✅ Activity marked as complete!');
 
-        if (completionStatus) {
-            completionStatus.classList.remove('hidden');
-            if (completionMessage) {
-                completionMessage.textContent = 'Activity "' + activityName + '" has been added to your portfolio!';
-            }
-        }
+        // ============================================================
+        // SHOW PHASE 4 SUCCESS SECTION (INSTEAD OF REDIRECTING)
+        // ============================================================
 
+        // Hide the "Mark as Complete" button container
         if (completeActivityContainer) {
             completeActivityContainer.style.display = 'none';
         }
 
+        // Show the Phase 4 success section with "Continue to Reflection" button
+        if (phase4Success) {
+            phase4Success.style.display = 'block';
+            phase4Success.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Update status message
         if (phase4Status) {
             phase4Status.style.display = 'block';
             phase4Status.style.color = '#22c55e';
-            phase4Status.innerHTML = '✅ Activity marked as complete! Redirecting to Phase 4...';
+            phase4Status.innerHTML = '✅ Activity marked as complete! Click "Continue to Reflection" to proceed.';
         }
 
-        // REDIRECT TO POST-ACTIVITY (Phase 4 Reflection)
-        setTimeout(function() {
-            window.location.href = 'post-activity.html?id=' + activityId;
-        }, 1500);
+        // Store in localStorage that this activity is completed
+        localStorage.setItem('activityCompleted_' + activityId, 'true');
+        localStorage.setItem('phase3Complete', 'true');
+
+        console.log('✅ Phase 4 success section shown! User can now click "Continue to Reflection"');
 
     } catch (error) {
         console.error('❌ Error completing activity:', error);
@@ -314,6 +321,38 @@ async function markActivityAsComplete() {
         }
     }
 }
+
+// ============================================================
+// GO TO REFLECTION (Phase 4) - Called from HTML button
+// ============================================================
+
+window.goToReflection = function() {
+    console.log('🔵 goToReflection() called from HTML button!');
+    
+    // Get activity ID from URL
+    const params = new URLSearchParams(window.location.search);
+    let activityId = params.get('id');
+    
+    // If no ID in URL, try localStorage
+    if (!activityId) {
+        activityId = localStorage.getItem('currentActivityId');
+    }
+    
+    if (!activityId) {
+        alert('No activity selected. Please go back and select an activity.');
+        window.location.href = 'student-app.html';
+        return;
+    }
+    
+    console.log('🔄 Redirecting to Phase 4 Reflection for activity:', activityId);
+    
+    // Store that Phase 3 is complete
+    localStorage.setItem('phase3Complete', 'true');
+    localStorage.setItem('currentActivityId', activityId);
+    
+    // Navigate to Phase 4 (post-activity.html)
+    window.location.href = 'post-activity.html?id=' + activityId;
+};
 
 // ============================================================
 // CHECK IF ACTIVITY IS ALREADY COMPLETED
@@ -329,19 +368,17 @@ async function checkIfActivityCompleted(userId, activityId) {
         const snapshot = await getDocs(q);
         
         if (!snapshot.empty) {
-            if (completionStatus) {
-                completionStatus.classList.remove('hidden');
-                if (completionMessage) {
-                    completionMessage.textContent = 'You have already completed this activity! 🎉';
-                }
-            }
+            // Activity is already completed - show Phase 4 success
             if (completeActivityContainer) {
                 completeActivityContainer.style.display = 'none';
+            }
+            if (phase4Success) {
+                phase4Success.style.display = 'block';
             }
             if (phase4Status) {
                 phase4Status.style.display = 'block';
                 phase4Status.style.color = '#22c55e';
-                phase4Status.innerHTML = '✅ This activity is already in your portfolio. <a href="portfolio.html" style="color:#6C3CE1;font-weight:600;">View Portfolio</a>';
+                phase4Status.innerHTML = '✅ This activity is already in your portfolio. Click "Continue to Reflection" to proceed.';
             }
             return true;
         }
@@ -442,6 +479,7 @@ async function initApp() {
             }
         }
         
+        // Check if activity is already completed
         await checkIfActivityCompleted(user.uid, activityId);
     });
 }
@@ -457,3 +495,4 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 console.log('✅ activity-registration.js initialized!');
+console.log('📌 Phase 4: Click "Mark as Complete" → Shows Phase 4 success → Click "Continue to Reflection" → post-activity.html');
