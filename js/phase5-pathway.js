@@ -1,5 +1,6 @@
-// Phase 5: Grade-Based University Pathway
-// This replaces university.js
+// ============================================
+// PHASE 5: GRADE-BASED UNIVERSITY PATHWAY
+// ============================================
 
 // University database
 const UNIVERSITY_DATABASE = [
@@ -425,16 +426,6 @@ function goToPhase6() {
 // Initialize on page load
 document.addEventListener('DOMContentLoaded', function() {
     if (document.getElementById('phase5-container')) {
-        // Check if student is logged in
-        try {
-            const student = JSON.parse(localStorage.getItem('studentProfile') || '{}');
-            if (!student.name) {
-                // Allow but show message
-                console.log('Student not logged in');
-            }
-        } catch {
-            // Ignore
-        }
         initPhase5();
     }
 });
