@@ -239,33 +239,49 @@
                 // Check student exists
                 const studentDoc = await getDoc(doc(db, 'students', user.uid));
                 if (!studentDoc.exists()) {
-                    // Create student profile if missing
                     await setDoc(doc(db, 'students', user.uid), {
                         uid: user.uid,
                         email: email,
                         name: email.split('@')[0],
                         interests: [],
+                        selectedInterests: [],
                         profileCompleted: false,
+                        quizCompleted: false,
                         createdAt: new Date().toISOString()
                     });
                 }
                 
-                const studentData = studentDoc.data();
+                const studentData = (await getDoc(doc(db, 'students', user.uid))).data();
                 
-                // If student hasn't completed quiz, redirect to quiz
-                if (!studentData?.profileCompleted) {
+                // ============================================================
+                // SMART REDIRECT BASED ON PROGRESS
+                // ============================================================
+                
+                // 1. If quiz completed → Phase 2 (Activities)
+                if (studentData?.quizCompleted) {
                     msgEl.className = 'message-box success';
-                    msgEl.textContent = '✅ Welcome! Taking you to the quiz...';
+                    msgEl.textContent = '✅ Welcome back! Taking you to activities...';
                     setTimeout(() => {
-                        window.location.href = `quiz.html?uid=${user.uid}`;
+                        window.location.href = 'activities.html';
                     }, 500);
                     return;
                 }
                 
+                // 2. If interests selected but quiz not completed → Quiz
+                if (studentData?.selectedInterests && studentData.selectedInterests.length === 3) {
+                    msgEl.className = 'message-box success';
+                    msgEl.textContent = '✅ You selected your interests! Taking you to the quiz...';
+                    setTimeout(() => {
+                        window.location.href = 'quiz.html?uid=' + user.uid;
+                    }, 500);
+                    return;
+                }
+                
+                // 3. If no interests selected → Interest selection
                 msgEl.className = 'message-box success';
-                msgEl.textContent = '✅ Login successful! Redirecting...';
+                msgEl.textContent = '✅ Welcome! Choose your interests first...';
                 setTimeout(() => {
-                    window.location.href = 'student-app.html';
+                    window.location.href = 'select-interests.html?uid=' + user.uid;
                 }, 500);
                 
             } catch (error) {
