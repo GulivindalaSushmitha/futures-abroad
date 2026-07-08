@@ -4,9 +4,6 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Login - Futures Abroad</title>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
     <link rel="stylesheet" href="css/style.css" />
     <style>
         .auth-container {
@@ -193,20 +190,23 @@
         </div>
     </div>
 
-    <script>
-        const firebaseConfig = {
-            apiKey: "AIzaSyBGJcOifwfWlGeFsFCXhdC67fyRTBOvfGQ",
-            authDomain: "futures-2.firebaseapp.com",
-            projectId: "futures-2",
-            storageBucket: "futures-2.firebasestorage.app",
-            messagingSenderId: "143399880838",
-            appId: "1:143399880838:web:c2232759fcbc1fa2ed2907"
-        };
+    <script type="module">
+        // ============================================================
+        // IMPORTS
+        // ============================================================
+        import { 
+            auth, 
+            db,
+            doc,
+            getDoc,
+            setDoc,
+            signInWithEmailAndPassword,
+            ADMIN_UID
+        } from './js/firebase-config.js';
 
-        firebase.initializeApp(firebaseConfig);
-        const auth = firebase.auth();
-        const db = firebase.firestore();
-
+        // ============================================================
+        // LOGIN FORM
+        // ============================================================
         document.getElementById('login-form').addEventListener('submit', async function(e) {
             e.preventDefault();
             const email = document.getElementById('login-email').value.trim();
@@ -223,12 +223,11 @@
             }
             
             try {
-                const userCredential = await auth.signInWithEmailAndPassword(email, password);
+                const userCredential = await signInWithEmailAndPassword(auth, email, password);
                 const user = userCredential.user;
                 
                 // Check if admin
-                const adminDoc = await db.collection('admins').doc(user.uid).get();
-                if (adminDoc.exists) {
+                if (user.uid === ADMIN_UID) {
                     msgEl.className = 'message-box success';
                     msgEl.textContent = '🔐 Admin login successful!';
                     setTimeout(() => {
@@ -238,16 +237,16 @@
                 }
                 
                 // Check student exists
-                const studentDoc = await db.collection('students').doc(user.uid).get();
+                const studentDoc = await getDoc(doc(db, 'students', user.uid));
                 if (!studentDoc.exists()) {
                     // Create student profile if missing
-                    await db.collection('students').doc(user.uid).set({
+                    await setDoc(doc(db, 'students', user.uid), {
                         uid: user.uid,
                         email: email,
                         name: email.split('@')[0],
                         interests: [],
                         profileCompleted: false,
-                        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                        createdAt: new Date().toISOString()
                     });
                 }
                 
