@@ -4,12 +4,148 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Phase 5 - University Pathway</title>
-    <link rel="stylesheet" href="css/university.css">
     <link rel="stylesheet" href="css/student-app.css">
+    <style>
+        .uni-card {
+            padding: 15px 20px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border-left: 4px solid #2563eb;
+            background: white;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+        }
+        .uni-card.reach { border-left-color: #ef4444; }
+        .uni-card.target { border-left-color: #f59e0b; }
+        .uni-card.safety { border-left-color: #22c55e; }
+        .uni-card h4 { margin: 0 0 4px 0; color: #1e293b; }
+        .uni-country { color: #64748b; margin: 2px 0; font-size: 13px; }
+        .uni-programs { color: #475569; margin: 4px 0; font-size: 13px; }
+        .uni-acceptance { color: #64748b; margin: 2px 0; font-size: 13px; }
+        .uni-rationale { color: #2563eb; margin: 8px 0 0 0; font-size: 13px; font-style: italic; }
+        .uni-badge {
+            display: inline-block;
+            padding: 2px 12px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+            margin-top: 6px;
+        }
+        .uni-badge.reach { background: #fef2f2; color: #ef4444; }
+        .uni-badge.target { background: #fffbeb; color: #f59e0b; }
+        .uni-badge.safety { background: #f0fdf4; color: #22c55e; }
+        
+        .cta-fullscreen-card {
+            background: linear-gradient(135deg, #1e3a5f, #2563eb);
+            color: white;
+            padding: 35px;
+            border-radius: 12px;
+            text-align: center;
+            margin-top: 30px;
+        }
+        .cta-fullscreen-card h2 { font-size: 22px; margin-bottom: 10px; }
+        .cta-fullscreen-card p { font-size: 15px; margin-bottom: 18px; opacity: 0.9; }
+        .cta-primary {
+            background: white;
+            color: #2563eb;
+            border: none;
+            padding: 12px 32px;
+            border-radius: 30px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .cta-primary:hover { transform: scale(1.05); box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
+        
+        .gap-item {
+            padding: 10px 15px;
+            margin: 6px 0;
+            background: #fef2f2;
+            border-radius: 6px;
+            border-left: 3px solid #ef4444;
+            color: #991b1b;
+            font-size: 14px;
+        }
+        .no-gaps {
+            padding: 10px 15px;
+            background: #f0fdf4;
+            border-radius: 6px;
+            color: #166534;
+            font-size: 14px;
+        }
+        .milestone {
+            display: flex;
+            align-items: center;
+            padding: 10px 15px;
+            margin: 6px 0;
+            background: #f8fafc;
+            border-radius: 6px;
+            border-left: 3px solid #2563eb;
+        }
+        .milestone-month { font-weight: 600; color: #1e293b; min-width: 90px; font-size: 14px; }
+        .milestone-task { color: #475569; font-size: 14px; }
+        .deadline-item {
+            display: flex;
+            align-items: center;
+            padding: 10px 15px;
+            margin: 6px 0;
+            background: #f8fafc;
+            border-radius: 6px;
+            border-left: 3px solid #ef4444;
+        }
+        .deadline-date { font-weight: 600; color: #991b1b; min-width: 90px; font-size: 14px; }
+        .deadline-task { color: #475569; font-size: 14px; }
+        .phase-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+        }
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            background: #e2e8f0;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #2563eb, #7c3aed);
+            border-radius: 10px;
+            transition: width 1s ease;
+        }
+        .nav-buttons {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 2px solid #e2e8f0;
+        }
+        .secondary-btn {
+            background: transparent;
+            color: #2563eb;
+            border: 2px solid #2563eb;
+            padding: 10px 24px;
+            border-radius: 6px;
+            font-size: 15px;
+            cursor: pointer;
+        }
+        .primary-btn {
+            background: #2563eb;
+            color: white;
+            border: none;
+            padding: 12px 28px;
+            border-radius: 6px;
+            font-size: 15px;
+            cursor: pointer;
+        }
+    </style>
 </head>
 <body>
-    <div class="app-container">
-        <!-- Phase Navigation -->
+    <div class="app-container" style="max-width: 1000px; margin: 0 auto; padding: 20px;">
         <div id="phase-navigation"></div>
 
         <div id="phase5-container" class="phase-container">
@@ -17,8 +153,8 @@
 
             <!-- Grade 11 Content -->
             <div id="grade-11-content" style="display:none;">
-                <h2>Your University Shortlist</h2>
-                <p class="subtitle">Based on your interests and profile, here are universities that match you.</p>
+                <h2>🎓 Your University Shortlist</h2>
+                <p class="subtitle" style="color: #64748b;">Based on your interests and profile, here are universities that match you.</p>
                 
                 <div class="shortlist-section">
                     <h3>🎯 Reach Schools</h3>
@@ -40,8 +176,8 @@
 
             <!-- Grade 10 Content -->
             <div id="grade-10-content" style="display:none;">
-                <h2>Your Grade 10 Journey</h2>
-                <p class="subtitle">You're building a strong foundation. Here's your progress and what's next.</p>
+                <h2>📈 Your Grade 10 Journey</h2>
+                <p class="subtitle" style="color: #64748b;">You're building a strong foundation. Here's your progress and what's next.</p>
                 
                 <div class="progress-section" style="margin: 20px 0;">
                     <h3>Profile Strength: <span id="profile-score">0</span>%</h3>
@@ -67,8 +203,8 @@
 
             <!-- Grade 12 Content -->
             <div id="grade-12-content" style="display:none;">
-                <h2>Application Support</h2>
-                <p class="subtitle">You're in the final stretch. Stay on top of your deadlines.</p>
+                <h2>📋 Application Support</h2>
+                <p class="subtitle" style="color: #64748b;">You're in the final stretch. Stay on top of your deadlines.</p>
                 
                 <div class="deadlines-section" style="margin: 20px 0;">
                     <h3>Upcoming Deadlines</h3>
@@ -79,17 +215,259 @@
                     View Your Portfolio
                 </button>
             </div>
+
+            <div class="nav-buttons">
+                <a href="post-activity.html" class="secondary-btn" style="text-decoration: none;">← Back to Reflection</a>
+                <button id="continue-to-phase6-btn" class="primary-btn" style="display: none;">
+                    Continue to Enrollment →
+                </button>
+            </div>
         </div>
     </div>
 
     <!-- Scripts -->
     <script src="js/phase-navigation.js"></script>
-    <script src="js/phase-detection.js"></script>
-    <script src="phase5-pathway.js"></script>
     <script>
+        // ============================================================
+        // PHASE 5 - COMPLETE CODE
+        // ============================================================
+
+        const UNIVERSITY_DATABASE = [
+            { id: 1, name: "MIT", country: "USA", programs: ["Computer Science", "Engineering", "Data Science"], selectivity: "Reach", acceptanceRate: "4%", interestTags: ["STEM", "Computer Science", "Engineering"] },
+            { id: 2, name: "Stanford University", country: "USA", programs: ["Computer Science", "Business", "Engineering"], selectivity: "Reach", acceptanceRate: "4%", interestTags: ["STEM", "Business", "Technology"] },
+            { id: 3, name: "University of Toronto", country: "Canada", programs: ["Engineering", "Computer Science", "Medicine"], selectivity: "Target", acceptanceRate: "15%", interestTags: ["STEM", "Medicine", "Engineering"] },
+            { id: 4, name: "University of British Columbia", country: "Canada", programs: ["Environmental Science", "Biology", "Engineering"], selectivity: "Target", acceptanceRate: "18%", interestTags: ["Environment", "Biology", "STEM"] },
+            { id: 5, name: "King's College London", country: "UK", programs: ["Medicine", "Law", "Psychology"], selectivity: "Target", acceptanceRate: "20%", interestTags: ["Medicine", "Health", "Law"] },
+            { id: 6, name: "University of Melbourne", country: "Australia", programs: ["Medicine", "Engineering", "Business"], selectivity: "Safety", acceptanceRate: "30%", interestTags: ["Medicine", "Engineering", "Business"] },
+            { id: 7, name: "National University of Singapore", country: "Singapore", programs: ["Engineering", "Computer Science", "Business"], selectivity: "Target", acceptanceRate: "12%", interestTags: ["STEM", "Business", "Engineering"] },
+            { id: 8, name: "University of Cambridge", country: "UK", programs: ["Mathematics", "Physics", "Medicine"], selectivity: "Reach", acceptanceRate: "5%", interestTags: ["STEM", "Physics", "Mathematics"] }
+        ];
+
+        let universityShortlist = { reach: [], target: [], safety: [] };
+
+        function initPhase5() {
+            try {
+                const student = JSON.parse(localStorage.getItem('studentProfile') || '{}');
+                const grade = student.grade || 10;
+                
+                if (typeof initPhaseNavigation === 'function') initPhaseNavigation();
+                
+                if (grade === 11) showGrade11Experience(student);
+                else if (grade === 10) showGrade10Experience(student);
+                else if (grade === 12) showGrade12Experience(student);
+                else showGrade10Experience(student);
+            } catch (error) {
+                console.log('Error initializing Phase 5:', error);
+            }
+        }
+
+        function showGrade11Experience(student) {
+            document.getElementById('grade-11-content').style.display = 'block';
+            document.getElementById('grade-10-content').style.display = 'none';
+            document.getElementById('grade-12-content').style.display = 'none';
+
+            generateUniversityShortlist(student);
+            displayShortlist();
+            showCTACard();
+            document.getElementById('continue-to-phase6-btn').style.display = 'inline-block';
+        }
+
+        function generateUniversityShortlist(student) {
+            const interests = student.interests || [];
+            const matched = [];
+
+            UNIVERSITY_DATABASE.forEach(uni => {
+                const matches = uni.interestTags.some(tag => 
+                    interests.some(interest => 
+                        interest && (interest.toLowerCase().includes(tag.toLowerCase()) ||
+                        tag.toLowerCase().includes(interest.toLowerCase()))
+                    )
+                );
+                if (matches) matched.push(uni);
+            });
+
+            if (matched.length < 6) {
+                UNIVERSITY_DATABASE.forEach(uni => {
+                    if (!matched.find(m => m.id === uni.id)) matched.push(uni);
+                });
+            }
+
+            universityShortlist.reach = matched.filter(uni => uni.selectivity === 'Reach').slice(0, 2);
+            universityShortlist.target = matched.filter(uni => uni.selectivity === 'Target').slice(0, 3);
+            universityShortlist.safety = matched.filter(uni => uni.selectivity === 'Safety').slice(0, 2);
+
+            localStorage.setItem('universityShortlist', JSON.stringify(universityShortlist));
+        }
+
+        function displayShortlist() {
+            const containers = {
+                reach: document.getElementById('reach-schools'),
+                target: document.getElementById('target-schools'),
+                safety: document.getElementById('safety-schools')
+            };
+
+            Object.keys(containers).forEach(key => {
+                const container = containers[key];
+                if (container) {
+                    container.innerHTML = '';
+                    if (universityShortlist[key] && universityShortlist[key].length > 0) {
+                        universityShortlist[key].forEach(uni => {
+                            container.appendChild(createUniversityCard(uni));
+                        });
+                    } else {
+                        container.innerHTML = '<p class="no-results" style="color: #64748b; font-style: italic; padding: 10px;">No schools found.</p>';
+                    }
+                }
+            });
+        }
+
+        function createUniversityCard(uni) {
+            const div = document.createElement('div');
+            div.className = `uni-card ${uni.selectivity.toLowerCase()}`;
+            div.innerHTML = `
+                <h4>${uni.name}</h4>
+                <p class="uni-country">📍 ${uni.country}</p>
+                <p class="uni-programs">${uni.programs.join(' • ')}</p>
+                <p class="uni-acceptance">Acceptance: ${uni.acceptanceRate}</p>
+                <p class="uni-rationale">💡 Recommended because you're interested in ${uni.programs[0] || 'this field'}</p>
+                <span class="uni-badge ${uni.selectivity.toLowerCase()}">${uni.selectivity}</span>
+            `;
+            return div;
+        }
+
+        function showCTACard() {
+            const ctaContainer = document.getElementById('cta-card');
+            if (ctaContainer) {
+                ctaContainer.style.display = 'block';
+                ctaContainer.innerHTML = `
+                    <div class="cta-fullscreen-card">
+                        <h2>🚀 Ready to turn this shortlist into a real application?</h2>
+                        <p>Book your first session with a Futures Abroad counselor.</p>
+                        <button id="cta-enroll-btn" class="cta-primary">
+                            Register with Futures Abroad →
+                        </button>
+                    </div>
+                `;
+                document.getElementById('cta-enroll-btn')?.addEventListener('click', goToPhase6);
+            }
+        }
+
+        function showGrade10Experience(student) {
+            document.getElementById('grade-11-content').style.display = 'none';
+            document.getElementById('grade-10-content').style.display = 'block';
+            document.getElementById('grade-12-content').style.display = 'none';
+
+            const score = student.profileStrengthScore || 0;
+            document.getElementById('profile-score').textContent = score;
+            document.getElementById('strength-bar-grade10').style.width = score + '%';
+
+            showGapAnalysis(student);
+            showRoadmap();
+
+            document.getElementById('soft-cta')?.addEventListener('click', function() {
+                window.location.href = 'futures-abroad-enroll.html';
+            });
+        }
+
+        function showGapAnalysis(student) {
+            let portfolio = JSON.parse(localStorage.getItem('studentPortfolio') || '[]');
+            const gaps = [];
+            const types = new Set(portfolio.map(e => e.activityType || ''));
+
+            if (!types.has('volunteering') && !types.has('Volunteering')) {
+                gaps.push('You have strong academics but no volunteering experience yet');
+            }
+            if (!types.has('competition') && !types.has('Competition')) {
+                gaps.push('Consider joining a competition to build your profile');
+            }
+            if (!types.has('internship') && !types.has('Internship')) {
+                gaps.push('Internships are valuable for university applications');
+            }
+            if (portfolio.length < 3) {
+                gaps.push('Try completing more activities to build a strong portfolio');
+            }
+
+            const container = document.getElementById('gap-analysis');
+            if (container) {
+                container.innerHTML = '';
+                if (gaps.length > 0) {
+                    gaps.forEach(gap => {
+                        const div = document.createElement('div');
+                        div.className = 'gap-item';
+                        div.textContent = '⚠️ ' + gap;
+                        container.appendChild(div);
+                    });
+                } else {
+                    container.innerHTML = '<p class="no-gaps">✅ You have a well-rounded profile! Keep up the great work!</p>';
+                }
+            }
+        }
+
+        function showRoadmap() {
+            const roadmap = [
+                { month: 'Month 1', task: 'Start volunteering or community service' },
+                { month: 'Month 3', task: 'Join a competition or academic challenge' },
+                { month: 'Month 6', task: 'Take on a leadership role in an activity' },
+                { month: 'Month 9', task: 'Build your portfolio with diverse experiences' },
+                { month: 'Month 12', task: 'Start researching universities and programs' }
+            ];
+
+            const container = document.getElementById('roadmap-timeline');
+            if (container) {
+                container.innerHTML = '';
+                roadmap.forEach(item => {
+                    const div = document.createElement('div');
+                    div.className = 'milestone';
+                    div.innerHTML = `
+                        <span class="milestone-month">${item.month}</span>
+                        <span class="milestone-task">${item.task}</span>
+                    `;
+                    container.appendChild(div);
+                });
+            }
+        }
+
+        function showGrade12Experience(student) {
+            document.getElementById('grade-11-content').style.display = 'none';
+            document.getElementById('grade-10-content').style.display = 'none';
+            document.getElementById('grade-12-content').style.display = 'block';
+
+            const deadlines = [
+                { date: 'November 1', task: 'Early Decision Application Deadline' },
+                { date: 'January 1', task: 'Regular Decision Application Deadline' },
+                { date: 'February 15', task: 'Financial Aid Application Deadline' }
+            ];
+
+            const container = document.getElementById('deadline-list');
+            if (container) {
+                container.innerHTML = '';
+                deadlines.forEach(deadline => {
+                    const div = document.createElement('div');
+                    div.className = 'deadline-item';
+                    div.innerHTML = `
+                        <span class="deadline-date">📅 ${deadline.date}</span>
+                        <span class="deadline-task">${deadline.task}</span>
+                    `;
+                    container.appendChild(div);
+                });
+            }
+        }
+
+        function goToPhase6() {
+            try {
+                const student = JSON.parse(localStorage.getItem('studentProfile') || '{}');
+                student.hasAcceptedCTA = true;
+                student.currentPhase = 6;
+                localStorage.setItem('studentProfile', JSON.stringify(student));
+            } catch { /* ignore */ }
+            window.location.href = 'futures-abroad-enroll.html';
+        }
+
+        document.getElementById('continue-to-phase6-btn')?.addEventListener('click', goToPhase6);
+
         document.addEventListener('DOMContentLoaded', function() {
-            if (typeof initPhaseDetection === 'function') {
-                initPhaseDetection();
+            if (document.getElementById('phase5-container')) {
+                initPhase5();
             }
         });
     </script>
