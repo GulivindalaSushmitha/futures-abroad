@@ -21,7 +21,7 @@
 .admin-logo {
     font-size: 1.5rem;
     font-weight: 700;
-    color: var(--primary);
+    color: #6C3CE1;
     margin-bottom: 2rem;
 }
 
@@ -29,7 +29,7 @@
     display: block;
     font-size: 0.8rem;
     font-weight: 400;
-    color: var(--text-light);
+    color: #888;
 }
 
 .admin-nav {
@@ -41,15 +41,15 @@
 .admin-nav a {
     padding: 0.8rem 1rem;
     border-radius: 12px;
-    color: var(--text-dark);
+    color: #2D1B4E;
     text-decoration: none;
     font-weight: 500;
-    transition: var(--transition);
+    transition: all 0.3s ease;
 }
 
 .admin-nav a:hover,
 .admin-nav a.active {
-    background: var(--primary);
+    background: #6C3CE1;
     color: white;
 }
 
@@ -68,6 +68,13 @@
     border-radius: 8px;
     cursor: pointer;
     margin-top: 0.5rem;
+    font-weight: 600;
+    transition: all 0.3s;
+}
+
+.admin-user button:hover {
+    background: #e74c3c;
+    transform: translateY(-2px);
 }
 
 .admin-main {
@@ -83,6 +90,17 @@
     animation: fadeInUp 0.4s ease;
 }
 
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
 .stats-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -94,7 +112,7 @@
     background: white;
     padding: 1.5rem;
     border-radius: 16px;
-    box-shadow: var(--shadow);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.06);
     display: flex;
     align-items: center;
     gap: 1rem;
@@ -112,19 +130,19 @@
 .stat-number {
     font-size: 2rem;
     font-weight: 700;
-    color: var(--primary);
+    color: #6C3CE1;
 }
 
 .stat-label {
     font-size: 0.9rem;
-    color: var(--text-light);
+    color: #888;
 }
 
 .activity-table {
     background: white;
     border-radius: 16px;
     padding: 1.5rem;
-    box-shadow: var(--shadow);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.06);
     overflow-x: auto;
 }
 
@@ -137,7 +155,7 @@
     text-align: left;
     padding: 0.8rem;
     border-bottom: 2px solid #F0F0F0;
-    color: var(--text-light);
+    color: #888;
     font-weight: 600;
 }
 
@@ -146,10 +164,15 @@
     border-bottom: 1px solid #F0F0F0;
 }
 
+.activity-table table tbody tr:hover {
+    background: #f8f4ff;
+}
+
 .admin-toolbar {
     display: flex;
     gap: 1rem;
     margin-bottom: 1.5rem;
+    flex-wrap: wrap;
 }
 
 .admin-toolbar input,
@@ -158,6 +181,38 @@
     border: 2px solid #E0E0E0;
     border-radius: 8px;
     font-size: 0.9rem;
+    font-family: 'Quicksand', sans-serif;
+    background: white;
+}
+
+.admin-toolbar input:focus,
+.admin-toolbar select:focus {
+    border-color: #6C3CE1;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(108,60,225,0.1);
+}
+
+/* ============================================================
+   BUTTONS
+   ============================================================ */
+
+.btn-primary {
+    background: #6C3CE1;
+    color: white;
+    border: none;
+    padding: 10px 24px;
+    border-radius: 50px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-family: 'Quicksand', sans-serif;
+    font-size: 14px;
+    margin-bottom: 1rem;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 20px rgba(108,60,225,0.3);
 }
 
 .btn-sm {
@@ -165,14 +220,72 @@
     border: none;
     border-radius: 6px;
     cursor: pointer;
-    background: var(--primary);
+    background: #6C3CE1;
     color: white;
-    font-size: 0.8rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    transition: all 0.2s;
+    font-family: 'Quicksand', sans-serif;
+}
+
+.btn-sm:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(108,60,225,0.3);
 }
 
 .btn-sm.btn-danger {
     background: #FF6584;
 }
+
+.btn-sm.btn-danger:hover {
+    box-shadow: 0 4px 12px rgba(255,101,132,0.3);
+}
+
+/* ============================================================
+   STATUS BADGES
+   ============================================================ */
+
+.status-badge {
+    display: inline-block;
+    padding: 2px 12px;
+    border-radius: 50px;
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.status-badge.active {
+    background: #e8f5e9;
+    color: #22c55e;
+}
+
+.status-badge.pending {
+    background: #fff3e0;
+    color: #f57c00;
+}
+
+.status-badge.completed {
+    background: #e3f2fd;
+    color: #1976d2;
+}
+
+.status-badge.inactive {
+    background: #fce4ec;
+    color: #e74c3c;
+}
+
+/* ============================================================
+   EMPTY STATE
+   ============================================================ */
+
+.empty-state {
+    text-align: center;
+    padding: 40px 20px;
+    color: #999;
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
 
 @media (max-width: 1024px) {
     .stats-grid {
@@ -184,11 +297,56 @@
     .admin-container {
         grid-template-columns: 1fr;
     }
+    
     .admin-sidebar {
         height: auto;
         position: relative;
     }
+    
     .stats-grid {
         grid-template-columns: 1fr;
+    }
+    
+    .admin-main {
+        padding: 1rem;
+    }
+    
+    .stat-card {
+        padding: 1rem;
+    }
+    
+    .stat-number {
+        font-size: 1.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .admin-main {
+        padding: 0.75rem;
+    }
+    
+    .activity-table {
+        padding: 0.5rem;
+    }
+    
+    .activity-table table td,
+    .activity-table table th {
+        padding: 0.4rem;
+        font-size: 0.75rem;
+    }
+    
+    .btn-sm {
+        padding: 0.2rem 0.5rem;
+        font-size: 0.65rem;
+    }
+    
+    .admin-toolbar input,
+    .admin-toolbar select {
+        padding: 0.4rem 0.8rem;
+        font-size: 0.8rem;
+    }
+    
+    .admin-logo {
+        font-size: 1.2rem;
     }
 }
