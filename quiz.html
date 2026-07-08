@@ -4,9 +4,6 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Interest Quiz - Futures Abroad</title>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
     <link rel="stylesheet" href="css/style.css" />
     <style>
         .quiz-container {
@@ -217,27 +214,22 @@
                 <p style="color:#666;">Based on your answers, we've identified these interests:</p>
                 <div id="interestTags" style="margin:20px 0;"></div>
                 <p style="color:#888; font-size:14px;">These tags will help us recommend the best activities for you.</p>
-                <button class="btn-finish" onclick="goToApp()">🚀 Go to Student App</button>
+                <button class="btn-finish" id="goToAppBtn">🚀 Go to Student App</button>
             </div>
         </div>
     </div>
 
-    <script>
+    <script type="module">
         // ============================================================
-        // FIREBASE CONFIG
+        // IMPORTS
         // ============================================================
-        const firebaseConfig = {
-            apiKey: "AIzaSyBGJcOifwfWlGeFsFCXhdC67fyRTBOvfGQ",
-            authDomain: "futures-2.firebaseapp.com",
-            projectId: "futures-2",
-            storageBucket: "futures-2.firebasestorage.app",
-            messagingSenderId: "143399880838",
-            appId: "1:143399880838:web:c2232759fcbc1fa2ed2907"
-        };
-
-        firebase.initializeApp(firebaseConfig);
-        const auth = firebase.auth();
-        const db = firebase.firestore();
+        import { 
+            auth, 
+            db,
+            doc,
+            updateDoc,
+            serverTimestamp
+        } from './js/firebase-config.js';
 
         // ============================================================
         // QUIZ DATA (8 Questions as per spec)
@@ -498,25 +490,43 @@
             // Save to Firestore if we have UID
             if (currentUid) {
                 try {
-                    await db.collection('students').doc(currentUid).update({
+                    await updateDoc(doc(db, 'students', currentUid), {
                         interests: sortedInterests,
                         profileCompleted: true,
                         quizCompleted: true,
-                        quizCompletedAt: firebase.firestore.FieldValue.serverTimestamp()
+                        quizCompletedAt: serverTimestamp()
                     });
                     console.log('✅ Quiz results saved!');
                 } catch (error) {
                     console.error('Error saving quiz:', error);
                 }
+            } else {
+                // Try to get current user
+                auth.onAuthStateChanged(async (user) => {
+                    if (user) {
+                        currentUid = user.uid;
+                        try {
+                            await updateDoc(doc(db, 'students', currentUid), {
+                                interests: sortedInterests,
+                                profileCompleted: true,
+                                quizCompleted: true,
+                                quizCompletedAt: serverTimestamp()
+                            });
+                            console.log('✅ Quiz results saved!');
+                        } catch (error) {
+                            console.error('Error saving quiz:', error);
+                        }
+                    }
+                });
             }
         }
 
         // ============================================================
         // GO TO APP
         // ============================================================
-        function goToApp() {
+        document.getElementById('goToAppBtn').addEventListener('click', function() {
             window.location.href = 'student-app.html';
-        }
+        });
 
         // ============================================================
         // INIT QUIZ
@@ -534,6 +544,8 @@
                 }
             });
         }
+
+        console.log('✅ Quiz loaded!');
     </script>
 </body>
 </html>
