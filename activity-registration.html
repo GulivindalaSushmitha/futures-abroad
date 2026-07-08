@@ -121,6 +121,23 @@
         }
         .btn-enroll:hover { transform: translateY(-2px); box-shadow: 0 4px 15px rgba(0,176,155,0.4); }
 
+        .btn-phase4 {
+            background: #22c55e;
+            color: white;
+            border: none;
+            padding: 16px 40px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: 'Quicksand', Arial, sans-serif;
+            text-decoration: none;
+            display: inline-block;
+            box-shadow: 0 4px 15px rgba(34,197,94,0.4);
+        }
+        .btn-phase4:hover { transform: translateY(-3px); box-shadow: 0 6px 25px rgba(34,197,94,0.5); }
+
         .registered-badge {
             background: #22c55e;
             color: white;
@@ -161,7 +178,7 @@
         .checklist-item .desc { color: #666; font-size: 0.9rem; margin: 2px 0; }
         .checklist-item .due { color: #888; font-size: 0.8rem; }
 
-        /* PHASE 4 - ALWAYS VISIBLE */
+        /* PHASE 4 - Always Visible Section */
         .phase4-section {
             border: 3px solid #22c55e;
             border-radius: 16px;
@@ -265,7 +282,9 @@
             </div>
         </div>
 
-        <!-- PHASE 4 - Complete Activity -->
+        <!-- ============================================================
+        PHASE 4 - Complete Activity (UPDATED WITH CONTINUE BUTTON)
+        ============================================================ -->
         <div class="phase4-section" id="phase4Section">
             <span class="phase-badge">Phase 4</span>
             <h3>🎯 After Completing This Activity</h3>
@@ -293,6 +312,23 @@
                 </p>
             </div>
 
+            <!-- ============================================================
+            NEW: Phase 4 Success - Continue to Phase 5 Button
+            ============================================================ -->
+            <div id="phase4Success" style="display: none; background: #e8f5e9; padding: 25px; border-radius: 16px; text-align: center; margin-top: 15px;">
+                <div style="font-size: 48px;">✅</div>
+                <h3 style="color: #16a34a; margin: 10px 0;">Activity Completed Successfully!</h3>
+                <p style="color: #555; font-size: 16px;">Your experience has been saved to your portfolio.</p>
+                <div style="margin-top: 20px; display: flex; gap: 15px; flex-wrap: wrap; justify-content: center;">
+                    <button onclick="goToPhase4Reflection()" class="btn-phase4">
+                        📝 Continue to Reflection →
+                    </button>
+                    <a href="portfolio.html" class="btn-secondary" style="padding: 14px 30px; font-size: 16px;">
+                        📂 View Portfolio
+                    </a>
+                </div>
+            </div>
+
             <div id="phase4-status" style="margin-top: 12px; font-size: 1rem; display: none; text-align: center; padding: 15px; background: #e8f5e9; border-radius: 12px;"></div>
         </div>
 
@@ -307,6 +343,45 @@
     </div>
 
     <script type="module" src="js/activity-registration.js"></script>
+
+    <!-- ============================================================
+    INLINE SCRIPT FOR PHASE 4 NAVIGATION
+    ============================================================ -->
+    <script>
+        // This function is called when the activity is marked as complete
+        // It's also called from the activity-registration.js module
+        window.goToPhase4Reflection = function() {
+            // Get activity ID from URL
+            const params = new URLSearchParams(window.location.search);
+            const activityId = params.get('id');
+            
+            if (activityId) {
+                console.log('🔄 Redirecting to Phase 4 Reflection for activity:', activityId);
+                window.location.href = 'post-activity.html?id=' + activityId;
+            } else {
+                // If no ID, try to get from localStorage
+                const savedId = localStorage.getItem('currentActivityId');
+                if (savedId) {
+                    window.location.href = 'post-activity.html?id=' + savedId;
+                } else {
+                    alert('Please select an activity first.');
+                    window.location.href = 'student-app.html';
+                }
+            }
+        };
+
+        // Save activity ID to localStorage when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            const params = new URLSearchParams(window.location.search);
+            const activityId = params.get('id');
+            if (activityId) {
+                localStorage.setItem('currentActivityId', activityId);
+                console.log('💾 Saved activity ID to localStorage:', activityId);
+            }
+        });
+
+        console.log('✅ activity-registration.html loaded with Phase 4 navigation!');
+    </script>
 
 </body>
 </html>
