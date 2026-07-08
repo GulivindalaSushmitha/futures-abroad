@@ -4,9 +4,6 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Admin Dashboard - Futures Abroad</title>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
     <link rel="stylesheet" href="css/style.css" />
     <link rel="stylesheet" href="css/admin.css" />
 </head>
@@ -53,88 +50,91 @@
             <!-- Activities -->
             <section id="section-activities" class="admin-section">
                 <h1>Activity Management</h1>
-                <button class="btn-primary" onclick="showAddActivity()">+ Add New Activity</button>
+                <button class="btn-primary" id="addActivityBtn">+ Add New Activity</button>
                 <div class="activity-table"><table><thead><tr><th>Name</th><th>Type</th><th>Interests</th><th>Grade</th><th>Status</th><th>Actions</th></tr></thead><tbody id="activities-list"></tbody></table></div>
             </section>
         </main>
     </div>
 
-    <script>
+    <!-- Using MODULE script -->
+    <script type="module">
         // ============================================================
-        // FIREBASE CONFIG
+        // IMPORTS
         // ============================================================
-        const firebaseConfig = {
-            apiKey: "AIzaSyBGJcOifwfWlGeFsFCXhdC67fyRTBOvfGQ",
-            authDomain: "futures-2.firebaseapp.com",
-            projectId: "futures-2",
-            storageBucket: "futures-2.firebasestorage.app",
-            messagingSenderId: "143399880838",
-            appId: "1:143399880838:web:c2232759fcbc1fa2ed2907"
-        };
+        import { 
+            auth, 
+            db,
+            collection,
+            doc,
+            getDoc,
+            getDocs,
+            setDoc,
+            updateDoc,
+            deleteDoc,
+            addDoc,
+            onAuthStateChanged,
+            signOut,
+            serverTimestamp,
+            ADMIN_UID
+        } from './js/firebase-config.js';
 
-        firebase.initializeApp(firebaseConfig);
-        const auth = firebase.auth();
-        const db = firebase.firestore();
-
-        const ADMIN_UID = "hrONkvAlxVac4Wc7nwdNLhdOIe33";
-
         // ============================================================
-        // CHECK AUTH - FIXED
+        // CHECK AUTH
         // ============================================================
-        document.addEventListener('DOMContentLoaded', function() {
-            auth.onAuthStateChanged(user => {
-                if (user) {
-                    console.log('✅ Logged in as:', user.email);
-                    console.log('📌 UID:', user.uid);
-                    
-                    if (user.uid === ADMIN_UID) {
-                        loadDashboard();
-                        loadStudents();
-                        loadActivities();
-                    } else {
-                        auth.signOut().then(() => {
-                            window.location.href = 'admin-login.html';
-                        });
-                    }
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                console.log('✅ Logged in as:', user.email);
+                console.log('📌 UID:', user.uid);
+                
+                if (user.uid === ADMIN_UID) {
+                    loadDashboard();
+                    loadStudents();
+                    loadActivities();
                 } else {
-                    window.location.href = 'admin-login.html';
+                    signOut(auth).then(() => {
+                        window.location.href = 'admin-login.html';
+                    });
                 }
-            });
+            } else {
+                window.location.href = 'admin-login.html';
+            }
+        });
 
-            // Navigation
-            document.querySelectorAll('.admin-nav a').forEach(link => {
-                link.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    document.querySelectorAll('.admin-nav a').forEach(l => l.classList.remove('active'));
-                    this.classList.add('active');
-                    const section = this.dataset.section;
-                    document.querySelectorAll('.admin-section').forEach(s => s.classList.remove('active'));
-                    document.getElementById(`section-${section}`).classList.add('active');
-                });
-            });
-
-            // ============================================================
-            // LOGOUT - FIXED
-            // ============================================================
-            document.getElementById('logoutBtn').addEventListener('click', function() {
-                auth.signOut().then(() => {
-                    console.log('✅ Logged out successfully');
-                    window.location.href = 'admin-login.html';
-                }).catch((error) => {
-                    console.error('❌ Logout error:', error);
-                    window.location.href = 'admin-login.html';
-                });
+        // ============================================================
+        // NAVIGATION
+        // ============================================================
+        document.querySelectorAll('.admin-nav a').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                document.querySelectorAll('.admin-nav a').forEach(l => l.classList.remove('active'));
+                this.classList.add('active');
+                const section = this.dataset.section;
+                document.querySelectorAll('.admin-section').forEach(s => s.classList.remove('active'));
+                document.getElementById(`section-${section}`).classList.add('active');
             });
         });
 
         // ============================================================
-        // LOAD DASHBOARD - FIXED
+        // LOGOUT - FIXED
+        // ============================================================
+        document.getElementById('logoutBtn').addEventListener('click', function() {
+            signOut(auth).then(() => {
+                console.log('✅ Logged out successfully');
+                window.location.href = 'admin-login.html';
+            }).catch((error) => {
+                console.error('❌ Logout error:', error);
+                window.location.href = 'admin-login.html';
+            });
+        });
+
+        // ============================================================
+        // LOAD DASHBOARD
         // ============================================================
         async function loadDashboard() {
             try {
                 console.log('📊 Loading dashboard...');
                 
-                const studentsSnapshot = await db.collection('students').get();
+                const studentsSnapshot = await getDocs(collection(db, 'students'));
                 const allStudents = [];
                 studentsSnapshot.forEach(doc => {
                     allStudents.push({ id: doc.id, ...doc.data() });
@@ -151,7 +151,7 @@
                 const hasShortlist = allStudents.filter(s => s.universities && s.universities.length > 0);
                 document.getElementById('university-shortlists').textContent = hasShortlist.length;
                 
-                const activitiesSnapshot = await db.collection('activities').get();
+                const activitiesSnapshot = await getDocs(collection(db, 'activities'));
                 document.getElementById('active-activities').textContent = activitiesSnapshot.size;
                 
                 // Recent students
@@ -215,7 +215,7 @@
         // ============================================================
         async function loadStudents() {
             try {
-                const snapshot = await db.collection('students').get();
+                const snapshot = await getDocs(collection(db, 'students'));
                 const tbody = document.getElementById('students-list');
                 tbody.innerHTML = '';
                 
@@ -239,8 +239,8 @@
                             <td>${interests}</td>
                             <td>${phase}</td>
                             <td>
-                                <button onclick="viewStudent('${doc.id}')" class="btn-sm">👁️ View</button>
-                                <button onclick="deleteStudent('${doc.id}')" class="btn-sm btn-danger">🗑️</button>
+                                <button onclick="window.viewStudent('${doc.id}')" class="btn-sm">👁️ View</button>
+                                <button onclick="window.deleteStudent('${doc.id}')" class="btn-sm btn-danger">🗑️</button>
                             </td>
                         </tr>
                     `;
@@ -268,7 +268,7 @@
         // ============================================================
         async function loadActivities() {
             try {
-                const snapshot = await db.collection('activities').get();
+                const snapshot = await getDocs(collection(db, 'activities'));
                 const tbody = document.getElementById('activities-list');
                 tbody.innerHTML = '';
                 
@@ -292,8 +292,8 @@
                             <td>${gradeRange}</td>
                             <td>${status}</td>
                             <td>
-                                <button onclick="editActivity('${doc.id}')" class="btn-sm">✏️ Edit</button>
-                                <button onclick="deleteActivity('${doc.id}')" class="btn-sm btn-danger">🗑️</button>
+                                <button onclick="window.editActivity('${doc.id}')" class="btn-sm">✏️ Edit</button>
+                                <button onclick="window.deleteActivity('${doc.id}')" class="btn-sm btn-danger">🗑️</button>
                             </td>
                         </tr>
                     `;
@@ -315,16 +315,16 @@
         }
 
         // ============================================================
-        // STUDENT FUNCTIONS
+        // STUDENT FUNCTIONS (Exposed to window)
         // ============================================================
-        function viewStudent(id) {
+        window.viewStudent = function(id) {
             window.location.href = `student-detail.html?id=${id}`;
-        }
+        };
 
-        async function deleteStudent(id) {
+        window.deleteStudent = async function(id) {
             if (confirm('⚠️ Delete this student permanently?')) {
                 try {
-                    await db.collection('students').doc(id).delete();
+                    await deleteDoc(doc(db, 'students', id));
                     alert('✅ Student deleted!');
                     loadDashboard();
                     loadStudents();
@@ -332,12 +332,12 @@
                     alert('Error: ' + error.message);
                 }
             }
-        }
+        };
 
         // ============================================================
-        // ACTIVITY FUNCTIONS
+        // ACTIVITY FUNCTIONS (Exposed to window)
         // ============================================================
-        function showAddActivity() {
+        document.getElementById('addActivityBtn').addEventListener('click', function() {
             const name = prompt('Activity name:');
             if (!name) return;
             
@@ -350,7 +350,7 @@
             const gradeMin = prompt('Minimum grade:');
             const gradeMax = prompt('Maximum grade:');
             
-            db.collection('activities').add({
+            addDoc(collection(db, 'activities'), {
                 name, type,
                 interest_tags: interests.split(',').map(t => t.trim()),
                 grade_min: parseInt(gradeMin) || 10,
@@ -358,30 +358,30 @@
                 cost: 'Free',
                 duration: 'TBD',
                 active: true,
-                createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                createdAt: serverTimestamp()
             }).then(() => {
                 alert('✅ Activity added!');
                 loadActivities();
                 loadDashboard();
             }).catch(error => alert('Error: ' + error.message));
-        }
+        });
 
-        function editActivity(id) {
+        window.editActivity = function(id) {
             const newName = prompt('New name:');
             if (newName && newName.trim()) {
-                db.collection('activities').doc(id).update({ 
+                updateDoc(doc(db, 'activities', id), { 
                     name: newName.trim() 
                 }).then(() => {
                     alert('✅ Updated!');
                     loadActivities();
                 });
             }
-        }
+        };
 
-        async function deleteActivity(id) {
+        window.deleteActivity = async function(id) {
             if (confirm('⚠️ Delete this activity?')) {
                 try {
-                    await db.collection('activities').doc(id).delete();
+                    await deleteDoc(doc(db, 'activities', id));
                     alert('✅ Activity deleted!');
                     loadActivities();
                     loadDashboard();
@@ -389,7 +389,7 @@
                     alert('Error: ' + error.message);
                 }
             }
-        }
+        };
 
         // ============================================================
         // SEARCH AND FILTER
