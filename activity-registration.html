@@ -5,15 +5,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Activity Registration - Futures Abroad</title>
     <link rel="stylesheet" href="css/activity-registration.css" />
-    <link rel="stylesheet" href="css/student-app.css" />
     <style>
-        /* Additional styles to match your design */
+        /* Your existing beautiful styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: #f1f5f9;
+            color: #1e293b;
+            line-height: 1.6;
+        }
         .app-container {
             max-width: 900px;
             margin: 0 auto;
             padding: 30px 20px;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
         }
+        /* Phase Navigation */
         .phase-nav {
             display: flex;
             align-items: center;
@@ -33,6 +43,10 @@
             cursor: pointer;
             padding: 0 8px;
             min-width: 44px;
+            transition: all 0.3s;
+        }
+        .phase-item:hover .phase-circle {
+            transform: scale(1.1);
         }
         .phase-circle {
             width: 34px;
@@ -55,12 +69,18 @@
             background: #22c55e;
             color: white;
         }
+        .phase-circle.current {
+            background: #1e40af;
+            color: white;
+            box-shadow: 0 0 0 4px rgba(37,99,235,0.25);
+        }
         .phase-label {
             font-size: 9px;
             color: #94a3b8;
             margin-top: 4px;
             text-transform: uppercase;
             letter-spacing: 0.3px;
+            font-weight: 500;
         }
         .phase-label.active {
             color: #1e293b;
@@ -71,10 +91,12 @@
             height: 2px;
             background: #e2e8f0;
             flex-shrink: 0;
+            transition: all 0.5s;
         }
         .phase-connector.active {
             background: #2563eb;
         }
+        /* Main Card */
         .registration-card {
             background: white;
             border-radius: 12px;
@@ -85,6 +107,7 @@
             font-size: 28px;
             color: #1e293b;
             margin: 0 0 5px 0;
+            font-weight: 700;
         }
         .registration-card .subtitle {
             color: #64748b;
@@ -93,6 +116,7 @@
             padding-bottom: 15px;
             border-bottom: 1px solid #e2e8f0;
         }
+        /* Important Dates */
         .dates-box {
             background: #f8fafc;
             padding: 15px 20px;
@@ -110,6 +134,10 @@
             color: #475569;
             font-size: 14px;
         }
+        .dates-box p strong {
+            color: #1e293b;
+        }
+        /* Reminders */
         .reminder-box {
             background: #eff6ff;
             padding: 12px 16px;
@@ -122,6 +150,7 @@
             color: #1e40af;
             font-size: 14px;
         }
+        /* Activity Info */
         .activity-info {
             background: white;
             padding: 20px;
@@ -137,7 +166,9 @@
         .activity-info p {
             color: #64748b;
             margin: 4px 0;
+            font-size: 14px;
         }
+        /* Checklist */
         .checklist-item {
             display: flex;
             align-items: flex-start;
@@ -158,6 +189,7 @@
             height: 18px;
             cursor: pointer;
             flex-shrink: 0;
+            accent-color: #2563eb;
         }
         .checklist-item .check-content {
             flex: 1;
@@ -188,6 +220,7 @@
             font-family: inherit;
             resize: vertical;
             margin-top: 8px;
+            transition: all 0.3s;
         }
         .checklist-item textarea:focus {
             outline: none;
@@ -212,12 +245,14 @@
             border: 1px solid #cbd5e1;
             border-radius: 6px;
             font-size: 14px;
+            transition: all 0.3s;
         }
         .input-row input:focus {
             outline: none;
             border-color: #2563eb;
             box-shadow: 0 0 0 3px rgba(37,99,235,0.1);
         }
+        /* Status Box */
         .status-box {
             background: #f0fdf4;
             padding: 12px 16px;
@@ -230,11 +265,12 @@
             color: #166534;
             font-weight: 500;
         }
+        /* Action Buttons - Beautiful Design */
         .action-buttons {
             display: flex;
             gap: 12px;
             flex-wrap: wrap;
-            margin-top: 20px;
+            margin-top: 25px;
             padding-top: 20px;
             border-top: 2px solid #e2e8f0;
         }
@@ -249,12 +285,13 @@
             cursor: pointer;
             text-decoration: none;
             display: inline-block;
-            transition: background 0.3s;
+            transition: all 0.3s;
         }
         .btn-back:hover {
             background: #475569;
+            transform: translateY(-1px);
         }
-        .btn-primary {
+        .btn-continue {
             padding: 10px 28px;
             background: #2563eb;
             color: white;
@@ -263,25 +300,14 @@
             font-size: 14px;
             font-weight: 500;
             cursor: pointer;
-            transition: background 0.3s;
+            transition: all 0.3s;
         }
-        .btn-primary:hover {
+        .btn-continue:hover {
             background: #1d4ed8;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(37,99,235,0.3);
         }
-        .btn-success {
-            padding: 10px 28px;
-            background: #22c55e;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            font-size: 14px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: background 0.3s;
-        }
-        .btn-success:hover {
-            background: #16a34a;
-        }
+        /* Notification */
         .notification {
             padding: 12px 20px;
             border-radius: 6px;
@@ -310,16 +336,30 @@
             max-width: 400px;
             width: 100%;
         }
+        /* Responsive */
         @media (max-width: 768px) {
             .registration-card { padding: 20px; }
             .registration-card h1 { font-size: 22px; }
             .action-buttons { flex-direction: column; }
-            .action-buttons .btn-back,
-            .action-buttons .btn-primary,
-            .action-buttons .btn-success { width: 100%; text-align: center; }
+            .action-buttons a, .action-buttons button { 
+                width: 100%; 
+                text-align: center;
+                padding: 12px;
+            }
             .phase-item { padding: 0 4px; min-width: 36px; }
             .phase-circle { width: 28px; height: 28px; font-size: 11px; }
             .phase-connector { width: 15px; }
+            .phase-label { font-size: 7px; }
+            .dates-box { padding: 12px 15px; }
+            .reminder-box { padding: 10px 14px; }
+            .checklist-item { padding: 12px; }
+            .input-row input { min-width: 100%; }
+        }
+        @media (max-width: 480px) {
+            .phase-item { padding: 0 3px; min-width: 30px; }
+            .phase-circle { width: 24px; height: 24px; font-size: 10px; }
+            .phase-connector { width: 10px; }
+            .registration-card h1 { font-size: 19px; }
         }
     </style>
 </head>
@@ -336,9 +376,9 @@
             <div class="dates-box">
                 <h3>📅 Important Dates</h3>
                 <p><strong>Registration Deadline:</strong> 2026-10-01</p>
-                <p><strong>Personal Statement Due:</strong> 2026-10-01</p>
-                <p><strong>Parent/Guardian Consent Due:</strong> 2026-10-01</p>
-                <p><strong>Registration Form Due:</strong> 2026-10-01</p>
+                <p><strong>Personal Statement:</strong> Due: 2026-10-01</p>
+                <p><strong>Parent/Guardian Consent:</strong> Due: 2026-10-01</p>
+                <p><strong>Complete Registration Form:</strong> Due: 2026-10-01</p>
             </div>
 
             <!-- Reminders -->
@@ -354,8 +394,8 @@
             </div>
 
             <!-- Registration Checklist -->
-            <h3 style="margin-bottom: 5px;">Registration Checklist</h3>
-            <p style="color: #64748b; font-size: 14px; margin-bottom: 15px;">Main Deadline: 2026-10-01</p>
+            <h3 style="margin-bottom: 5px; font-size: 18px; color: #1e293b;">Registration Checklist</h3>
+            <p style="color: #64748b; font-size: 14px; margin-bottom: 15px;"><strong>Main Deadline:</strong> 2026-10-01</p>
 
             <!-- Checklist Item 1 -->
             <div class="checklist-item">
@@ -403,10 +443,10 @@
                 <p>✅ You are already registered for this activity!</p>
             </div>
 
-            <!-- Action Buttons -->
+            <!-- Action Buttons - Beautiful Design -->
             <div class="action-buttons">
                 <a href="activities.html" class="btn-back">← Back to Activities</a>
-                <button id="continue-to-phase4-btn" class="btn-primary">Continue to University Pathway →</button>
+                <button id="continue-to-phase4-btn" class="btn-continue">Continue to University Pathway →</button>
             </div>
         </div>
 
@@ -445,32 +485,22 @@
         // Continue to Phase 4/5/6
         document.getElementById('continue-to-phase4-btn')?.addEventListener('click', function() {
             try {
-                // Get current activity
                 const activity = JSON.parse(localStorage.getItem('selectedActivity') || '{"id":"activity_1","name":"Activity"}');
-                
-                // Get student profile
                 let student = JSON.parse(localStorage.getItem('studentProfile') || '{}');
                 
-                // Initialize completedActivities if not exists
                 if (!student.completedActivities) {
                     student.completedActivities = [];
                 }
-                
-                // Add activity to completed if not already there
                 if (!student.completedActivities.includes(activity.id)) {
                     student.completedActivities.push(activity.id);
                 }
                 
-                // Set phase to 4
                 student.currentPhase = 4;
                 student.phase4Completed = true;
-                
-                // Save to localStorage
                 localStorage.setItem('studentProfile', JSON.stringify(student));
                 
                 showNotification('✅ Moving to University Pathway...', 'success');
                 
-                // Redirect to Phase 4 (Post-Activity)
                 setTimeout(() => {
                     window.location.href = 'post-activity.html';
                 }, 1000);
@@ -522,6 +552,7 @@
                 let circleClass = 'phase-circle';
                 if (isActive) circleClass += ' active';
                 if (isCompleted) circleClass += ' completed';
+                if (isCurrent) circleClass += ' current';
                 
                 let labelClass = 'phase-label';
                 if (isActive) labelClass += ' active';
@@ -550,19 +581,9 @@
             }
         }
 
-        // Initialize
         document.addEventListener('DOMContentLoaded', function() {
             loadActivityData();
             initPhaseNavigation();
-            
-            // Update progress on checkbox change
-            document.querySelectorAll('.checklist-item input[type="checkbox"]').forEach(cb => {
-                cb.addEventListener('change', function() {
-                    const checked = document.querySelectorAll('.checklist-item input[type="checkbox"]:checked');
-                    const total = document.querySelectorAll('.checklist-item input[type="checkbox"]');
-                    // Optional: Show progress
-                });
-            });
         });
     </script>
 </body>
