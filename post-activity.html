@@ -1,565 +1,69 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Post-Activity Reflection | Futures Abroad</title>
-    <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body {
-            font-family: 'Quicksand', Arial, sans-serif;
-            background: linear-gradient(135deg, #f5f7fa 0%, #e8ecf1 100%);
-            min-height: 100vh;
-            padding: 20px;
-            padding-top: 80px;
-        }
-
-        .main-header {
-            background: white;
-            padding: 15px 30px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            z-index: 1000;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-        .main-header .logo a {
-            font-size: 22px;
-            font-weight: 800;
-            color: #2D1B4E;
-            text-decoration: none;
-        }
-        .main-header .logo a span { color: #6C3CE1; }
-        .main-header nav { display: flex; gap: 15px; align-items: center; flex-wrap: wrap; }
-        .main-header nav a {
-            text-decoration: none;
-            color: #555;
-            font-weight: 600;
-            padding: 8px 16px;
-            border-radius: 8px;
-            transition: all 0.3s;
-            font-size: 14px;
-        }
-        .main-header nav a:hover { background: #f0e6ff; color: #6C3CE1; }
-        .main-header nav #logout-link { color: #e74c3c; }
-        .main-header nav #logout-link:hover { background: #fde8e8; }
-
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-        }
-
-        .phase-badge {
-            display: inline-block;
-            background: #22c55e;
-            color: white;
-            padding: 4px 16px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 700;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            margin-bottom: 10px;
-        }
-
-        .reflection-card {
-            background: white;
-            border-radius: 20px;
-            padding: 35px;
-            box-shadow: 0 4px 30px rgba(0,0,0,0.08);
-            margin-bottom: 25px;
-        }
-
-        .reflection-card h2 {
-            color: #2D1B4E;
-            font-size: 28px;
-            margin-bottom: 5px;
-        }
-
-        .reflection-card .subtitle {
-            color: #888;
-            font-size: 16px;
-            margin-bottom: 25px;
-        }
-
-        .question-group {
-            margin-bottom: 25px;
-        }
-
-        .question-group label {
-            display: block;
-            font-weight: 700;
-            color: #2D1B4E;
-            font-size: 17px;
-            margin-bottom: 8px;
-        }
-
-        .question-group textarea {
-            width: 100%;
-            padding: 14px 18px;
-            border: 2px solid #e0e0e0;
-            border-radius: 12px;
-            font-size: 15px;
-            font-family: 'Quicksand', Arial, sans-serif;
-            transition: border-color 0.3s;
-            resize: vertical;
-            min-height: 100px;
-            background: #fafafa;
-        }
-
-        .question-group textarea:focus {
-            outline: none;
-            border-color: #6C3CE1;
-            background: white;
-            box-shadow: 0 0 0 3px rgba(108,60,225,0.1);
-        }
-
-        .question-group .hint {
-            color: #999;
-            font-size: 13px;
-            margin-top: 5px;
-        }
-
-        .btn-primary {
-            background: #6C3CE1;
-            color: white;
-            border: none;
-            padding: 14px 40px;
-            border-radius: 50px;
-            font-weight: 700;
-            font-size: 18px;
-            cursor: pointer;
-            transition: all 0.3s;
-            font-family: 'Quicksand', Arial, sans-serif;
-            width: 100%;
-        }
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 20px rgba(108,60,225,0.35);
-        }
-
-        .btn-secondary {
-            background: transparent;
-            color: #6C3CE1;
-            border: 2px solid #6C3CE1;
-            padding: 12px 30px;
-            border-radius: 50px;
-            font-weight: 700;
-            font-size: 16px;
-            cursor: pointer;
-            transition: all 0.3s;
-            font-family: 'Quicksand', Arial, sans-serif;
-            text-decoration: none;
-            display: inline-block;
-        }
-        .btn-secondary:hover { background: #6C3CE1; color: white; }
-
-        .btn-success {
-            background: #22c55e;
-            color: white;
-            border: none;
-            padding: 14px 40px;
-            border-radius: 50px;
-            font-weight: 700;
-            font-size: 18px;
-            cursor: pointer;
-            transition: all 0.3s;
-            font-family: 'Quicksand', Arial, sans-serif;
-            width: 100%;
-        }
-        .btn-success:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 20px rgba(34,197,94,0.35);
-        }
-
-        .btn-phase5 {
-            background: #6C3CE1;
-            color: white;
-            border: none;
-            padding: 14px 40px;
-            border-radius: 50px;
-            font-weight: 700;
-            font-size: 18px;
-            cursor: pointer;
-            transition: all 0.3s;
-            font-family: 'Quicksand', Arial, sans-serif;
-            text-decoration: none;
-            display: inline-block;
-        }
-        .btn-phase5:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 20px rgba(108,60,225,0.35);
-        }
-
-        .button-group {
-            display: flex;
-            gap: 15px;
-            margin-top: 10px;
-            flex-wrap: wrap;
-        }
-        .button-group .btn-secondary { flex: 1; text-align: center; }
-        .button-group .btn-success { flex: 2; }
-
-        .success-message {
-            background: #f0fdf4;
-            border: 3px solid #22c55e;
-            border-radius: 16px;
-            padding: 30px;
-            text-align: center;
-            display: none;
-        }
-        .success-message .icon { font-size: 56px; }
-        .success-message h3 { color: #16a34a; margin: 10px 0; }
-        .success-message p { color: #555; font-size: 16px; }
-
-        .quick-nav {
-            margin-top: 30px;
-            padding-top: 20px;
-            border-top: 1px solid #eee;
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-        .quick-nav a { flex: 0 1 auto; min-width: 140px; text-align: center; }
-
-        .loading {
-            text-align: center;
-            padding: 40px;
-        }
-        .loading .spinner {
-            font-size: 40px;
-            animation: spin 1s linear infinite;
-        }
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        @media (max-width: 768px) {
-            body { padding-top: 120px; padding-left: 10px; padding-right: 10px; }
-            .main-header { padding: 12px 16px; }
-            .main-header nav a { font-size: 12px; padding: 6px 10px; }
-            .reflection-card { padding: 20px; }
-            .button-group { flex-direction: column; }
-            .button-group .btn-secondary,
-            .button-group .btn-success { flex: 1; }
-        }
-    </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phase 4 - Post Activity Reflection</title>
+    <link rel="stylesheet" href="css/post-activity.css">
+    <link rel="stylesheet" href="css/student-app.css">
 </head>
 <body>
+    <div class="app-container">
+        <!-- Phase Navigation -->
+        <div id="phase-navigation"></div>
 
-    <header class="main-header">
-        <div class="logo">
-            <a href="index.html">Futures <span>Abroad</span></a>
-        </div>
-        <nav>
-            <a href="dashboard.html">Dashboard</a>
-            <a href="portfolio.html">My Portfolio</a>
-            <a href="university-shortlist.html">Universities</a>
-            <a href="#" id="logout-link">Logout</a>
-        </nav>
-    </header>
+        <div id="phase4-container" class="phase-container">
+            <h1>Phase 4: Post-Activity Guidance</h1>
+            <p class="subtitle">Reflect on your experience with <strong id="activity-name-display">this activity</strong></p>
 
-    <div class="container">
-
-        <!-- PHASE 4 - Reflection -->
-        <div class="reflection-card">
-            <span class="phase-badge">Phase 4</span>
-            <h2>📝 Reflect on Your Experience</h2>
-            <p class="subtitle">Answer these questions to build your portfolio and strengthen your profile.</p>
-
-            <div id="activityInfo" style="background:#f8f4ff;padding:15px;border-radius:12px;margin-bottom:25px;">
-                <p><strong>Activity:</strong> <span id="activityNameDisplay">Loading...</span></p>
-            </div>
-
-            <div id="reflectionForm">
-                <div class="question-group">
-                    <label for="reflection1">1. What did you learn from this activity?</label>
-                    <textarea id="reflection1" placeholder="Describe the key skills, knowledge, or insights you gained..."></textarea>
-                    <div class="hint">💡 Think about both technical and soft skills you developed.</div>
+            <div class="reflection-form">
+                <div class="form-group">
+                    <label for="completion-date">Date Completed:</label>
+                    <input type="date" id="completion-date" />
                 </div>
 
-                <div class="question-group">
-                    <label for="reflection2">2. What challenges did you face and how did you overcome them?</label>
-                    <textarea id="reflection2" placeholder="Describe obstacles you encountered and how you handled them..."></textarea>
-                    <div class="hint">💡 This shows resilience and problem-solving ability.</div>
+                <div class="form-group">
+                    <label for="outcome-note">What did you gain from this experience?</label>
+                    <textarea id="outcome-note" rows="3" placeholder="Write a brief outcome note..."></textarea>
                 </div>
 
-                <div class="question-group">
-                    <label for="reflection3">3. How has this activity shaped your career or university goals?</label>
-                    <textarea id="reflection3" placeholder="Reflect on how this experience influences your future plans..."></textarea>
-                    <div class="hint">💡 This helps connect your experiences to your long-term goals.</div>
-                </div>
+                <h3>Reflection Prompts</h3>
+                <p class="hint">Answer these questions to capture your learning. These can be used in future essays.</p>
+                <div id="reflection-prompts"></div>
 
-                <div class="button-group">
-                    <button class="btn-secondary" id="skipBtn">⏭️ Skip</button>
-                    <button class="btn-success" id="saveReflectionBtn">💾 Save Reflection</button>
+                <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-top: 20px;">
+                    <button id="save-reflection" class="primary-btn">💾 Save Reflection</button>
+                    <button id="phase5-button" class="secondary-btn" style="display: none;">
+                        Continue to University Pathway →
+                    </button>
                 </div>
             </div>
 
-            <!-- ============================================================
-            SUCCESS MESSAGE - UPDATED WITH PHASE 5 NAVIGATION
-            ============================================================ -->
-            <div class="success-message" id="successMessage">
-                <div class="icon">🎉</div>
-                <h3>Reflection Saved Successfully!</h3>
-                <p>Your portfolio has been updated. This reflection will help you write stronger university applications.</p>
-                <div style="margin-top:20px;display:flex;gap:15px;flex-wrap:wrap;justify-content:center;">
-                    <a href="portfolio.html" class="btn-primary" style="padding:12px 30px;width:auto;">📂 View Portfolio</a>
-                    <a href="university-shortlist.html" class="btn-phase5" style="padding:12px 30px;width:auto;">
-                        🏛️ Phase 5: Universities →
-                    </a>
+            <!-- Profile Strength -->
+            <div class="strength-section" style="margin-top: 30px; padding: 20px; background: #f8fafc; border-radius: 8px;">
+                <h3>Your Profile Strength</h3>
+                <div class="progress-bar">
+                    <div id="strength-bar" class="progress-fill" style="width: 0%"></div>
                 </div>
+                <p style="margin-top: 8px;">Score: <span id="profile-strength-score">0</span>%</p>
+                <p style="color: #64748b; font-size: 13px;">Activities in portfolio: <span id="portfolio-count">0</span></p>
             </div>
-        </div>
 
-        <!-- Navigation -->
-        <div class="quick-nav">
-            <a href="dashboard.html" class="btn-secondary">📊 Dashboard</a>
-            <a href="portfolio.html" class="btn-secondary">📂 Portfolio</a>
-            <a href="university-shortlist.html" class="btn-secondary">🏛️ University Shortlist</a>
-            <a href="futures-abroad-enroll.html" class="btn-secondary" style="background:linear-gradient(135deg,#00b09b,#96c93d);color:white;border:none;">🚀 Enroll Now</a>
+            <div id="notification-container"></div>
         </div>
-
     </div>
 
-    <script type="module">
-        import { 
-            auth, db, COLLECTIONS,
-            doc, getDoc, updateDoc, arrayUnion,
-            onAuthStateChanged, signOut,
-            query, where, collection, getDocs
-        } from './js/firebase-config.js';
-
-        // DOM Elements
-        const activityNameDisplay = document.getElementById('activityNameDisplay');
-        const reflection1 = document.getElementById('reflection1');
-        const reflection2 = document.getElementById('reflection2');
-        const reflection3 = document.getElementById('reflection3');
-        const saveBtn = document.getElementById('saveReflectionBtn');
-        const skipBtn = document.getElementById('skipBtn');
-        const successMessage = document.getElementById('successMessage');
-        const reflectionForm = document.getElementById('reflectionForm');
-
-        let activityId = null;
-        let activityName = '';
-
-        function getActivityIdFromURL() {
-            const params = new URLSearchParams(window.location.search);
-            return params.get('id');
-        }
-
-        async function loadActivity() {
-            activityId = getActivityIdFromURL();
-            if (!activityId) {
-                alert('No activity selected.');
-                window.location.href = 'dashboard.html';
-                return;
-            }
-
-            try {
-                const activityRef = doc(db, COLLECTIONS.activities, activityId);
-                const activityDoc = await getDoc(activityRef);
-                if (activityDoc.exists()) {
-                    const data = activityDoc.data();
-                    activityName = data.name || 'Activity';
-                    activityNameDisplay.textContent = activityName;
-                } else {
-                    activityNameDisplay.textContent = 'Unknown Activity';
-                }
-            } catch (error) {
-                console.error('Error loading activity:', error);
-                activityNameDisplay.textContent = 'Error loading activity';
-            }
-        }
-
-        // Save reflection
-        async function saveReflection() {
-            const user = auth.currentUser;
-            if (!user) {
-                alert('Please log in.');
-                return;
-            }
-
-            const answers = {
-                q1: reflection1.value.trim(),
-                q2: reflection2.value.trim(),
-                q3: reflection3.value.trim()
-            };
-
-            // Check if any answer is provided
-            const hasContent = answers.q1 || answers.q2 || answers.q3;
-            if (!hasContent) {
-                alert('Please write at least one reflection before saving, or click Skip.');
-                return;
-            }
-
-            try {
-                // Get portfolio entry for this activity
-                const portfolioRef = collection(db, COLLECTIONS.studentPortfolio);
-                const q = query(portfolioRef, 
-                    where("userId", "==", user.uid), 
-                    where("activityId", "==", activityId)
-                );
-                const snapshot = await getDocs(q);
-
-                if (snapshot.empty) {
-                    // Create new portfolio entry
-                    const { addDoc, serverTimestamp } = await import('./js/firebase-config.js');
-                    await addDoc(portfolioRef, {
-                        userId: user.uid,
-                        activityId: activityId,
-                        activityName: activityName,
-                        dateCompleted: new Date().toISOString().split('T')[0],
-                        reflectionResponses: answers,
-                        essayPotentialFlag: checkEssayPotential(answers),
-                        createdAt: serverTimestamp()
-                    });
-                } else {
-                    // Update existing portfolio entry
-                    const entryDoc = snapshot.docs[0];
-                    await updateDoc(doc(db, COLLECTIONS.studentPortfolio, entryDoc.id), {
-                        reflectionResponses: answers,
-                        essayPotentialFlag: checkEssayPotential(answers)
-                    });
-                }
-
-                // Update user profile
-                const userRef = doc(db, COLLECTIONS.users, user.uid);
-                await updateDoc(userRef, {
-                    hasReflection: true,
-                    lastReflectionDate: new Date().toISOString()
-                });
-
-                // Show success
-                reflectionForm.style.display = 'none';
-                successMessage.style.display = 'block';
-
-                // Update profile strength
-                await updateProfileStrength(user.uid);
-
-                // Mark Phase 4 as completed in localStorage
-                localStorage.setItem('phase4Completed', 'true');
-
-            } catch (error) {
-                console.error('Error saving reflection:', error);
-                alert('Error saving reflection. Please try again.');
-            }
-        }
-
-        function checkEssayPotential(answers) {
-            const keywords = ['learned', 'challenge', 'overcame', 'goal', 'future', 'career', 'university', 'passion', 'discover', 'grow', 'develop', 'inspire'];
-            let score = 0;
-            Object.values(answers).forEach(text => {
-                keywords.forEach(keyword => {
-                    if (text.toLowerCase().includes(keyword)) score++;
-                });
-            });
-            return score >= 5;
-        }
-
-        async function updateProfileStrength(userId) {
-            try {
-                const portfolioRef = collection(db, COLLECTIONS.studentPortfolio);
-                const q = query(portfolioRef, where("userId", "==", userId));
-                const snapshot = await getDocs(q);
-                
-                const activities = [];
-                snapshot.forEach(doc => activities.push(doc.data()));
-                
-                let score = 0;
-                const count = Math.min(activities.length, 5);
-                score += (count / 5) * 30;
-                
-                const types = new Set(activities.map(a => a.type));
-                score += (Math.min(types.size, 4) / 4) * 20;
-                
-                const hasReflections = activities.filter(a => 
-                    a.reflectionResponses && Object.keys(a.reflectionResponses).length > 0
-                );
-                const reflectionScore = Math.min(hasReflections.length / 3, 1) * 15;
-                score += reflectionScore;
-                
-                const hasEssayPotential = activities.some(a => a.essayPotentialFlag);
-                if (hasEssayPotential) score += 15;
-                
-                const hasLeadership = activities.some(a => 
-                    a.skills && a.skills.some(s => 
-                        ['leadership', 'initiative', 'management', 'coordinator', 'organizer'].includes(s.toLowerCase())
-                    )
-                );
-                if (hasLeadership) score += 20;
-                
-                const finalScore = Math.min(Math.round(score), 100);
-                
-                const userRef = doc(db, COLLECTIONS.users, userId);
-                await updateDoc(userRef, {
-                    profileStrength: finalScore
-                });
-                
-                return finalScore;
-            } catch (error) {
-                console.error('Error updating profile strength:', error);
-                return 0;
-            }
-        }
-
-        // Skip reflection - UPDATED to redirect to Phase 5
-        function skipReflection() {
-            if (confirm('Are you sure you want to skip the reflection? You can always add it later from your portfolio.')) {
-                reflectionForm.style.display = 'none';
-                successMessage.style.display = 'block';
-                successMessage.querySelector('h3').textContent = '⏭️ Reflection Skipped';
-                successMessage.querySelector('p').textContent = 'You can add your reflection later from your portfolio page.';
-                
-                // Add Phase 5 button to skipped state
-                const existingButtons = successMessage.querySelector('div[style*="margin-top:20px"]');
-                if (existingButtons) {
-                    existingButtons.innerHTML = `
-                        <a href="portfolio.html" class="btn-primary" style="padding:12px 30px;width:auto;">📂 View Portfolio</a>
-                        <a href="university-shortlist.html" class="btn-phase5" style="padding:12px 30px;width:auto;">
-                            🏛️ Continue to Phase 5 →
-                        </a>
-                    `;
-                }
-                
-                localStorage.setItem('phase4Completed', 'true');
-            }
-        }
-
-        // Logout
-        document.getElementById('logout-link')?.addEventListener('click', async (e) => {
-            e.preventDefault();
-            try {
-                await signOut(auth);
-                window.location.href = 'login.html';
-            } catch (error) {
-                console.error('Logout error:', error);
+    <!-- Scripts -->
+    <script src="js/phase-navigation.js"></script>
+    <script src="js/phase-detection.js"></script>
+    <script src="phase4-complete.js"></script>
+    <script>
+        // Initialize phase detection
+        document.addEventListener('DOMContentLoaded', function() {
+            if (typeof initPhaseDetection === 'function') {
+                initPhaseDetection();
             }
         });
-
-        // Event Listeners
-        saveBtn?.addEventListener('click', saveReflection);
-        skipBtn?.addEventListener('click', skipReflection);
-
-        // Initialize
-        onAuthStateChanged(auth, async (user) => {
-            if (!user) {
-                window.location.href = 'login.html';
-                return;
-            }
-            await loadActivity();
-        });
-
-        console.log('✅ post-activity.html loaded with Phase 5 navigation!');
     </script>
-
 </body>
 </html>
