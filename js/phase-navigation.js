@@ -1,8 +1,7 @@
-// ============================================
+// ============================================================
 // PHASE NAVIGATION SYSTEM
-// ============================================
+// ============================================================
 
-// Get current phase from localStorage
 function getCurrentPhase() {
     try {
         const student = JSON.parse(localStorage.getItem('studentProfile') || '{}');
@@ -12,31 +11,10 @@ function getCurrentPhase() {
     }
 }
 
-// Update phase navigation display
-function updatePhaseNavigation() {
-    const currentPhase = getCurrentPhase();
-    const dots = document.querySelectorAll('.phase-dot');
-    const lines = document.querySelectorAll('.phase-line');
-
-    dots.forEach((dot, index) => {
-        const phaseNum = index + 1;
-        dot.classList.toggle('active', phaseNum <= currentPhase);
-        dot.classList.toggle('completed', phaseNum < currentPhase);
-    });
-
-    lines.forEach((line, index) => {
-        const phaseNum = index + 1;
-        line.classList.toggle('active', phaseNum < currentPhase);
-    });
-}
-
-// Navigate to a phase
 function navigateToPhase(phase) {
     const currentPhase = getCurrentPhase();
     
-    // Can only navigate to completed or current phase
     if (phase > currentPhase) {
-        // Redirect to current phase page
         const phasePages = {
             1: 'quiz.html',
             2: 'activities.html',
@@ -49,7 +27,6 @@ function navigateToPhase(phase) {
         return;
     }
 
-    // Navigate to requested phase
     const phasePages = {
         1: 'quiz.html',
         2: 'activities.html',
@@ -61,7 +38,6 @@ function navigateToPhase(phase) {
     window.location.href = phasePages[phase] || 'dashboard.html';
 }
 
-// Render phase navigation HTML
 function renderPhaseNavigation() {
     const currentPhase = getCurrentPhase();
     const phases = [
@@ -73,26 +49,26 @@ function renderPhaseNavigation() {
         { num: 6, label: 'Enroll' }
     ];
 
-    let html = '<div class="phase-nav">';
+    let html = '<div class="phase-nav" style="display: flex; align-items: center; justify-content: center; gap: 0; flex-wrap: wrap;">';
     phases.forEach((phase, index) => {
         const isActive = phase.num <= currentPhase;
         const isCurrent = phase.num === currentPhase;
         const isCompleted = phase.num < currentPhase;
         
         let circleContent = phase.num;
-        if (isCompleted) {
-            circleContent = '✓';
-        }
+        if (isCompleted) circleContent = '✓';
         
         html += `
             <div class="phase-item ${isActive ? 'active' : ''} ${isCurrent ? 'current' : ''} ${isCompleted ? 'completed' : ''}" 
-                 onclick="navigateToPhase(${phase.num})">
-                <div class="phase-circle"><span>${circleContent}</span></div>
-                <span class="phase-label">${phase.label}</span>
+                 onclick="navigateToPhase(${phase.num})" style="display: flex; flex-direction: column; align-items: center; cursor: pointer; padding: 0 8px; min-width: 44px;">
+                <div style="width: 34px; height: 34px; border-radius: 50%; background: ${isActive ? '#2563eb' : '#e2e8f0'}; display: flex; align-items: center; justify-content: center; font-weight: 700; color: ${isActive ? 'white' : '#94a3b8'}; transition: all 0.3s; font-size: 13px; border: 2px solid ${isCurrent ? '#2563eb' : 'transparent'}; box-shadow: ${isCurrent ? '0 0 0 4px rgba(37,99,235,0.25)' : 'none'};">
+                    <span>${circleContent}</span>
+                </div>
+                <span style="font-size: 9px; color: ${isActive ? '#1e293b' : '#94a3b8'}; margin-top: 4px; font-weight: ${isActive ? '600' : '400'}; text-transform: uppercase; letter-spacing: 0.3px;">${phase.label}</span>
             </div>
         `;
         if (index < phases.length - 1) {
-            html += `<div class="phase-connector ${phase.num < currentPhase ? 'active' : ''}"></div>`;
+            html += `<div style="width: 25px; height: 2px; background: ${phase.num < currentPhase ? '#2563eb' : '#e2e8f0'}; flex-shrink: 0; transition: all 0.5s;"></div>`;
         }
     });
     html += '</div>';
@@ -100,21 +76,9 @@ function renderPhaseNavigation() {
     return html;
 }
 
-// Initialize phase navigation
 function initPhaseNavigation() {
     const navContainer = document.getElementById('phase-navigation');
     if (navContainer) {
         navContainer.innerHTML = renderPhaseNavigation();
     }
-}
-
-// Export for use in other files
-if (typeof module !== 'undefined' && module.exports) {
-    module.exports = {
-        getCurrentPhase,
-        updatePhaseNavigation,
-        navigateToPhase,
-        renderPhaseNavigation,
-        initPhaseNavigation
-    };
 }
