@@ -4,13 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>University Shortlist - Futures Abroad</title>
-    <link rel="stylesheet" href="css/university.css" />
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
             background: #f1f5f9;
             color: #1e293b;
+            line-height: 1.6;
         }
         .app-container {
             max-width: 900px;
@@ -36,7 +40,9 @@
             cursor: pointer;
             padding: 0 8px;
             min-width: 44px;
+            transition: all 0.3s;
         }
+        .phase-item:hover .phase-circle { transform: scale(1.1); }
         .phase-circle {
             width: 34px;
             height: 34px;
@@ -52,12 +58,14 @@
         }
         .phase-circle.active { background: #2563eb; color: white; }
         .phase-circle.completed { background: #22c55e; color: white; }
+        .phase-circle.current { background: #1e40af; color: white; box-shadow: 0 0 0 4px rgba(37,99,235,0.25); }
         .phase-label {
             font-size: 9px;
             color: #94a3b8;
             margin-top: 4px;
             text-transform: uppercase;
             letter-spacing: 0.3px;
+            font-weight: 500;
         }
         .phase-label.active { color: #1e293b; font-weight: 600; }
         .phase-connector {
@@ -65,6 +73,7 @@
             height: 2px;
             background: #e2e8f0;
             flex-shrink: 0;
+            transition: all 0.5s;
         }
         .phase-connector.active { background: #2563eb; }
         .shortlist-card {
@@ -77,6 +86,7 @@
             font-size: 28px;
             color: #1e293b;
             margin: 0 0 5px 0;
+            font-weight: 700;
         }
         .shortlist-card .subtitle {
             color: #64748b;
@@ -93,7 +103,7 @@
             background: #f8fafc;
             transition: all 0.3s;
         }
-        .uni-card:hover { background: #f1f5f9; }
+        .uni-card:hover { background: #f1f5f9; transform: translateX(4px); }
         .uni-card.reach { border-left-color: #ef4444; }
         .uni-card.target { border-left-color: #f59e0b; }
         .uni-card.safety { border-left-color: #22c55e; }
@@ -113,6 +123,8 @@
         .uni-badge.reach { background: #fef2f2; color: #ef4444; }
         .uni-badge.target { background: #fffbeb; color: #f59e0b; }
         .uni-badge.safety { background: #f0fdf4; color: #22c55e; }
+        .section-title { font-size: 18px; margin: 20px 0 10px 0; color: #1e293b; }
+        .no-results { color: #64748b; font-style: italic; padding: 10px; }
         .cta-card {
             background: linear-gradient(135deg, #1e3a5f, #2563eb);
             color: white;
@@ -180,12 +192,11 @@
             border-radius: 10px;
             transition: width 1s ease;
         }
-        .section-title { font-size: 18px; margin: 20px 0 10px 0; color: #1e293b; }
         .action-buttons {
             display: flex;
             gap: 12px;
             flex-wrap: wrap;
-            margin-top: 20px;
+            margin-top: 25px;
             padding-top: 20px;
             border-top: 2px solid #e2e8f0;
         }
@@ -202,7 +213,7 @@
             display: inline-block;
             transition: all 0.3s;
         }
-        .btn-secondary:hover { background: #eff6ff; }
+        .btn-secondary:hover { background: #eff6ff; transform: translateY(-1px); }
         .btn-primary {
             padding: 10px 24px;
             background: #2563eb;
@@ -212,10 +223,9 @@
             font-size: 14px;
             font-weight: 500;
             cursor: pointer;
-            transition: background 0.3s;
+            transition: all 0.3s;
         }
-        .btn-primary:hover { background: #1d4ed8; }
-        .no-results { color: #64748b; font-style: italic; padding: 10px; }
+        .btn-primary:hover { background: #1d4ed8; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(37,99,235,0.3); }
         @media (max-width: 768px) {
             .shortlist-card { padding: 20px; }
             .shortlist-card h1 { font-size: 22px; }
@@ -224,13 +234,19 @@
             .phase-item { padding: 0 4px; min-width: 36px; }
             .phase-circle { width: 28px; height: 28px; font-size: 11px; }
             .phase-connector { width: 15px; }
+            .phase-label { font-size: 7px; }
             .milestone-month, .deadline-date { min-width: 70px; font-size: 12px; }
+        }
+        @media (max-width: 480px) {
+            .phase-item { padding: 0 3px; min-width: 30px; }
+            .phase-circle { width: 24px; height: 24px; font-size: 10px; }
+            .phase-connector { width: 10px; }
+            .shortlist-card h1 { font-size: 19px; }
         }
     </style>
 </head>
 <body>
     <div class="app-container">
-        <!-- Phase Navigation -->
         <div id="phase-navigation" class="phase-nav"></div>
 
         <div class="shortlist-card">
@@ -239,7 +255,7 @@
 
             <!-- Grade 11 Content -->
             <div id="grade-11-content" style="display:none;">
-                <h2 style="font-size: 22px; margin-bottom: 5px;">🎓 Your University Shortlist</h2>
+                <h2 style="font-size: 22px; margin-bottom: 5px; color: #1e293b;">🎓 Your University Shortlist</h2>
                 <p style="color: #64748b; margin-bottom: 20px;">Based on your interests and profile, here are universities that match you.</p>
                 
                 <h3 class="section-title">🎯 Reach Schools</h3>
@@ -256,23 +272,23 @@
 
             <!-- Grade 10 Content -->
             <div id="grade-10-content" style="display:none;">
-                <h2 style="font-size: 22px; margin-bottom: 5px;">📈 Your Grade 10 Journey</h2>
+                <h2 style="font-size: 22px; margin-bottom: 5px; color: #1e293b;">📈 Your Grade 10 Journey</h2>
                 <p style="color: #64748b; margin-bottom: 20px;">You're building a strong foundation. Here's your progress and what's next.</p>
                 
                 <div style="margin: 20px 0;">
-                    <h3 style="font-size: 16px; margin-bottom: 8px;">Profile Strength: <span id="profile-score">0</span>%</h3>
+                    <h3 style="font-size: 16px; margin-bottom: 8px; color: #1e293b;">Profile Strength: <span id="profile-score">0</span>%</h3>
                     <div class="progress-bar">
                         <div id="strength-bar-grade10" class="progress-fill" style="width: 0%"></div>
                     </div>
                 </div>
 
                 <div style="margin: 20px 0;">
-                    <h3 style="font-size: 16px; margin-bottom: 8px;">Gap Analysis</h3>
+                    <h3 style="font-size: 16px; margin-bottom: 8px; color: #1e293b;">Gap Analysis</h3>
                     <div id="gap-analysis"></div>
                 </div>
 
                 <div style="margin: 20px 0;">
-                    <h3 style="font-size: 16px; margin-bottom: 8px;">Recommended Milestones</h3>
+                    <h3 style="font-size: 16px; margin-bottom: 8px; color: #1e293b;">Recommended Milestones</h3>
                     <div id="roadmap-timeline"></div>
                 </div>
 
@@ -281,18 +297,17 @@
 
             <!-- Grade 12 Content -->
             <div id="grade-12-content" style="display:none;">
-                <h2 style="font-size: 22px; margin-bottom: 5px;">📋 Application Support</h2>
+                <h2 style="font-size: 22px; margin-bottom: 5px; color: #1e293b;">📋 Application Support</h2>
                 <p style="color: #64748b; margin-bottom: 20px;">You're in the final stretch. Stay on top of your deadlines.</p>
                 
                 <div style="margin: 20px 0;">
-                    <h3 style="font-size: 16px; margin-bottom: 8px;">Upcoming Deadlines</h3>
+                    <h3 style="font-size: 16px; margin-bottom: 8px; color: #1e293b;">Upcoming Deadlines</h3>
                     <div id="deadline-list"></div>
                 </div>
 
                 <button onclick="window.location.href='portfolio.html'" class="btn-primary">View Your Portfolio</button>
             </div>
 
-            <!-- Action Buttons -->
             <div class="action-buttons">
                 <a href="post-activity.html" class="btn-secondary">← Back to Reflection</a>
                 <button id="continue-to-phase6-btn" class="btn-primary" style="display: none;">
@@ -320,7 +335,6 @@
 
         let universityShortlist = { reach: [], target: [], safety: [] };
 
-        // Phase Navigation
         function getCurrentPhase() {
             try {
                 const student = JSON.parse(localStorage.getItem('studentProfile') || '{}');
@@ -352,7 +366,8 @@
             phases.forEach((phase, index) => {
                 const isActive = phase.num <= currentPhase;
                 const isCompleted = phase.num < currentPhase;
-                let circleClass = 'phase-circle' + (isActive ? ' active' : '') + (isCompleted ? ' completed' : '');
+                const isCurrent = phase.num === currentPhase;
+                let circleClass = 'phase-circle' + (isActive ? ' active' : '') + (isCompleted ? ' completed' : '') + (isCurrent ? ' current' : '');
                 let labelClass = 'phase-label' + (isActive ? ' active' : '');
                 let circleContent = isCompleted ? '✓' : phase.num;
                 html += `
@@ -589,7 +604,7 @@
         document.getElementById('continue-to-phase6-btn')?.addEventListener('click', goToPhase6);
 
         document.addEventListener('DOMContentLoaded', function() {
-            if (document.getElementById('phase5-container') || document.querySelector('.shortlist-card')) {
+            if (document.querySelector('.shortlist-card')) {
                 initPhase5();
             }
         });
