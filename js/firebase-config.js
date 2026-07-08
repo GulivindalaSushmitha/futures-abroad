@@ -26,7 +26,9 @@ import {
     deleteDoc,
     addDoc,
     serverTimestamp,
-    writeBatch
+    writeBatch,
+    orderBy,
+    limit
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 // Your web app's Firebase configuration
@@ -49,13 +51,21 @@ const db = getFirestore(app);
 // ============================================================
 const COLLECTIONS = {
     users: "users",
+    students: "students",              // Main student collection
     activities: "activities",
-    studentPortfolio: "studentPortfolio",    // Phase 4
-    universities: "universities",            // Phase 5
-    enrollments: "enrollments",              // Phase 6
-    counselorTasks: "counselorTasks",        // Phase 6
-    payments: "payments"                     // Phase 6
+    studentPortfolio: "studentPortfolio",
+    universities: "universities",
+    enrollments: "enrollments",
+    counselorTasks: "counselorTasks",
+    payments: "payments",
+    admins: "admins",
+    studentProfiles: "studentProfiles"
 };
+
+// ============================================================
+// ADMIN UID - Your admin user ID
+// ============================================================
+const ADMIN_UID = "hrONkvAlxVac4Wc7nwdNLhdOIe33";
 
 // ============================================================
 // Export everything
@@ -84,9 +94,15 @@ export {
     addDoc,
     serverTimestamp,
     writeBatch,
+    orderBy,
+    limit,
     
     // Collections
-    COLLECTIONS
+    COLLECTIONS,
+    
+    // Admin
+    ADMIN_UID
 };
 
 console.log("🔥 Firebase initialized successfully!");
+console.log("📌 Admin UID:", ADMIN_UID);
