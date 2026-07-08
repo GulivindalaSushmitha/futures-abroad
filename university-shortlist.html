@@ -260,6 +260,38 @@
         .empty-state p {
             color: #666;
         }
+
+        /* Phase 6 Navigation Button Styles */
+        .btn-phase6 {
+            background: white;
+            color: #6C3CE1;
+            border: none;
+            padding: 1rem 3rem;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: 'Quicksand', Arial, sans-serif;
+        }
+        .btn-phase6:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+        }
+
+        .phase-badge {
+            display: inline-block;
+            background: #6C3CE1;
+            color: white;
+            padding: 4px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+
         @media (max-width: 768px) {
             .navbar {
                 flex-wrap: wrap;
@@ -283,6 +315,10 @@
             .cta-section h2 {
                 font-size: 1.5rem;
             }
+            .btn-phase6 {
+                padding: 0.75rem 2rem;
+                font-size: 1rem;
+            }
         }
     </style>
 </head>
@@ -304,6 +340,11 @@
     <!-- MAIN CONTENT -->
     <main class="university-container">
         
+        <!-- Phase Badge -->
+        <div style="text-align:center;margin-bottom:1rem;">
+            <span class="phase-badge">Phase 5</span>
+        </div>
+
         <!-- Header -->
         <div class="university-header">
             <h1>🎯 Your University Shortlist</h1>
@@ -326,12 +367,14 @@
             </div>
         </div>
 
-        <!-- Phase 6 CTA - Primary Conversion Point -->
-        <div class="cta-section">
+        <!-- ============================================================
+        PHASE 6 CTA - Primary Conversion Point to Enrollment
+        ============================================================ -->
+        <div class="cta-section" id="phase6CTA">
             <h2>🚀 Ready to Turn This Shortlist into a Real Application?</h2>
             <p>Get 1-on-1 guidance from our expert counselors. We'll help you build a winning application strategy.</p>
-            <button id="futuresAbroadCTA" class="cta-button">
-                👋 Book Your First Session
+            <button id="futuresAbroadCTA" class="btn-phase6">
+                👋 Book Your First Session →
             </button>
             <p style="margin-top:1rem;font-size:0.85rem;opacity:0.7;">
                 No commitment required. First session is completely free.
@@ -342,7 +385,7 @@
         <div style="display:flex;justify-content:center;gap:1rem;flex-wrap:wrap;margin-top:2rem;padding-top:1.5rem;border-top:1px solid #eee;">
             <a href="dashboard.html" style="color:#6C3CE1;text-decoration:none;font-weight:600;">📊 Dashboard</a>
             <a href="portfolio.html" style="color:#6C3CE1;text-decoration:none;font-weight:600;">📂 Portfolio</a>
-            <a href="futures-abroad-enroll.html" style="color:#6C3CE1;text-decoration:none;font-weight:600;">🚀 Enroll Now</a>
+            <a href="futures-abroad-enroll.html" style="color:#6C3CE1;text-decoration:none;font-weight:600;background:#f0e6ff;padding:8px 20px;border-radius:50px;">🚀 Enroll Now</a>
         </div>
     </main>
 
@@ -356,23 +399,26 @@
     <!-- University Logic -->
     <script type="module" src="js/university.js"></script>
     
-    <!-- Main Script - Phase 5 Tracking Added -->
+    <!-- ============================================================
+    MAIN SCRIPT - Phase 5 with Navigation to Phase 6
+    ============================================================ -->
     <script type="module">
         import { auth, onAuthStateChanged, signOut } from './js/firebase-config.js';
         
         // ============================================================
-        // PHASE 5 TRACKING: Mark that user has viewed universities
-        // This updates the dashboard phase progress
+        // PHASE 5 TRACKING
         // ============================================================
         
-        // Mark Phase 5 as viewed
         localStorage.setItem('viewedUniversities', 'true');
-        console.log('✅ Phase 5: University Shortlist viewed - Dashboard will update');
+        localStorage.setItem('phase5Completed', 'true');
+        console.log('✅ Phase 5: University Shortlist viewed');
         
-        // Also update in Firestore if you want to persist across devices
+        // ============================================================
+        // UPDATE FIRESTORE - Mark Phase 5 as viewed
+        // ============================================================
+        
         async function markUniversitiesViewed(userId) {
             try {
-                // Import dynamically to avoid circular imports
                 const { db, doc, updateDoc } = await import('./js/firebase-config.js');
                 const userRef = doc(db, 'users', userId);
                 await updateDoc(userRef, {
@@ -382,7 +428,7 @@
                 });
                 console.log('✅ Phase 5 marked in Firestore');
             } catch (error) {
-                console.log('⚠️ Could not update Firestore (may not be needed):', error.message);
+                console.log('⚠️ Could not update Firestore:', error.message);
             }
         }
         
@@ -401,11 +447,52 @@
         });
 
         // ============================================================
-        // CTA BUTTON - Navigate to Phase 6
+        // CTA BUTTON - Navigate to Phase 6 (Enrollment)
         // ============================================================
         
-        document.getElementById('futuresAbroadCTA')?.addEventListener('click', () => {
+        document.getElementById('futuresAbroadCTA')?.addEventListener('click', function() {
+            console.log('🚀 Phase 5 CTA clicked - Navigating to Phase 6 (Enrollment)');
+            // Store that user is coming from Phase 5
+            localStorage.setItem('fromPhase5', 'true');
             window.location.href = 'futures-abroad-enroll.html';
+        });
+
+        // ============================================================
+        // ALSO CAPTURE ANY ENROLL LINKS IN THE PAGE
+        // ============================================================
+        
+        document.querySelectorAll('a[href="futures-abroad-enroll.html"]').forEach(link => {
+            link.addEventListener('click', function(e) {
+                localStorage.setItem('fromPhase5', 'true');
+                console.log('🚀 Enroll link clicked - Navigating to Phase 6');
+            });
+        });
+
+        // ============================================================
+        // FILTER BUTTONS FUNCTIONALITY
+        // ============================================================
+        
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                
+                const filter = this.dataset.filter;
+                const cards = document.querySelectorAll('.university-card');
+                
+                cards.forEach(card => {
+                    if (filter === 'all') {
+                        card.style.display = 'block';
+                    } else {
+                        const category = card.dataset.category || '';
+                        if (category.toLowerCase() === filter) {
+                            card.style.display = 'block';
+                        } else {
+                            card.style.display = 'none';
+                        }
+                    }
+                });
+            });
         });
 
         // ============================================================
@@ -414,15 +501,14 @@
         
         onAuthStateChanged(auth, async (user) => {
             if (user) {
-                // Mark Phase 5 as viewed in Firestore for persistence
                 await markUniversitiesViewed(user.uid);
+                console.log('✅ User logged in - Phase 5 marked complete');
             } else {
-                // If not logged in, redirect to login
-                // window.location.href = 'login.html';
+                console.log('⚠️ User not logged in - showing Phase 5 as preview');
             }
         });
         
-        console.log('✅ university-shortlist.html loaded with Phase 5 tracking!');
+        console.log('✅ university-shortlist.html loaded with Phase 6 navigation!');
     </script>
 
 </body>
