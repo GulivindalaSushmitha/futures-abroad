@@ -3,9 +3,116 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Phase 4 - Post Activity Reflection</title>
-    <link rel="stylesheet" href="css/student-app.css">
+    <title>Post-Activity Reflection - Futures Abroad</title>
+    <link rel="stylesheet" href="css/post-activity.css" />
     <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f1f5f9;
+            color: #1e293b;
+        }
+        .app-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+        .phase-nav {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0;
+            flex-wrap: wrap;
+            background: white;
+            padding: 15px 20px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            margin-bottom: 30px;
+        }
+        .phase-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+            padding: 0 8px;
+            min-width: 44px;
+        }
+        .phase-circle {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            background: #e2e8f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: #94a3b8;
+            font-size: 13px;
+            transition: all 0.3s;
+        }
+        .phase-circle.active { background: #2563eb; color: white; }
+        .phase-circle.completed { background: #22c55e; color: white; }
+        .phase-label {
+            font-size: 9px;
+            color: #94a3b8;
+            margin-top: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+        .phase-label.active { color: #1e293b; font-weight: 600; }
+        .phase-connector {
+            width: 25px;
+            height: 2px;
+            background: #e2e8f0;
+            flex-shrink: 0;
+        }
+        .phase-connector.active { background: #2563eb; }
+        .reflection-card {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        }
+        .reflection-card h1 {
+            font-size: 28px;
+            color: #1e293b;
+            margin: 0 0 5px 0;
+        }
+        .reflection-card .subtitle {
+            color: #64748b;
+            font-size: 16px;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        .form-group {
+            margin: 15px 0;
+        }
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 5px;
+            font-size: 14px;
+        }
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            font-size: 14px;
+            font-family: inherit;
+            transition: all 0.3s;
+        }
+        .form-group input:focus, .form-group textarea:focus {
+            outline: none;
+            border-color: #2563eb;
+            box-shadow: 0 0 0 3px rgba(37,99,235,0.1);
+        }
+        .form-group textarea {
+            min-height: 80px;
+            resize: vertical;
+        }
         .reflection-item {
             margin: 15px 0;
             padding: 15px;
@@ -17,10 +124,11 @@
             font-weight: 600;
             color: #1e293b;
             margin-bottom: 8px;
+            font-size: 14px;
         }
         .reflection-item textarea {
             width: 100%;
-            min-height: 80px;
+            min-height: 70px;
             padding: 10px;
             border: 1px solid #cbd5e1;
             border-radius: 6px;
@@ -28,48 +136,66 @@
             font-family: inherit;
             resize: vertical;
         }
-        .form-group {
-            margin: 15px 0;
+        .reflection-item textarea:focus {
+            outline: none;
+            border-color: #2563eb;
+            box-shadow: 0 0 0 3px rgba(37,99,235,0.1);
         }
-        .form-group label {
-            display: block;
-            font-weight: 600;
-            color: #1e293b;
-            margin-bottom: 5px;
-        }
-        .form-group input, .form-group textarea {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #cbd5e1;
-            border-radius: 6px;
-            font-size: 14px;
-            font-family: inherit;
-        }
-        .primary-btn {
+        .btn-primary {
+            padding: 12px 28px;
             background: #2563eb;
             color: white;
             border: none;
-            padding: 12px 28px;
             border-radius: 6px;
             font-size: 15px;
+            font-weight: 500;
             cursor: pointer;
-            transition: all 0.3s;
+            transition: background 0.3s;
         }
-        .primary-btn:hover {
-            background: #1d4ed8;
-        }
-        .secondary-btn {
+        .btn-primary:hover { background: #1d4ed8; }
+        .btn-secondary {
+            padding: 12px 28px;
             background: transparent;
             color: #2563eb;
             border: 2px solid #2563eb;
-            padding: 10px 24px;
             border-radius: 6px;
             font-size: 15px;
+            font-weight: 500;
             cursor: pointer;
             transition: all 0.3s;
         }
-        .secondary-btn:hover {
-            background: #eff6ff;
+        .btn-secondary:hover { background: #eff6ff; }
+        .btn-success {
+            padding: 12px 28px;
+            background: #22c55e;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 15px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .btn-success:hover { background: #16a34a; }
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 2px solid #e2e8f0;
+        }
+        .strength-section {
+            margin-top: 30px;
+            padding: 20px;
+            background: #f8fafc;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+        }
+        .strength-section h3 {
+            font-size: 16px;
+            margin-bottom: 10px;
+            color: #1e293b;
         }
         .progress-bar {
             width: 100%;
@@ -84,87 +210,74 @@
             border-radius: 10px;
             transition: width 1s ease;
         }
+        .strength-text {
+            margin-top: 8px;
+            font-size: 14px;
+            color: #475569;
+        }
         .notification {
             padding: 12px 20px;
             border-radius: 6px;
             margin: 10px 0;
+            animation: slideDown 0.3s ease;
         }
-        .notification.success {
-            background: #f0fdf4;
-            color: #166534;
-            border: 1px solid #86efac;
+        .notification.success { background: #f0fdf4; color: #166534; border: 1px solid #86efac; }
+        .notification.error { background: #fef2f2; color: #991b1b; border: 1px solid #fca5a5; }
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
-        .notification.error {
-            background: #fef2f2;
-            color: #991b1b;
-            border: 1px solid #fca5a5;
+        #notification-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 9999;
+            max-width: 400px;
+            width: 100%;
         }
-        .phase-container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
-        }
-        .phase-container h1 {
-            font-size: 28px;
-            color: #1e293b;
-        }
-        .subtitle {
-            color: #64748b;
-            font-size: 16px;
-            margin-bottom: 25px;
-        }
-        .reflection-form {
-            margin: 20px 0;
-        }
-        .nav-buttons {
-            display: flex;
-            gap: 12px;
-            flex-wrap: wrap;
-            margin-top: 20px;
-            padding-top: 20px;
-            border-top: 2px solid #e2e8f0;
-        }
-        .strength-section {
-            margin-top: 30px;
-            padding: 20px;
-            background: #f8fafc;
-            border-radius: 8px;
+        @media (max-width: 768px) {
+            .reflection-card { padding: 20px; }
+            .reflection-card h1 { font-size: 22px; }
+            .action-buttons { flex-direction: column; }
+            .action-buttons button { width: 100%; }
+            .phase-item { padding: 0 4px; min-width: 36px; }
+            .phase-circle { width: 28px; height: 28px; font-size: 11px; }
+            .phase-connector { width: 15px; }
         }
     </style>
 </head>
 <body>
-    <div class="app-container" style="max-width: 1000px; margin: 0 auto; padding: 20px;">
+    <div class="app-container">
         <!-- Phase Navigation -->
-        <div id="phase-navigation"></div>
+        <div id="phase-navigation" class="phase-nav"></div>
 
-        <div id="phase4-container" class="phase-container">
+        <div class="reflection-card">
             <h1>Phase 4: Post-Activity Guidance</h1>
             <p class="subtitle">Reflect on your experience with <strong id="activity-name-display">this activity</strong></p>
 
-            <div class="reflection-form">
-                <div class="form-group">
-                    <label for="completion-date">📅 Date Completed:</label>
-                    <input type="date" id="completion-date" />
-                </div>
+            <!-- Date -->
+            <div class="form-group">
+                <label for="completion-date">📅 Date Completed:</label>
+                <input type="date" id="completion-date" />
+            </div>
 
-                <div class="form-group">
-                    <label for="outcome-note">📝 What did you gain from this experience?</label>
-                    <textarea id="outcome-note" rows="3" placeholder="Write a brief outcome note..."></textarea>
-                </div>
+            <!-- Outcome Note -->
+            <div class="form-group">
+                <label for="outcome-note">📝 What did you gain from this experience?</label>
+                <textarea id="outcome-note" rows="3" placeholder="Write a brief outcome note..."></textarea>
+            </div>
 
-                <h3>💭 Reflection Prompts</h3>
-                <p style="color: #64748b; font-size: 14px;">Answer these questions to capture your learning. These can be used in future essays.</p>
-                <div id="reflection-prompts"></div>
+            <!-- Reflection Prompts -->
+            <h3 style="margin: 20px 0 10px 0;">💭 Reflection Prompts</h3>
+            <p style="color: #64748b; font-size: 14px; margin-bottom: 15px;">Answer these questions to capture your learning. These can be used in future essays.</p>
+            <div id="reflection-prompts"></div>
 
-                <div class="nav-buttons">
-                    <button id="save-reflection" class="primary-btn">💾 Save Reflection</button>
-                    <button id="phase5-button" class="secondary-btn" style="display: none;">
-                        Continue to University Pathway →
-                    </button>
-                </div>
+            <!-- Action Buttons -->
+            <div class="action-buttons">
+                <button id="save-reflection" class="btn-primary">💾 Save Reflection</button>
+                <button id="phase5-button" class="btn-secondary" style="display: none;">
+                    Continue to University Pathway →
+                </button>
             </div>
 
             <!-- Profile Strength -->
@@ -173,19 +286,16 @@
                 <div class="progress-bar">
                     <div id="strength-bar" class="progress-fill" style="width: 0%"></div>
                 </div>
-                <p style="margin-top: 8px;">Score: <span id="profile-strength-score">0</span>%</p>
-                <p style="color: #64748b; font-size: 13px;">Activities in portfolio: <span id="portfolio-count">0</span></p>
+                <p class="strength-text">Score: <span id="profile-strength-score">0</span>% &bull; Activities in portfolio: <span id="portfolio-count">0</span></p>
             </div>
-
-            <div id="notification-container" style="margin-top: 20px;"></div>
         </div>
+
+        <div id="notification-container"></div>
     </div>
 
-    <!-- Scripts -->
-    <script src="js/phase-navigation.js"></script>
     <script>
         // ============================================================
-        // PHASE 4 - COMPLETE CODE
+        // PHASE 4 - POST-ACTIVITY GUIDANCE
         // ============================================================
 
         const REFLECTION_PROMPTS = [
@@ -203,6 +313,60 @@
             activityName: ''
         };
 
+        // Phase Navigation Functions
+        function getCurrentPhase() {
+            try {
+                const student = JSON.parse(localStorage.getItem('studentProfile') || '{}');
+                return student.currentPhase || 1;
+            } catch { return 1; }
+        }
+
+        function navigateToPhase(phase) {
+            const currentPhase = getCurrentPhase();
+            const phasePages = {
+                1: 'quiz.html', 2: 'activities.html', 3: 'activity-registration.html',
+                4: 'post-activity.html', 5: 'university-shortlist.html', 6: 'futures-abroad-enroll.html'
+            };
+            if (phase > currentPhase) {
+                window.location.href = phasePages[currentPhase] || 'dashboard.html';
+                return;
+            }
+            window.location.href = phasePages[phase] || 'dashboard.html';
+        }
+
+        function renderPhaseNavigation() {
+            const currentPhase = getCurrentPhase();
+            const phases = [
+                { num: 1, label: 'Discovery' }, { num: 2, label: 'Activities' },
+                { num: 3, label: 'Register' }, { num: 4, label: 'Reflect' },
+                { num: 5, label: 'Pathway' }, { num: 6, label: 'Enroll' }
+            ];
+            let html = '';
+            phases.forEach((phase, index) => {
+                const isActive = phase.num <= currentPhase;
+                const isCompleted = phase.num < currentPhase;
+                let circleClass = 'phase-circle' + (isActive ? ' active' : '') + (isCompleted ? ' completed' : '');
+                let labelClass = 'phase-label' + (isActive ? ' active' : '');
+                let circleContent = isCompleted ? '✓' : phase.num;
+                html += `
+                    <div class="phase-item" onclick="navigateToPhase(${phase.num})">
+                        <div class="${circleClass}"><span>${circleContent}</span></div>
+                        <span class="${labelClass}">${phase.label}</span>
+                    </div>
+                `;
+                if (index < phases.length - 1) {
+                    html += `<div class="phase-connector ${phase.num < currentPhase ? 'active' : ''}"></div>`;
+                }
+            });
+            return html;
+        }
+
+        function initPhaseNavigation() {
+            const navContainer = document.getElementById('phase-navigation');
+            if (navContainer) navContainer.innerHTML = renderPhaseNavigation();
+        }
+
+        // Load activity data
         function loadActivityData() {
             try {
                 const saved = localStorage.getItem('selectedActivity');
@@ -210,62 +374,49 @@
                     const activity = JSON.parse(saved);
                     currentReflection.activityId = activity.id || 'activity_1';
                     currentReflection.activityName = activity.name || 'this activity';
-                    const display = document.getElementById('activity-name-display');
-                    if (display) display.textContent = currentReflection.activityName;
+                    document.getElementById('activity-name-display').textContent = currentReflection.activityName;
                 }
-            } catch (error) {
-                console.log('Error loading activity data:', error);
-            }
+            } catch (error) { console.log('Error loading activity data:', error); }
         }
 
+        // Render reflection prompts
         function renderReflectionPrompts() {
             const container = document.getElementById('reflection-prompts');
             if (!container) return;
-
             container.innerHTML = '';
-            
             REFLECTION_PROMPTS.forEach((prompt, index) => {
                 const div = document.createElement('div');
                 div.className = 'reflection-item';
                 div.innerHTML = `
                     <p class="prompt">${index + 1}. ${prompt}</p>
-                    <textarea 
-                        id="reflection-${index}" 
-                        placeholder="Write your reflection here..."
-                        rows="3"
-                        data-index="${index}"
-                    ></textarea>
+                    <textarea id="reflection-${index}" placeholder="Write your reflection here..." rows="3"></textarea>
                 `;
                 container.appendChild(div);
             });
         }
 
+        // Load portfolio count
         function loadPortfolioCount() {
             try {
                 const portfolio = JSON.parse(localStorage.getItem('studentPortfolio') || '[]');
-                const countDisplay = document.getElementById('portfolio-count');
-                if (countDisplay) countDisplay.textContent = portfolio.length;
-            } catch (error) {
-                console.log('Error loading portfolio count:', error);
-            }
+                document.getElementById('portfolio-count').textContent = portfolio.length;
+            } catch (error) { console.log('Error loading portfolio count:', error); }
         }
 
+        // Calculate profile strength
         function calculateProfileStrength() {
             try {
                 let portfolio = JSON.parse(localStorage.getItem('studentPortfolio') || '[]');
                 let student = JSON.parse(localStorage.getItem('studentProfile') || '{}');
                 let score = 0;
 
-                // Factor 1: Number of activities (max 30 pts)
                 const activityCount = Math.min(portfolio.length, 5);
                 score += activityCount * 6;
 
-                // Factor 2: Diversity (max 20 pts)
                 const types = new Set();
                 portfolio.forEach(e => { if (e.activityType) types.add(e.activityType); });
                 score += Math.min(types.size * 5, 20);
 
-                // Factor 3: Leadership (20 pts)
                 let hasLeadership = false;
                 portfolio.forEach(entry => {
                     if (entry.reflectionResponses) {
@@ -280,7 +431,6 @@
                 });
                 score += hasLeadership ? 20 : 0;
 
-                // Factor 4: Recency (15 pts)
                 const recent = portfolio.some(entry => {
                     if (entry.dateCompleted) {
                         const date = new Date(entry.dateCompleted);
@@ -292,7 +442,6 @@
                 });
                 score += recent ? 15 : 0;
 
-                // Factor 5: Reflection quality (max 15 pts)
                 let totalChars = 0;
                 portfolio.forEach(entry => {
                     if (entry.reflectionResponses) {
@@ -306,29 +455,23 @@
                 student.profileStrengthScore = Math.min(score, 100);
                 localStorage.setItem('studentProfile', JSON.stringify(student));
 
-                const scoreDisplay = document.getElementById('profile-strength-score');
-                if (scoreDisplay) scoreDisplay.textContent = student.profileStrengthScore || 0;
-                
-                const bar = document.getElementById('strength-bar');
-                if (bar) bar.style.width = (student.profileStrengthScore || 0) + '%';
-
-            } catch (error) {
-                console.log('Error calculating profile strength:', error);
-            }
+                document.getElementById('profile-strength-score').textContent = student.profileStrengthScore || 0;
+                document.getElementById('strength-bar').style.width = (student.profileStrengthScore || 0) + '%';
+            } catch (error) { console.log('Error calculating profile strength:', error); }
         }
 
+        // Show notification
         function showNotification(message, type = 'info') {
             const container = document.getElementById('notification-container');
             if (!container) { alert(message); return; }
-
             const div = document.createElement('div');
             div.className = `notification ${type}`;
             div.textContent = message;
             container.appendChild(div);
-
             setTimeout(() => { if (div.parentNode) div.remove(); }, 5000);
         }
 
+        // Save reflection
         function saveReflection() {
             try {
                 const completionDate = document.getElementById('completion-date')?.value || new Date().toISOString().split('T')[0];
@@ -367,8 +510,7 @@
                 calculateProfileStrength();
                 showNotification('✅ Reflection saved successfully!', 'success');
 
-                const phase5Btn = document.getElementById('phase5-button');
-                if (phase5Btn) phase5Btn.style.display = 'inline-block';
+                document.getElementById('phase5-button').style.display = 'inline-block';
 
                 localStorage.setItem('currentReflection', JSON.stringify({
                     ...currentReflection,
@@ -378,41 +520,37 @@
                 }));
 
                 loadPortfolioCount();
-
             } catch (error) {
                 console.log('Error saving reflection:', error);
                 showNotification('❌ Error saving reflection. Please try again.', 'error');
             }
         }
 
+        // Go to Phase 5
         function goToPhase5() {
-            // Check if student is Grade 11 or higher
-            try {
-                const student = JSON.parse(localStorage.getItem('studentProfile') || '{}');
-                const grade = student.grade || 10;
-                
-                if (grade >= 11) {
-                    window.location.href = 'university-shortlist.html';
-                } else {
-                    // Grade 10 goes to a different view
-                    window.location.href = 'university-shortlist.html';
-                }
-            } catch {
-                window.location.href = 'university-shortlist.html';
-            }
+            window.location.href = 'university-shortlist.html';
         }
 
-        function initPhase4() {
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
             loadActivityData();
             renderReflectionPrompts();
             loadSavedReflection();
             loadPortfolioCount();
             calculateProfileStrength();
-            
-            if (typeof initPhaseNavigation === 'function') {
-                initPhaseNavigation();
-            }
-        }
+            initPhaseNavigation();
+
+            document.getElementById('save-reflection')?.addEventListener('click', saveReflection);
+            document.getElementById('phase5-button')?.addEventListener('click', goToPhase5);
+
+            // Check if already saved
+            try {
+                const student = JSON.parse(localStorage.getItem('studentProfile') || '{}');
+                if (student.phase4Completed) {
+                    document.getElementById('phase5-button').style.display = 'inline-block';
+                }
+            } catch { /* ignore */ }
+        });
 
         function loadSavedReflection() {
             try {
@@ -420,12 +558,10 @@
                 if (saved) {
                     const data = JSON.parse(saved);
                     if (data.completionDate) {
-                        const dateInput = document.getElementById('completion-date');
-                        if (dateInput) dateInput.value = data.completionDate;
+                        document.getElementById('completion-date').value = data.completionDate;
                     }
                     if (data.outcomeNote) {
-                        const noteInput = document.getElementById('outcome-note');
-                        if (noteInput) noteInput.value = data.outcomeNote;
+                        document.getElementById('outcome-note').value = data.outcomeNote;
                     }
                     if (data.reflectionAnswers) {
                         data.reflectionAnswers.forEach((answer, index) => {
@@ -434,30 +570,8 @@
                         });
                     }
                 }
-            } catch (error) {
-                console.log('Error loading saved reflection:', error);
-            }
+            } catch (error) { console.log('Error loading saved reflection:', error); }
         }
-
-        document.addEventListener('DOMContentLoaded', function() {
-            if (document.getElementById('phase4-container')) {
-                initPhase4();
-                
-                const saveBtn = document.getElementById('save-reflection');
-                if (saveBtn) saveBtn.addEventListener('click', saveReflection);
-
-                const phase5Btn = document.getElementById('phase5-button');
-                if (phase5Btn) {
-                    phase5Btn.addEventListener('click', goToPhase5);
-                    try {
-                        const student = JSON.parse(localStorage.getItem('studentProfile') || '{}');
-                        if (student.phase4Completed) {
-                            phase5Btn.style.display = 'inline-block';
-                        }
-                    } catch { /* ignore */ }
-                }
-            }
-        });
     </script>
 </body>
 </html>
