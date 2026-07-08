@@ -250,7 +250,9 @@
                     country: country,
                     school: school || 'Not specified',
                     interests: [],
+                    selectedInterests: [], // For the 3 interests they choose
                     profileCompleted: false,
+                    quizCompleted: false,
                     onboardingPhase: 1,
                     phase: 'Phase 1',
                     createdAt: serverTimestamp(),
@@ -272,13 +274,13 @@
                 console.log('📌 Name:', name);
                 
                 msgEl.className = 'message-box success';
-                msgEl.textContent = '✅ Account created! Taking you to the quiz...';
+                msgEl.textContent = '✅ Account created! Choose your interests...';
                 
                 // ============================================================
-                // REDIRECT TO QUIZ
+                // REDIRECT TO INTEREST SELECTION (NOT QUIZ YET)
                 // ============================================================
                 setTimeout(() => {
-                    window.location.href = 'quiz.html?uid=' + user.uid;
+                    window.location.href = 'select-interests.html?uid=' + user.uid;
                 }, 1500);
                 
             } catch (error) {
