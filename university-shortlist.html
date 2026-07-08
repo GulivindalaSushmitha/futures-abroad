@@ -3,25 +3,105 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Phase 5 - University Pathway</title>
-    <link rel="stylesheet" href="css/student-app.css">
+    <title>University Shortlist - Futures Abroad</title>
+    <link rel="stylesheet" href="css/university.css" />
     <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f1f5f9;
+            color: #1e293b;
+        }
+        .app-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+        .phase-nav {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0;
+            flex-wrap: wrap;
+            background: white;
+            padding: 15px 20px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            margin-bottom: 30px;
+        }
+        .phase-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+            padding: 0 8px;
+            min-width: 44px;
+        }
+        .phase-circle {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            background: #e2e8f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: #94a3b8;
+            font-size: 13px;
+            transition: all 0.3s;
+        }
+        .phase-circle.active { background: #2563eb; color: white; }
+        .phase-circle.completed { background: #22c55e; color: white; }
+        .phase-label {
+            font-size: 9px;
+            color: #94a3b8;
+            margin-top: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+        .phase-label.active { color: #1e293b; font-weight: 600; }
+        .phase-connector {
+            width: 25px;
+            height: 2px;
+            background: #e2e8f0;
+            flex-shrink: 0;
+        }
+        .phase-connector.active { background: #2563eb; }
+        .shortlist-card {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        }
+        .shortlist-card h1 {
+            font-size: 28px;
+            color: #1e293b;
+            margin: 0 0 5px 0;
+        }
+        .shortlist-card .subtitle {
+            color: #64748b;
+            font-size: 16px;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #e2e8f0;
+        }
         .uni-card {
             padding: 15px 20px;
             margin: 10px 0;
             border-radius: 8px;
             border-left: 4px solid #2563eb;
-            background: white;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+            background: #f8fafc;
+            transition: all 0.3s;
         }
+        .uni-card:hover { background: #f1f5f9; }
         .uni-card.reach { border-left-color: #ef4444; }
         .uni-card.target { border-left-color: #f59e0b; }
         .uni-card.safety { border-left-color: #22c55e; }
-        .uni-card h4 { margin: 0 0 4px 0; color: #1e293b; }
-        .uni-country { color: #64748b; margin: 2px 0; font-size: 13px; }
-        .uni-programs { color: #475569; margin: 4px 0; font-size: 13px; }
-        .uni-acceptance { color: #64748b; margin: 2px 0; font-size: 13px; }
-        .uni-rationale { color: #2563eb; margin: 8px 0 0 0; font-size: 13px; font-style: italic; }
+        .uni-card h4 { margin: 0 0 4px 0; color: #1e293b; font-size: 16px; }
+        .uni-country { color: #64748b; font-size: 13px; margin: 2px 0; }
+        .uni-programs { color: #475569; font-size: 13px; margin: 4px 0; }
+        .uni-acceptance { color: #64748b; font-size: 13px; margin: 2px 0; }
+        .uni-rationale { color: #2563eb; font-size: 13px; margin: 8px 0 0 0; font-style: italic; }
         .uni-badge {
             display: inline-block;
             padding: 2px 12px;
@@ -33,8 +113,7 @@
         .uni-badge.reach { background: #fef2f2; color: #ef4444; }
         .uni-badge.target { background: #fffbeb; color: #f59e0b; }
         .uni-badge.safety { background: #f0fdf4; color: #22c55e; }
-        
-        .cta-fullscreen-card {
+        .cta-card {
             background: linear-gradient(135deg, #1e3a5f, #2563eb);
             color: white;
             padding: 35px;
@@ -42,9 +121,9 @@
             text-align: center;
             margin-top: 30px;
         }
-        .cta-fullscreen-card h2 { font-size: 22px; margin-bottom: 10px; }
-        .cta-fullscreen-card p { font-size: 15px; margin-bottom: 18px; opacity: 0.9; }
-        .cta-primary {
+        .cta-card h2 { font-size: 22px; margin-bottom: 10px; }
+        .cta-card p { font-size: 15px; margin-bottom: 18px; opacity: 0.9; }
+        .btn-cta {
             background: white;
             color: #2563eb;
             border: none;
@@ -55,8 +134,7 @@
             cursor: pointer;
             transition: all 0.3s;
         }
-        .cta-primary:hover { transform: scale(1.05); box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
-        
+        .btn-cta:hover { transform: scale(1.05); box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
         .gap-item {
             padding: 10px 15px;
             margin: 6px 0;
@@ -66,13 +144,7 @@
             color: #991b1b;
             font-size: 14px;
         }
-        .no-gaps {
-            padding: 10px 15px;
-            background: #f0fdf4;
-            border-radius: 6px;
-            color: #166534;
-            font-size: 14px;
-        }
+        .no-gaps { padding: 10px 15px; background: #f0fdf4; border-radius: 6px; color: #166534; font-size: 14px; }
         .milestone {
             display: flex;
             align-items: center;
@@ -95,14 +167,6 @@
         }
         .deadline-date { font-weight: 600; color: #991b1b; min-width: 90px; font-size: 14px; }
         .deadline-task { color: #475569; font-size: 14px; }
-        .phase-container {
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 20px;
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
-        }
         .progress-bar {
             width: 100%;
             height: 20px;
@@ -116,7 +180,8 @@
             border-radius: 10px;
             transition: width 1s ease;
         }
-        .nav-buttons {
+        .section-title { font-size: 18px; margin: 20px 0 10px 0; color: #1e293b; }
+        .action-buttons {
             display: flex;
             gap: 12px;
             flex-wrap: wrap;
@@ -124,116 +189,126 @@
             padding-top: 20px;
             border-top: 2px solid #e2e8f0;
         }
-        .secondary-btn {
+        .btn-secondary {
+            padding: 10px 24px;
             background: transparent;
             color: #2563eb;
             border: 2px solid #2563eb;
-            padding: 10px 24px;
             border-radius: 6px;
-            font-size: 15px;
+            font-size: 14px;
+            font-weight: 500;
             cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s;
         }
-        .primary-btn {
+        .btn-secondary:hover { background: #eff6ff; }
+        .btn-primary {
+            padding: 10px 24px;
             background: #2563eb;
             color: white;
             border: none;
-            padding: 12px 28px;
             border-radius: 6px;
-            font-size: 15px;
+            font-size: 14px;
+            font-weight: 500;
             cursor: pointer;
+            transition: background 0.3s;
+        }
+        .btn-primary:hover { background: #1d4ed8; }
+        .no-results { color: #64748b; font-style: italic; padding: 10px; }
+        @media (max-width: 768px) {
+            .shortlist-card { padding: 20px; }
+            .shortlist-card h1 { font-size: 22px; }
+            .action-buttons { flex-direction: column; }
+            .action-buttons a, .action-buttons button { width: 100%; text-align: center; }
+            .phase-item { padding: 0 4px; min-width: 36px; }
+            .phase-circle { width: 28px; height: 28px; font-size: 11px; }
+            .phase-connector { width: 15px; }
+            .milestone-month, .deadline-date { min-width: 70px; font-size: 12px; }
         }
     </style>
 </head>
 <body>
-    <div class="app-container" style="max-width: 1000px; margin: 0 auto; padding: 20px;">
-        <div id="phase-navigation"></div>
+    <div class="app-container">
+        <!-- Phase Navigation -->
+        <div id="phase-navigation" class="phase-nav"></div>
 
-        <div id="phase5-container" class="phase-container">
+        <div class="shortlist-card">
             <h1>Phase 5: University Pathway</h1>
+            <p class="subtitle">Your personalized university recommendations based on your interests</p>
 
             <!-- Grade 11 Content -->
             <div id="grade-11-content" style="display:none;">
-                <h2>🎓 Your University Shortlist</h2>
-                <p class="subtitle" style="color: #64748b;">Based on your interests and profile, here are universities that match you.</p>
+                <h2 style="font-size: 22px; margin-bottom: 5px;">🎓 Your University Shortlist</h2>
+                <p style="color: #64748b; margin-bottom: 20px;">Based on your interests and profile, here are universities that match you.</p>
                 
-                <div class="shortlist-section">
-                    <h3>🎯 Reach Schools</h3>
-                    <div id="reach-schools"></div>
-                </div>
+                <h3 class="section-title">🎯 Reach Schools</h3>
+                <div id="reach-schools"></div>
 
-                <div class="shortlist-section">
-                    <h3>🎯 Target Schools</h3>
-                    <div id="target-schools"></div>
-                </div>
+                <h3 class="section-title">🎯 Target Schools</h3>
+                <div id="target-schools"></div>
 
-                <div class="shortlist-section">
-                    <h3>🛡️ Safety Schools</h3>
-                    <div id="safety-schools"></div>
-                </div>
+                <h3 class="section-title">🛡️ Safety Schools</h3>
+                <div id="safety-schools"></div>
 
                 <div id="cta-card"></div>
             </div>
 
             <!-- Grade 10 Content -->
             <div id="grade-10-content" style="display:none;">
-                <h2>📈 Your Grade 10 Journey</h2>
-                <p class="subtitle" style="color: #64748b;">You're building a strong foundation. Here's your progress and what's next.</p>
+                <h2 style="font-size: 22px; margin-bottom: 5px;">📈 Your Grade 10 Journey</h2>
+                <p style="color: #64748b; margin-bottom: 20px;">You're building a strong foundation. Here's your progress and what's next.</p>
                 
-                <div class="progress-section" style="margin: 20px 0;">
-                    <h3>Profile Strength: <span id="profile-score">0</span>%</h3>
+                <div style="margin: 20px 0;">
+                    <h3 style="font-size: 16px; margin-bottom: 8px;">Profile Strength: <span id="profile-score">0</span>%</h3>
                     <div class="progress-bar">
                         <div id="strength-bar-grade10" class="progress-fill" style="width: 0%"></div>
                     </div>
                 </div>
 
-                <div class="gap-section" style="margin: 20px 0;">
-                    <h3>Gap Analysis</h3>
+                <div style="margin: 20px 0;">
+                    <h3 style="font-size: 16px; margin-bottom: 8px;">Gap Analysis</h3>
                     <div id="gap-analysis"></div>
                 </div>
 
-                <div class="roadmap-section" style="margin: 20px 0;">
-                    <h3>Recommended Milestones</h3>
+                <div style="margin: 20px 0;">
+                    <h3 style="font-size: 16px; margin-bottom: 8px;">Recommended Milestones</h3>
                     <div id="roadmap-timeline"></div>
                 </div>
 
-                <button id="soft-cta" class="secondary-btn" style="margin-top: 20px;">
-                    Learn about Futures Abroad
-                </button>
+                <button id="soft-cta" class="btn-secondary" style="margin-top: 10px;">Learn about Futures Abroad</button>
             </div>
 
             <!-- Grade 12 Content -->
             <div id="grade-12-content" style="display:none;">
-                <h2>📋 Application Support</h2>
-                <p class="subtitle" style="color: #64748b;">You're in the final stretch. Stay on top of your deadlines.</p>
+                <h2 style="font-size: 22px; margin-bottom: 5px;">📋 Application Support</h2>
+                <p style="color: #64748b; margin-bottom: 20px;">You're in the final stretch. Stay on top of your deadlines.</p>
                 
-                <div class="deadlines-section" style="margin: 20px 0;">
-                    <h3>Upcoming Deadlines</h3>
+                <div style="margin: 20px 0;">
+                    <h3 style="font-size: 16px; margin-bottom: 8px;">Upcoming Deadlines</h3>
                     <div id="deadline-list"></div>
                 </div>
 
-                <button onclick="window.location.href='portfolio.html'" class="primary-btn" style="margin-top: 20px;">
-                    View Your Portfolio
-                </button>
+                <button onclick="window.location.href='portfolio.html'" class="btn-primary">View Your Portfolio</button>
             </div>
 
-            <div class="nav-buttons">
-                <a href="post-activity.html" class="secondary-btn" style="text-decoration: none;">← Back to Reflection</a>
-                <button id="continue-to-phase6-btn" class="primary-btn" style="display: none;">
+            <!-- Action Buttons -->
+            <div class="action-buttons">
+                <a href="post-activity.html" class="btn-secondary">← Back to Reflection</a>
+                <button id="continue-to-phase6-btn" class="btn-primary" style="display: none;">
                     Continue to Enrollment →
                 </button>
             </div>
         </div>
     </div>
 
-    <!-- Scripts -->
-    <script src="js/phase-navigation.js"></script>
     <script>
         // ============================================================
-        // PHASE 5 - COMPLETE CODE
+        // PHASE 5 - UNIVERSITY PATHWAY
         // ============================================================
 
         const UNIVERSITY_DATABASE = [
-            { id: 1, name: "MIT", country: "USA", programs: ["Computer Science", "Engineering", "Data Science"], selectivity: "Reach", acceptanceRate: "4%", interestTags: ["STEM", "Computer Science", "Engineering"] },
+            { id: 1, name: "Massachusetts Institute of Technology (MIT)", country: "USA", programs: ["Computer Science", "Engineering", "Data Science"], selectivity: "Reach", acceptanceRate: "4%", interestTags: ["STEM", "Computer Science", "Engineering"] },
             { id: 2, name: "Stanford University", country: "USA", programs: ["Computer Science", "Business", "Engineering"], selectivity: "Reach", acceptanceRate: "4%", interestTags: ["STEM", "Business", "Technology"] },
             { id: 3, name: "University of Toronto", country: "Canada", programs: ["Engineering", "Computer Science", "Medicine"], selectivity: "Target", acceptanceRate: "15%", interestTags: ["STEM", "Medicine", "Engineering"] },
             { id: 4, name: "University of British Columbia", country: "Canada", programs: ["Environmental Science", "Biology", "Engineering"], selectivity: "Target", acceptanceRate: "18%", interestTags: ["Environment", "Biology", "STEM"] },
@@ -245,20 +320,70 @@
 
         let universityShortlist = { reach: [], target: [], safety: [] };
 
+        // Phase Navigation
+        function getCurrentPhase() {
+            try {
+                const student = JSON.parse(localStorage.getItem('studentProfile') || '{}');
+                return student.currentPhase || 1;
+            } catch { return 1; }
+        }
+
+        function navigateToPhase(phase) {
+            const currentPhase = getCurrentPhase();
+            const phasePages = {
+                1: 'quiz.html', 2: 'activities.html', 3: 'activity-registration.html',
+                4: 'post-activity.html', 5: 'university-shortlist.html', 6: 'futures-abroad-enroll.html'
+            };
+            if (phase > currentPhase) {
+                window.location.href = phasePages[currentPhase] || 'dashboard.html';
+                return;
+            }
+            window.location.href = phasePages[phase] || 'dashboard.html';
+        }
+
+        function renderPhaseNavigation() {
+            const currentPhase = getCurrentPhase();
+            const phases = [
+                { num: 1, label: 'Discovery' }, { num: 2, label: 'Activities' },
+                { num: 3, label: 'Register' }, { num: 4, label: 'Reflect' },
+                { num: 5, label: 'Pathway' }, { num: 6, label: 'Enroll' }
+            ];
+            let html = '';
+            phases.forEach((phase, index) => {
+                const isActive = phase.num <= currentPhase;
+                const isCompleted = phase.num < currentPhase;
+                let circleClass = 'phase-circle' + (isActive ? ' active' : '') + (isCompleted ? ' completed' : '');
+                let labelClass = 'phase-label' + (isActive ? ' active' : '');
+                let circleContent = isCompleted ? '✓' : phase.num;
+                html += `
+                    <div class="phase-item" onclick="navigateToPhase(${phase.num})">
+                        <div class="${circleClass}"><span>${circleContent}</span></div>
+                        <span class="${labelClass}">${phase.label}</span>
+                    </div>
+                `;
+                if (index < phases.length - 1) {
+                    html += `<div class="phase-connector ${phase.num < currentPhase ? 'active' : ''}"></div>`;
+                }
+            });
+            return html;
+        }
+
+        function initPhaseNavigation() {
+            const navContainer = document.getElementById('phase-navigation');
+            if (navContainer) navContainer.innerHTML = renderPhaseNavigation();
+        }
+
         function initPhase5() {
             try {
                 const student = JSON.parse(localStorage.getItem('studentProfile') || '{}');
                 const grade = student.grade || 10;
-                
-                if (typeof initPhaseNavigation === 'function') initPhaseNavigation();
+                initPhaseNavigation();
                 
                 if (grade === 11) showGrade11Experience(student);
                 else if (grade === 10) showGrade10Experience(student);
                 else if (grade === 12) showGrade12Experience(student);
                 else showGrade10Experience(student);
-            } catch (error) {
-                console.log('Error initializing Phase 5:', error);
-            }
+            } catch (error) { console.log('Error initializing Phase 5:', error); }
         }
 
         function showGrade11Experience(student) {
@@ -315,7 +440,7 @@
                             container.appendChild(createUniversityCard(uni));
                         });
                     } else {
-                        container.innerHTML = '<p class="no-results" style="color: #64748b; font-style: italic; padding: 10px;">No schools found.</p>';
+                        container.innerHTML = '<p class="no-results">No schools found in this category.</p>';
                     }
                 }
             });
@@ -340,12 +465,10 @@
             if (ctaContainer) {
                 ctaContainer.style.display = 'block';
                 ctaContainer.innerHTML = `
-                    <div class="cta-fullscreen-card">
+                    <div class="cta-card">
                         <h2>🚀 Ready to turn this shortlist into a real application?</h2>
                         <p>Book your first session with a Futures Abroad counselor.</p>
-                        <button id="cta-enroll-btn" class="cta-primary">
-                            Register with Futures Abroad →
-                        </button>
+                        <button id="cta-enroll-btn" class="btn-cta">Register with Futures Abroad →</button>
                     </div>
                 `;
                 document.getElementById('cta-enroll-btn')?.addEventListener('click', goToPhase6);
@@ -398,7 +521,7 @@
                         container.appendChild(div);
                     });
                 } else {
-                    container.innerHTML = '<p class="no-gaps">✅ You have a well-rounded profile! Keep up the great work!</p>';
+                    container.innerHTML = '<div class="no-gaps">✅ You have a well-rounded profile! Keep up the great work!</div>';
                 }
             }
         }
@@ -466,7 +589,7 @@
         document.getElementById('continue-to-phase6-btn')?.addEventListener('click', goToPhase6);
 
         document.addEventListener('DOMContentLoaded', function() {
-            if (document.getElementById('phase5-container')) {
+            if (document.getElementById('phase5-container') || document.querySelector('.shortlist-card')) {
                 initPhase5();
             }
         });
