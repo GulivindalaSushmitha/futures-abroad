@@ -105,22 +105,6 @@
         }
         .btn-secondary:hover { background: #6C3CE1; color: white; }
 
-        .btn-enroll {
-            background: linear-gradient(135deg, #00b09b, #96c93d);
-            color: white;
-            border: none;
-            padding: 12px 30px;
-            border-radius: 50px;
-            font-weight: 700;
-            font-size: 16px;
-            cursor: pointer;
-            transition: all 0.3s;
-            font-family: 'Quicksand', Arial, sans-serif;
-            text-decoration: none;
-            display: inline-block;
-        }
-        .btn-enroll:hover { transform: translateY(-2px); box-shadow: 0 4px 15px rgba(0,176,155,0.4); }
-
         /* ============================================================
            PHASE 4 BUTTON - BIG GREEN "CONTINUE TO REFLECTION"
            ============================================================ */
@@ -146,22 +130,6 @@
             box-shadow: 0 6px 30px rgba(34,197,94,0.5); 
         }
 
-        .btn-phase5 {
-            background: #6C3CE1;
-            color: white;
-            border: none;
-            padding: 14px 40px;
-            border-radius: 50px;
-            font-weight: 700;
-            font-size: 18px;
-            cursor: pointer;
-            transition: all 0.3s;
-            font-family: 'Quicksand', Arial, sans-serif;
-            text-decoration: none;
-            display: inline-block;
-        }
-        .btn-phase5:hover { transform: translateY(-2px); box-shadow: 0 4px 20px rgba(108,60,225,0.35); }
-
         .registered-badge {
             background: #22c55e;
             color: white;
@@ -172,17 +140,6 @@
             margin: 10px 0;
             font-size: 18px;
         }
-
-        .completion-status {
-            background: #f0fdf4;
-            border: 3px solid #22c55e;
-            border-radius: 16px;
-            padding: 24px;
-            margin: 20px 0;
-            text-align: center;
-        }
-        .completion-status .icon { font-size: 56px; }
-        .completion-status h3 { color: #16a34a; margin: 10px 0 5px; font-size: 24px; }
 
         .checklist-item {
             display: flex;
@@ -251,6 +208,9 @@
             justify-content: center;
         }
 
+        /* ============================================================
+           HIDDEN CLASS
+           ============================================================ */
         .hidden { display: none !important; }
         .text-center { text-align: center; }
 
@@ -353,7 +313,7 @@
             </div>
 
             <!-- ============================================================
-            STEP 1: MARK COMPLETE BUTTON
+            STEP 1: MARK COMPLETE BUTTON (Visible initially)
             ============================================================ -->
             <div id="completeActivityContainer" class="button-wrapper">
                 <button id="completeActivityBtn" class="btn-success" style="font-size: 20px; padding: 18px 50px; width: 100%; max-width: 450px;">
@@ -366,12 +326,14 @@
 
             <!-- ============================================================
             STEP 2: SUCCESS - CONTINUE TO PHASE 4 REFLECTION
+            (Shown after clicking Mark as Complete)
             ============================================================ -->
             <div id="phase4Success">
                 <div class="icon">✅</div>
                 <h3>Activity Completed Successfully!</h3>
                 <p>Your progress has been saved to your portfolio.</p>
                 <div class="success-buttons">
+                    <!-- THIS IS THE BUTTON THAT GOES TO PHASE 4 (post-activity.html) -->
                     <button onclick="goToReflection()" class="btn-phase4">
                         📝 Continue to Reflection →
                     </button>
@@ -391,7 +353,7 @@
             <a href="dashboard.html" class="btn-secondary">📊 Dashboard</a>
             <a href="student-app.html" class="btn-secondary">🎯 Find More Activities</a>
             <a href="university-shortlist.html" class="btn-secondary">🏛️ University Shortlist</a>
-            <a href="futures-abroad-enroll.html" class="btn-enroll">🚀 Enroll Now</a>
+            <a href="futures-abroad-enroll.html" class="btn-secondary" style="background:linear-gradient(135deg,#00b09b,#96c93d);color:white;border:none;">🚀 Enroll Now</a>
         </div>
 
     </div>
@@ -399,13 +361,16 @@
     <script type="module" src="js/activity-registration.js"></script>
 
     <!-- ============================================================
-    INLINE SCRIPT - PHASE 4 NAVIGATION
+    INLINE SCRIPT - PHASE 4 NAVIGATION (WORKS EVEN IF JS MODULE FAILS)
     ============================================================ -->
     <script>
         // ============================================================
         // GO TO PHASE 4 REFLECTION (post-activity.html)
+        // This function is called when the user clicks "Continue to Reflection"
         // ============================================================
         function goToReflection() {
+            console.log('🔵 goToReflection() called!');
+            
             // Get activity ID from URL
             const params = new URLSearchParams(window.location.search);
             let activityId = params.get('id');
@@ -415,16 +380,26 @@
                 activityId = localStorage.getItem('currentActivityId');
             }
             
-            if (activityId) {
-                console.log('🔄 Redirecting to Phase 4 Reflection for activity:', activityId);
-                // Store that Phase 3 is complete
-                localStorage.setItem('phase3Complete', 'true');
-                localStorage.setItem('currentActivityId', activityId);
-                window.location.href = 'post-activity.html?id=' + activityId;
-            } else {
+            // If still no ID, try to get from the page
+            if (!activityId) {
+                const activityNameEl = document.getElementById('activity-name');
+                if (activityNameEl) {
+                    // Try to extract from the page
+                    console.log('⚠️ No activity ID found, checking page content...');
+                }
                 alert('No activity selected. Please go back and select an activity.');
                 window.location.href = 'student-app.html';
+                return;
             }
+            
+            console.log('🔄 Redirecting to Phase 4 Reflection for activity:', activityId);
+            
+            // Store that Phase 3 is complete
+            localStorage.setItem('phase3Complete', 'true');
+            localStorage.setItem('currentActivityId', activityId);
+            
+            // Navigate to Phase 4 (post-activity.html)
+            window.location.href = 'post-activity.html?id=' + activityId;
         }
 
         // ============================================================
@@ -436,6 +411,15 @@
             if (activityId) {
                 localStorage.setItem('currentActivityId', activityId);
                 console.log('💾 Saved activity ID to localStorage:', activityId);
+            }
+            
+            // Check if we should show Phase 4 success
+            const isCompleted = localStorage.getItem('activityCompleted_' + activityId);
+            if (isCompleted === 'true') {
+                const completeContainer = document.getElementById('completeActivityContainer');
+                const successDiv = document.getElementById('phase4Success');
+                if (completeContainer) completeContainer.style.display = 'none';
+                if (successDiv) successDiv.style.display = 'block';
             }
         });
 
