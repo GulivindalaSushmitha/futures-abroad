@@ -4,6 +4,9 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Login - Futures Abroad</title>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
     <link rel="stylesheet" href="css/style.css" />
     <style>
         .auth-container {
@@ -107,26 +110,6 @@
             color: #2E7D32;
             border-left: 4px solid #2E7D32;
         }
-        .message-box.error a {
-            color: #6C3CE1;
-            font-weight: 700;
-        }
-        .btn-app-redirect {
-            display: inline-block;
-            margin-top: 10px;
-            padding: 10px 24px;
-            background: #6C3CE1;
-            color: white;
-            border-radius: 50px;
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 14px;
-            transition: all 0.3s;
-        }
-        .btn-app-redirect:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(108,60,225,0.3);
-        }
         .signup-cta {
             background: #f8f4ff;
             border-radius: 16px;
@@ -155,19 +138,21 @@
             transform: translateY(-2px);
             box-shadow: 0 4px 20px rgba(108,60,225,0.3);
         }
-        .demo-credentials {
-            background: #f0f7ff;
-            border-radius: 12px;
-            padding: 12px 16px;
-            margin: 12px 0;
-            font-size: 13px;
-            border: 1px dashed #6C3CE1;
+        .btn-app-redirect {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 10px 24px;
+            background: #6C3CE1;
+            color: white;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.3s;
         }
-        .demo-credentials code {
-            background: white;
-            padding: 2px 8px;
-            border-radius: 4px;
-            font-family: monospace;
+        .btn-app-redirect:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(108,60,225,0.3);
         }
     </style>
 </head>
@@ -193,7 +178,6 @@
             <button type="submit" class="btn-submit">Login 🚀</button>
         </form>
         
-        <!-- ===== SIGN UP CTA - NEW USERS ===== -->
         <div class="signup-cta">
             <p>🆕 New to Futures Abroad?</p>
             <a href="signup.html" class="btn-signup-cta">Create Your Account →</a>
@@ -209,31 +193,20 @@
         </div>
     </div>
 
-    <script type="module">
-        import { 
-            auth, 
-            onAuthStateChanged, 
-            signInWithEmailAndPassword,
-            doc,
-            getDoc,
-            setDoc,
-            db
-        } from './js/firebase-config.js';
-        
-        // Check if already logged in
-        onAuthStateChanged(auth, async (user) => {
-            if (user) {
-                // Check if admin
-                const adminDoc = await getDoc(doc(db, 'admins', user.uid));
-                if (adminDoc.exists()) {
-                    window.location.href = 'admin-dashboard.html';
-                    return;
-                }
-                // Redirect to student-app.html
-                window.location.href = 'student-app.html';
-            }
-        });
-        
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyBGJcOifwfWlGeFsFCXhdC67fyRTBOvfGQ",
+            authDomain: "futures-2.firebaseapp.com",
+            projectId: "futures-2",
+            storageBucket: "futures-2.firebasestorage.app",
+            messagingSenderId: "143399880838",
+            appId: "1:143399880838:web:c2232759fcbc1fa2ed2907"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+
         document.getElementById('login-form').addEventListener('submit', async function(e) {
             e.preventDefault();
             const email = document.getElementById('login-email').value.trim();
@@ -250,12 +223,12 @@
             }
             
             try {
-                const userCredential = await signInWithEmailAndPassword(auth, email, password);
+                const userCredential = await auth.signInWithEmailAndPassword(email, password);
                 const user = userCredential.user;
                 
                 // Check if admin
-                const adminDoc = await getDoc(doc(db, 'admins', user.uid));
-                if (adminDoc.exists()) {
+                const adminDoc = await db.collection('admins').doc(user.uid).get();
+                if (adminDoc.exists) {
                     msgEl.className = 'message-box success';
                     msgEl.textContent = '🔐 Admin login successful!';
                     setTimeout(() => {
@@ -265,19 +238,33 @@
                 }
                 
                 // Check student exists
-                const studentDoc = await getDoc(doc(db, 'students', user.uid));
+                const studentDoc = await db.collection('students').doc(user.uid).get();
                 if (!studentDoc.exists()) {
                     // Create student profile if missing
-                    await setDoc(doc(db, 'students', user.uid), {
+                    await db.collection('students').doc(user.uid).set({
                         uid: user.uid,
                         email: email,
                         name: email.split('@')[0],
-                        createdAt: new Date().toISOString()
+                        interests: [],
+                        profileCompleted: false,
+                        createdAt: firebase.firestore.FieldValue.serverTimestamp()
                     });
                 }
                 
+                const studentData = studentDoc.data();
+                
+                // If student hasn't completed quiz, redirect to quiz
+                if (!studentData?.profileCompleted) {
+                    msgEl.className = 'message-box success';
+                    msgEl.textContent = '✅ Welcome! Taking you to the quiz...';
+                    setTimeout(() => {
+                        window.location.href = `quiz.html?uid=${user.uid}`;
+                    }, 500);
+                    return;
+                }
+                
                 msgEl.className = 'message-box success';
-                msgEl.textContent = '✅ Login successful! Redirecting to Student App...';
+                msgEl.textContent = '✅ Login successful! Redirecting...';
                 setTimeout(() => {
                     window.location.href = 'student-app.html';
                 }, 500);
@@ -286,17 +273,12 @@
                 console.error('Login error:', error);
                 msgEl.className = 'message-box error';
                 
-                // User-friendly error messages
                 if (error.code === 'auth/user-not-found') {
-                    msgEl.innerHTML = '❌ No account found with this email. <a href="signup.html">Create an account</a> first.';
+                    msgEl.innerHTML = '❌ No account found. <a href="signup.html">Create one here</a>';
                 } else if (error.code === 'auth/wrong-password') {
-                    msgEl.textContent = '❌ Incorrect password. Please try again.';
+                    msgEl.textContent = '❌ Incorrect password.';
                 } else if (error.code === 'auth/invalid-email') {
-                    msgEl.textContent = '❌ Invalid email format. Please check your email.';
-                } else if (error.code === 'auth/invalid-credential') {
-                    msgEl.innerHTML = '❌ Invalid login credentials. This email may not be registered. <a href="signup.html">Create an account</a>.';
-                } else if (error.code === 'auth/too-many-requests') {
-                    msgEl.textContent = '❌ Too many failed attempts. Please wait a moment and try again.';
+                    msgEl.textContent = '❌ Invalid email.';
                 } else {
                     msgEl.textContent = '❌ Login failed: ' + error.message;
                 }
