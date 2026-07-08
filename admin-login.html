@@ -107,16 +107,10 @@
             color: #2E7D32;
             border-left: 4px solid #2E7D32;
         }
-        .admin-login-hint {
-            background: #FFF3E0;
-            border-radius: 12px;
-            padding: 12px;
-            margin: 10px 0;
-            font-size: 13px;
-            color: #E65100;
-            border: 1px solid #FFE0B2;
+        /* Hidden credentials - only visible to admin */
+        .admin-hint {
+            display: none;
         }
-        .admin-login-hint strong { color: #BF360C; }
     </style>
 </head>
 <body>
@@ -128,17 +122,16 @@
                 <p>Access the admin dashboard</p>
             </div>
             <form id="admin-login-form">
-                <div id="adminMessage" style="display:none; padding:10px; border-radius:10px; margin-bottom:10px;"></div>
+                <div id="adminMessage" class="message-box"></div>
                 
-                <div class="admin-login-hint">
-                    <strong>🔑 Admin Credentials:</strong><br />
-                    Email: admin@futuresabroad.com<br />
-                    Password: FuturesAdmin2026!
+                <!-- CREDENTIALS HIDDEN - Only you know them -->
+                <div class="admin-hint">
+                    <!-- This is hidden from users -->
                 </div>
                 
                 <div class="form-group">
                     <label>Admin Email</label>
-                    <input type="email" id="admin-email" placeholder="admin@futuresabroad.com" value="admin@futuresabroad.com" required />
+                    <input type="email" id="admin-email" placeholder="Enter admin email" required />
                 </div>
                 <div class="form-group">
                     <label>Admin Password</label>
@@ -176,10 +169,9 @@
             const password = document.getElementById('admin-password').value;
             const msgEl = document.getElementById('adminMessage');
             
-            msgEl.style.display = 'block';
-            msgEl.style.background = '#FFE8E8';
-            msgEl.style.color = '#C62828';
+            msgEl.className = 'message-box';
             msgEl.textContent = '⏳ Logging in...';
+            msgEl.style.display = 'block';
             
             try {
                 const userCredential = await signInWithEmailAndPassword(auth, email, password);
@@ -187,7 +179,6 @@
                 
                 console.log("✅ Logged in as:", user.email);
                 console.log("📌 Your UID:", user.uid);
-                console.log("🔐 Expected Admin UID:", ADMIN_UID);
                 
                 if (user.uid === ADMIN_UID) {
                     // Check if admin document exists
@@ -200,8 +191,7 @@
                         });
                     }
                     
-                    msgEl.style.background = '#E8F5E9';
-                    msgEl.style.color = '#2E7D32';
+                    msgEl.className = 'message-box success';
                     msgEl.textContent = '✅ Admin login successful! Redirecting...';
                     
                     setTimeout(() => {
@@ -210,15 +200,22 @@
                     return;
                 } else {
                     await signOut(auth);
-                    msgEl.style.background = '#FFE8E8';
-                    msgEl.style.color = '#C62828';
+                    msgEl.className = 'message-box error';
                     msgEl.textContent = '❌ Access denied. You are not an admin.';
                 }
             } catch (error) {
                 console.error('Login error:', error);
-                msgEl.style.background = '#FFE8E8';
-                msgEl.style.color = '#C62828';
-                msgEl.textContent = '❌ Login failed: ' + error.message;
+                msgEl.className = 'message-box error';
+                
+                if (error.code === 'auth/user-not-found') {
+                    msgEl.textContent = '❌ No admin account found with this email.';
+                } else if (error.code === 'auth/wrong-password') {
+                    msgEl.textContent = '❌ Incorrect password. Please try again.';
+                } else if (error.code === 'auth/invalid-email') {
+                    msgEl.textContent = '❌ Invalid email format.';
+                } else {
+                    msgEl.textContent = '❌ Login failed: ' + error.message;
+                }
             }
         });
     </script>
