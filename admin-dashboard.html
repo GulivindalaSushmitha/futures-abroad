@@ -21,7 +21,7 @@
             </nav>
             <div class="admin-user">
                 <span>👤 admin@futuresabroad.com</span>
-                <button onclick="logout()">Logout</button>
+                <button id="logoutBtn">Logout</button>
             </div>
         </aside>
         <main class="admin-main">
@@ -59,7 +59,359 @@
         </main>
     </div>
 
-    <script src="js/firebase-config.js"></script>
-    <script src="js/admin.js"></script>
+    <script>
+        // ============================================================
+        // FIREBASE CONFIG
+        // ============================================================
+        const firebaseConfig = {
+            apiKey: "AIzaSyBGJcOifwfWlGeFsFCXhdC67fyRTBOvfGQ",
+            authDomain: "futures-2.firebaseapp.com",
+            projectId: "futures-2",
+            storageBucket: "futures-2.firebasestorage.app",
+            messagingSenderId: "143399880838",
+            appId: "1:143399880838:web:c2232759fcbc1fa2ed2907"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+
+        const ADMIN_UID = "hrONkvAlxVac4Wc7nwdNLhdOIe33";
+
+        // ============================================================
+        // CHECK AUTH - FIXED
+        // ============================================================
+        document.addEventListener('DOMContentLoaded', function() {
+            auth.onAuthStateChanged(user => {
+                if (user) {
+                    console.log('✅ Logged in as:', user.email);
+                    console.log('📌 UID:', user.uid);
+                    
+                    if (user.uid === ADMIN_UID) {
+                        loadDashboard();
+                        loadStudents();
+                        loadActivities();
+                    } else {
+                        auth.signOut().then(() => {
+                            window.location.href = 'admin-login.html';
+                        });
+                    }
+                } else {
+                    window.location.href = 'admin-login.html';
+                }
+            });
+
+            // Navigation
+            document.querySelectorAll('.admin-nav a').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    document.querySelectorAll('.admin-nav a').forEach(l => l.classList.remove('active'));
+                    this.classList.add('active');
+                    const section = this.dataset.section;
+                    document.querySelectorAll('.admin-section').forEach(s => s.classList.remove('active'));
+                    document.getElementById(`section-${section}`).classList.add('active');
+                });
+            });
+
+            // ============================================================
+            // LOGOUT - FIXED
+            // ============================================================
+            document.getElementById('logoutBtn').addEventListener('click', function() {
+                auth.signOut().then(() => {
+                    console.log('✅ Logged out successfully');
+                    window.location.href = 'admin-login.html';
+                }).catch((error) => {
+                    console.error('❌ Logout error:', error);
+                    window.location.href = 'admin-login.html';
+                });
+            });
+        });
+
+        // ============================================================
+        // LOAD DASHBOARD - FIXED
+        // ============================================================
+        async function loadDashboard() {
+            try {
+                console.log('📊 Loading dashboard...');
+                
+                const studentsSnapshot = await db.collection('students').get();
+                const allStudents = [];
+                studentsSnapshot.forEach(doc => {
+                    allStudents.push({ id: doc.id, ...doc.data() });
+                });
+                
+                console.log('📌 Found', allStudents.length, 'students');
+                
+                // Update stats
+                document.getElementById('total-students').textContent = allStudents.length;
+                
+                const quizCompleted = allStudents.filter(s => s.profileCompleted === true || (s.interests && s.interests.length > 0));
+                document.getElementById('completed-quiz').textContent = quizCompleted.length;
+                
+                const hasShortlist = allStudents.filter(s => s.universities && s.universities.length > 0);
+                document.getElementById('university-shortlists').textContent = hasShortlist.length;
+                
+                const activitiesSnapshot = await db.collection('activities').get();
+                document.getElementById('active-activities').textContent = activitiesSnapshot.size;
+                
+                // Recent students
+                const tbody = document.getElementById('recent-students');
+                tbody.innerHTML = '';
+                
+                const sortedStudents = allStudents
+                    .sort((a, b) => {
+                        const dateA = a.createdAt ? a.createdAt.seconds || 0 : 0;
+                        const dateB = b.createdAt ? b.createdAt.seconds || 0 : 0;
+                        return dateB - dateA;
+                    })
+                    .slice(0, 5);
+                
+                if (sortedStudents.length === 0) {
+                    tbody.innerHTML = `
+                        <tr>
+                            <td colspan="5" style="text-align:center;color:#999;padding:30px;">
+                                😕 No students registered yet
+                            </td>
+                        </tr>
+                    `;
+                } else {
+                    sortedStudents.forEach(data => {
+                        const name = data.name || data.email || 'Unknown Student';
+                        const grade = data.grade || 'N/A';
+                        const interests = Array.isArray(data.interests) 
+                            ? data.interests.join(', ') 
+                            : (data.interests || 'Not set');
+                        const status = data.profileCompleted ? '✅ Complete' : '⏳ Pending';
+                        const joined = data.createdAt 
+                            ? new Date(data.createdAt.seconds * 1000).toLocaleDateString() 
+                            : 'Today';
+                        
+                        tbody.innerHTML += `
+                            <tr>
+                                <td>${name}</td>
+                                <td>${grade}</td>
+                                <td>${interests}</td>
+                                <td>${status}</td>
+                                <td>${joined}</td>
+                            </tr>
+                        `;
+                    });
+                }
+                
+            } catch (error) {
+                console.error('❌ Error loading dashboard:', error);
+                document.getElementById('recent-students').innerHTML = `
+                    <tr>
+                        <td colspan="5" style="text-align:center;color:#e74c3c;padding:20px;">
+                            ❌ Error: ${error.message}
+                        </td>
+                    </tr>
+                `;
+            }
+        }
+
+        // ============================================================
+        // LOAD STUDENTS
+        // ============================================================
+        async function loadStudents() {
+            try {
+                const snapshot = await db.collection('students').get();
+                const tbody = document.getElementById('students-list');
+                tbody.innerHTML = '';
+                
+                let count = 0;
+                snapshot.forEach(doc => {
+                    const data = doc.data();
+                    count++;
+                    const name = data.name || data.email || 'Unknown';
+                    const email = data.email || 'N/A';
+                    const grade = data.grade || 'N/A';
+                    const interests = Array.isArray(data.interests) 
+                        ? data.interests.join(', ') 
+                        : (data.interests || 'Not set');
+                    const phase = data.phase || 'Phase 1';
+                    
+                    tbody.innerHTML += `
+                        <tr>
+                            <td>${name}</td>
+                            <td>${email}</td>
+                            <td>${grade}</td>
+                            <td>${interests}</td>
+                            <td>${phase}</td>
+                            <td>
+                                <button onclick="viewStudent('${doc.id}')" class="btn-sm">👁️ View</button>
+                                <button onclick="deleteStudent('${doc.id}')" class="btn-sm btn-danger">🗑️</button>
+                            </td>
+                        </tr>
+                    `;
+                });
+                
+                if (count === 0) {
+                    tbody.innerHTML = `
+                        <tr>
+                            <td colspan="6" style="text-align:center;color:#999;padding:30px;">
+                                😕 No students found
+                            </td>
+                        </tr>
+                    `;
+                }
+                
+                console.log('✅ Loaded', count, 'students');
+                
+            } catch (error) {
+                console.error('Error loading students:', error);
+            }
+        }
+
+        // ============================================================
+        // LOAD ACTIVITIES
+        // ============================================================
+        async function loadActivities() {
+            try {
+                const snapshot = await db.collection('activities').get();
+                const tbody = document.getElementById('activities-list');
+                tbody.innerHTML = '';
+                
+                let count = 0;
+                snapshot.forEach(doc => {
+                    const data = doc.data();
+                    count++;
+                    const interests = Array.isArray(data.interest_tags) 
+                        ? data.interest_tags.join(', ') 
+                        : (data.interests || 'N/A');
+                    const gradeRange = data.grade_min && data.grade_max 
+                        ? `${data.grade_min} - ${data.grade_max}` 
+                        : (data.grade || 'All');
+                    const status = data.active !== false ? '✅ Active' : '⏸️ Inactive';
+                    
+                    tbody.innerHTML += `
+                        <tr>
+                            <td>${data.name || 'Unnamed'}</td>
+                            <td>${data.type || 'General'}</td>
+                            <td>${interests}</td>
+                            <td>${gradeRange}</td>
+                            <td>${status}</td>
+                            <td>
+                                <button onclick="editActivity('${doc.id}')" class="btn-sm">✏️ Edit</button>
+                                <button onclick="deleteActivity('${doc.id}')" class="btn-sm btn-danger">🗑️</button>
+                            </td>
+                        </tr>
+                    `;
+                });
+                
+                if (count === 0) {
+                    tbody.innerHTML = `
+                        <tr>
+                            <td colspan="6" style="text-align:center;color:#999;padding:30px;">
+                                😕 No activities found
+                            </td>
+                        </tr>
+                    `;
+                }
+                
+            } catch (error) {
+                console.error('Error loading activities:', error);
+            }
+        }
+
+        // ============================================================
+        // STUDENT FUNCTIONS
+        // ============================================================
+        function viewStudent(id) {
+            window.location.href = `student-detail.html?id=${id}`;
+        }
+
+        async function deleteStudent(id) {
+            if (confirm('⚠️ Delete this student permanently?')) {
+                try {
+                    await db.collection('students').doc(id).delete();
+                    alert('✅ Student deleted!');
+                    loadDashboard();
+                    loadStudents();
+                } catch (error) {
+                    alert('Error: ' + error.message);
+                }
+            }
+        }
+
+        // ============================================================
+        // ACTIVITY FUNCTIONS
+        // ============================================================
+        function showAddActivity() {
+            const name = prompt('Activity name:');
+            if (!name) return;
+            
+            const type = prompt('Type (internship/competition/volunteering/course):');
+            if (!type) return;
+            
+            const interests = prompt('Interest tags (comma separated):');
+            if (!interests) return;
+            
+            const gradeMin = prompt('Minimum grade:');
+            const gradeMax = prompt('Maximum grade:');
+            
+            db.collection('activities').add({
+                name, type,
+                interest_tags: interests.split(',').map(t => t.trim()),
+                grade_min: parseInt(gradeMin) || 10,
+                grade_max: parseInt(gradeMax) || 12,
+                cost: 'Free',
+                duration: 'TBD',
+                active: true,
+                createdAt: firebase.firestore.FieldValue.serverTimestamp()
+            }).then(() => {
+                alert('✅ Activity added!');
+                loadActivities();
+                loadDashboard();
+            }).catch(error => alert('Error: ' + error.message));
+        }
+
+        function editActivity(id) {
+            const newName = prompt('New name:');
+            if (newName && newName.trim()) {
+                db.collection('activities').doc(id).update({ 
+                    name: newName.trim() 
+                }).then(() => {
+                    alert('✅ Updated!');
+                    loadActivities();
+                });
+            }
+        }
+
+        async function deleteActivity(id) {
+            if (confirm('⚠️ Delete this activity?')) {
+                try {
+                    await db.collection('activities').doc(id).delete();
+                    alert('✅ Activity deleted!');
+                    loadActivities();
+                    loadDashboard();
+                } catch (error) {
+                    alert('Error: ' + error.message);
+                }
+            }
+        }
+
+        // ============================================================
+        // SEARCH AND FILTER
+        // ============================================================
+        document.getElementById('search-students')?.addEventListener('input', function() {
+            const searchTerm = this.value.toLowerCase();
+            document.querySelectorAll('#students-list tr').forEach(row => {
+                const text = row.textContent.toLowerCase();
+                row.style.display = text.includes(searchTerm) ? '' : 'none';
+            });
+        });
+
+        document.getElementById('filter-grade')?.addEventListener('change', function() {
+            const filter = this.value;
+            document.querySelectorAll('#students-list tr').forEach(row => {
+                const gradeCell = row.querySelectorAll('td')[2];
+                const grade = gradeCell ? gradeCell.textContent : '';
+                row.style.display = !filter || grade.includes(filter) ? '' : 'none';
+            });
+        });
+
+        console.log('✅ Admin dashboard ready!');
+    </script>
 </body>
 </html>
