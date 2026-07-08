@@ -3,324 +3,784 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Select Interests - Futures Abroad</title>
-    <link rel="stylesheet" href="css/style.css" />
+    <title>AI Interest Discovery | Futures Abroad</title>
     <style>
-        .container {
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Quicksand', Arial, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e8ecf1 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .quiz-container {
             max-width: 700px;
-            margin: 60px auto;
-            padding: 40px;
+            width: 100%;
             background: white;
             border-radius: 24px;
-            box-shadow: 0 20px 60px rgba(108,60,225,0.12);
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.12);
         }
-        .header {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-        .header .logo {
-            font-size: 28px;
-            font-weight: 800;
-            color: #2D1B4E;
-        }
-        .header .logo span { color: #6C3CE1; }
-        .header h1 {
-            font-size: 24px;
-            color: #2D1B4E;
-            margin: 10px 0 5px;
-        }
-        .header p {
-            color: #888;
-            font-size: 15px;
-        }
-        .interests-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 12px;
-            margin: 20px 0;
-        }
-        .interest-btn {
-            padding: 14px 10px;
-            border: 2px solid #E8E0F0;
-            border-radius: 14px;
-            background: white;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-            font-family: 'Quicksand', sans-serif;
-            text-align: center;
-            color: #2D1B4E;
-        }
-        .interest-btn:hover {
-            border-color: #6C3CE1;
-            background: #f8f4ff;
-            transform: translateY(-2px);
-        }
-        .interest-btn.selected {
-            border-color: #6C3CE1;
+
+        .phase-badge {
+            display: inline-block;
             background: #6C3CE1;
             color: white;
-            box-shadow: 0 4px 15px rgba(108,60,225,0.3);
+            padding: 4px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 10px;
         }
-        .interest-btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-            transform: none;
+
+        .quiz-header h1 {
+            font-size: 32px;
+            color: #2D1B4E;
+            margin-bottom: 5px;
         }
-        .selected-count {
-            text-align: center;
-            font-size: 14px;
+        .quiz-header p {
             color: #888;
-            margin: 10px 0;
+            font-size: 16px;
+            margin-bottom: 25px;
         }
-        .selected-count strong {
-            color: #6C3CE1;
+
+        /* Chat UI */
+        .chat-container {
+            background: #f8f9fa;
+            border-radius: 16px;
+            padding: 20px;
+            min-height: 300px;
+            max-height: 400px;
+            overflow-y: auto;
+            margin-bottom: 20px;
         }
-        .btn-next {
-            width: 100%;
-            padding: 16px;
+
+        .message {
+            display: flex;
+            margin-bottom: 15px;
+            animation: fadeIn 0.3s ease;
+        }
+        .message.ai {
+            justify-content: flex-start;
+        }
+        .message.user {
+            justify-content: flex-end;
+        }
+
+        .message .bubble {
+            max-width: 85%;
+            padding: 12px 18px;
+            border-radius: 16px;
+            font-size: 15px;
+            line-height: 1.5;
+        }
+        .message.ai .bubble {
+            background: white;
+            color: #2D1B4E;
+            border: 1px solid #e0e0e0;
+            border-bottom-left-radius: 4px;
+        }
+        .message.user .bubble {
+            background: #6C3CE1;
+            color: white;
+            border-bottom-right-radius: 4px;
+        }
+
+        .message .bubble .typing {
+            display: inline-block;
+            animation: typing 1.2s infinite;
+        }
+        @keyframes typing {
+            0%, 60%, 100% { opacity: 1; }
+            30% { opacity: 0.3; }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Options */
+        .options-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 5px;
+        }
+        .option-btn {
+            padding: 12px 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            background: white;
+            cursor: pointer;
+            font-size: 15px;
+            font-family: 'Quicksand', Arial, sans-serif;
+            transition: all 0.3s;
+            text-align: left;
+            font-weight: 500;
+        }
+        .option-btn:hover {
+            border-color: #6C3CE1;
+            background: #f8f4ff;
+            transform: translateX(5px);
+        }
+        .option-btn:active {
+            transform: scale(0.98);
+        }
+
+        .input-area {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        .input-area input {
+            flex: 1;
+            padding: 12px 18px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 15px;
+            font-family: 'Quicksand', Arial, sans-serif;
+            transition: border-color 0.3s;
+        }
+        .input-area input:focus {
+            outline: none;
+            border-color: #6C3CE1;
+        }
+        .input-area button {
+            padding: 12px 24px;
             background: #6C3CE1;
             color: white;
             border: none;
-            border-radius: 50px;
+            border-radius: 12px;
             font-weight: 700;
-            font-size: 17px;
+            font-size: 15px;
             cursor: pointer;
             transition: all 0.3s;
-            font-family: 'Quicksand', sans-serif;
-            margin-top: 15px;
+            font-family: 'Quicksand', Arial, sans-serif;
         }
-        .btn-next:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 30px rgba(108,60,225,0.35);
+        .input-area button:hover {
+            background: #5a2db8;
+            transform: scale(1.02);
         }
-        .btn-next:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-            transform: none;
+
+        /* Progress */
+        .progress-bar {
+            height: 4px;
+            background: #e0e0e0;
+            border-radius: 4px;
+            margin: 15px 0;
+            overflow: hidden;
         }
-        .message-box {
-            padding: 12px 16px;
-            border-radius: 12px;
-            margin-bottom: 15px;
+        .progress-bar .fill {
+            height: 100%;
+            background: linear-gradient(90deg, #6C3CE1, #a855f7);
+            border-radius: 4px;
+            transition: width 0.5s ease;
+            width: 0%;
+        }
+
+        .question-counter {
+            color: #888;
+            font-size: 14px;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        /* Profile Result */
+        .profile-result {
+            background: #f8f4ff;
+            border-radius: 16px;
+            padding: 25px;
+            margin-top: 20px;
             display: none;
+            border: 3px solid #6C3CE1;
+        }
+        .profile-result h3 {
+            color: #2D1B4E;
+            font-size: 22px;
+            margin-bottom: 5px;
+        }
+        .profile-result .tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 15px 0;
+        }
+        .profile-result .tag {
+            background: #6C3CE1;
+            color: white;
+            padding: 6px 18px;
+            border-radius: 50px;
+            font-weight: 600;
             font-size: 14px;
         }
-        .message-box.error {
-            display: block;
-            background: #FFE8E8;
-            color: #C62828;
-            border-left: 4px solid #C62828;
+        .profile-result .explanation {
+            color: #555;
+            font-size: 15px;
+            line-height: 1.6;
+            margin: 10px 0;
         }
-        @media (max-width: 500px) {
-            .container {
-                margin: 20px 15px;
-                padding: 25px 20px;
-            }
-            .interests-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
+        .btn-primary {
+            background: #6C3CE1;
+            color: white;
+            border: none;
+            padding: 14px 40px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 18px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: 'Quicksand', Arial, sans-serif;
+            width: 100%;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(108,60,225,0.35);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: #6C3CE1;
+            border: 2px solid #6C3CE1;
+            padding: 12px 30px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: 'Quicksand', Arial, sans-serif;
+        }
+        .btn-secondary:hover { background: #6C3CE1; color: white; }
+
+        .flex-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+        .flex-buttons .btn-primary { flex: 2; }
+        .flex-buttons .btn-secondary { flex: 1; }
+
+        .hidden { display: none !important; }
+
+        @media (max-width: 768px) {
+            .quiz-container { padding: 20px; }
+            .quiz-header h1 { font-size: 24px; }
+            .chat-container { min-height: 200px; max-height: 300px; padding: 15px; }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <div class="logo">🧭 Futures <span>Abroad</span></div>
-            <h1>Choose Your Interests</h1>
-            <p>Select <strong>3 interests</strong> that match you best</p>
+
+    <div class="quiz-container">
+        <span class="phase-badge">Phase 1</span>
+        
+        <div class="quiz-header" id="quizHeader">
+            <h1>🧠 Discover Your Interests</h1>
+            <p>Answer a few questions and our AI will create your personalized interest profile.</p>
         </div>
-        
-        <div id="messageBox" class="message-box"></div>
-        
-        <div class="selected-count">
-            Selected: <strong id="selectedCount">0</strong> / 3
+
+        <!-- Progress -->
+        <div class="progress-bar">
+            <div class="fill" id="progressFill"></div>
         </div>
-        
-        <div class="interests-grid" id="interestsGrid">
-            <!-- Interests will be loaded here -->
+        <div class="question-counter" id="questionCounter">Question 1 of 8</div>
+
+        <!-- Chat Container -->
+        <div class="chat-container" id="chatContainer">
+            <!-- Messages will be inserted here -->
         </div>
-        
-        <button class="btn-next" id="nextBtn" disabled>
-            Continue to Quiz →
-        </button>
+
+        <!-- Options Area -->
+        <div id="optionsArea"></div>
+
+        <!-- Input Area (for text input questions) -->
+        <div class="input-area hidden" id="inputArea">
+            <input type="text" id="textInput" placeholder="Type your answer..." />
+            <button id="sendBtn">Send</button>
+        </div>
+
+        <!-- Profile Result -->
+        <div class="profile-result" id="profileResult">
+            <h3>🎯 Your Interest Profile</h3>
+            <p style="color:#888;">Based on your answers, our AI has identified these interests:</p>
+            <div class="tags" id="interestTags"></div>
+            <div class="explanation" id="profileExplanation"></div>
+            <div class="flex-buttons">
+                <button class="btn-secondary" onclick="restartQuiz()">🔄 Retake Quiz</button>
+                <button class="btn-primary" onclick="confirmProfile()">✅ Confirm & Continue</button>
+            </div>
+        </div>
     </div>
 
     <script type="module">
-        // ============================================================
-        // IMPORTS
-        // ============================================================
-        import { 
-            auth, 
-            db,
-            doc,
-            getDoc,
-            updateDoc,
-            serverTimestamp
-        } from './js/firebase-config.js';
+        import { auth, db, COLLECTIONS, doc, updateDoc, onAuthStateChanged } from './js/firebase-config.js';
 
         // ============================================================
-        // INTERESTS LIST
+        // QUIZ DATA - AI Conversational Questions
         // ============================================================
-        const allInterests = [
-            "Biology", "Chemistry", "Physics", "Mathematics", 
-            "Computer Science", "Engineering", "Data Science", "Robotics",
-            "Medicine", "Public Health", "Neuroscience",
-            "History", "Philosophy", "Political Science", "Law",
-            "Psychology", "Sociology", "Economics", "International Relations",
-            "Visual Art", "Music", "Graphic Design", "Architecture",
-            "Entrepreneurship", "Finance", "Marketing", "Management",
-            "Sustainability", "Climate Change", "Environmental Policy",
-            "Community Service", "Leadership", "Social Enterprise",
-            "AI & Machine Learning", "Cybersecurity", "App Development"
+        const questions = [
+            {
+                id: 'q1',
+                type: 'options',
+                question: 'What subject do you look forward to most at school?',
+                options: [
+                    'Biology & Life Sciences',
+                    'Chemistry & Physics',
+                    'Mathematics & Data',
+                    'Computer Science & Technology',
+                    'History & Humanities',
+                    'Art & Design',
+                    'Business & Economics',
+                    'Physical Education & Sports'
+                ],
+                tags: {
+                    'Biology & Life Sciences': ['Biology', 'Medicine', 'Environment'],
+                    'Chemistry & Physics': ['Chemistry', 'Physics', 'Engineering'],
+                    'Mathematics & Data': ['Mathematics', 'Data Science', 'Computer Science'],
+                    'Computer Science & Technology': ['Computer Science', 'AI & Machine Learning', 'Robotics'],
+                    'History & Humanities': ['History', 'Political Science', 'Law'],
+                    'Art & Design': ['Visual Art', 'Graphic Design', 'Architecture'],
+                    'Business & Economics': ['Business', 'Entrepreneurship', 'Finance'],
+                    'Physical Education & Sports': ['Sports Science', 'Leadership', 'Health']
+                }
+            },
+            {
+                id: 'q2',
+                type: 'options',
+                question: 'If you had a free weekend, what would you build or explore?',
+                options: [
+                    'A new app or website',
+                    'A science experiment or project',
+                    'A piece of art or music',
+                    'A business or social enterprise',
+                    'A community service project',
+                    'A sports tournament or competition',
+                    'A research paper or essay',
+                    'A sustainable or environmental project'
+                ],
+                tags: {
+                    'A new app or website': ['Computer Science', 'App Development', 'Technology'],
+                    'A science experiment or project': ['STEM', 'Engineering', 'Research'],
+                    'A piece of art or music': ['Visual Art', 'Music', 'Film'],
+                    'A business or social enterprise': ['Entrepreneurship', 'Business', 'Social Enterprise'],
+                    'A community service project': ['Community Service', 'Leadership', 'Non-Profit'],
+                    'A sports tournament or competition': ['Sports Science', 'Leadership', 'Health'],
+                    'A research paper or essay': ['Research', 'Humanities', 'Political Science'],
+                    'A sustainable or environmental project': ['Sustainability', 'Environment', 'Climate Change']
+                }
+            },
+            {
+                id: 'q3',
+                type: 'options',
+                question: 'What kind of change do you want to see in the world?',
+                options: [
+                    'Advance technology and innovation',
+                    'Improve healthcare and medicine',
+                    'Protect the environment and climate',
+                    'Promote social justice and equality',
+                    'Educate and empower communities',
+                    'Create economic opportunities',
+                    'Build safer and smarter cities',
+                    'Foster peace and international cooperation'
+                ],
+                tags: {
+                    'Advance technology and innovation': ['Technology', 'AI & Machine Learning', 'Engineering'],
+                    'Improve healthcare and medicine': ['Medicine', 'Public Health', 'Neuroscience'],
+                    'Protect the environment and climate': ['Environment', 'Sustainability', 'Climate Change'],
+                    'Promote social justice and equality': ['Social Sciences', 'Law', 'Political Science'],
+                    'Educate and empower communities': ['Education', 'Community Service', 'Leadership'],
+                    'Create economic opportunities': ['Business', 'Entrepreneurship', 'Finance'],
+                    'Build safer and smarter cities': ['Engineering', 'Architecture', 'Urban Planning'],
+                    'Foster peace and international cooperation': ['International Relations', 'Political Science', 'Law']
+                }
+            },
+            {
+                id: 'q4',
+                type: 'options',
+                question: 'What type of career do you see yourself in?',
+                options: [
+                    'Scientist or Researcher',
+                    'Engineer or Developer',
+                    'Doctor or Healthcare Professional',
+                    'Teacher or Educator',
+                    'Business Leader or Entrepreneur',
+                    'Lawyer or Policy Maker',
+                    'Artist or Designer',
+                    'Environmentalist or Conservationist'
+                ],
+                tags: {
+                    'Scientist or Researcher': ['Biology', 'Chemistry', 'Physics', 'Research'],
+                    'Engineer or Developer': ['Engineering', 'Computer Science', 'Robotics'],
+                    'Doctor or Healthcare Professional': ['Medicine', 'Dentistry', 'Public Health'],
+                    'Teacher or Educator': ['Education', 'Humanities', 'Social Sciences'],
+                    'Business Leader or Entrepreneur': ['Business', 'Entrepreneurship', 'Finance'],
+                    'Lawyer or Policy Maker': ['Law', 'Political Science', 'International Relations'],
+                    'Artist or Designer': ['Visual Art', 'Graphic Design', 'Architecture'],
+                    'Environmentalist or Conservationist': ['Environment', 'Sustainability', 'Marine Biology']
+                }
+            },
+            {
+                id: 'q5',
+                type: 'options',
+                question: 'What skills do you want to develop the most?',
+                options: [
+                    'Problem-solving and critical thinking',
+                    'Creativity and design thinking',
+                    'Leadership and team management',
+                    'Communication and public speaking',
+                    'Data analysis and research',
+                    'Technical and coding skills',
+                    'Empathy and emotional intelligence',
+                    'Project management and planning'
+                ],
+                tags: {
+                    'Problem-solving and critical thinking': ['STEM', 'Engineering', 'Mathematics'],
+                    'Creativity and design thinking': ['Visual Art', 'Design', 'Architecture'],
+                    'Leadership and team management': ['Leadership', 'Business', 'Management'],
+                    'Communication and public speaking': ['Law', 'Political Science', 'Humanities'],
+                    'Data analysis and research': ['Data Science', 'Research', 'Mathematics'],
+                    'Technical and coding skills': ['Computer Science', 'App Development', 'Robotics'],
+                    'Empathy and emotional intelligence': ['Psychology', 'Social Sciences', 'Healthcare'],
+                    'Project management and planning': ['Business', 'Management', 'Entrepreneurship']
+                }
+            },
+            {
+                id: 'q6',
+                type: 'options',
+                question: 'Which of these activities excites you the most?',
+                options: [
+                    'Building or creating something new',
+                    'Solving complex problems',
+                    'Helping and supporting others',
+                    'Exploring new ideas and concepts',
+                    'Competing and achieving goals',
+                    'Leading and inspiring teams',
+                    'Analyzing data and patterns',
+                    'Designing and visualizing ideas'
+                ],
+                tags: {
+                    'Building or creating something new': ['Engineering', 'App Development', 'Design'],
+                    'Solving complex problems': ['STEM', 'Mathematics', 'Computer Science'],
+                    'Helping and supporting others': ['Medicine', 'Psychology', 'Community Service'],
+                    'Exploring new ideas and concepts': ['Research', 'Humanities', 'Philosophy'],
+                    'Competing and achieving goals': ['Business', 'Entrepreneurship', 'Sports'],
+                    'Leading and inspiring teams': ['Leadership', 'Management', 'Politics'],
+                    'Analyzing data and patterns': ['Data Science', 'Mathematics', 'Economics'],
+                    'Designing and visualizing ideas': ['Visual Art', 'Graphic Design', 'Architecture']
+                }
+            },
+            {
+                id: 'q7',
+                type: 'options',
+                question: 'What environment do you thrive in?',
+                options: [
+                    'Fast-paced and dynamic',
+                    'Structured and organized',
+                    'Creative and flexible',
+                    'Collaborative and team-oriented',
+                    'Independent and self-directed',
+                    'Purpose-driven and meaningful',
+                    'Competitive and challenging',
+                    'Calm and reflective'
+                ],
+                tags: {
+                    'Fast-paced and dynamic': ['Business', 'Entrepreneurship', 'Technology'],
+                    'Structured and organized': ['Law', 'Finance', 'Management'],
+                    'Creative and flexible': ['Visual Art', 'Design', 'Film'],
+                    'Collaborative and team-oriented': ['Leadership', 'Management', 'Sports'],
+                    'Independent and self-directed': ['Research', 'Computer Science', 'Writing'],
+                    'Purpose-driven and meaningful': ['Non-Profit', 'Community Service', 'Social Enterprise'],
+                    'Competitive and challenging': ['Business', 'Law', 'Sports'],
+                    'Calm and reflective': ['Psychology', 'Philosophy', 'Research']
+                }
+            },
+            {
+                id: 'q8',
+                type: 'options',
+                question: 'What impact do you want to leave on the world?',
+                options: [
+                    'Advance human knowledge and understanding',
+                    'Create sustainable solutions for the future',
+                    'Inspire and empower others',
+                    'Build communities and connections',
+                    'Drive economic growth and opportunity',
+                    'Protect and preserve our planet',
+                    'Promote health and well-being',
+                    'Champion justice and equality'
+                ],
+                tags: {
+                    'Advance human knowledge and understanding': ['Research', 'Science', 'Humanities'],
+                    'Create sustainable solutions for the future': ['Environment', 'Sustainability', 'Engineering'],
+                    'Inspire and empower others': ['Education', 'Leadership', 'Community Service'],
+                    'Build communities and connections': ['Social Sciences', 'Politics', 'Public Health'],
+                    'Drive economic growth and opportunity': ['Business', 'Entrepreneurship', 'Finance'],
+                    'Protect and preserve our planet': ['Environment', 'Marine Biology', 'Climate Change'],
+                    'Promote health and well-being': ['Medicine', 'Public Health', 'Psychology'],
+                    'Champion justice and equality': ['Law', 'Political Science', 'Social Sciences']
+                }
+            }
         ];
 
         // ============================================================
         // STATE
         // ============================================================
-        let selectedInterests = [];
-        let currentUid = null;
+        let currentQuestionIndex = 0;
+        let selectedAnswers = [];
+        let userId = null;
+        let userData = null;
 
-        // Get UID from URL
-        const urlParams = new URLSearchParams(window.location.search);
-        currentUid = urlParams.get('uid');
+        const chatContainer = document.getElementById('chatContainer');
+        const optionsArea = document.getElementById('optionsArea');
+        const inputArea = document.getElementById('inputArea');
+        const textInput = document.getElementById('textInput');
+        const sendBtn = document.getElementById('sendBtn');
+        const progressFill = document.getElementById('progressFill');
+        const questionCounter = document.getElementById('questionCounter');
+        const profileResult = document.getElementById('profileResult');
+        const interestTags = document.getElementById('interestTags');
+        const profileExplanation = document.getElementById('profileExplanation');
 
         // ============================================================
-        // RENDER INTERESTS
+        // CHAT FUNCTIONS
         // ============================================================
-        function renderInterests() {
-            const grid = document.getElementById('interestsGrid');
-            grid.innerHTML = '';
+        function addMessage(text, type) {
+            const div = document.createElement('div');
+            div.className = `message ${type}`;
+            div.innerHTML = `<div class="bubble">${text}</div>`;
+            chatContainer.appendChild(div);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+
+        function addTypingIndicator() {
+            const div = document.createElement('div');
+            div.className = 'message ai';
+            div.id = 'typingIndicator';
+            div.innerHTML = `<div class="bubble"><span class="typing">●●●</span></div>`;
+            chatContainer.appendChild(div);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+
+        function removeTypingIndicator() {
+            const indicator = document.getElementById('typingIndicator');
+            if (indicator) indicator.remove();
+        }
+
+        // ============================================================
+        // SHOW QUESTION
+        // ============================================================
+        function showQuestion(index) {
+            if (index >= questions.length) {
+                generateProfile();
+                return;
+            }
+
+            const question = questions[index];
             
-            allInterests.forEach(interest => {
-                const btn = document.createElement('button');
-                btn.className = 'interest-btn';
-                btn.textContent = interest;
-                btn.dataset.interest = interest;
-                
-                if (selectedInterests.includes(interest)) {
-                    btn.classList.add('selected');
-                }
-                
-                btn.addEventListener('click', function() {
-                    toggleInterest(interest, this);
+            // Update progress
+            progressFill.style.width = `${((index) / questions.length) * 100}%`;
+            questionCounter.textContent = `Question ${index + 1} of ${questions.length}`;
+
+            // Show AI message with question
+            addMessage(question.question, 'ai');
+
+            // Show options or input
+            if (question.type === 'options') {
+                optionsArea.innerHTML = `
+                    <div class="options-container">
+                        ${question.options.map(opt => `
+                            <button class="option-btn" data-value="${opt}">${opt}</button>
+                        `).join('')}
+                    </div>
+                `;
+                optionsArea.classList.remove('hidden');
+                inputArea.classList.add('hidden');
+
+                // Add event listeners to options
+                document.querySelectorAll('.option-btn').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const value = this.dataset.value;
+                        handleAnswer(value);
+                    });
                 });
-                
-                grid.appendChild(btn);
+            } else {
+                optionsArea.classList.add('hidden');
+                inputArea.classList.remove('hidden');
+                textInput.value = '';
+                textInput.focus();
+            }
+        }
+
+        // ============================================================
+        // HANDLE ANSWER
+        // ============================================================
+        function handleAnswer(answer) {
+            // Add user message
+            addMessage(answer, 'user');
+
+            // Store answer
+            selectedAnswers.push(answer);
+
+            // Move to next question
+            currentQuestionIndex++;
+            
+            // Clear options
+            optionsArea.innerHTML = '';
+            inputArea.classList.add('hidden');
+
+            // Show next question after delay
+            setTimeout(() => {
+                showQuestion(currentQuestionIndex);
+            }, 500);
+        }
+
+        // ============================================================
+        // GENERATE PROFILE
+        // ============================================================
+        function generateProfile() {
+            progressFill.style.width = '100%';
+            questionCounter.textContent = 'Quiz Complete! 🎉';
+
+            // Collect all tags from answers
+            const allTags = [];
+            selectedAnswers.forEach((answer, index) => {
+                const question = questions[index];
+                if (question && question.tags && question.tags[answer]) {
+                    allTags.push(...question.tags[answer]);
+                }
             });
-            
-            updateUI();
+
+            // Count tag frequencies
+            const tagCounts = {};
+            allTags.forEach(tag => {
+                tagCounts[tag] = (tagCounts[tag] || 0) + 1;
+            });
+
+            // Sort by frequency and get top tags
+            const sortedTags = Object.entries(tagCounts)
+                .sort((a, b) => b[1] - a[1])
+                .slice(0, 4)
+                .map(entry => entry[0]);
+
+            // Generate explanation
+            const explanation = `Based on your answers, you have a strong interest in ${sortedTags.slice(0, -1).join(', ')}${sortedTags.length > 1 ? ' and ' : ''}${sortedTags[sortedTags.length - 1]}. These interests align well with careers in ${sortedTags.map(t => t.toLowerCase()).join(', ')}. Your profile suggests you are curious, driven, and ready to make an impact.`;
+
+            // Show profile result
+            profileResult.style.display = 'block';
+            interestTags.innerHTML = sortedTags.map(tag => `<span class="tag">${tag}</span>`).join('');
+            profileExplanation.textContent = explanation;
+
+            // Save to Firebase
+            saveProfileToFirebase(sortedTags, explanation);
+
+            // Scroll to result
+            profileResult.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
 
         // ============================================================
-        // TOGGLE INTEREST
+        // SAVE TO FIREBASE
         // ============================================================
-        function toggleInterest(interest, btn) {
-            const index = selectedInterests.indexOf(interest);
-            
-            if (index > -1) {
-                // Remove
-                selectedInterests.splice(index, 1);
-                btn.classList.remove('selected');
-            } else {
-                // Add (max 3)
-                if (selectedInterests.length >= 3) {
-                    document.getElementById('messageBox').className = 'message-box error';
-                    document.getElementById('messageBox').textContent = '⚠️ You can only select 3 interests.';
-                    setTimeout(() => {
-                        document.getElementById('messageBox').className = 'message-box';
-                        document.getElementById('messageBox').textContent = '';
-                    }, 2000);
-                    return;
-                }
-                selectedInterests.push(interest);
-                btn.classList.add('selected');
-            }
-            
-            updateUI();
-        }
+        async function saveProfileToFirebase(tags, explanation) {
+            if (!userId) return;
 
-        // ============================================================
-        // UPDATE UI
-        // ============================================================
-        function updateUI() {
-            document.getElementById('selectedCount').textContent = selectedInterests.length;
-            const nextBtn = document.getElementById('nextBtn');
-            nextBtn.disabled = selectedInterests.length !== 3;
-            
-            // Update button text
-            if (selectedInterests.length === 3) {
-                nextBtn.textContent = '✅ Continue to Quiz →';
-            } else {
-                nextBtn.textContent = `Select ${3 - selectedInterests.length} more...`;
-            }
-        }
-
-        // ============================================================
-        // SAVE AND CONTINUE
-        // ============================================================
-        document.getElementById('nextBtn').addEventListener('click', async function() {
-            if (selectedInterests.length !== 3) return;
-            
-            const msgEl = document.getElementById('messageBox');
-            msgEl.className = 'message-box';
-            msgEl.textContent = '';
-            
-            // Get UID
-            if (!currentUid) {
-                const user = auth.currentUser;
-                if (user) {
-                    currentUid = user.uid;
-                } else {
-                    msgEl.className = 'message-box error';
-                    msgEl.textContent = '⚠️ Please login first.';
-                    return;
-                }
-            }
-            
             try {
-                // Save selected interests to Firestore
-                await updateDoc(doc(db, 'students', currentUid), {
-                    selectedInterests: selectedInterests,
-                    phase: 'Phase 1 - Quiz Ready',
-                    updatedAt: serverTimestamp()
+                const userRef = doc(db, COLLECTIONS.users, userId);
+                await updateDoc(userRef, {
+                    interests: tags,
+                    interestSummary: explanation,
+                    quizCompleted: true,
+                    quizAnswers: selectedAnswers,
+                    profileGenerated: new Date().toISOString()
                 });
-                
-                console.log('✅ Selected interests saved:', selectedInterests);
-                
-                msgEl.className = 'message-box success';
-                msgEl.textContent = '✅ Interests saved! Taking you to the quiz...';
-                
-                setTimeout(() => {
-                    window.location.href = 'quiz.html?uid=' + currentUid;
-                }, 1000);
-                
+                console.log('✅ Profile saved to Firebase:', tags);
             } catch (error) {
-                console.error('Error saving interests:', error);
-                msgEl.className = 'message-box error';
-                msgEl.textContent = '❌ Error: ' + error.message;
+                console.error('Error saving profile:', error);
+            }
+        }
+
+        // ============================================================
+        // CONFIRM PROFILE
+        // ============================================================
+        window.confirmProfile = function() {
+            // Store in localStorage for dashboard
+            localStorage.setItem('profileConfirmed', 'true');
+            localStorage.setItem('userInterests', JSON.stringify(
+                document.querySelectorAll('.tag').length > 0 
+                    ? Array.from(document.querySelectorAll('.tag')).map(el => el.textContent)
+                    : []
+            ));
+            
+            // Navigate to Phase 2
+            window.location.href = 'student-app.html';
+        };
+
+        // ============================================================
+        // RESTART QUIZ
+        // ============================================================
+        window.restartQuiz = function() {
+            currentQuestionIndex = 0;
+            selectedAnswers = [];
+            chatContainer.innerHTML = '';
+            profileResult.style.display = 'none';
+            optionsArea.innerHTML = '';
+            inputArea.classList.add('hidden');
+            progressFill.style.width = '0%';
+            questionCounter.textContent = 'Question 1 of 8';
+            
+            // Start from beginning
+            setTimeout(() => {
+                addMessage("👋 Hi! Let's discover your interests. I'll ask you a few questions to understand what you're passionate about.", 'ai');
+                setTimeout(() => {
+                    showQuestion(0);
+                }, 800);
+            }, 500);
+        };
+
+        // ============================================================
+        // SEND BUTTON (for text input)
+        // ============================================================
+        sendBtn.addEventListener('click', function() {
+            const value = textInput.value.trim();
+            if (value) {
+                handleAnswer(value);
+            }
+        });
+
+        textInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                const value = this.value.trim();
+                if (value) {
+                    handleAnswer(value);
+                }
             }
         });
 
         // ============================================================
-        // INIT
+        // INITIALIZE
         // ============================================================
-        renderInterests();
+        onAuthStateChanged(auth, async (user) => {
+            if (!user) {
+                window.location.href = 'login.html';
+                return;
+            }
+            userId = user.uid;
+            
+            // Start quiz
+            setTimeout(() => {
+                addMessage("👋 Hi! Let's discover your interests. I'll ask you a few questions to understand what you're passionate about.", 'ai');
+                setTimeout(() => {
+                    showQuestion(0);
+                }, 1000);
+            }, 500);
+        });
 
-        // If no UID, try to get current user
-        if (!currentUid) {
-            auth.onAuthStateChanged(user => {
-                if (user) {
-                    currentUid = user.uid;
-                } else {
-                    document.getElementById('messageBox').className = 'message-box error';
-                    document.getElementById('messageBox').textContent = '⚠️ Please login to continue.';
-                }
-            });
-        }
-
-        console.log('✅ Interest selection loaded!');
+        console.log('✅ AI Quiz loaded successfully!');
     </script>
+
 </body>
 </html>
