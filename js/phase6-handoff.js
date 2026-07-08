@@ -1,5 +1,6 @@
-// Phase 6: Futures Abroad Handoff
-// This replaces enrollment.js
+// ============================================
+// PHASE 6: FUTURES ABROAD HANDOFF
+// ============================================
 
 // Store enrollment data
 let enrollmentData = {
@@ -13,9 +14,6 @@ let enrollmentData = {
 function initPhase6() {
     try {
         const student = JSON.parse(localStorage.getItem('studentProfile') || '{}');
-        if (!student.name) {
-            console.log('Student not logged in');
-        }
 
         // Initialize phase navigation
         if (typeof initPhaseNavigation === 'function') {
@@ -102,11 +100,9 @@ function setupStepProgress() {
 // Next step
 function nextStep() {
     if (enrollmentData.step === 1) {
-        // Validate profile confirmation (always valid)
         enrollmentData.step = 2;
         showStep(2);
     } else if (enrollmentData.step === 2) {
-        // Validate program selection
         if (!enrollmentData.program) {
             alert('Please select a program');
             return;
@@ -114,7 +110,6 @@ function nextStep() {
         enrollmentData.step = 3;
         showStep(3);
     } else if (enrollmentData.step === 3) {
-        // Validate intake form
         const parentEmail = document.getElementById('parent-email')?.value;
         const timezone = document.getElementById('counselor-timezone')?.value;
         if (!parentEmail || !parentEmail.includes('@')) {
@@ -123,8 +118,6 @@ function nextStep() {
         }
         enrollmentData.parentEmail = parentEmail;
         enrollmentData.counselorTimezone = timezone || 'EST';
-        
-        // Show confirmation
         enrollmentData.step = 4;
         showStep(4);
         updateSummary();
@@ -204,26 +197,16 @@ function updateSummary() {
 // Confirm enrollment
 function confirmEnrollment() {
     try {
-        // Get student data
         const student = JSON.parse(localStorage.getItem('studentProfile') || '{}');
-        
-        // Generate profile PDF data
         const profileData = generateProfilePDF(student);
-
-        // Notify counselor
         notifyCounselor(student, profileData, enrollmentData);
-
-        // Schedule first session
         scheduleFirstSession(student);
 
-        // Update student status
         student.enrollmentComplete = true;
         student.currentPhase = 6;
         localStorage.setItem('studentProfile', JSON.stringify(student));
 
-        // Show success
         showEnrollmentSuccess();
-
     } catch (error) {
         console.log('Error confirming enrollment:', error);
         alert('There was an error completing your enrollment. Please try again.');
@@ -262,9 +245,7 @@ function generateProfilePDF(student) {
         generatedDate: new Date().toISOString()
     };
 
-    // Save for PDF generation
     localStorage.setItem('profilePDFData', JSON.stringify(profileData));
-
     console.log('📄 Profile PDF generated:', profileData);
     return profileData;
 }
@@ -280,15 +261,12 @@ function notifyCounselor(student, profileData, enrollment) {
         profile: profileData
     });
 
-    // Show notification
-    const message = `✅ Counselor has been notified!\n\nWe'll contact you at ${enrollment.parentEmail} to schedule your first session.`;
-    alert(message);
+    alert(`✅ Counselor has been notified!\n\nWe'll contact you at ${enrollment.parentEmail} to schedule your first session.`);
 }
 
 // Schedule first session
 function scheduleFirstSession(student) {
     console.log('📅 Scheduling first session for:', student.name || 'Student');
-    // In real app: Calendly integration
 }
 
 // Show enrollment success
@@ -304,9 +282,9 @@ function showEnrollmentSuccess() {
             <div class="next-steps">
                 <h3>What's next?</h3>
                 <ul>
-                    <li>✓ Review your profile in the dashboard</li>
-                    <li>✓ Check your email for counselor introduction</li>
-                    <li>✓ Prepare for your first session</li>
+                    <li>Review your profile in the dashboard</li>
+                    <li>Check your email for counselor introduction</li>
+                    <li>Prepare for your first session</li>
                 </ul>
             </div>
             <button onclick="window.location.href='dashboard.html'" class="primary-btn">
@@ -315,15 +293,11 @@ function showEnrollmentSuccess() {
         </div>
     `;
 
-    // Hide navigation
     const stepNav = document.getElementById('step-navigation');
-    if (stepNav) {
-        stepNav.style.display = 'none';
-    }
+    if (stepNav) stepNav.style.display = 'none';
+    
     const stepProgress = document.querySelector('.step-progress');
-    if (stepProgress) {
-        stepProgress.style.display = 'none';
-    }
+    if (stepProgress) stepProgress.style.display = 'none';
 }
 
 // Initialize on page load
