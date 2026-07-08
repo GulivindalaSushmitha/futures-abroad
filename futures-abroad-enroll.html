@@ -47,6 +47,8 @@
             font-size: 14px;
         }
         .main-header nav a:hover { background: #f0e6ff; color: #6C3CE1; }
+        .main-header nav #logout-link { color: #e74c3c; }
+        .main-header nav #logout-link:hover { background: #fde8e8; }
 
         .container {
             max-width: 900px;
@@ -185,6 +187,26 @@
             text-decoration: none;
             display: inline-block;
         }
+        .btn-secondary:hover { background: #6C3CE1; color: white; }
+
+        .btn-dashboard {
+            background: #6C3CE1;
+            color: white;
+            border: none;
+            padding: 14px 40px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 18px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: 'Quicksand', Arial, sans-serif;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .btn-dashboard:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(108,60,225,0.35);
+        }
 
         .success-message {
             background: #f0fdf4;
@@ -207,6 +229,8 @@
             flex-wrap: wrap;
             justify-content: center;
         }
+
+        .hidden { display: none !important; }
 
         @media (max-width: 768px) {
             body { padding-top: 120px; padding-left: 10px; padding-right: 10px; }
@@ -261,27 +285,28 @@
                     <div class="icon">🌱</div>
                     <h3>Grade 10-12 Track</h3>
                     <p>Build your profile over 3 years with expert guidance</p>
-                    <div class="price">$0 / year</div>
+                    <div class="price">AED 450 <span style="font-size:16px;color:#888;">/month</span></div>
                     <span class="badge">⭐ Most Popular</span>
                 </div>
                 <div class="program-card" data-program="11-fast-track" onclick="selectProgram(this)">
                     <div class="icon">🚀</div>
                     <h3>Grade 11 Fast-Track</h3>
                     <p>Intensive 1-year university preparation program</p>
-                    <div class="price">$0 / year</div>
+                    <div class="price">AED 650 <span style="font-size:16px;color:#888;">/month</span></div>
                     <span class="badge">🔥 Accelerated</span>
                 </div>
             </div>
 
             <button id="enrollBtn" class="btn-primary" disabled>Select a Program to Continue</button>
 
-            <!-- Success Message -->
+            <!-- Success Message - UPDATED with Dashboard link -->
             <div class="success-message" id="successMessage">
                 <div class="icon">🎉</div>
                 <h3>You're Enrolled in Futures Abroad!</h3>
                 <p>A counselor will reach out to you within 24 hours to schedule your first session.</p>
-                <div style="margin-top:20px;">
-                    <a href="dashboard.html" class="btn-secondary" style="padding:12px 30px;">📊 Go to Dashboard</a>
+                <div style="margin-top:20px;display:flex;gap:15px;flex-wrap:wrap;justify-content:center;">
+                    <a href="dashboard.html" class="btn-dashboard">📊 Go to Dashboard</a>
+                    <a href="portfolio.html" class="btn-secondary" style="padding:12px 30px;">📂 View Portfolio</a>
                 </div>
             </div>
         </div>
@@ -290,6 +315,7 @@
             <a href="dashboard.html" class="btn-secondary">📊 Dashboard</a>
             <a href="portfolio.html" class="btn-secondary">📂 Portfolio</a>
             <a href="university-shortlist.html" class="btn-secondary">🏛️ University Shortlist</a>
+            <a href="student-app.html" class="btn-secondary">🎯 Activities</a>
         </div>
 
     </div>
@@ -350,6 +376,10 @@
             const user = auth.currentUser;
             if (!user) return;
 
+            const enrollBtn = document.getElementById('enrollBtn');
+            enrollBtn.textContent = '⏳ Processing...';
+            enrollBtn.disabled = true;
+
             try {
                 // Update user status
                 await updateDoc(doc(db, COLLECTIONS.users, user.uid), {
@@ -380,6 +410,10 @@
                     createdAt: serverTimestamp()
                 });
 
+                // Mark Phase 6 as completed
+                localStorage.setItem('phase6Completed', 'true');
+                localStorage.setItem('enrolled', 'true');
+
                 // Show success
                 document.querySelector('.enroll-card .btn-primary').style.display = 'none';
                 document.getElementById('programGrid').style.display = 'none';
@@ -387,9 +421,13 @@
                 document.querySelector('.enroll-card .subtitle').style.display = 'none';
                 document.getElementById('successMessage').style.display = 'block';
 
+                console.log('✅ Phase 6: Enrollment complete!');
+
             } catch (error) {
                 console.error('Error enrolling:', error);
                 alert('Error enrolling. Please try again.');
+                enrollBtn.textContent = 'Select a Program to Continue';
+                enrollBtn.disabled = false;
             }
         }
 
@@ -414,6 +452,8 @@
             }
             currentUser = user;
             await loadProfile(user.uid);
+            
+            console.log('✅ Phase 6: Enrollment page loaded!');
         });
     </script>
 
