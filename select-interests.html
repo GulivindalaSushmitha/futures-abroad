@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Select Interests - Futures Abroad</title>
+    <link rel="stylesheet" href="css/style.css" />
+    <style>
+        .container {
+            max-width: 700px;
+            margin: 60px auto;
+            padding: 40px;
+            background: white;
+            border-radius: 24px;
+            box-shadow: 0 20px 60px rgba(108,60,225,0.12);
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .header .logo {
+            font-size: 28px;
+            font-weight: 800;
+            color: #2D1B4E;
+        }
+        .header .logo span { color: #6C3CE1; }
+        .header h1 {
+            font-size: 24px;
+            color: #2D1B4E;
+            margin: 10px 0 5px;
+        }
+        .header p {
+            color: #888;
+            font-size: 15px;
+        }
+        .interests-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin: 20px 0;
+        }
+        .interest-btn {
+            padding: 14px 10px;
+            border: 2px solid #E8E0F0;
+            border-radius: 14px;
+            background: white;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: 'Quicksand', sans-serif;
+            text-align: center;
+            color: #2D1B4E;
+        }
+        .interest-btn:hover {
+            border-color: #6C3CE1;
+            background: #f8f4ff;
+            transform: translateY(-2px);
+        }
+        .interest-btn.selected {
+            border-color: #6C3CE1;
+            background: #6C3CE1;
+            color: white;
+            box-shadow: 0 4px 15px rgba(108,60,225,0.3);
+        }
+        .interest-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+        .selected-count {
+            text-align: center;
+            font-size: 14px;
+            color: #888;
+            margin: 10px 0;
+        }
+        .selected-count strong {
+            color: #6C3CE1;
+        }
+        .btn-next {
+            width: 100%;
+            padding: 16px;
+            background: #6C3CE1;
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 17px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: 'Quicksand', sans-serif;
+            margin-top: 15px;
+        }
+        .btn-next:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(108,60,225,0.35);
+        }
+        .btn-next:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+        .message-box {
+            padding: 12px 16px;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            display: none;
+            font-size: 14px;
+        }
+        .message-box.error {
+            display: block;
+            background: #FFE8E8;
+            color: #C62828;
+            border-left: 4px solid #C62828;
+        }
+        @media (max-width: 500px) {
+            .container {
+                margin: 20px 15px;
+                padding: 25px 20px;
+            }
+            .interests-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">🧭 Futures <span>Abroad</span></div>
+            <h1>Choose Your Interests</h1>
+            <p>Select <strong>3 interests</strong> that match you best</p>
+        </div>
+        
+        <div id="messageBox" class="message-box"></div>
+        
+        <div class="selected-count">
+            Selected: <strong id="selectedCount">0</strong> / 3
+        </div>
+        
+        <div class="interests-grid" id="interestsGrid">
+            <!-- Interests will be loaded here -->
+        </div>
+        
+        <button class="btn-next" id="nextBtn" disabled>
+            Continue to Quiz →
+        </button>
+    </div>
+
+    <script type="module">
+        // ============================================================
+        // IMPORTS
+        // ============================================================
+        import { 
+            auth, 
+            db,
+            doc,
+            getDoc,
+            updateDoc,
+            serverTimestamp
+        } from './js/firebase-config.js';
+
+        // ============================================================
+        // INTERESTS LIST
+        // ============================================================
+        const allInterests = [
+            "Biology", "Chemistry", "Physics", "Mathematics", 
+            "Computer Science", "Engineering", "Data Science", "Robotics",
+            "Medicine", "Public Health", "Neuroscience",
+            "History", "Philosophy", "Political Science", "Law",
+            "Psychology", "Sociology", "Economics", "International Relations",
+            "Visual Art", "Music", "Graphic Design", "Architecture",
+            "Entrepreneurship", "Finance", "Marketing", "Management",
+            "Sustainability", "Climate Change", "Environmental Policy",
+            "Community Service", "Leadership", "Social Enterprise",
+            "AI & Machine Learning", "Cybersecurity", "App Development"
+        ];
+
+        // ============================================================
+        // STATE
+        // ============================================================
+        let selectedInterests = [];
+        let currentUid = null;
+
+        // Get UID from URL
+        const urlParams = new URLSearchParams(window.location.search);
+        currentUid = urlParams.get('uid');
+
+        // ============================================================
+        // RENDER INTERESTS
+        // ============================================================
+        function renderInterests() {
+            const grid = document.getElementById('interestsGrid');
+            grid.innerHTML = '';
+            
+            allInterests.forEach(interest => {
+                const btn = document.createElement('button');
+                btn.className = 'interest-btn';
+                btn.textContent = interest;
+                btn.dataset.interest = interest;
+                
+                if (selectedInterests.includes(interest)) {
+                    btn.classList.add('selected');
+                }
+                
+                btn.addEventListener('click', function() {
+                    toggleInterest(interest, this);
+                });
+                
+                grid.appendChild(btn);
+            });
+            
+            updateUI();
+        }
+
+        // ============================================================
+        // TOGGLE INTEREST
+        // ============================================================
+        function toggleInterest(interest, btn) {
+            const index = selectedInterests.indexOf(interest);
+            
+            if (index > -1) {
+                // Remove
+                selectedInterests.splice(index, 1);
+                btn.classList.remove('selected');
+            } else {
+                // Add (max 3)
+                if (selectedInterests.length >= 3) {
+                    document.getElementById('messageBox').className = 'message-box error';
+                    document.getElementById('messageBox').textContent = '⚠️ You can only select 3 interests.';
+                    setTimeout(() => {
+                        document.getElementById('messageBox').className = 'message-box';
+                        document.getElementById('messageBox').textContent = '';
+                    }, 2000);
+                    return;
+                }
+                selectedInterests.push(interest);
+                btn.classList.add('selected');
+            }
+            
+            updateUI();
+        }
+
+        // ============================================================
+        // UPDATE UI
+        // ============================================================
+        function updateUI() {
+            document.getElementById('selectedCount').textContent = selectedInterests.length;
+            const nextBtn = document.getElementById('nextBtn');
+            nextBtn.disabled = selectedInterests.length !== 3;
+            
+            // Update button text
+            if (selectedInterests.length === 3) {
+                nextBtn.textContent = '✅ Continue to Quiz →';
+            } else {
+                nextBtn.textContent = `Select ${3 - selectedInterests.length} more...`;
+            }
+        }
+
+        // ============================================================
+        // SAVE AND CONTINUE
+        // ============================================================
+        document.getElementById('nextBtn').addEventListener('click', async function() {
+            if (selectedInterests.length !== 3) return;
+            
+            const msgEl = document.getElementById('messageBox');
+            msgEl.className = 'message-box';
+            msgEl.textContent = '';
+            
+            // Get UID
+            if (!currentUid) {
+                const user = auth.currentUser;
+                if (user) {
+                    currentUid = user.uid;
+                } else {
+                    msgEl.className = 'message-box error';
+                    msgEl.textContent = '⚠️ Please login first.';
+                    return;
+                }
+            }
+            
+            try {
+                // Save selected interests to Firestore
+                await updateDoc(doc(db, 'students', currentUid), {
+                    selectedInterests: selectedInterests,
+                    phase: 'Phase 1 - Quiz Ready',
+                    updatedAt: serverTimestamp()
+                });
+                
+                console.log('✅ Selected interests saved:', selectedInterests);
+                
+                msgEl.className = 'message-box success';
+                msgEl.textContent = '✅ Interests saved! Taking you to the quiz...';
+                
+                setTimeout(() => {
+                    window.location.href = 'quiz.html?uid=' + currentUid;
+                }, 1000);
+                
+            } catch (error) {
+                console.error('Error saving interests:', error);
+                msgEl.className = 'message-box error';
+                msgEl.textContent = '❌ Error: ' + error.message;
+            }
+        });
+
+        // ============================================================
+        // INIT
+        // ============================================================
+        renderInterests();
+
+        // If no UID, try to get current user
+        if (!currentUid) {
+            auth.onAuthStateChanged(user => {
+                if (user) {
+                    currentUid = user.uid;
+                } else {
+                    document.getElementById('messageBox').className = 'message-box error';
+                    document.getElementById('messageBox').textContent = '⚠️ Please login to continue.';
+                }
+            });
+        }
+
+        console.log('✅ Interest selection loaded!');
+    </script>
+</body>
+</html>
