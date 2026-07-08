@@ -3,99 +3,142 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>AI Quiz - Futures Abroad</title>
+    <title>Interest Quiz - Futures Abroad</title>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
     <link rel="stylesheet" href="css/style.css" />
     <style>
         .quiz-container {
             max-width: 600px;
-            margin: 100px auto;
+            margin: 80px auto;
             padding: 40px;
             background: white;
-            border-radius: 30px;
+            border-radius: 24px;
             box-shadow: 0 20px 60px rgba(108,60,225,0.12);
-            min-height: 500px;
+            min-height: 400px;
         }
-        .quiz-container .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-        .quiz-container .header h1 {
-            font-size: 24px;
-            color: #2D1B4E;
-            margin: 0;
-        }
-        .quiz-container .sub {
+        .quiz-header {
             text-align: center;
-            color: #888;
             margin-bottom: 30px;
         }
-        .quiz-question {
-            background: #F8F4FF;
-            border-radius: 20px;
-            padding: 20px;
-            margin: 12px 0;
-            border-left: 5px solid #6C3CE1;
-        }
-        .quiz-question .q-text {
-            font-weight: 700;
-            font-size: 18px;
+        .quiz-header .logo {
+            font-size: 28px;
+            font-weight: 800;
             color: #2D1B4E;
-            margin-bottom: 15px;
         }
-        .quiz-options {
+        .quiz-header .logo span { color: #6C3CE1; }
+        .quiz-header h1 {
+            font-size: 24px;
+            color: #2D1B4E;
+            margin: 10px 0 5px;
+        }
+        .quiz-header p {
+            color: #888;
+            font-size: 15px;
+        }
+        .question-container {
+            margin-bottom: 25px;
+        }
+        .question-container .question-number {
+            font-size: 14px;
+            color: #6C3CE1;
+            font-weight: 700;
+        }
+        .question-container .question-text {
+            font-size: 20px;
+            font-weight: 700;
+            color: #2D1B4E;
+            margin: 10px 0 15px;
+        }
+        .options {
             display: flex;
             flex-direction: column;
             gap: 10px;
         }
-        .quiz-options label {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 12px 16px;
-            background: white;
-            border-radius: 14px;
+        .options button {
+            padding: 14px 20px;
             border: 2px solid #E8E0F0;
+            border-radius: 14px;
+            background: white;
+            font-size: 16px;
+            font-weight: 600;
             cursor: pointer;
             transition: all 0.3s;
-            font-weight: 500;
-            margin: 0;
-            font-size: 15px;
+            font-family: 'Quicksand', sans-serif;
+            text-align: left;
+            color: #2D1B4E;
         }
-        .quiz-options label:hover { 
-            border-color: #6C3CE1; 
-            background: #F0E6FF; 
+        .options button:hover {
+            border-color: #6C3CE1;
+            background: #f8f4ff;
             transform: translateX(5px);
         }
-        .quiz-options input[type="radio"] {
-            width: 18px;
-            height: 18px;
-            accent-color: #6C3CE1;
-            flex-shrink: 0;
-        }
-        .quiz-options label.selected {
+        .options button.selected {
             border-color: #6C3CE1;
-            background: #F0E6FF;
+            background: #6C3CE1;
+            color: white;
         }
         .quiz-progress {
-            background: #E8E0F0;
-            border-radius: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 2px solid #f0e6ff;
+        }
+        .progress-bar {
+            flex: 1;
             height: 8px;
-            margin: 15px 0;
+            background: #f0e6ff;
+            border-radius: 10px;
+            margin: 0 20px;
             overflow: hidden;
         }
-        .quiz-progress .bar {
+        .progress-bar .fill {
             height: 100%;
-            background: linear-gradient(90deg, #6C3CE1, #FFD93D);
-            border-radius: 20px;
+            background: #6C3CE1;
+            border-radius: 10px;
             transition: width 0.5s ease;
+            width: 0%;
         }
-        .btn-submit {
-            width: 100%;
-            padding: 16px;
+        .btn-next {
+            padding: 12px 30px;
+            background: #6C3CE1;
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-weight: 700;
+            cursor: pointer;
+            font-family: 'Quicksand', sans-serif;
+            font-size: 15px;
+            transition: all 0.3s;
+        }
+        .btn-next:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(108,60,225,0.3);
+        }
+        .btn-next:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+        .result-container {
+            text-align: center;
+            padding: 20px 0;
+        }
+        .result-container .interest-tag {
+            display: inline-block;
+            padding: 8px 20px;
+            background: #f0e6ff;
+            border-radius: 50px;
+            margin: 5px;
+            font-weight: 700;
+            color: #6C3CE1;
+            border: 2px solid #6C3CE1;
+        }
+        .btn-finish {
+            padding: 14px 40px;
             background: #6C3CE1;
             color: white;
             border: none;
@@ -103,487 +146,394 @@
             font-weight: 700;
             font-size: 17px;
             cursor: pointer;
-            margin-top: 20px;
-            transition: all 0.3s;
-            font-family: 'Quicksand', sans-serif;
-        }
-        .btn-submit:hover { 
-            transform: translateY(-3px); 
-            box-shadow: 0 8px 30px rgba(108,60,225,0.35); 
-        }
-        .btn-submit:disabled { 
-            opacity: 0.5; 
-            cursor: not-allowed; 
-            transform: none !important;
-        }
-        .btn-back {
-            padding: 10px 20px;
-            background: #6C3CE1;
-            color: white;
-            border: none;
-            border-radius: 50px;
-            font-weight: 700;
-            cursor: pointer;
             font-family: 'Quicksand', sans-serif;
             transition: all 0.3s;
-            font-size: 14px;
-        }
-        .btn-back:hover { 
-            transform: translateY(-2px); 
-            box-shadow: 0 4px 15px rgba(108,60,225,0.3); 
-        }
-        .btn-secondary-custom {
-            padding: 10px 20px;
-            background: #FFD93D;
-            color: #2D1B4E;
-            border: none;
-            border-radius: 50px;
-            font-weight: 700;
-            cursor: pointer;
-            font-family: 'Quicksand', sans-serif;
-            transition: all 0.3s;
-            font-size: 14px;
-        }
-        .btn-secondary-custom:hover { 
-            transform: translateY(-2px); 
-            box-shadow: 0 4px 15px rgba(255,217,61,0.4); 
-        }
-        .result-card {
-            text-align: center;
-            padding: 30px 20px;
-            background: linear-gradient(135deg, #F0E6FF, #FFF8F0);
-            border-radius: 24px;
-            margin: 15px 0;
-        }
-        .result-card .emoji { font-size: 72px; }
-        .result-card h3 { color: #2D1B4E; margin: 10px 0 5px; font-size: 24px; }
-        .result-card p { color: #555; font-size: 15px; max-width: 400px; margin: 0 auto; }
-        .interest-score {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin: 6px 0;
-        }
-        .interest-score .label { 
-            width: 80px; 
-            font-size: 13px; 
-            font-weight: 600;
-            color: #2D1B4E;
-        }
-        .interest-score .bar-bg {
-            flex: 1;
-            background: #E8E0F0;
-            border-radius: 10px;
-            height: 10px;
-            overflow: hidden;
-        }
-        .interest-score .bar-fill {
-            height: 100%;
-            border-radius: 10px;
-            transition: width 1s ease;
-        }
-        .interest-score .pct { 
-            font-weight: 700; 
-            font-size: 14px; 
-            min-width: 40px;
-            text-align: right;
-        }
-        .result-actions {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
             margin-top: 20px;
         }
-        .result-actions button {
-            flex: 1;
-            min-width: 140px;
-            padding: 14px;
-            border: none;
-            border-radius: 50px;
-            font-weight: 700;
-            font-size: 15px;
-            cursor: pointer;
-            font-family: 'Quicksand', sans-serif;
-            transition: all 0.3s;
-        }
-        .result-actions .btn-view-activities {
-            background: #6C3CE1;
-            color: white;
-        }
-        .result-actions .btn-view-activities:hover {
+        .btn-finish:hover {
             transform: translateY(-3px);
             box-shadow: 0 8px 30px rgba(108,60,225,0.35);
         }
-        .result-actions .btn-retake {
-            background: #FFD93D;
-            color: #2D1B4E;
-        }
-        .result-actions .btn-retake:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 30px rgba(255,217,61,0.4);
-        }
-        .q-counter {
-            text-align: right;
-            color: #888;
+        .message-box {
+            padding: 12px 16px;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            display: none;
             font-size: 14px;
-            font-weight: 600;
         }
-        @media (max-width: 600px) {
+        .message-box.error {
+            display: block;
+            background: #FFE8E8;
+            color: #C62828;
+            border-left: 4px solid #C62828;
+        }
+        @media (max-width: 500px) {
             .quiz-container {
-                margin: 60px 15px;
+                margin: 20px 15px;
                 padding: 25px 20px;
             }
-            .quiz-container .header h1 { font-size: 20px; }
-            .quiz-options label { font-size: 14px; padding: 10px 14px; }
-            .result-actions button { min-width: 100%; }
-            .interest-score .label { width: 60px; font-size: 11px; }
+            .question-container .question-text {
+                font-size: 17px;
+            }
+            .options button {
+                font-size: 14px;
+                padding: 12px 16px;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="quiz-container">
-        <div class="header">
-            <h1>🧠 AI Interest Quiz</h1>
-            <button class="btn-back" onclick="window.location.href='dashboard.html'">← Back</button>
+    <div class="quiz-container" id="quizContainer">
+        <div class="quiz-header">
+            <div class="logo">🧭 Futures <span>Abroad</span></div>
+            <h1>Interest Discovery Quiz</h1>
+            <p id="progressText">Question 1 of 8</p>
         </div>
-        <p class="sub">Discover your career interests</p>
         
-        <div id="quizContent">
-            <!-- Dynamic content loaded by JS -->
+        <div id="messageBox" class="message-box"></div>
+        
+        <!-- Questions Area -->
+        <div id="questionArea">
+            <div class="question-container">
+                <div class="question-number" id="questionNumber">Q1</div>
+                <div class="question-text" id="questionText">Loading question...</div>
+                <div class="options" id="optionsContainer"></div>
+            </div>
+            
+            <div class="quiz-progress">
+                <span id="questionCounter">1/8</span>
+                <div class="progress-bar">
+                    <div class="fill" id="progressFill"></div>
+                </div>
+                <button class="btn-next" id="nextBtn" disabled>Next →</button>
+            </div>
+        </div>
+        
+        <!-- Results Area (hidden initially) -->
+        <div id="resultArea" style="display:none;">
+            <div class="result-container">
+                <div style="font-size:48px;">🎉</div>
+                <h2 style="color:#2D1B4E; margin:10px 0;">Your Interest Profile</h2>
+                <p style="color:#666;">Based on your answers, we've identified these interests:</p>
+                <div id="interestTags" style="margin:20px 0;"></div>
+                <p style="color:#888; font-size:14px;">These tags will help us recommend the best activities for you.</p>
+                <button class="btn-finish" onclick="goToApp()">🚀 Go to Student App</button>
+            </div>
         </div>
     </div>
 
-    <script type="module">
-        import { auth, db, onAuthStateChanged, doc, getDoc, updateDoc } from './js/firebase-config.js';
+    <script>
+        // ============================================================
+        // FIREBASE CONFIG
+        // ============================================================
+        const firebaseConfig = {
+            apiKey: "AIzaSyBGJcOifwfWlGeFsFCXhdC67fyRTBOvfGQ",
+            authDomain: "futures-2.firebaseapp.com",
+            projectId: "futures-2",
+            storageBucket: "futures-2.firebasestorage.app",
+            messagingSenderId: "143399880838",
+            appId: "1:143399880838:web:c2232759fcbc1fa2ed2907"
+        };
 
-        // Auth check
-        onAuthStateChanged(auth, async (user) => {
-            if (!user) {
-                window.location.href = 'login.html';
-                return;
-            }
-            startQuiz();
-        });
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
 
-        // ========================================
-        // QUIZ QUESTIONS
-        // ========================================
+        // ============================================================
+        // QUIZ DATA (8 Questions as per spec)
+        // ============================================================
         const questions = [
-            { 
-                q: "Which activity excites you the most?", 
-                options: [
-                    "🔬 Doing science experiments", 
-                    "💻 Building websites or apps", 
-                    "🏥 Helping sick people get better", 
-                    "🎨 Creating art or designs", 
-                    "📊 Solving math problems"
-                ] 
+            {
+                id: 1,
+                text: "What subject do you look forward to most at school?",
+                options: ["Biology / Life Sciences", "Chemistry", "Physics", "Mathematics", "Computer Science", "History / Social Studies", "Art / Design", "Business / Economics"]
             },
-            { 
-                q: "What school subject do you enjoy most?", 
-                options: [
-                    "🧬 Biology", 
-                    "💻 Computer Science", 
-                    "🧪 Chemistry", 
-                    "🎭 Art & Design", 
-                    "📐 Mathematics"
-                ] 
+            {
+                id: 2,
+                text: "If you had a free weekend, what would you build or explore?",
+                options: ["A science experiment", "A new app or website", "A piece of art or music", "A volunteer project", "A business idea", "A research paper", "A sports tournament", "A community event"]
             },
-            { 
-                q: "Where do you see yourself working?", 
-                options: [
-                    "🏥 Hospital or clinic", 
-                    "💼 Office with computers", 
-                    "🔬 Research laboratory", 
-                    "🎨 Creative studio", 
-                    "🏛️ University or school"
-                ] 
+            {
+                id: 3,
+                text: "What kind of change do you want to see in the world?",
+                options: ["Curing diseases", "Protecting the environment", "Advancing technology", "Promoting social justice", "Improving education", "Creating art that inspires", "Building stronger communities", "Driving economic growth"]
             },
-            { 
-                q: "What kind of problems do you like solving?", 
-                options: [
-                    "🧬 Medical/health problems", 
-                    "💻 Technical/software problems", 
-                    "🔬 Scientific research problems", 
-                    "🎨 Creative/design problems", 
-                    "📊 Business/financial problems"
-                ] 
+            {
+                id: 4,
+                text: "What type of work environment excites you most?",
+                options: ["A lab or research facility", "A tech startup", "A creative studio", "A non-profit organization", "A corporate office", "A hospital or clinic", "A school or university", "A government agency"]
             },
-            { 
-                q: "Which skill would you most like to develop?", 
-                options: [
-                    "🩺 Medical skills", 
-                    "💻 Coding & programming", 
-                    "🔬 Research skills", 
-                    "🎨 Creative skills", 
-                    "📈 Business skills"
-                ] 
+            {
+                id: 5,
+                text: "Which skill do you want to develop most?",
+                options: ["Leadership", "Technical/Programming", "Creative/Design", "Communication", "Problem-solving", "Teamwork", "Analytical thinking", "Empathy and emotional intelligence"]
             },
-            { 
-                q: "What's your ideal work environment?", 
-                options: [
-                    "🏥 Fast-paced medical environment", 
-                    "💻 Tech startup or office", 
-                    "🔬 Quiet research lab", 
-                    "🎨 Creative studio or gallery", 
-                    "🏛️ Corporate office"
-                ] 
+            {
+                id: 6,
+                text: "What type of activity sounds most appealing to you?",
+                options: ["Scientific research", "Competing in a challenge", "Volunteering for a cause", "Building a project", "Leading a team", "Creating content", "Learning a new skill", "Networking with professionals"]
             },
-            { 
-                q: "Which career sounds most appealing?", 
-                options: [
-                    "🩺 Doctor or Nurse", 
-                    "💻 Software Engineer", 
-                    "🔬 Research Scientist", 
-                    "🎨 Graphic Designer", 
-                    "📊 Business Analyst"
-                ] 
+            {
+                id: 7,
+                text: "Where do you see yourself in 10 years?",
+                options: ["As a doctor or healthcare professional", "As an engineer or scientist", "As an entrepreneur or business leader", "As an artist or designer", "As a teacher or professor", "As a lawyer or policymaker", "As a tech innovator", "As a community leader"]
             },
-            { 
-                q: "What do you want your job to achieve?", 
-                options: [
-                    "🩺 Save lives and improve health", 
-                    "💻 Build innovative technology", 
-                    "🔬 Discover new knowledge", 
-                    "🎨 Create beautiful things", 
-                    "📊 Help businesses grow"
-                ] 
-            },
-            { 
-                q: "Which activity would you do for fun?", 
-                options: [
-                    "🧬 Learning about the human body", 
-                    "💻 Building a computer game", 
-                    "🔬 Doing science experiments", 
-                    "🎨 Painting or drawing", 
-                    "📊 Playing strategy games"
-                ] 
-            },
-            { 
-                q: "What's your biggest career goal?", 
-                options: [
-                    "🩺 Become a leading doctor", 
-                    "💻 Create world-changing software", 
-                    "🔬 Win a Nobel Prize in science", 
-                    "🎨 Become a famous artist", 
-                    "📊 Build a successful company"
-                ] 
+            {
+                id: 8,
+                text: "What's most important to you in a future career?",
+                options: ["Helping others", "Financial success", "Making a global impact", "Creative freedom", "Intellectual challenge", "Work-life balance", "Job security", "Continuous learning"]
             }
         ];
 
-        // ========================================
-        // QUIZ STATE
-        // ========================================
-        let currentQuestion = 0;
-        let answers = [];
-        let quizStarted = false;
-
-        // ========================================
-        // START QUIZ
-        // ========================================
-        window.startQuiz = function() {
-            currentQuestion = 0;
-            answers = [];
-            quizStarted = true;
-            renderQuestion();
+        // ============================================================
+        // MAP OPTIONS TO INTEREST TAGS
+        // ============================================================
+        const tagMapping = {
+            "Biology / Life Sciences": ["Medicine", "Biology"],
+            "Chemistry": ["Chemistry", "STEM"],
+            "Physics": ["Physics", "STEM"],
+            "Mathematics": ["Mathematics", "STEM"],
+            "Computer Science": ["Computer Science", "Technology"],
+            "History / Social Studies": ["Humanities", "Social Sciences"],
+            "Art / Design": ["Arts & Design"],
+            "Business / Economics": ["Business", "Finance"],
+            "A science experiment": ["STEM", "Research"],
+            "A new app or website": ["Technology", "App Development"],
+            "A piece of art or music": ["Arts & Design", "Music"],
+            "A volunteer project": ["Community Service", "Leadership"],
+            "A business idea": ["Entrepreneurship", "Business"],
+            "A research paper": ["Research", "STEM"],
+            "A sports tournament": ["Sports Science", "Leadership"],
+            "A community event": ["Community Service", "Social Enterprise"],
+            "Curing diseases": ["Medicine", "Public Health"],
+            "Protecting the environment": ["Environment", "Sustainability"],
+            "Advancing technology": ["Technology", "AI & Machine Learning"],
+            "Promoting social justice": ["Social Sciences", "International Relations"],
+            "Improving education": ["Education", "Social Enterprise"],
+            "Creating art that inspires": ["Arts & Design", "Visual Art"],
+            "Building stronger communities": ["Community Service", "Social Enterprise"],
+            "Driving economic growth": ["Economics", "Business"],
+            "A lab or research facility": ["STEM", "Research"],
+            "A tech startup": ["Technology", "Entrepreneurship"],
+            "A creative studio": ["Arts & Design", "Graphic Design"],
+            "A non-profit organization": ["Non-Profit", "Social Enterprise"],
+            "A corporate office": ["Business", "Management"],
+            "A hospital or clinic": ["Medicine", "Public Health"],
+            "A school or university": ["Education", "Social Sciences"],
+            "A government agency": ["Political Science", "International Relations"],
+            "Leadership": ["Leadership", "Management"],
+            "Technical/Programming": ["Technology", "Computer Science"],
+            "Creative/Design": ["Arts & Design", "Graphic Design"],
+            "Communication": ["Communications", "Marketing"],
+            "Problem-solving": ["STEM", "Engineering"],
+            "Teamwork": ["Leadership", "Management"],
+            "Analytical thinking": ["STEM", "Data Science"],
+            "Empathy and emotional intelligence": ["Psychology", "Social Sciences"],
+            "Scientific research": ["STEM", "Research"],
+            "Competing in a challenge": ["Competition", "STEM"],
+            "Volunteering for a cause": ["Community Service", "Leadership"],
+            "Building a project": ["Entrepreneurship", "Technology"],
+            "Leading a team": ["Leadership", "Management"],
+            "Creating content": ["Arts & Design", "Media"],
+            "Learning a new skill": ["Education", "Personal Development"],
+            "Networking with professionals": ["Business", "Leadership"],
+            "As a doctor or healthcare professional": ["Medicine", "Public Health"],
+            "As an engineer or scientist": ["STEM", "Engineering"],
+            "As an entrepreneur or business leader": ["Entrepreneurship", "Business"],
+            "As an artist or designer": ["Arts & Design", "Visual Art"],
+            "As a teacher or professor": ["Education", "Social Sciences"],
+            "As a lawyer or policymaker": ["Law", "Political Science"],
+            "As a tech innovator": ["Technology", "AI & Machine Learning"],
+            "As a community leader": ["Community Service", "Leadership"],
+            "Helping others": ["Community Service", "Medicine"],
+            "Financial success": ["Business", "Finance"],
+            "Making a global impact": ["International Relations", "Social Enterprise"],
+            "Creative freedom": ["Arts & Design", "Creative"],
+            "Intellectual challenge": ["STEM", "Research"],
+            "Work-life balance": ["Personal Development", "Health"],
+            "Job security": ["Business", "Finance"],
+            "Continuous learning": ["Education", "STEM"]
         };
 
-        // ========================================
+        // ============================================================
+        // QUIZ STATE
+        // ============================================================
+        let currentQuestion = 0;
+        let selectedAnswers = [];
+        let userInterests = [];
+        let currentUid = null;
+
+        // Get UID from URL
+        const urlParams = new URLSearchParams(window.location.search);
+        currentUid = urlParams.get('uid');
+
+        // ============================================================
         // RENDER QUESTION
-        // ========================================
+        // ============================================================
         function renderQuestion() {
-            const container = document.getElementById('quizContent');
-            
             if (currentQuestion >= questions.length) {
                 showResults();
                 return;
             }
 
             const q = questions[currentQuestion];
+            document.getElementById('questionNumber').textContent = `Q${q.id}`;
+            document.getElementById('questionText').textContent = q.text;
+            document.getElementById('questionCounter').textContent = `${currentQuestion + 1}/${questions.length}`;
+            document.getElementById('progressText').textContent = `Question ${currentQuestion + 1} of ${questions.length}`;
+            
+            // Update progress bar
             const progress = ((currentQuestion) / questions.length) * 100;
-            
-            container.innerHTML = `
-                <div class="quiz-progress">
-                    <div class="bar" style="width: ${progress}%"></div>
-                </div>
-                <div class="q-counter">${currentQuestion + 1} of ${questions.length}</div>
-                <div class="quiz-question">
-                    <div class="q-text">${q.q}</div>
-                    <div class="quiz-options" id="optionsContainer">
-                        ${q.options.map((opt, idx) => `
-                            <label class="option-item" data-idx="${idx}">
-                                <input type="radio" name="quiz" value="${idx}">
-                                ${opt}
-                            </label>
-                        `).join('')}
-                    </div>
-                </div>
-                <button class="btn-submit" id="nextBtn" disabled onclick="nextQuestion()">
-                    ${currentQuestion === questions.length - 1 ? '🎉 See Results' : 'Next Question →'}
-                </button>
-            `;
+            document.getElementById('progressFill').style.width = progress + '%';
 
-            // Add click event to labels for better UX
-            document.querySelectorAll('.option-item').forEach(label => {
-                label.addEventListener('click', function() {
-                    const radio = this.querySelector('input[type="radio"]');
-                    radio.checked = true;
-                    document.getElementById('nextBtn').disabled = false;
-                    // Highlight selected
-                    document.querySelectorAll('.option-item').forEach(l => l.classList.remove('selected'));
-                    this.classList.add('selected');
+            // Render options
+            const optionsContainer = document.getElementById('optionsContainer');
+            optionsContainer.innerHTML = '';
+            
+            q.options.forEach((option, index) => {
+                const btn = document.createElement('button');
+                btn.textContent = option;
+                btn.dataset.index = index;
+                btn.onclick = function() {
+                    selectOption(index);
+                };
+                optionsContainer.appendChild(btn);
+            });
+
+            // Reset next button
+            const nextBtn = document.getElementById('nextBtn');
+            nextBtn.disabled = true;
+            nextBtn.textContent = currentQuestion === questions.length - 1 ? 'Finish →' : 'Next →';
+            
+            // Clear any selected state
+            document.querySelectorAll('.options button').forEach(btn => {
+                btn.classList.remove('selected');
+            });
+            
+            // Restore selected answer if exists
+            if (selectedAnswers[currentQuestion] !== undefined) {
+                const btns = document.querySelectorAll('.options button');
+                btns.forEach((btn, idx) => {
+                    if (idx === selectedAnswers[currentQuestion]) {
+                        btn.classList.add('selected');
+                    }
                 });
-            });
+                nextBtn.disabled = false;
+            }
         }
 
-        // ========================================
+        // ============================================================
+        // SELECT OPTION
+        // ============================================================
+        function selectOption(index) {
+            selectedAnswers[currentQuestion] = index;
+            
+            // Update UI
+            document.querySelectorAll('.options button').forEach((btn, idx) => {
+                btn.classList.toggle('selected', idx === index);
+            });
+            
+            document.getElementById('nextBtn').disabled = false;
+        }
+
+        // ============================================================
         // NEXT QUESTION
-        // ========================================
-        window.nextQuestion = function() {
-            const selected = document.querySelector('input[name="quiz"]:checked');
-            if (!selected) return;
+        // ============================================================
+        document.getElementById('nextBtn').addEventListener('click', function() {
+            if (this.disabled) return;
             
-            answers.push(parseInt(selected.value));
-            currentQuestion++;
-            renderQuestion();
-        };
-
-        // ========================================
-        // SHOW RESULTS
-        // ========================================
-        function showResults() {
-            const container = document.getElementById('quizContent');
+            // Save selected answer's tags
+            const q = questions[currentQuestion];
+            const selectedIndex = selectedAnswers[currentQuestion];
+            const selectedText = q.options[selectedIndex];
             
-            // Calculate scores
-            const scores = { medicine: 0, engineering: 0, science: 0, arts: 0, business: 0 };
-            const careerNames = { 
-                medicine: '🩺 Medicine & Healthcare', 
-                engineering: '💻 Computer Science & Engineering', 
-                science: '🔬 Science & Research', 
-                arts: '🎨 Arts & Design', 
-                business: '📊 Business & Finance' 
-            };
-            const careerEmojis = { 
-                medicine: '🩺', 
-                engineering: '💻', 
-                science: '🔬', 
-                arts: '🎨', 
-                business: '📊' 
-            };
-            const careerColors = {
-                medicine: '#E83A6B',
-                engineering: '#2D7DD2',
-                science: '#6C3CE1',
-                arts: '#FF6B35',
-                business: '#FFD93D'
-            };
-            const careerDescriptions = {
-                medicine: 'You are passionate about helping others. Consider: Medicine, Nursing, Dentistry, Pharmacy, or Public Health.',
-                engineering: 'You love technology. Consider: Software Engineering, Web Development, AI, Robotics, or Data Science.',
-                science: 'You are curious about the world. Consider: Research Science, Chemistry, Physics, or Biotechnology.',
-                arts: 'You have a creative vision. Consider: Graphic Design, Animation, Interior Design, Architecture, or Film.',
-                business: 'You have strong analytical skills. Consider: Finance, Marketing, Management, or Consulting.'
-            };
-
-            // Score each answer
-            answers.forEach((ans, idx) => {
-                const q = questions[idx];
-                const opt = q.options[ans];
-                if (!opt) return;
-                
-                if (opt.includes('🩺') || opt.includes('doctor') || opt.includes('medical') || 
-                    opt.includes('hospital') || opt.includes('nurse') || opt.includes('health')) {
-                    scores.medicine++;
-                } else if (opt.includes('💻') || opt.includes('code') || opt.includes('programming') || 
-                    opt.includes('software') || opt.includes('website') || opt.includes('app') || opt.includes('tech')) {
-                    scores.engineering++;
-                } else if (opt.includes('🔬') || opt.includes('research') || opt.includes('science') || 
-                    opt.includes('experiment') || opt.includes('laboratory')) {
-                    scores.science++;
-                } else if (opt.includes('🎨') || opt.includes('art') || opt.includes('design') || 
-                    opt.includes('creative') || opt.includes('paint') || opt.includes('draw') || opt.includes('studio')) {
-                    scores.arts++;
-                } else if (opt.includes('📊') || opt.includes('business') || opt.includes('financial') || 
-                    opt.includes('strategy') || opt.includes('company') || opt.includes('analyst')) {
-                    scores.business++;
+            // Get tags for this answer
+            const tags = tagMapping[selectedText] || [];
+            tags.forEach(tag => {
+                if (!userInterests.includes(tag)) {
+                    userInterests.push(tag);
                 }
             });
+            
+            currentQuestion++;
+            
+            if (currentQuestion >= questions.length) {
+                showResults();
+            } else {
+                renderQuestion();
+            }
+        });
 
-            // Find top career
-            let topCareer = '';
-            let topScore = 0;
-            for (const [key, val] of Object.entries(scores)) {
-                if (val > topScore) {
-                    topScore = val;
-                    topCareer = key;
+        // ============================================================
+        // SHOW RESULTS
+        // ============================================================
+        async function showResults() {
+            // Hide question area, show results
+            document.getElementById('questionArea').style.display = 'none';
+            document.getElementById('resultArea').style.display = 'block';
+            document.getElementById('progressText').textContent = 'Quiz Complete! 🎉';
+            
+            // Count frequency of each interest
+            const interestCount = {};
+            userInterests.forEach(tag => {
+                interestCount[tag] = (interestCount[tag] || 0) + 1;
+            });
+            
+            // Sort by frequency and get top 4
+            const sortedInterests = Object.entries(interestCount)
+                .sort((a, b) => b[1] - a[1])
+                .slice(0, 4)
+                .map(item => item[0]);
+            
+            // Display tags
+            const tagsContainer = document.getElementById('interestTags');
+            tagsContainer.innerHTML = '';
+            sortedInterests.forEach(tag => {
+                const span = document.createElement('span');
+                span.className = 'interest-tag';
+                span.textContent = tag;
+                tagsContainer.appendChild(span);
+            });
+            
+            // Save to Firestore if we have UID
+            if (currentUid) {
+                try {
+                    await db.collection('students').doc(currentUid).update({
+                        interests: sortedInterests,
+                        profileCompleted: true,
+                        quizCompleted: true,
+                        quizCompletedAt: firebase.firestore.FieldValue.serverTimestamp()
+                    });
+                    console.log('✅ Quiz results saved!');
+                } catch (error) {
+                    console.error('Error saving quiz:', error);
                 }
             }
-
-            // If tie, pick first
-            if (!topCareer) topCareer = 'engineering';
-
-            // Save interests to Firestore
-            const interests = Object.keys(scores).filter(key => scores[key] > 0);
-            const user = auth.currentUser;
-            if (user) {
-                updateDoc(doc(db, 'students', user.uid), {
-                    interests: interests,
-                    profileCompleted: true,
-                    onboardingPhase: 2,
-                    profileStrength: 20
-                }).catch(console.error);
-            }
-
-            // Store in localStorage for activity matching
-            localStorage.setItem('quizScores', JSON.stringify(scores));
-            localStorage.setItem('interests', JSON.stringify(interests));
-
-            // Build results HTML
-            let html = `
-                <div class="result-card">
-                    <div class="emoji">${careerEmojis[topCareer] || '🌟'}</div>
-                    <h3>${careerNames[topCareer] || 'Career'}</h3>
-                    <p>${careerDescriptions[topCareer] || 'Explore your career options!'}</p>
-                </div>
-                <div style="background: #F8F4FF; border-radius: 16px; padding: 16px; margin: 15px 0;">
-                    <h4 style="color: #6C3CE1; margin-bottom: 12px;">📊 Your Interest Scores</h4>
-                    ${Object.entries(scores).map(([key, val]) => {
-                        const pct = Math.round((val / questions.length) * 100);
-                        const color = pct > 50 ? careerColors[key] : '#FFD93D';
-                        return `
-                            <div class="interest-score">
-                                <span class="label">${careerNames[key]}</span>
-                                <div class="bar-bg">
-                                    <div class="bar-fill" style="width: ${pct}%; background: ${color};"></div>
-                                </div>
-                                <span class="pct">${pct}%</span>
-                            </div>
-                        `;
-                    }).join('')}
-                </div>
-                <div style="background: #E8F5E9; border-radius: 12px; padding: 12px; text-align: center; margin: 10px 0;">
-                    <span style="color: #2E7D32; font-weight: 600;">✅ Quiz completed! Your interests have been saved.</span>
-                </div>
-                <div class="result-actions">
-                    <button class="btn-view-activities" onclick="window.location.href='activities.html'">🎯 View Activities</button>
-                    <button class="btn-retake" onclick="startQuiz()">🔄 Retake Quiz</button>
-                </div>
-                <div style="text-align: center; margin-top: 15px;">
-                    <button class="btn-back" onclick="window.location.href='dashboard.html'" style="font-size: 14px; padding: 8px 20px;">← Back to Dashboard</button>
-                </div>
-            `;
-
-            container.innerHTML = html;
         }
 
-        // Make functions globally available
-        window.startQuiz = startQuiz;
-        window.nextQuestion = nextQuestion;
+        // ============================================================
+        // GO TO APP
+        // ============================================================
+        function goToApp() {
+            window.location.href = 'student-app.html';
+        }
 
-        // Start quiz immediately
-        startQuiz();
+        // ============================================================
+        // INIT QUIZ
+        // ============================================================
+        renderQuestion();
 
-        console.log('🧠 Quiz loaded successfully!');
+        // If no UID, try to get current user
+        if (!currentUid) {
+            auth.onAuthStateChanged(user => {
+                if (user) {
+                    currentUid = user.uid;
+                } else {
+                    document.getElementById('messageBox').className = 'message-box error';
+                    document.getElementById('messageBox').textContent = '⚠️ Please login to save your quiz results.';
+                }
+            });
+        }
     </script>
 </body>
 </html>
