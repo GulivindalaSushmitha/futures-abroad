@@ -4,13 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Enrollment - Futures Abroad</title>
-    <link rel="stylesheet" href="css/enrollment.css" />
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
             background: #f1f5f9;
             color: #1e293b;
+            line-height: 1.6;
         }
         .app-container {
             max-width: 900px;
@@ -36,7 +40,9 @@
             cursor: pointer;
             padding: 0 8px;
             min-width: 44px;
+            transition: all 0.3s;
         }
+        .phase-item:hover .phase-circle { transform: scale(1.1); }
         .phase-circle {
             width: 34px;
             height: 34px;
@@ -52,12 +58,14 @@
         }
         .phase-circle.active { background: #2563eb; color: white; }
         .phase-circle.completed { background: #22c55e; color: white; }
+        .phase-circle.current { background: #1e40af; color: white; box-shadow: 0 0 0 4px rgba(37,99,235,0.25); }
         .phase-label {
             font-size: 9px;
             color: #94a3b8;
             margin-top: 4px;
             text-transform: uppercase;
             letter-spacing: 0.3px;
+            font-weight: 500;
         }
         .phase-label.active { color: #1e293b; font-weight: 600; }
         .phase-connector {
@@ -65,6 +73,7 @@
             height: 2px;
             background: #e2e8f0;
             flex-shrink: 0;
+            transition: all 0.5s;
         }
         .phase-connector.active { background: #2563eb; }
         .enrollment-card {
@@ -77,6 +86,7 @@
             font-size: 28px;
             color: #1e293b;
             margin: 0 0 5px 0;
+            font-weight: 700;
         }
         .enrollment-card .subtitle {
             color: #64748b;
@@ -124,7 +134,7 @@
             transition: all 0.3s;
             background: white;
         }
-        .program-card:hover { border-color: #2563eb; box-shadow: 0 4px 16px rgba(37,99,235,0.1); }
+        .program-card:hover { border-color: #2563eb; box-shadow: 0 4px 16px rgba(37,99,235,0.1); transform: translateY(-2px); }
         .program-card.selected { border-color: #2563eb; background: #eff6ff; }
         .program-card .price { font-size: 22px; font-weight: 700; color: #2563eb; margin-top: 8px; }
         .form-group { margin: 15px 0; }
@@ -135,6 +145,7 @@
             border: 1px solid #cbd5e1;
             border-radius: 6px;
             font-size: 14px;
+            transition: all 0.3s;
         }
         .form-group input:focus, .form-group select:focus {
             outline: none;
@@ -150,10 +161,10 @@
             font-size: 15px;
             font-weight: 500;
             cursor: pointer;
-            transition: background 0.3s;
+            transition: all 0.3s;
         }
-        .btn-primary:hover { background: #1d4ed8; }
-        .btn-primary:disabled { background: #94a3b8; cursor: not-allowed; }
+        .btn-primary:hover { background: #1d4ed8; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(37,99,235,0.3); }
+        .btn-primary:disabled { background: #94a3b8; cursor: not-allowed; transform: none; box-shadow: none; }
         .btn-secondary {
             padding: 10px 24px;
             background: transparent;
@@ -166,7 +177,7 @@
             margin-right: 10px;
             transition: all 0.3s;
         }
-        .btn-secondary:hover { background: #eff6ff; }
+        .btn-secondary:hover { background: #eff6ff; transform: translateY(-1px); }
         .summary-box { background: #f8fafc; padding: 20px; border-radius: 8px; margin: 15px 0; border: 1px solid #e2e8f0; }
         .summary-box p { margin: 6px 0; }
         .profile-details p { margin: 6px 0; font-size: 14px; }
@@ -195,7 +206,7 @@
             border-radius: 10px;
             border: 1px solid #e2e8f0;
         }
-        .next-steps h3 { margin-bottom: 12px; font-size: 16px; }
+        .next-steps h3 { margin-bottom: 12px; font-size: 16px; color: #1e293b; }
         .next-steps li { padding: 8px 0; border-bottom: 1px solid #e2e8f0; color: #475569; font-size: 14px; list-style: none; }
         .next-steps li:last-child { border-bottom: none; }
         .next-steps li::before { content: '✓ '; color: #22c55e; font-weight: 700; }
@@ -207,21 +218,26 @@
             .phase-item { padding: 0 4px; min-width: 36px; }
             .phase-circle { width: 28px; height: 28px; font-size: 11px; }
             .phase-connector { width: 15px; }
+            .phase-label { font-size: 7px; }
             .step-line { width: 20px; }
             .step-dot { width: 28px; height: 28px; font-size: 12px; }
+        }
+        @media (max-width: 480px) {
+            .phase-item { padding: 0 3px; min-width: 30px; }
+            .phase-circle { width: 24px; height: 24px; font-size: 10px; }
+            .phase-connector { width: 10px; }
+            .enrollment-card h1 { font-size: 19px; }
         }
     </style>
 </head>
 <body>
     <div class="app-container">
-        <!-- Phase Navigation -->
         <div id="phase-navigation" class="phase-nav"></div>
 
         <div class="enrollment-card" id="phase6-container">
             <h1>Phase 6: Futures Abroad Enrollment</h1>
             <p class="subtitle">Complete your enrollment to get personalized guidance from our counselors.</p>
 
-            <!-- Step Progress -->
             <div class="step-progress">
                 <span class="step-dot active">1</span>
                 <span class="step-line"></span>
@@ -233,17 +249,17 @@
             </div>
             <p class="step-counter" id="step-counter">Step 1 of 4</p>
 
-            <!-- Step 1: Profile Review -->
+            <!-- Step 1 -->
             <div id="step-1" class="handoff-step">
-                <h2 style="font-size: 20px; margin-bottom: 10px;">Step 1: Review Your Profile</h2>
+                <h2 style="font-size: 20px; margin-bottom: 10px; color: #1e293b;">Step 1: Review Your Profile</h2>
                 <p style="color: #64748b; margin-bottom: 15px;">Please review your profile before sharing with counselors.</p>
                 <div id="profile-preview" style="background: #f8fafc; padding: 20px; border-radius: 8px; margin: 15px 0; border: 1px solid #e2e8f0;"></div>
                 <button id="next-step-btn" class="btn-primary">Next →</button>
             </div>
 
-            <!-- Step 2: Program Selection -->
+            <!-- Step 2 -->
             <div id="step-2" class="handoff-step" style="display:none;">
-                <h2 style="font-size: 20px; margin-bottom: 10px;">Step 2: Choose Your Program</h2>
+                <h2 style="font-size: 20px; margin-bottom: 10px; color: #1e293b;">Step 2: Choose Your Program</h2>
                 <div class="program-options">
                     <div class="program-card" data-program="grade10-12">
                         <h3 style="margin: 0 0 6px 0;">📚 Grade 10-12 Track</h3>
@@ -262,9 +278,9 @@
                 </div>
             </div>
 
-            <!-- Step 3: Intake Form -->
+            <!-- Step 3 -->
             <div id="step-3" class="handoff-step" style="display:none;">
-                <h2 style="font-size: 20px; margin-bottom: 10px;">Step 3: Complete Intake Form</h2>
+                <h2 style="font-size: 20px; margin-bottom: 10px; color: #1e293b;">Step 3: Complete Intake Form</h2>
                 <div class="form-group">
                     <label for="parent-email">👨‍👩‍👦 Parent/Guardian Email:</label>
                     <input type="email" id="parent-email" placeholder="parent@email.com" />
@@ -287,9 +303,9 @@
                 </div>
             </div>
 
-            <!-- Step 4: Confirmation -->
+            <!-- Step 4 -->
             <div id="step-4" class="handoff-step" style="display:none;">
-                <h2 style="font-size: 20px; margin-bottom: 10px;">Step 4: Confirm Enrollment</h2>
+                <h2 style="font-size: 20px; margin-bottom: 10px; color: #1e293b;">Step 4: Confirm Enrollment</h2>
                 <p style="color: #64748b; margin-bottom: 15px;">Review your selections and confirm enrollment.</p>
                 <div class="summary-box">
                     <p><strong>Program:</strong> <span id="summary-program">Not selected</span></p>
@@ -316,7 +332,6 @@
             step: 1
         };
 
-        // Phase Navigation
         function getCurrentPhase() {
             try {
                 const student = JSON.parse(localStorage.getItem('studentProfile') || '{}');
@@ -348,7 +363,8 @@
             phases.forEach((phase, index) => {
                 const isActive = phase.num <= currentPhase;
                 const isCompleted = phase.num < currentPhase;
-                let circleClass = 'phase-circle' + (isActive ? ' active' : '') + (isCompleted ? ' completed' : '');
+                const isCurrent = phase.num === currentPhase;
+                let circleClass = 'phase-circle' + (isActive ? ' active' : '') + (isCompleted ? ' completed' : '') + (isCurrent ? ' current' : '');
                 let labelClass = 'phase-label' + (isActive ? ' active' : '');
                 let circleContent = isCompleted ? '✓' : phase.num;
                 html += `
