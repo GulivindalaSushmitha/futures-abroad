@@ -178,6 +178,25 @@
             box-shadow: 0 4px 20px rgba(34,197,94,0.35);
         }
 
+        .btn-phase5 {
+            background: #6C3CE1;
+            color: white;
+            border: none;
+            padding: 14px 40px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 18px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: 'Quicksand', Arial, sans-serif;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .btn-phase5:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(108,60,225,0.35);
+        }
+
         .button-group {
             display: flex;
             gap: 15px;
@@ -285,13 +304,18 @@
                 </div>
             </div>
 
+            <!-- ============================================================
+            SUCCESS MESSAGE - UPDATED WITH PHASE 5 NAVIGATION
+            ============================================================ -->
             <div class="success-message" id="successMessage">
                 <div class="icon">🎉</div>
                 <h3>Reflection Saved Successfully!</h3>
                 <p>Your portfolio has been updated. This reflection will help you write stronger university applications.</p>
                 <div style="margin-top:20px;display:flex;gap:15px;flex-wrap:wrap;justify-content:center;">
                     <a href="portfolio.html" class="btn-primary" style="padding:12px 30px;width:auto;">📂 View Portfolio</a>
-                    <a href="university-shortlist.html" class="btn-secondary" style="padding:12px 30px;">🏛️ Phase 5: Universities</a>
+                    <a href="university-shortlist.html" class="btn-phase5" style="padding:12px 30px;width:auto;">
+                        🏛️ Phase 5: Universities →
+                    </a>
                 </div>
             </div>
         </div>
@@ -301,6 +325,7 @@
             <a href="dashboard.html" class="btn-secondary">📊 Dashboard</a>
             <a href="portfolio.html" class="btn-secondary">📂 Portfolio</a>
             <a href="university-shortlist.html" class="btn-secondary">🏛️ University Shortlist</a>
+            <a href="futures-abroad-enroll.html" class="btn-secondary" style="background:linear-gradient(135deg,#00b09b,#96c93d);color:white;border:none;">🚀 Enroll Now</a>
         </div>
 
     </div>
@@ -387,16 +412,15 @@
 
                 if (snapshot.empty) {
                     // Create new portfolio entry
-                    await import('./firebase-config.js').then(async ({ addDoc, serverTimestamp }) => {
-                        await addDoc(portfolioRef, {
-                            userId: user.uid,
-                            activityId: activityId,
-                            activityName: activityName,
-                            dateCompleted: new Date().toISOString().split('T')[0],
-                            reflectionResponses: answers,
-                            essayPotentialFlag: checkEssayPotential(answers),
-                            createdAt: serverTimestamp()
-                        });
+                    const { addDoc, serverTimestamp } = await import('./js/firebase-config.js');
+                    await addDoc(portfolioRef, {
+                        userId: user.uid,
+                        activityId: activityId,
+                        activityName: activityName,
+                        dateCompleted: new Date().toISOString().split('T')[0],
+                        reflectionResponses: answers,
+                        essayPotentialFlag: checkEssayPotential(answers),
+                        createdAt: serverTimestamp()
                     });
                 } else {
                     // Update existing portfolio entry
@@ -420,6 +444,9 @@
 
                 // Update profile strength
                 await updateProfileStrength(user.uid);
+
+                // Mark Phase 4 as completed in localStorage
+                localStorage.setItem('phase4Completed', 'true');
 
             } catch (error) {
                 console.error('Error saving reflection:', error);
@@ -460,11 +487,9 @@
                 const reflectionScore = Math.min(hasReflections.length / 3, 1) * 15;
                 score += reflectionScore;
                 
-                // Check for essay potential
                 const hasEssayPotential = activities.some(a => a.essayPotentialFlag);
                 if (hasEssayPotential) score += 15;
                 
-                // Check for leadership
                 const hasLeadership = activities.some(a => 
                     a.skills && a.skills.some(s => 
                         ['leadership', 'initiative', 'management', 'coordinator', 'organizer'].includes(s.toLowerCase())
@@ -474,7 +499,6 @@
                 
                 const finalScore = Math.min(Math.round(score), 100);
                 
-                // Update user profile with new strength
                 const userRef = doc(db, COLLECTIONS.users, userId);
                 await updateDoc(userRef, {
                     profileStrength: finalScore
@@ -487,13 +511,26 @@
             }
         }
 
-        // Skip reflection
+        // Skip reflection - UPDATED to redirect to Phase 5
         function skipReflection() {
             if (confirm('Are you sure you want to skip the reflection? You can always add it later from your portfolio.')) {
                 reflectionForm.style.display = 'none';
                 successMessage.style.display = 'block';
                 successMessage.querySelector('h3').textContent = '⏭️ Reflection Skipped';
                 successMessage.querySelector('p').textContent = 'You can add your reflection later from your portfolio page.';
+                
+                // Add Phase 5 button to skipped state
+                const existingButtons = successMessage.querySelector('div[style*="margin-top:20px"]');
+                if (existingButtons) {
+                    existingButtons.innerHTML = `
+                        <a href="portfolio.html" class="btn-primary" style="padding:12px 30px;width:auto;">📂 View Portfolio</a>
+                        <a href="university-shortlist.html" class="btn-phase5" style="padding:12px 30px;width:auto;">
+                            🏛️ Continue to Phase 5 →
+                        </a>
+                    `;
+                }
+                
+                localStorage.setItem('phase4Completed', 'true');
             }
         }
 
@@ -520,6 +557,8 @@
             }
             await loadActivity();
         });
+
+        console.log('✅ post-activity.html loaded with Phase 5 navigation!');
     </script>
 
 </body>
