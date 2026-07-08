@@ -214,7 +214,7 @@
                 <p style="color:#666;">Based on your answers, we've identified these interests:</p>
                 <div id="interestTags" style="margin:20px 0;"></div>
                 <p style="color:#888; font-size:14px;">These tags will help us recommend the best activities for you.</p>
-                <button class="btn-finish" id="goToAppBtn">🚀 Go to Student App</button>
+                <button class="btn-finish" id="goToAppBtn">🚀 Go to Activities (Phase 2)</button>
             </div>
         </div>
     </div>
@@ -494,7 +494,8 @@
                         interests: sortedInterests,
                         profileCompleted: true,
                         quizCompleted: true,
-                        quizCompletedAt: serverTimestamp()
+                        quizCompletedAt: serverTimestamp(),
+                        phase: 'Phase 2'
                     });
                     console.log('✅ Quiz results saved!');
                 } catch (error) {
@@ -510,7 +511,8 @@
                                 interests: sortedInterests,
                                 profileCompleted: true,
                                 quizCompleted: true,
-                                quizCompletedAt: serverTimestamp()
+                                quizCompletedAt: serverTimestamp(),
+                                phase: 'Phase 2'
                             });
                             console.log('✅ Quiz results saved!');
                         } catch (error) {
@@ -522,10 +524,11 @@
         }
 
         // ============================================================
-        // GO TO APP
+        // GO TO PHASE 2 - ACTIVITIES (CHANGED FROM student-app.html)
         // ============================================================
         document.getElementById('goToAppBtn').addEventListener('click', function() {
-            window.location.href = 'student-app.html';
+            // Redirect to Phase 2: Activity Recommendations
+            window.location.href = 'activities.html';
         });
 
         // ============================================================
