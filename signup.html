@@ -4,80 +4,37 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Sign Up - Futures Abroad</title>
-    <!-- ===== FIREBASE SDKs - LOAD FIRST ===== -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
     <link rel="stylesheet" href="css/style.css" />
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        body {
-            font-family: 'Quicksand', sans-serif;
-            background: linear-gradient(135deg, #f5f0ff 0%, #e8e0f5 100%);
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-        }
         .auth-container {
-            max-width: 520px;
-            width: 100%;
-            margin: 0 auto;
+            max-width: 420px;
+            margin: 60px auto;
             padding: 40px;
             background: white;
-            border-radius: 28px;
-            box-shadow: 0 20px 60px rgba(108,60,225,0.15);
+            border-radius: 24px;
+            box-shadow: 0 20px 60px rgba(108,60,225,0.12);
         }
         .auth-header {
             text-align: center;
             margin-bottom: 30px;
         }
-        .auth-logo {
+        .auth-header .logo {
             font-size: 28px;
             font-weight: 800;
             color: #2D1B4E;
         }
-        .auth-logo span { color: #6C3CE1; }
+        .auth-header .logo span { color: #6C3CE1; }
         .auth-header h1 {
-            font-size: 26px;
+            font-size: 24px;
             color: #2D1B4E;
-            margin: 8px 0 4px;
+            margin: 10px 0 5px;
         }
         .auth-header p {
             color: #888;
             font-size: 15px;
-        }
-        .form-step {
-            display: none;
-            animation: fadeIn 0.4s ease;
-        }
-        .form-step.active {
-            display: block;
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        .step-indicator {
-            font-size: 13px;
-            font-weight: 600;
-            color: #6C3CE1;
-            margin-bottom: 8px;
-        }
-        .form-step h2 {
-            font-size: 20px;
-            color: #2D1B4E;
-            margin-bottom: 16px;
-        }
-        .step-description {
-            color: #666;
-            font-size: 14px;
-            margin-bottom: 16px;
         }
         .form-group {
             margin-bottom: 16px;
@@ -107,117 +64,28 @@
             background: white;
             box-shadow: 0 0 0 4px rgba(108,60,225,0.08);
         }
-        .form-group small {
-            color: #888;
-            font-size: 12px;
-            display: block;
-            margin-top: 4px;
-        }
-        .grade-selector {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-        .grade-btn {
-            padding: 10px 24px;
-            border: 2px solid #E8E0F0;
-            border-radius: 50px;
-            background: white;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-            font-family: 'Quicksand', sans-serif;
-            font-size: 14px;
-            flex: 1;
-            min-width: 80px;
-        }
-        .grade-btn:hover {
-            border-color: #6C3CE1;
-            background: #f5f0ff;
-        }
-        .grade-btn.active {
-            background: #6C3CE1;
-            color: white;
-            border-color: #6C3CE1;
-        }
-        .interest-tags {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin: 12px 0;
-        }
-        .interest-btn {
-            padding: 10px 20px;
-            border: 2px solid #E8E0F0;
-            border-radius: 50px;
-            background: white;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-            font-family: 'Quicksand', sans-serif;
-            font-size: 14px;
-        }
-        .interest-btn:hover {
-            border-color: #6C3CE1;
-            background: #f5f0ff;
-        }
-        .interest-btn.selected {
-            background: #6C3CE1;
-            color: white;
-            border-color: #6C3CE1;
-        }
-        .form-navigation {
-            display: flex;
-            gap: 12px;
-            margin-top: 20px;
-        }
-        .btn-prev {
-            padding: 12px 24px;
-            background: transparent;
-            border: 2px solid #E8E0F0;
-            border-radius: 50px;
-            font-weight: 600;
-            cursor: pointer;
-            font-family: 'Quicksand', sans-serif;
-            transition: all 0.3s;
-            flex: 1;
-        }
-        .btn-prev:hover {
-            border-color: #6C3CE1;
-            background: #f5f0ff;
-        }
-        .btn-next {
-            padding: 12px 24px;
-            background: #6C3CE1;
-            color: white;
-            border: none;
-            border-radius: 50px;
-            font-weight: 700;
-            cursor: pointer;
-            font-family: 'Quicksand', sans-serif;
-            transition: all 0.3s;
-            flex: 1;
-        }
-        .btn-next:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(108,60,225,0.3);
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
         }
         .btn-submit {
-            padding: 12px 24px;
-            background: linear-gradient(135deg, #6C3CE1, #a855f7);
+            width: 100%;
+            padding: 16px;
+            background: #6C3CE1;
             color: white;
             border: none;
             border-radius: 50px;
             font-weight: 700;
-            font-size: 16px;
+            font-size: 17px;
             cursor: pointer;
-            font-family: 'Quicksand', sans-serif;
             transition: all 0.3s;
-            flex: 1;
+            font-family: 'Quicksand', sans-serif;
+            margin-top: 5px;
         }
         .btn-submit:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 20px rgba(108,60,225,0.35);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(108,60,225,0.35);
         }
         .auth-footer {
             text-align: center;
@@ -250,147 +118,86 @@
             color: #2E7D32;
             border-left: 4px solid #2E7D32;
         }
-        .message-box.error a {
-            color: #6C3CE1;
-            font-weight: 700;
-        }
-        .btn-app-redirect {
-            display: inline-block;
-            margin-top: 10px;
-            padding: 10px 24px;
-            background: #6C3CE1;
-            color: white;
-            border-radius: 50px;
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 14px;
-            transition: all 0.3s;
-        }
-        .btn-app-redirect:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(108,60,225,0.3);
-        }
-        @media (max-width: 480px) {
-            .auth-container { padding: 24px; }
-            .grade-selector { flex-direction: column; }
-            .grade-btn { flex: none; }
-            .interest-tags { gap: 8px; }
-            .interest-btn { font-size: 13px; padding: 8px 16px; }
+        @media (max-width: 500px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            .auth-container {
+                margin: 20px 15px;
+                padding: 25px 20px;
+            }
         }
     </style>
 </head>
 <body>
     <div class="auth-container">
         <div class="auth-header">
-            <div class="auth-logo">🚀 Futures <span>Abroad</span></div>
+            <div class="logo">🚀 Futures <span>Abroad</span></div>
             <h1>Create Your Account</h1>
-            <p>Start your AI-powered journey to university</p>
+            <p>Start your university journey today</p>
         </div>
-
-        <form id="signup-form" class="auth-form">
-            <div id="signupMessage" class="message-box"></div>
-            
-            <!-- Step 1: Basic Info -->
-            <div class="form-step active" data-step="1">
-                <div class="step-indicator">Step 1 of 3</div>
-                <h2>About You</h2>
-                <div class="form-group">
-                    <label>Full Name</label>
-                    <input type="text" id="full-name" placeholder="Enter your full name" required />
-                </div>
-                <div class="form-group">
-                    <label>Email Address</label>
-                    <input type="email" id="email" placeholder="student@email.com" required />
-                </div>
-                <div class="form-group">
-                    <label>Password</label>
-                    <input type="password" id="password" placeholder="Create a strong password" required minlength="8" />
-                    <small>Must be at least 8 characters</small>
-                </div>
-                <button type="button" class="btn-next" onclick="nextStep(2)">Next →</button>
+        
+        <div id="signupMessage" class="message-box"></div>
+        
+        <form id="signup-form">
+            <div class="form-group">
+                <label>Full Name</label>
+                <input type="text" id="signup-name" placeholder="Your full name" required />
             </div>
-
-            <!-- Step 2: Academic Info -->
-            <div class="form-step" data-step="2">
-                <div class="step-indicator">Step 2 of 3</div>
-                <h2>Academic Profile</h2>
+            
+            <div class="form-group">
+                <label>Email Address</label>
+                <input type="email" id="signup-email" placeholder="student@email.com" required />
+            </div>
+            
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" id="signup-password" placeholder="Minimum 6 characters" required minlength="6" />
+            </div>
+            
+            <div class="form-row">
                 <div class="form-group">
                     <label>Grade</label>
-                    <div class="grade-selector">
-                        <button type="button" class="grade-btn" data-grade="10">Grade 10</button>
-                        <button type="button" class="grade-btn active" data-grade="11">Grade 11</button>
-                        <button type="button" class="grade-btn" data-grade="12">Grade 12</button>
-                    </div>
-                    <input type="hidden" id="grade" value="11" />
+                    <select id="signup-grade" required>
+                        <option value="">Select Grade</option>
+                        <option value="10">Grade 10</option>
+                        <option value="11">Grade 11</option>
+                        <option value="12">Grade 12</option>
+                    </select>
                 </div>
-                <div class="form-group">
-                    <label>School Name</label>
-                    <input type="text" id="school" placeholder="Enter your school name" required />
-                </div>
+                
                 <div class="form-group">
                     <label>Country</label>
-                    <select id="country" required>
-                        <option value="">Select your country</option>
-                        <option value="UAE">United Arab Emirates</option>
+                    <select id="signup-country" required>
+                        <option value="">Select Country</option>
+                        <option value="UAE">UAE</option>
                         <option value="Saudi Arabia">Saudi Arabia</option>
                         <option value="Qatar">Qatar</option>
                         <option value="Kuwait">Kuwait</option>
-                        <option value="Bahrain">Bahrain</option>
                         <option value="Oman">Oman</option>
-                        <option value="UK">United Kingdom</option>
-                        <option value="USA">United States</option>
-                        <option value="Canada">Canada</option>
-                        <option value="Australia">Australia</option>
+                        <option value="Bahrain">Bahrain</option>
                         <option value="Other">Other</option>
                     </select>
                 </div>
-                <div class="form-navigation">
-                    <button type="button" class="btn-prev" onclick="prevStep(1)">← Back</button>
-                    <button type="button" class="btn-next" onclick="nextStep(3)">Next →</button>
-                </div>
             </div>
-
-            <!-- Step 3: Interests -->
-            <div class="form-step" data-step="3">
-                <div class="step-indicator">Step 3 of 3</div>
-                <h2>Your Interests</h2>
-                <p class="step-description">Pick a few areas you're curious about (we'll do a deeper quiz next!)</p>
-                <div class="interest-tags">
-                    <button type="button" class="interest-btn" data-tag="STEM">🔬 STEM</button>
-                    <button type="button" class="interest-btn" data-tag="Medicine & Health">⚕️ Medicine</button>
-                    <button type="button" class="interest-btn" data-tag="Business">💼 Business</button>
-                    <button type="button" class="interest-btn" data-tag="Arts & Design">🎨 Arts & Design</button>
-                    <button type="button" class="interest-btn" data-tag="Humanities">📚 Humanities</button>
-                    <button type="button" class="interest-btn" data-tag="Environment">🌍 Environment</button>
-                    <button type="button" class="interest-btn" data-tag="Technology">💻 Technology</button>
-                    <button type="button" class="interest-btn" data-tag="Leadership & Service">👥 Leadership</button>
-                    <button type="button" class="interest-btn" data-tag="Social Sciences">🧠 Social Sciences</button>
-                </div>
-                <input type="hidden" id="selected-interests" value="" />
-                <div class="form-navigation">
-                    <button type="button" class="btn-prev" onclick="prevStep(2)">← Back</button>
-                    <button type="submit" class="btn-submit">Create Account 🎉</button>
-                </div>
+            
+            <div class="form-group">
+                <label>School Name</label>
+                <input type="text" id="signup-school" placeholder="Your school name" />
             </div>
+            
+            <button type="submit" class="btn-submit">Create Account 🚀</button>
         </form>
-
+        
         <div class="auth-footer">
-            <p>Already have an account? <a href="login.html">Login here</a></p>
+            <p>Already have an account? <a href="login.html">Log In</a></p>
             <p style="margin-top:8px;"><a href="index.html">← Back to Home</a></p>
-            <p style="margin-top:4px; font-size:12px; color:#aaa;">KHDA Permit #633441</p>
-        </div>
-
-        <div style="text-align: center; margin-top: 16px; padding-top: 16px; border-top: 1px solid #f0ecf8;">
-            <a href="student-app.html" class="btn-app-redirect">🚀 Go to Student App</a>
         </div>
     </div>
 
-    <!-- ======================================== -->
-    <!-- FIREBASE INITIALIZATION - COMPLETE -->
-    <!-- ======================================== -->
     <script>
         // ============================================================
-        // FIREBASE CONFIGURATION - YOUR CONFIG
+        // FIREBASE CONFIG
         // ============================================================
         const firebaseConfig = {
             apiKey: "AIzaSyBGJcOifwfWlGeFsFCXhdC67fyRTBOvfGQ",
@@ -401,176 +208,99 @@
             appId: "1:143399880838:web:c2232759fcbc1fa2ed2907"
         };
 
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+
         // ============================================================
-        // INITIALIZE FIREBASE - THE FIX!
+        // SIGNUP FORM
         // ============================================================
-        // Check if Firebase is already initialized to avoid errors
-        if (typeof firebase !== 'undefined' && !firebase.apps.length) {
-            firebase.initializeApp(firebaseConfig);
-            console.log("🔥 Firebase initialized successfully from signup.html!");
-        } else if (typeof firebase === 'undefined') {
-            console.error("❌ Firebase SDK not loaded! Check your internet connection.");
-            alert("Firebase SDK failed to load. Please check your internet connection and refresh.");
-        } else {
-            console.log("🔥 Firebase already initialized.");
-        }
-
-        // Get Firebase services
-        let auth, db;
-        try {
-            auth = firebase.auth();
-            db = firebase.firestore();
-            console.log("✅ Firebase Auth and Firestore ready!");
-        } catch (error) {
-            console.error("❌ Error getting Firebase services:", error);
-        }
-
-        // ========================================
-        // SIGNUP FORM LOGIC
-        // ========================================
-        let currentStep = 1;
-        let selectedTags = [];
-
-        document.addEventListener('DOMContentLoaded', function() {
-            console.log("📄 Signup page loaded!");
-
-            // Grade buttons
-            document.querySelectorAll('.grade-btn').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    document.querySelectorAll('.grade-btn').forEach(b => b.classList.remove('active'));
-                    this.classList.add('active');
-                    document.getElementById('grade').value = this.dataset.grade;
+        document.getElementById('signup-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const name = document.getElementById('signup-name').value.trim();
+            const email = document.getElementById('signup-email').value.trim();
+            const password = document.getElementById('signup-password').value;
+            const grade = document.getElementById('signup-grade').value;
+            const country = document.getElementById('signup-country').value;
+            const school = document.getElementById('signup-school').value.trim();
+            
+            const msgEl = document.getElementById('signupMessage');
+            msgEl.className = 'message-box';
+            msgEl.textContent = '';
+            
+            // Validation
+            if (!name || !email || !password || !grade || !country) {
+                msgEl.className = 'message-box error';
+                msgEl.textContent = '⚠️ Please fill in all required fields.';
+                return;
+            }
+            
+            if (password.length < 6) {
+                msgEl.className = 'message-box error';
+                msgEl.textContent = '⚠️ Password must be at least 6 characters.';
+                return;
+            }
+            
+            try {
+                // Create user in Firebase Auth
+                const userCredential = await auth.createUserWithEmailAndPassword(email, password);
+                const user = userCredential.user;
+                
+                // ============================================================
+                // SAVE STUDENT DATA TO FIRESTORE - THIS IS WHAT MAKES THEM SHOW IN ADMIN
+                // ============================================================
+                await db.collection('students').doc(user.uid).set({
+                    uid: user.uid,
+                    name: name,
+                    email: email,
+                    grade: grade,
+                    country: country,
+                    school: school || 'Not specified',
+                    interests: [], // Will be filled by quiz
+                    profileCompleted: false,
+                    phase: 'Phase 1',
+                    onboardingPhase: 1,
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                    updatedAt: firebase.firestore.FieldValue.serverTimestamp()
                 });
-            });
-
-            // Interest buttons
-            document.querySelectorAll('.interest-btn').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    this.classList.toggle('selected');
-                    const tag = this.dataset.tag;
-                    if (this.classList.contains('selected')) {
-                        selectedTags.push(tag);
-                    } else {
-                        selectedTags = selectedTags.filter(t => t !== tag);
-                    }
-                    document.getElementById('selected-interests').value = selectedTags.join(',');
+                
+                // Also save to a separate collection for easier admin access
+                await db.collection('studentProfiles').doc(user.uid).set({
+                    name: name,
+                    email: email,
+                    grade: grade,
+                    country: country,
+                    school: school || 'Not specified',
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
                 });
-            });
-
-            // Form submission
-            document.getElementById('signup-form').addEventListener('submit', async function(e) {
-                e.preventDefault();
-
-                // Check if Firebase is ready
-                if (!auth || !db) {
-                    alert("❌ Firebase is not ready. Please refresh the page and try again.");
-                    return;
+                
+                console.log('✅ Student saved to Firestore!');
+                console.log('📌 UID:', user.uid);
+                console.log('📌 Name:', name);
+                
+                msgEl.className = 'message-box success';
+                msgEl.textContent = '✅ Account created successfully! Redirecting...';
+                
+                setTimeout(() => {
+                    window.location.href = 'student-app.html';
+                }, 1500);
+                
+            } catch (error) {
+                console.error('Signup error:', error);
+                msgEl.className = 'message-box error';
+                
+                if (error.code === 'auth/email-already-in-use') {
+                    msgEl.textContent = '❌ This email is already registered. Please login instead.';
+                } else if (error.code === 'auth/invalid-email') {
+                    msgEl.textContent = '❌ Invalid email address.';
+                } else if (error.code === 'auth/weak-password') {
+                    msgEl.textContent = '❌ Password is too weak. Please use at least 6 characters.';
+                } else {
+                    msgEl.textContent = '❌ Signup failed: ' + error.message;
                 }
-
-                const name = document.getElementById('full-name').value.trim();
-                const email = document.getElementById('email').value.trim();
-                const password = document.getElementById('password').value;
-                const grade = document.getElementById('grade').value;
-                const school = document.getElementById('school').value.trim();
-                const country = document.getElementById('country').value;
-                const interests = selectedTags;
-
-                const msgEl = document.getElementById('signupMessage');
-
-                // Reset message
-                msgEl.className = 'message-box';
-                msgEl.textContent = '';
-
-                // Validation
-                if (!name || !email || !password || !school || !country) {
-                    msgEl.className = 'message-box error';
-                    msgEl.textContent = '⚠️ Please fill in all fields';
-                    return;
-                }
-                if (password.length < 8) {
-                    msgEl.className = 'message-box error';
-                    msgEl.textContent = '⚠️ Password must be at least 8 characters';
-                    return;
-                }
-                if (interests.length < 2) {
-                    msgEl.className = 'message-box error';
-                    msgEl.textContent = '⚠️ Please select at least 2 interests';
-                    return;
-                }
-
-                try {
-                    console.log('📝 Creating user with email:', email);
-                    const userCredential = await auth.createUserWithEmailAndPassword(email, password);
-                    const user = userCredential.user;
-                    console.log('✅ User created:', user.uid);
-
-                    // Save student profile to Firestore
-                    await db.collection('students').doc(user.uid).set({
-                        uid: user.uid,
-                        name: name,
-                        email: email,
-                        grade: parseInt(grade),
-                        school: school,
-                        country: country,
-                        interests: interests,
-                        profileCompleted: false,
-                        quizAnswers: [],
-                        registeredActivities: [],
-                        completedActivities: [],
-                        calendarEvents: [],
-                        onboardingPhase: 1,
-                        profileStrength: 0,
-                        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-                        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-                    });
-                    console.log('✅ Profile saved to Firestore');
-
-                    msgEl.className = 'message-box success';
-                    msgEl.textContent = '✅ Account created successfully! Redirecting to Student App...';
-
-                    setTimeout(() => {
-                        window.location.href = 'student-app.html';
-                    }, 800);
-
-                } catch (error) {
-                    console.error('❌ Signup error:', error.code, error.message);
-                    msgEl.className = 'message-box error';
-                    if (error.code === 'auth/email-already-in-use') {
-                        msgEl.innerHTML = '❌ This email is already registered. Please <a href="login.html" style="color:#6C3CE1;">login</a> instead.';
-                    } else if (error.code === 'auth/weak-password') {
-                        msgEl.textContent = '❌ Password is too weak. Please use at least 8 characters with letters and numbers.';
-                    } else if (error.code === 'auth/invalid-email') {
-                        msgEl.textContent = '❌ Invalid email address. Please check and try again.';
-                    } else if (error.code === 'auth/network-request-failed') {
-                        msgEl.textContent = '❌ Network error. Please check your internet connection.';
-                    } else {
-                        msgEl.textContent = '❌ Signup failed: ' + error.message;
-                    }
-                }
-            });
+            }
         });
-
-        // ========================================
-        // STEP NAVIGATION
-        // ========================================
-        function nextStep(step) {
-            if (step > 3) step = 3;
-            currentStep = step;
-            updateSteps();
-        }
-
-        function prevStep(step) {
-            if (step < 1) step = 1;
-            currentStep = step;
-            updateSteps();
-        }
-
-        function updateSteps() {
-            document.querySelectorAll('.form-step').forEach((el, index) => {
-                el.classList.toggle('active', index + 1 === currentStep);
-            });
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
     </script>
 </body>
 </html>
