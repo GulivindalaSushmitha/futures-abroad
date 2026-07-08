@@ -4,19 +4,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Post-Activity Reflection - Futures Abroad</title>
-    <link rel="stylesheet" href="css/post-activity.css" />
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
             background: #f1f5f9;
             color: #1e293b;
+            line-height: 1.6;
         }
         .app-container {
             max-width: 900px;
             margin: 0 auto;
             padding: 30px 20px;
         }
+        /* Phase Navigation */
         .phase-nav {
             display: flex;
             align-items: center;
@@ -36,6 +41,10 @@
             cursor: pointer;
             padding: 0 8px;
             min-width: 44px;
+            transition: all 0.3s;
+        }
+        .phase-item:hover .phase-circle {
+            transform: scale(1.1);
         }
         .phase-circle {
             width: 34px;
@@ -50,23 +59,42 @@
             font-size: 13px;
             transition: all 0.3s;
         }
-        .phase-circle.active { background: #2563eb; color: white; }
-        .phase-circle.completed { background: #22c55e; color: white; }
+        .phase-circle.active {
+            background: #2563eb;
+            color: white;
+        }
+        .phase-circle.completed {
+            background: #22c55e;
+            color: white;
+        }
+        .phase-circle.current {
+            background: #1e40af;
+            color: white;
+            box-shadow: 0 0 0 4px rgba(37,99,235,0.25);
+        }
         .phase-label {
             font-size: 9px;
             color: #94a3b8;
             margin-top: 4px;
             text-transform: uppercase;
             letter-spacing: 0.3px;
+            font-weight: 500;
         }
-        .phase-label.active { color: #1e293b; font-weight: 600; }
+        .phase-label.active {
+            color: #1e293b;
+            font-weight: 600;
+        }
         .phase-connector {
             width: 25px;
             height: 2px;
             background: #e2e8f0;
             flex-shrink: 0;
+            transition: all 0.5s;
         }
-        .phase-connector.active { background: #2563eb; }
+        .phase-connector.active {
+            background: #2563eb;
+        }
+        /* Main Card */
         .reflection-card {
             background: white;
             border-radius: 12px;
@@ -77,6 +105,7 @@
             font-size: 28px;
             color: #1e293b;
             margin: 0 0 5px 0;
+            font-weight: 700;
         }
         .reflection-card .subtitle {
             color: #64748b;
@@ -84,6 +113,9 @@
             margin-bottom: 25px;
             padding-bottom: 15px;
             border-bottom: 1px solid #e2e8f0;
+        }
+        .reflection-card .subtitle strong {
+            color: #2563eb;
         }
         .form-group {
             margin: 15px 0;
@@ -95,7 +127,8 @@
             margin-bottom: 5px;
             font-size: 14px;
         }
-        .form-group input, .form-group textarea {
+        .form-group input,
+        .form-group textarea {
             width: 100%;
             padding: 10px 12px;
             border: 1px solid #cbd5e1;
@@ -104,7 +137,8 @@
             font-family: inherit;
             transition: all 0.3s;
         }
-        .form-group input:focus, .form-group textarea:focus {
+        .form-group input:focus,
+        .form-group textarea:focus {
             outline: none;
             border-color: #2563eb;
             box-shadow: 0 0 0 3px rgba(37,99,235,0.1);
@@ -119,6 +153,10 @@
             background: #f8fafc;
             border-radius: 8px;
             border: 1px solid #e2e8f0;
+            transition: all 0.3s;
+        }
+        .reflection-item:hover {
+            border-color: #2563eb;
         }
         .reflection-item .prompt {
             font-weight: 600;
@@ -135,11 +173,30 @@
             font-size: 14px;
             font-family: inherit;
             resize: vertical;
+            transition: all 0.3s;
         }
         .reflection-item textarea:focus {
             outline: none;
             border-color: #2563eb;
             box-shadow: 0 0 0 3px rgba(37,99,235,0.1);
+        }
+        .section-title {
+            font-size: 18px;
+            margin: 20px 0 10px 0;
+            color: #1e293b;
+        }
+        .section-hint {
+            color: #64748b;
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-top: 25px;
+            padding-top: 20px;
+            border-top: 2px solid #e2e8f0;
         }
         .btn-primary {
             padding: 12px 28px;
@@ -150,9 +207,13 @@
             font-size: 15px;
             font-weight: 500;
             cursor: pointer;
-            transition: background 0.3s;
+            transition: all 0.3s;
         }
-        .btn-primary:hover { background: #1d4ed8; }
+        .btn-primary:hover {
+            background: #1d4ed8;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(37,99,235,0.3);
+        }
         .btn-secondary {
             padding: 12px 28px;
             background: transparent;
@@ -164,7 +225,10 @@
             cursor: pointer;
             transition: all 0.3s;
         }
-        .btn-secondary:hover { background: #eff6ff; }
+        .btn-secondary:hover {
+            background: #eff6ff;
+            transform: translateY(-1px);
+        }
         .btn-success {
             padding: 12px 28px;
             background: #22c55e;
@@ -174,16 +238,12 @@
             font-size: 15px;
             font-weight: 500;
             cursor: pointer;
-            transition: background 0.3s;
+            transition: all 0.3s;
         }
-        .btn-success:hover { background: #16a34a; }
-        .action-buttons {
-            display: flex;
-            gap: 12px;
-            flex-wrap: wrap;
-            margin-top: 20px;
-            padding-top: 20px;
-            border-top: 2px solid #e2e8f0;
+        .btn-success:hover {
+            background: #16a34a;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(34,197,94,0.3);
         }
         .strength-section {
             margin-top: 30px;
@@ -215,14 +275,26 @@
             font-size: 14px;
             color: #475569;
         }
+        .strength-text span {
+            font-weight: 600;
+            color: #1e293b;
+        }
         .notification {
             padding: 12px 20px;
             border-radius: 6px;
             margin: 10px 0;
             animation: slideDown 0.3s ease;
         }
-        .notification.success { background: #f0fdf4; color: #166534; border: 1px solid #86efac; }
-        .notification.error { background: #fef2f2; color: #991b1b; border: 1px solid #fca5a5; }
+        .notification.success {
+            background: #f0fdf4;
+            color: #166534;
+            border: 1px solid #86efac;
+        }
+        .notification.error {
+            background: #fef2f2;
+            color: #991b1b;
+            border: 1px solid #fca5a5;
+        }
         @keyframes slideDown {
             from { opacity: 0; transform: translateY(-10px); }
             to { opacity: 1; transform: translateY(0); }
@@ -243,6 +315,13 @@
             .phase-item { padding: 0 4px; min-width: 36px; }
             .phase-circle { width: 28px; height: 28px; font-size: 11px; }
             .phase-connector { width: 15px; }
+            .phase-label { font-size: 7px; }
+        }
+        @media (max-width: 480px) {
+            .phase-item { padding: 0 3px; min-width: 30px; }
+            .phase-circle { width: 24px; height: 24px; font-size: 10px; }
+            .phase-connector { width: 10px; }
+            .reflection-card h1 { font-size: 19px; }
         }
     </style>
 </head>
@@ -268,8 +347,8 @@
             </div>
 
             <!-- Reflection Prompts -->
-            <h3 style="margin: 20px 0 10px 0;">💭 Reflection Prompts</h3>
-            <p style="color: #64748b; font-size: 14px; margin-bottom: 15px;">Answer these questions to capture your learning. These can be used in future essays.</p>
+            <h3 class="section-title">💭 Reflection Prompts</h3>
+            <p class="section-hint">Answer these questions to capture your learning. These can be used in future essays.</p>
             <div id="reflection-prompts"></div>
 
             <!-- Action Buttons -->
@@ -313,7 +392,7 @@
             activityName: ''
         };
 
-        // Phase Navigation Functions
+        // Phase Navigation
         function getCurrentPhase() {
             try {
                 const student = JSON.parse(localStorage.getItem('studentProfile') || '{}');
@@ -345,7 +424,8 @@
             phases.forEach((phase, index) => {
                 const isActive = phase.num <= currentPhase;
                 const isCompleted = phase.num < currentPhase;
-                let circleClass = 'phase-circle' + (isActive ? ' active' : '') + (isCompleted ? ' completed' : '');
+                const isCurrent = phase.num === currentPhase;
+                let circleClass = 'phase-circle' + (isActive ? ' active' : '') + (isCompleted ? ' completed' : '') + (isCurrent ? ' current' : '');
                 let labelClass = 'phase-label' + (isActive ? ' active' : '');
                 let circleContent = isCompleted ? '✓' : phase.num;
                 html += `
@@ -393,6 +473,28 @@
                 `;
                 container.appendChild(div);
             });
+        }
+
+        // Load saved reflection
+        function loadSavedReflection() {
+            try {
+                const saved = localStorage.getItem('currentReflection');
+                if (saved) {
+                    const data = JSON.parse(saved);
+                    if (data.completionDate) {
+                        document.getElementById('completion-date').value = data.completionDate;
+                    }
+                    if (data.outcomeNote) {
+                        document.getElementById('outcome-note').value = data.outcomeNote;
+                    }
+                    if (data.reflectionAnswers) {
+                        data.reflectionAnswers.forEach((answer, index) => {
+                            const textarea = document.getElementById(`reflection-${index}`);
+                            if (textarea) textarea.value = answer || '';
+                        });
+                    }
+                }
+            } catch (error) { console.log('Error loading saved reflection:', error); }
         }
 
         // Load portfolio count
@@ -543,7 +645,6 @@
             document.getElementById('save-reflection')?.addEventListener('click', saveReflection);
             document.getElementById('phase5-button')?.addEventListener('click', goToPhase5);
 
-            // Check if already saved
             try {
                 const student = JSON.parse(localStorage.getItem('studentProfile') || '{}');
                 if (student.phase4Completed) {
@@ -551,27 +652,6 @@
                 }
             } catch { /* ignore */ }
         });
-
-        function loadSavedReflection() {
-            try {
-                const saved = localStorage.getItem('currentReflection');
-                if (saved) {
-                    const data = JSON.parse(saved);
-                    if (data.completionDate) {
-                        document.getElementById('completion-date').value = data.completionDate;
-                    }
-                    if (data.outcomeNote) {
-                        document.getElementById('outcome-note').value = data.outcomeNote;
-                    }
-                    if (data.reflectionAnswers) {
-                        data.reflectionAnswers.forEach((answer, index) => {
-                            const textarea = document.getElementById(`reflection-${index}`);
-                            if (textarea) textarea.value = answer || '';
-                        });
-                    }
-                }
-            } catch (error) { console.log('Error loading saved reflection:', error); }
-        }
     </script>
 </body>
 </html>
