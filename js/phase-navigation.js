@@ -1,4 +1,6 @@
-// Phase Navigation System
+// ============================================
+// PHASE NAVIGATION SYSTEM
+// ============================================
 
 // Get current phase from localStorage
 function getCurrentPhase() {
@@ -75,10 +77,17 @@ function renderPhaseNavigation() {
     phases.forEach((phase, index) => {
         const isActive = phase.num <= currentPhase;
         const isCurrent = phase.num === currentPhase;
+        const isCompleted = phase.num < currentPhase;
+        
+        let circleContent = phase.num;
+        if (isCompleted) {
+            circleContent = '✓';
+        }
+        
         html += `
-            <div class="phase-item ${isActive ? 'active' : ''} ${isCurrent ? 'current' : ''}" 
+            <div class="phase-item ${isActive ? 'active' : ''} ${isCurrent ? 'current' : ''} ${isCompleted ? 'completed' : ''}" 
                  onclick="navigateToPhase(${phase.num})">
-                <div class="phase-circle">${phase.num}</div>
+                <div class="phase-circle"><span>${circleContent}</span></div>
                 <span class="phase-label">${phase.label}</span>
             </div>
         `;
