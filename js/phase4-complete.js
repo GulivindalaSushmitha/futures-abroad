@@ -1,5 +1,6 @@
-// Phase 4: Post-Activity Guidance
-// This replaces post-activity.js
+// ============================================
+// PHASE 4: POST-ACTIVITY GUIDANCE
+// ============================================
 
 // Store reflection data
 let currentReflection = {
@@ -42,6 +43,7 @@ function initPhase4() {
     renderReflectionPrompts();
     loadSavedReflection();
     loadPortfolioCount();
+    calculateProfileStrength();
     
     // Initialize phase navigation
     if (typeof initPhaseNavigation === 'function') {
@@ -163,6 +165,11 @@ function saveReflection() {
         // Update portfolio count
         loadPortfolioCount();
 
+        // Transition to Phase 5 check
+        if (typeof transitionToNextPhase === 'function') {
+            transitionToNextPhase();
+        }
+
     } catch (error) {
         console.log('Error saving reflection:', error);
         showNotification('❌ Error saving reflection. Please try again.', 'error');
@@ -259,7 +266,6 @@ function calculateProfileStrength() {
 function showNotification(message, type = 'info') {
     const container = document.getElementById('notification-container');
     if (!container) {
-        // Fallback alert
         alert(message);
         return;
     }
