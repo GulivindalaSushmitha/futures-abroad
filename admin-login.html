@@ -4,12 +4,109 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Admin Login - Futures Abroad</title>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
     <link rel="stylesheet" href="css/style.css" />
-    <link rel="stylesheet" href="css/auth.css" />
     <style>
+        .auth-container {
+            max-width: 420px;
+            margin: 80px auto;
+            padding: 40px;
+            background: white;
+            border-radius: 24px;
+            box-shadow: 0 20px 60px rgba(108,60,225,0.12);
+        }
+        .auth-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .auth-header .logo {
+            font-size: 28px;
+            font-weight: 800;
+            color: #2D1B4E;
+        }
+        .auth-header .logo span { color: #6C3CE1; }
+        .auth-header h1 {
+            font-size: 28px;
+            color: #2D1B4E;
+            margin: 10px 0 5px;
+        }
+        .auth-header p {
+            color: #888;
+            font-size: 16px;
+        }
+        .form-group {
+            margin-bottom: 18px;
+        }
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: #2D1B4E;
+            font-size: 14px;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 14px 18px;
+            border: 2px solid #E8E0F0;
+            border-radius: 14px;
+            font-size: 15px;
+            font-family: 'Quicksand', sans-serif;
+            transition: border 0.3s;
+            background: #faf8ff;
+        }
+        .form-group input:focus {
+            border-color: #6C3CE1;
+            outline: none;
+            background: white;
+            box-shadow: 0 0 0 4px rgba(108,60,225,0.08);
+        }
+        .btn-submit {
+            width: 100%;
+            padding: 16px;
+            background: #6C3CE1;
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 17px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: 'Quicksand', sans-serif;
+        }
+        .btn-submit:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(108,60,225,0.35);
+        }
+        .auth-footer {
+            text-align: center;
+            margin-top: 20px;
+            color: #888;
+            font-size: 14px;
+        }
+        .auth-footer a {
+            color: #6C3CE1;
+            font-weight: 600;
+            text-decoration: none;
+        }
+        .auth-footer a:hover { text-decoration: underline; }
+        .message-box {
+            padding: 12px 16px;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            display: none;
+            font-size: 14px;
+        }
+        .message-box.error {
+            display: block;
+            background: #FFE8E8;
+            color: #C62828;
+            border-left: 4px solid #C62828;
+        }
+        .message-box.success {
+            display: block;
+            background: #E8F5E9;
+            color: #2E7D32;
+            border-left: 4px solid #2E7D32;
+        }
         .admin-login-hint {
             background: #FFF3E0;
             border-radius: 12px;
@@ -26,15 +123,15 @@
     <div class="auth-container">
         <div class="auth-card">
             <div class="auth-header">
-                <div class="auth-logo">🔐 Futures Abroad</div>
+                <div class="logo">🔐 Futures <span>Abroad</span></div>
                 <h1>Admin Login</h1>
                 <p>Access the admin dashboard</p>
             </div>
-            <form id="admin-login-form" class="auth-form">
+            <form id="admin-login-form">
                 <div id="adminMessage" style="display:none; padding:10px; border-radius:10px; margin-bottom:10px;"></div>
                 
                 <div class="admin-login-hint">
-                    <strong>🔑 Admin Credentials (YOURS ONLY):</strong><br />
+                    <strong>🔑 Admin Credentials:</strong><br />
                     Email: admin@futuresabroad.com<br />
                     Password: FuturesAdmin2026!
                 </div>
@@ -54,79 +151,71 @@
                 <p>Student login? <a href="login.html">Click here</a></p>
             </div>
         </div>
-        <div class="auth-illustration">
-            <div id="admin-animation"></div>
-            <p style="text-align:center;margin-top:2rem;">🔒 Secure Admin Access</p>
-        </div>
     </div>
 
-    <!-- Firebase Config -->
-    <script>
+    <script type="module">
         // ============================================================
-        // FIREBASE CONFIGURATION
+        // IMPORTS
         // ============================================================
-        const firebaseConfig = {
-          apiKey: "AIzaSyBGJcOifwfWlGeFsFCXhdC67fyRTBOvfGQ",
-          authDomain: "futures-2.firebaseapp.com",
-          projectId: "futures-2",
-          storageBucket: "futures-2.firebasestorage.app",
-          messagingSenderId: "143399880838",
-          appId: "1:143399880838:web:c2232759fcbc1fa2ed2907"
-        };
-
-        firebase.initializeApp(firebaseConfig);
-        const auth = firebase.auth();
-        const db = firebase.firestore();
+        import { 
+            auth, 
+            db,
+            doc,
+            getDoc,
+            setDoc,
+            signInWithEmailAndPassword,
+            ADMIN_UID
+        } from './js/firebase-config.js';
 
         // ============================================================
-        // YOUR CORRECT ADMIN UID FROM FIREBASE
+        // ADMIN LOGIN
         // ============================================================
-        const ADMIN_UID = "hrONkvAlxVac4Wc7nwdNLhdOIe33";
-
-        console.log("🔥 Firebase initialized!");
-        console.log("🔐 Admin UID:", ADMIN_UID);
-    </script>
-
-    <script>
         document.getElementById('admin-login-form').addEventListener('submit', async function(e) {
             e.preventDefault();
             const email = document.getElementById('admin-email').value;
             const password = document.getElementById('admin-password').value;
             const msgEl = document.getElementById('adminMessage');
             
+            msgEl.style.display = 'block';
+            msgEl.style.background = '#FFE8E8';
+            msgEl.style.color = '#C62828';
+            msgEl.textContent = '⏳ Logging in...';
+            
             try {
-                const userCredential = await auth.signInWithEmailAndPassword(email, password);
+                const userCredential = await signInWithEmailAndPassword(auth, email, password);
                 const user = userCredential.user;
                 
                 console.log("✅ Logged in as:", user.email);
                 console.log("📌 Your UID:", user.uid);
                 console.log("🔐 Expected Admin UID:", ADMIN_UID);
                 
-                // Check if the signed-in user's UID matches the hardcoded admin UID
                 if (user.uid === ADMIN_UID) {
-                    // Check if admin document exists in Firestore
-                    const adminDoc = await db.collection('admins').doc(ADMIN_UID).get();
-                    if (adminDoc.exists) {
-                        window.location.href = 'admin-dashboard.html';
-                        return;
-                    } else {
-                        // Create the admin document if it doesn't exist
-                        await db.collection('admins').doc(ADMIN_UID).set({
+                    // Check if admin document exists
+                    const adminDoc = await getDoc(doc(db, 'admins', ADMIN_UID));
+                    if (!adminDoc.exists()) {
+                        await setDoc(doc(db, 'admins', ADMIN_UID), {
                             email: "admin@futuresabroad.com",
-                            role: "admin"
+                            role: "admin",
+                            createdAt: new Date().toISOString()
                         });
-                        window.location.href = 'admin-dashboard.html';
-                        return;
                     }
+                    
+                    msgEl.style.background = '#E8F5E9';
+                    msgEl.style.color = '#2E7D32';
+                    msgEl.textContent = '✅ Admin login successful! Redirecting...';
+                    
+                    setTimeout(() => {
+                        window.location.href = 'admin-dashboard.html';
+                    }, 500);
+                    return;
                 } else {
-                    await auth.signOut();
-                    msgEl.style.display = 'block';
+                    await signOut(auth);
                     msgEl.style.background = '#FFE8E8';
                     msgEl.style.color = '#C62828';
                     msgEl.textContent = '❌ Access denied. You are not an admin.';
                 }
             } catch (error) {
-                msgEl.style.display = 'block';
+                console.error('Login error:', error);
                 msgEl.style.background = '#FFE8E8';
                 msgEl.style.color = '#C62828';
                 msgEl.textContent = '❌ Login failed: ' + error.message;
