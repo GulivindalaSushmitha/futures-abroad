@@ -3,9 +3,88 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Phase 6 - Futures Abroad Enrollment</title>
-    <link rel="stylesheet" href="css/student-app.css">
+    <title>Enrollment - Futures Abroad</title>
+    <link rel="stylesheet" href="css/enrollment.css" />
     <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f1f5f9;
+            color: #1e293b;
+        }
+        .app-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+        .phase-nav {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0;
+            flex-wrap: wrap;
+            background: white;
+            padding: 15px 20px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            margin-bottom: 30px;
+        }
+        .phase-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+            padding: 0 8px;
+            min-width: 44px;
+        }
+        .phase-circle {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            background: #e2e8f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: #94a3b8;
+            font-size: 13px;
+            transition: all 0.3s;
+        }
+        .phase-circle.active { background: #2563eb; color: white; }
+        .phase-circle.completed { background: #22c55e; color: white; }
+        .phase-label {
+            font-size: 9px;
+            color: #94a3b8;
+            margin-top: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+        .phase-label.active { color: #1e293b; font-weight: 600; }
+        .phase-connector {
+            width: 25px;
+            height: 2px;
+            background: #e2e8f0;
+            flex-shrink: 0;
+        }
+        .phase-connector.active { background: #2563eb; }
+        .enrollment-card {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        }
+        .enrollment-card h1 {
+            font-size: 28px;
+            color: #1e293b;
+            margin: 0 0 5px 0;
+        }
+        .enrollment-card .subtitle {
+            color: #64748b;
+            font-size: 16px;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #e2e8f0;
+        }
         .step-progress {
             display: flex;
             align-items: center;
@@ -25,11 +104,7 @@
             font-size: 14px;
             transition: all 0.5s;
         }
-        .step-dot.active {
-            background: #2563eb;
-            color: white;
-            box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.2);
-        }
+        .step-dot.active { background: #2563eb; color: white; box-shadow: 0 0 0 4px rgba(37,99,235,0.2); }
         .step-line {
             width: 40px;
             height: 2px;
@@ -37,13 +112,9 @@
             transition: all 0.5s;
         }
         .step-line.active { background: #2563eb; }
-        
+        .step-counter { text-align: center; color: #64748b; margin-bottom: 20px; }
         .handoff-step { margin: 20px 0; animation: fadeIn 0.4s ease; }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         .program-card {
             padding: 20px 24px;
             margin: 10px 0;
@@ -53,21 +124,60 @@
             transition: all 0.3s;
             background: white;
         }
-        .program-card:hover {
-            border-color: #2563eb;
-            box-shadow: 0 4px 16px rgba(37, 99, 235, 0.1);
+        .program-card:hover { border-color: #2563eb; box-shadow: 0 4px 16px rgba(37,99,235,0.1); }
+        .program-card.selected { border-color: #2563eb; background: #eff6ff; }
+        .program-card .price { font-size: 22px; font-weight: 700; color: #2563eb; margin-top: 8px; }
+        .form-group { margin: 15px 0; }
+        .form-group label { display: block; font-weight: 600; color: #1e293b; margin-bottom: 5px; }
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            font-size: 14px;
         }
-        .program-card.selected {
+        .form-group input:focus, .form-group select:focus {
+            outline: none;
             border-color: #2563eb;
-            background: #eff6ff;
+            box-shadow: 0 0 0 3px rgba(37,99,235,0.1);
         }
-        .program-card .price {
-            font-size: 22px;
-            font-weight: 700;
+        .btn-primary {
+            padding: 12px 28px;
+            background: #2563eb;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 15px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .btn-primary:hover { background: #1d4ed8; }
+        .btn-primary:disabled { background: #94a3b8; cursor: not-allowed; }
+        .btn-secondary {
+            padding: 10px 24px;
+            background: transparent;
             color: #2563eb;
-            margin-top: 8px;
+            border: 2px solid #2563eb;
+            border-radius: 6px;
+            font-size: 15px;
+            font-weight: 500;
+            cursor: pointer;
+            margin-right: 10px;
+            transition: all 0.3s;
         }
-        
+        .btn-secondary:hover { background: #eff6ff; }
+        .summary-box { background: #f8fafc; padding: 20px; border-radius: 8px; margin: 15px 0; border: 1px solid #e2e8f0; }
+        .summary-box p { margin: 6px 0; }
+        .profile-details p { margin: 6px 0; font-size: 14px; }
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 2px solid #e2e8f0;
+        }
         .enrollment-success {
             text-align: center;
             padding: 40px 20px;
@@ -75,6 +185,7 @@
         }
         .success-icon { font-size: 72px; margin-bottom: 20px; display: block; }
         .enrollment-success h2 { color: #1e293b; font-size: 28px; margin-bottom: 10px; }
+        .enrollment-success p { color: #64748b; font-size: 16px; margin-bottom: 25px; }
         .next-steps {
             text-align: left;
             max-width: 420px;
@@ -84,60 +195,33 @@
             border-radius: 10px;
             border: 1px solid #e2e8f0;
         }
+        .next-steps h3 { margin-bottom: 12px; font-size: 16px; }
         .next-steps li { padding: 8px 0; border-bottom: 1px solid #e2e8f0; color: #475569; font-size: 14px; list-style: none; }
         .next-steps li:last-child { border-bottom: none; }
         .next-steps li::before { content: '✓ '; color: #22c55e; font-weight: 700; }
-        
-        .phase-container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+        @media (max-width: 768px) {
+            .enrollment-card { padding: 20px; }
+            .enrollment-card h1 { font-size: 22px; }
+            .action-buttons { flex-direction: column; }
+            .action-buttons button { width: 100%; }
+            .phase-item { padding: 0 4px; min-width: 36px; }
+            .phase-circle { width: 28px; height: 28px; font-size: 11px; }
+            .phase-connector { width: 15px; }
+            .step-line { width: 20px; }
+            .step-dot { width: 28px; height: 28px; font-size: 12px; }
         }
-        .form-group { margin: 15px 0; }
-        .form-group label { display: block; font-weight: 600; color: #1e293b; margin-bottom: 5px; }
-        .form-group input, .form-group select {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #cbd5e1;
-            border-radius: 6px;
-            font-size: 14px;
-        }
-        .primary-btn {
-            background: #2563eb;
-            color: white;
-            border: none;
-            padding: 12px 28px;
-            border-radius: 6px;
-            font-size: 15px;
-            cursor: pointer;
-        }
-        .primary-btn:disabled { background: #94a3b8; cursor: not-allowed; }
-        .secondary-btn {
-            background: transparent;
-            color: #2563eb;
-            border: 2px solid #2563eb;
-            padding: 10px 24px;
-            border-radius: 6px;
-            font-size: 15px;
-            cursor: pointer;
-            margin-right: 10px;
-        }
-        .summary-box { background: #f8fafc; padding: 20px; border-radius: 8px; margin: 15px 0; }
-        .profile-details p { margin: 6px 0; }
-        .nav-buttons { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 20px; padding-top: 20px; border-top: 2px solid #e2e8f0; }
     </style>
 </head>
 <body>
-    <div class="app-container" style="max-width: 1000px; margin: 0 auto; padding: 20px;">
-        <div id="phase-navigation"></div>
+    <div class="app-container">
+        <!-- Phase Navigation -->
+        <div id="phase-navigation" class="phase-nav"></div>
 
-        <div id="phase6-container" class="phase-container">
+        <div class="enrollment-card" id="phase6-container">
             <h1>Phase 6: Futures Abroad Enrollment</h1>
-            <p style="color: #64748b;">Complete your enrollment to get personalized guidance from our counselors.</p>
+            <p class="subtitle">Complete your enrollment to get personalized guidance from our counselors.</p>
 
+            <!-- Step Progress -->
             <div class="step-progress">
                 <span class="step-dot active">1</span>
                 <span class="step-line"></span>
@@ -147,40 +231,40 @@
                 <span class="step-line"></span>
                 <span class="step-dot">4</span>
             </div>
-            <p id="step-counter" style="text-align: center; color: #64748b;">Step 1 of 4</p>
+            <p class="step-counter" id="step-counter">Step 1 of 4</p>
 
-            <!-- Step 1 -->
-            <div id="step-1" class="handoff-step" style="display:block;">
-                <h2>Step 1: Review Your Profile</h2>
-                <p>Please review your profile before sharing with counselors.</p>
-                <div id="profile-preview" style="background: #f8fafc; padding: 20px; border-radius: 8px; margin: 15px 0;"></div>
-                <button id="next-step-btn" class="primary-btn">Next →</button>
+            <!-- Step 1: Profile Review -->
+            <div id="step-1" class="handoff-step">
+                <h2 style="font-size: 20px; margin-bottom: 10px;">Step 1: Review Your Profile</h2>
+                <p style="color: #64748b; margin-bottom: 15px;">Please review your profile before sharing with counselors.</p>
+                <div id="profile-preview" style="background: #f8fafc; padding: 20px; border-radius: 8px; margin: 15px 0; border: 1px solid #e2e8f0;"></div>
+                <button id="next-step-btn" class="btn-primary">Next →</button>
             </div>
 
-            <!-- Step 2 -->
+            <!-- Step 2: Program Selection -->
             <div id="step-2" class="handoff-step" style="display:none;">
-                <h2>Step 2: Choose Your Program</h2>
+                <h2 style="font-size: 20px; margin-bottom: 10px;">Step 2: Choose Your Program</h2>
                 <div class="program-options">
                     <div class="program-card" data-program="grade10-12">
-                        <h3>📚 Grade 10-12 Track</h3>
-                        <p>Complete guidance through Grade 10, 11, and 12</p>
+                        <h3 style="margin: 0 0 6px 0;">📚 Grade 10-12 Track</h3>
+                        <p style="color: #64748b; margin: 4px 0;">Complete guidance through Grade 10, 11, and 12</p>
                         <p class="price">$1,200/year</p>
                     </div>
                     <div class="program-card" data-program="grade11-fast">
-                        <h3>⚡ Grade 11 Fast-Track</h3>
-                        <p>Intensive preparation for Grade 11-12</p>
+                        <h3 style="margin: 0 0 6px 0;">⚡ Grade 11 Fast-Track</h3>
+                        <p style="color: #64748b; margin: 4px 0;">Intensive preparation for Grade 11-12</p>
                         <p class="price">$1,800/year</p>
                     </div>
                 </div>
                 <div style="margin-top: 20px;">
-                    <button id="prev-step-btn" class="secondary-btn">← Back</button>
-                    <button id="next-step-btn" class="primary-btn" disabled>Next →</button>
+                    <button id="prev-step-btn" class="btn-secondary">← Back</button>
+                    <button id="next-step-btn" class="btn-primary" disabled>Next →</button>
                 </div>
             </div>
 
-            <!-- Step 3 -->
+            <!-- Step 3: Intake Form -->
             <div id="step-3" class="handoff-step" style="display:none;">
-                <h2>Step 3: Complete Intake Form</h2>
+                <h2 style="font-size: 20px; margin-bottom: 10px;">Step 3: Complete Intake Form</h2>
                 <div class="form-group">
                     <label for="parent-email">👨‍👩‍👦 Parent/Guardian Email:</label>
                     <input type="email" id="parent-email" placeholder="parent@email.com" />
@@ -198,34 +282,31 @@
                     </select>
                 </div>
                 <div style="margin-top: 20px;">
-                    <button id="prev-step-btn" class="secondary-btn">← Back</button>
-                    <button id="next-step-btn" class="primary-btn">Next →</button>
+                    <button id="prev-step-btn" class="btn-secondary">← Back</button>
+                    <button id="next-step-btn" class="btn-primary">Next →</button>
                 </div>
             </div>
 
-            <!-- Step 4 -->
+            <!-- Step 4: Confirmation -->
             <div id="step-4" class="handoff-step" style="display:none;">
-                <h2>Step 4: Confirm Enrollment</h2>
-                <p>Review your selections and confirm enrollment.</p>
+                <h2 style="font-size: 20px; margin-bottom: 10px;">Step 4: Confirm Enrollment</h2>
+                <p style="color: #64748b; margin-bottom: 15px;">Review your selections and confirm enrollment.</p>
                 <div class="summary-box">
                     <p><strong>Program:</strong> <span id="summary-program">Not selected</span></p>
                     <p><strong>Parent Email:</strong> <span id="summary-email">Not provided</span></p>
                     <p><strong>Timezone:</strong> <span id="summary-timezone">Not selected</span></p>
                 </div>
                 <div style="margin-top: 20px;">
-                    <button id="prev-step-btn" class="secondary-btn">← Back</button>
-                    <button id="confirm-enrollment" class="primary-btn">✅ Confirm Enrollment</button>
+                    <button id="prev-step-btn" class="btn-secondary">← Back</button>
+                    <button id="confirm-enrollment" class="btn-primary">✅ Confirm Enrollment</button>
                 </div>
             </div>
-
-            <div id="step-navigation"></div>
         </div>
     </div>
 
-    <script src="js/phase-navigation.js"></script>
     <script>
         // ============================================================
-        // PHASE 6 - COMPLETE CODE
+        // PHASE 6 - FUTURES ABROAD HANDOFF
         // ============================================================
 
         let enrollmentData = {
@@ -235,16 +316,67 @@
             step: 1
         };
 
+        // Phase Navigation
+        function getCurrentPhase() {
+            try {
+                const student = JSON.parse(localStorage.getItem('studentProfile') || '{}');
+                return student.currentPhase || 1;
+            } catch { return 1; }
+        }
+
+        function navigateToPhase(phase) {
+            const currentPhase = getCurrentPhase();
+            const phasePages = {
+                1: 'quiz.html', 2: 'activities.html', 3: 'activity-registration.html',
+                4: 'post-activity.html', 5: 'university-shortlist.html', 6: 'futures-abroad-enroll.html'
+            };
+            if (phase > currentPhase) {
+                window.location.href = phasePages[currentPhase] || 'dashboard.html';
+                return;
+            }
+            window.location.href = phasePages[phase] || 'dashboard.html';
+        }
+
+        function renderPhaseNavigation() {
+            const currentPhase = getCurrentPhase();
+            const phases = [
+                { num: 1, label: 'Discovery' }, { num: 2, label: 'Activities' },
+                { num: 3, label: 'Register' }, { num: 4, label: 'Reflect' },
+                { num: 5, label: 'Pathway' }, { num: 6, label: 'Enroll' }
+            ];
+            let html = '';
+            phases.forEach((phase, index) => {
+                const isActive = phase.num <= currentPhase;
+                const isCompleted = phase.num < currentPhase;
+                let circleClass = 'phase-circle' + (isActive ? ' active' : '') + (isCompleted ? ' completed' : '');
+                let labelClass = 'phase-label' + (isActive ? ' active' : '');
+                let circleContent = isCompleted ? '✓' : phase.num;
+                html += `
+                    <div class="phase-item" onclick="navigateToPhase(${phase.num})">
+                        <div class="${circleClass}"><span>${circleContent}</span></div>
+                        <span class="${labelClass}">${phase.label}</span>
+                    </div>
+                `;
+                if (index < phases.length - 1) {
+                    html += `<div class="phase-connector ${phase.num < currentPhase ? 'active' : ''}"></div>`;
+                }
+            });
+            return html;
+        }
+
+        function initPhaseNavigation() {
+            const navContainer = document.getElementById('phase-navigation');
+            if (navContainer) navContainer.innerHTML = renderPhaseNavigation();
+        }
+
         function initPhase6() {
             try {
                 const student = JSON.parse(localStorage.getItem('studentProfile') || '{}');
-                if (typeof initPhaseNavigation === 'function') initPhaseNavigation();
+                initPhaseNavigation();
                 displayStudentProfile(student);
                 setupStepNavigation();
                 showStep(1);
-            } catch (error) {
-                console.log('Error initializing Phase 6:', error);
-            }
+            } catch (error) { console.log('Error initializing Phase 6:', error); }
         }
 
         function displayStudentProfile(student) {
@@ -382,7 +514,7 @@
 
             container.innerHTML = `
                 <div class="enrollment-success">
-                    <div class="success-icon">🎉</div>
+                    <span class="success-icon">🎉</span>
                     <h2>Welcome to Futures Abroad!</h2>
                     <p>Your enrollment is complete. A counselor will contact you within 24 hours.</p>
                     <div class="next-steps">
@@ -393,7 +525,7 @@
                             <li>Prepare for your first session</li>
                         </ul>
                     </div>
-                    <button onclick="window.location.href='dashboard.html'" class="primary-btn">
+                    <button onclick="window.location.href='dashboard.html'" class="btn-primary">
                         Go to Dashboard
                     </button>
                 </div>
