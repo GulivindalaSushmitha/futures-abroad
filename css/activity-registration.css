@@ -1,4 +1,7 @@
-/* css/activity-registration.css */
+/* ============================================================
+   css/activity-registration.css - COMPLETE
+   ============================================================ */
+
 .registration-main {
     background: #ffffff;
     padding: 30px 35px;
@@ -168,4 +171,227 @@
 
 .btn-secondary:hover {
     background-color: #e5f0fa;
+}
+
+/* ============================================================
+   PHASE 4 STYLES
+   ============================================================ */
+
+/* Phase 4 Section - Green border highlight */
+.phase4-section {
+    border: 4px solid #22c55e !important;
+    border-radius: 20px !important;
+    padding: 35px !important;
+    margin-top: 24px !important;
+    background: #fafffe !important;
+    display: block !important;
+}
+
+.phase4-section .phase-badge {
+    background: #22c55e !important;
+    color: white !important;
+    padding: 4px 16px !important;
+    border-radius: 20px !important;
+    font-size: 12px !important;
+    font-weight: 700 !important;
+    letter-spacing: 1px !important;
+    text-transform: uppercase !important;
+    margin-bottom: 10px !important;
+    display: inline-block !important;
+}
+
+.phase4-section h3 {
+    font-size: 28px !important;
+    color: #2D1B4E !important;
+    margin-top: 10px !important;
+    margin-bottom: 15px !important;
+}
+
+.phase4-section .button-wrapper {
+    text-align: center !important;
+    margin: 20px 0 !important;
+}
+
+/* Phase 4 Success Section (shown after completion) */
+#phase4Success {
+    display: none;
+    background: #e8f5e9 !important;
+    padding: 30px !important;
+    border-radius: 16px !important;
+    text-align: center !important;
+    margin-top: 20px !important;
+    border: 3px solid #22c55e !important;
+}
+
+#phase4Success .icon {
+    font-size: 56px !important;
+    display: block !important;
+}
+
+#phase4Success h3 {
+    color: #16a34a !important;
+    margin: 10px 0 !important;
+    font-size: 24px !important;
+}
+
+#phase4Success p {
+    color: #555 !important;
+    font-size: 16px !important;
+}
+
+/* Success Buttons Container */
+.success-buttons {
+    margin-top: 20px !important;
+    display: flex !important;
+    gap: 15px !important;
+    flex-wrap: wrap !important;
+    justify-content: center !important;
+}
+
+/* Phase 4 Big Green Button */
+.btn-phase4 {
+    background: #22c55e !important;
+    color: white !important;
+    border: none !important;
+    padding: 18px 50px !important;
+    border-radius: 50px !important;
+    font-weight: 700 !important;
+    font-size: 22px !important;
+    cursor: pointer !important;
+    transition: all 0.3s ease !important;
+    font-family: 'Quicksand', Arial, sans-serif !important;
+    text-decoration: none !important;
+    display: inline-block !important;
+    box-shadow: 0 4px 20px rgba(34, 197, 94, 0.4) !important;
+    width: 100% !important;
+    max-width: 450px !important;
+}
+
+.btn-phase4:hover {
+    transform: translateY(-3px) scale(1.02) !important;
+    box-shadow: 0 6px 30px rgba(34, 197, 94, 0.5) !important;
+}
+
+.btn-phase4:active {
+    transform: scale(0.98) !important;
+}
+
+/* Phase 4 Status Message */
+#phase4-status {
+    margin-top: 12px !important;
+    font-size: 1rem !important;
+    display: none !important;
+    text-align: center !important;
+    padding: 15px !important;
+    border-radius: 12px !important;
+}
+
+#phase4-status.success {
+    color: #16a34a !important;
+    background: #e8f5e9 !important;
+    border: 2px solid #22c55e !important;
+}
+
+#phase4-status.info {
+    color: #0d47a1 !important;
+    background: #e3f2fd !important;
+    border: 2px solid #2196f3 !important;
+}
+
+/* Registered Badge */
+.registered-badge {
+    background: #22c55e !important;
+    color: white !important;
+    padding: 10px 24px !important;
+    border-radius: 50px !important;
+    font-weight: 700 !important;
+    display: inline-block !important;
+    margin: 10px 0 !important;
+    font-size: 18px !important;
+}
+
+/* Completion Status */
+.completion-status {
+    background: #f0fdf4 !important;
+    border: 3px solid #22c55e !important;
+    border-radius: 16px !important;
+    padding: 24px !important;
+    margin: 20px 0 !important;
+    text-align: center !important;
+}
+
+.completion-status .icon {
+    font-size: 56px !important;
+    display: block !important;
+}
+
+.completion-status h3 {
+    color: #16a34a !important;
+    margin: 10px 0 5px !important;
+    font-size: 24px !important;
+}
+
+/* Utility Classes */
+.hidden {
+    display: none !important;
+}
+
+.text-center {
+    text-align: center !important;
+}
+
+/* Quick Navigation Links */
+.quick-nav {
+    margin-top: 30px !important;
+    padding-top: 20px !important;
+    border-top: 1px solid #eee !important;
+    display: flex !important;
+    gap: 10px !important;
+    flex-wrap: wrap !important;
+    justify-content: center !important;
+}
+
+.quick-nav a {
+    flex: 0 1 auto !important;
+    min-width: 140px !important;
+    text-align: center !important;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    .phase4-section {
+        padding: 20px !important;
+    }
+    
+    .phase4-section h3 {
+        font-size: 22px !important;
+    }
+    
+    .btn-phase4 {
+        font-size: 18px !important;
+        padding: 16px 30px !important;
+    }
+    
+    #phase4Success {
+        padding: 20px !important;
+    }
+    
+    .success-buttons {
+        flex-direction: column !important;
+        align-items: center !important;
+    }
+    
+    .success-buttons .btn-secondary {
+        width: 100% !important;
+        text-align: center !important;
+    }
+    
+    .quick-nav {
+        flex-direction: column !important;
+        align-items: stretch !important;
+    }
+    
+    .quick-nav a {
+        text-align: center !important;
+    }
 }
