@@ -516,6 +516,7 @@
         import { auth, signOut } from './js/firebase-config.js';
 
         console.log('🚀 Dashboard loading...');
+        console.log('🔍 Checking if getActivityById exists:', typeof getActivityById);
 
         function getUserData() {
             const userData = localStorage.getItem('futuresAbroadUser');
@@ -547,21 +548,49 @@
         async function handleLogout() {
             if (confirm('Are you sure you want to logout?')) {
                 try {
-                    // Sign out from Firebase
                     await signOut(auth);
                     console.log('✅ Signed out from Firebase');
                 } catch (error) {
                     console.error('Logout error:', error);
                 }
                 
-                // Clear localStorage
                 localStorage.removeItem('futuresAbroadUser');
                 localStorage.removeItem('selectedActivity');
                 localStorage.removeItem('currentActivityId');
                 
-                // Redirect to login
                 window.location.replace('login.html');
             }
+        }
+
+        // ============================================================
+        // GO TO PHASE 3 - REGISTRATION PAGE
+        // ============================================================
+        function goToPhase3(activityId) {
+            console.log('🔵 Going to Phase 3 Registration for activity ID:', activityId);
+            
+            // ✅ Check if getActivityById exists
+            if (typeof getActivityById !== 'function') {
+                console.error('❌ getActivityById function not found!');
+                alert('Error: Activity data not loaded. Please refresh the page.');
+                return;
+            }
+            
+            const activity = getActivityById(activityId);
+            
+            if (!activity) {
+                console.error('❌ Activity not found for ID:', activityId);
+                alert('Activity not found. Please try again.');
+                return;
+            }
+            
+            console.log('✅ Activity found:', activity.name);
+            
+            // Save activity to localStorage
+            localStorage.setItem('selectedActivity', JSON.stringify(activity));
+            localStorage.setItem('currentActivityId', activityId);
+            
+            // ✅ Redirect to Phase 3 Registration Page
+            window.location.href = 'activity-registration.html?id=' + activityId;
         }
 
         // ============================================================
@@ -622,6 +651,8 @@
                     cost: currentCostFilter
                 });
                 console.log('✅ Found', activities.length, 'activities');
+            } else {
+                console.error('❌ getActivitiesByInterests function not found!');
             }
             
             renderActivities(activities);
@@ -686,20 +717,6 @@
                     `).join('')}
                 </div>
             `;
-        }
-
-        function goToPhase3(activityId) {
-            console.log('🔵 Going to Phase 3 Registration for activity:', activityId);
-            
-            const activity = getActivityById(activityId);
-            if (!activity) {
-                alert('Activity not found. Please try again.');
-                return;
-            }
-            
-            localStorage.setItem('selectedActivity', JSON.stringify(activity));
-            localStorage.setItem('currentActivityId', activityId);
-            window.location.href = 'activity-registration.html?id=' + activityId;
         }
 
         function getAIRationale(activity, user) {
@@ -769,6 +786,11 @@
                 window.location.href = 'signup.html';
             }
         }
+
+        // ============================================================
+        // MAKE goToPhase3 AVAILABLE GLOBALLY (for inline onclick)
+        // ============================================================
+        window.goToPhase3 = goToPhase3;
 
         // ============================================================
         // EVENT LISTENERS
