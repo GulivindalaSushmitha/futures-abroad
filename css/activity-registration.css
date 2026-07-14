@@ -2,6 +2,7 @@
    css/activity-registration.css - COMPLETE
    ============================================================ */
 
+/* ===== REGISTRATION CARD ===== */
 .registration-main {
     background: #ffffff;
     padding: 30px 35px;
@@ -40,6 +41,7 @@
     margin-bottom: 15px;
 }
 
+/* ===== READINESS SUMMARY ===== */
 .readiness-summary {
     background: #f8faff;
     padding: 15px 20px;
@@ -56,6 +58,7 @@
     color: #2c3e5a;
 }
 
+/* ===== CHECKLIST ===== */
 .checklist-section {
     margin: 25px 0 30px 0;
 }
@@ -125,6 +128,7 @@
     margin-left: 10px;
 }
 
+/* ===== BUTTONS ===== */
 .registration-actions {
     border-top: 1px solid #e9edf2;
     padding-top: 25px;
@@ -239,15 +243,6 @@
     font-size: 16px !important;
 }
 
-/* Success Buttons Container */
-.success-buttons {
-    margin-top: 20px !important;
-    display: flex !important;
-    gap: 15px !important;
-    flex-wrap: wrap !important;
-    justify-content: center !important;
-}
-
 /* Phase 4 Big Green Button */
 .btn-phase4 {
     background: #22c55e !important;
@@ -259,7 +254,7 @@
     font-size: 22px !important;
     cursor: pointer !important;
     transition: all 0.3s ease !important;
-    font-family: 'Quicksand', Arial, sans-serif !important;
+    font-family: inherit !important;
     text-decoration: none !important;
     display: inline-block !important;
     box-shadow: 0 4px 20px rgba(34, 197, 94, 0.4) !important;
@@ -338,60 +333,4 @@
 
 .text-center {
     text-align: center !important;
-}
-
-/* Quick Navigation Links */
-.quick-nav {
-    margin-top: 30px !important;
-    padding-top: 20px !important;
-    border-top: 1px solid #eee !important;
-    display: flex !important;
-    gap: 10px !important;
-    flex-wrap: wrap !important;
-    justify-content: center !important;
-}
-
-.quick-nav a {
-    flex: 0 1 auto !important;
-    min-width: 140px !important;
-    text-align: center !important;
-}
-
-/* Responsive Styles */
-@media (max-width: 768px) {
-    .phase4-section {
-        padding: 20px !important;
-    }
-    
-    .phase4-section h3 {
-        font-size: 22px !important;
-    }
-    
-    .btn-phase4 {
-        font-size: 18px !important;
-        padding: 16px 30px !important;
-    }
-    
-    #phase4Success {
-        padding: 20px !important;
-    }
-    
-    .success-buttons {
-        flex-direction: column !important;
-        align-items: center !important;
-    }
-    
-    .success-buttons .btn-secondary {
-        width: 100% !important;
-        text-align: center !important;
-    }
-    
-    .quick-nav {
-        flex-direction: column !important;
-        align-items: stretch !important;
-    }
-    
-    .quick-nav a {
-        text-align: center !important;
-    }
 }
