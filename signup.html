@@ -318,13 +318,12 @@
 
     <script type="module">
         // ============================================================
-        // SIGNUP - FIXED: No Blinking
+        // SIGNUP - COMPLETE REWRITE - NO BLINKING
         // ============================================================
         
         import { 
             auth, 
             createUserWithEmailAndPassword,
-            onAuthStateChanged,
             db,
             doc,
             setDoc,
@@ -346,7 +345,7 @@
         const interestsGrid = document.getElementById('interestsGrid');
 
         let selectedInterests = [];
-        let isRedirecting = false;
+        let isProcessing = false;
 
         // ============================================================
         // INTEREST SELECTION
@@ -367,8 +366,6 @@
                     selectedInterests.push(value);
                     this.classList.add('selected');
                 }
-                
-                console.log('Selected interests:', selectedInterests);
             });
         });
 
@@ -378,7 +375,8 @@
         async function handleSignup(event) {
             event.preventDefault();
             
-            if (isRedirecting) return;
+            if (isProcessing) return;
+            isProcessing = true;
 
             const name = nameInput.value.trim();
             const email = emailInput.value.trim();
@@ -390,22 +388,24 @@
             errorMessage.classList.remove('show');
             successMessage.classList.remove('show');
 
-            // Validate
             if (!name || !email || !password || !grade) {
                 errorMessage.textContent = '❌ Please fill in all required fields.';
                 errorMessage.classList.add('show');
+                isProcessing = false;
                 return;
             }
 
             if (password.length < 6) {
                 errorMessage.textContent = '❌ Password must be at least 6 characters.';
                 errorMessage.classList.add('show');
+                isProcessing = false;
                 return;
             }
 
             if (selectedInterests.length < 2) {
                 errorMessage.textContent = '❌ Please select at least 2 interests.';
                 errorMessage.classList.add('show');
+                isProcessing = false;
                 return;
             }
 
@@ -418,7 +418,6 @@
                 
                 console.log('✅ Account created:', user.email);
 
-                // Save user data to Firestore
                 const userData = {
                     uid: user.uid,
                     email: user.email,
@@ -442,9 +441,8 @@
                 signupBtn.disabled = false;
                 signupBtn.innerHTML = '✅ Account Created!';
 
-                isRedirecting = true;
                 setTimeout(() => {
-                    window.location.href = 'student-app.html';
+                    window.location.replace('student-app.html');
                 }, 1500);
 
             } catch (error) {
@@ -457,8 +455,6 @@
                     msg = '❌ Invalid email format. Please check.';
                 } else if (error.code === 'auth/weak-password') {
                     msg = '❌ Password is too weak. Use at least 6 characters.';
-                } else if (error.code === 'auth/network-request-failed') {
-                    msg = '❌ Network error. Please check your connection.';
                 }
                 
                 errorMessage.textContent = msg;
@@ -466,23 +462,21 @@
 
                 signupBtn.disabled = false;
                 signupBtn.innerHTML = '🚀 Create Account';
+                isProcessing = false;
             }
         }
 
         // ============================================================
-        // CHECK IF ALREADY LOGGED IN - WITH GUARD
+        // CHECK IF ALREADY LOGGED IN
         // ============================================================
         function checkExistingSession() {
-            if (isRedirecting) return false;
-            
             const userData = localStorage.getItem('futuresAbroadUser');
             if (userData) {
                 try {
                     const user = JSON.parse(userData);
                     if (user.loggedIn) {
                         console.log('🔵 Already logged in, redirecting...');
-                        isRedirecting = true;
-                        window.location.href = 'student-app.html';
+                        window.location.replace('student-app.html');
                         return true;
                     }
                 } catch (e) {
@@ -493,19 +487,10 @@
         }
 
         // ============================================================
-        // INITIALIZE - WITH GUARD
+        // INITIALIZE
         // ============================================================
         document.addEventListener('DOMContentLoaded', function() {
-            if (checkExistingSession()) return;
-
-            // Check Firebase auth state - WITH GUARD
-            onAuthStateChanged(auth, (user) => {
-                if (user && !isRedirecting) {
-                    console.log('🔵 Already logged in (Firebase):', user.email);
-                    isRedirecting = true;
-                    window.location.href = 'student-app.html';
-                }
-            });
+            checkExistingSession();
         });
 
         signupForm.addEventListener('submit', handleSignup);
