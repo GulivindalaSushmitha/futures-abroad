@@ -3,302 +3,454 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Login - Futures Abroad</title>
-    <link rel="stylesheet" href="css/style.css" />
+    <title>Login | Futures Abroad</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
     <style>
-        .auth-container {
-            max-width: 420px;
-            margin: 80px auto;
-            padding: 40px;
-            background: white;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0F0A1E;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            background-image: 
+                radial-gradient(ellipse at 20% 50%, rgba(108, 60, 225, 0.15) 0%, transparent 60%),
+                radial-gradient(ellipse at 80% 50%, rgba(0, 212, 170, 0.1) 0%, transparent 60%);
+        }
+
+        .login-container {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.12);
             border-radius: 24px;
-            box-shadow: 0 20px 60px rgba(108,60,225,0.12);
+            padding: 40px;
+            max-width: 420px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
         }
-        .auth-header {
+
+        .logo {
             text-align: center;
-            margin-bottom: 30px;
-        }
-        .auth-header .logo {
             font-size: 28px;
             font-weight: 800;
-            color: #2D1B4E;
+            margin-bottom: 8px;
+            background: linear-gradient(135deg, #6C3CE1 0%, #00D4AA 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
-        .auth-header .logo span { color: #6C3CE1; }
-        .auth-header h1 {
-            font-size: 28px;
-            color: #2D1B4E;
-            margin: 10px 0 5px;
+
+        .subtitle {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 14px;
+            margin-bottom: 30px;
         }
-        .auth-header p {
-            color: #888;
-            font-size: 16px;
-        }
+
         .form-group {
-            margin-bottom: 18px;
+            margin-bottom: 20px;
         }
+
         .form-group label {
             display: block;
-            font-weight: 600;
-            margin-bottom: 5px;
-            color: #2D1B4E;
+            color: rgba(255, 255, 255, 0.7);
             font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 6px;
         }
+
         .form-group input {
             width: 100%;
-            padding: 14px 18px;
-            border: 2px solid #E8E0F0;
-            border-radius: 14px;
+            padding: 14px 16px;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 12px;
+            color: white;
             font-size: 15px;
-            font-family: 'Quicksand', sans-serif;
-            transition: border 0.3s;
-            background: #faf8ff;
+            font-family: 'Inter', sans-serif;
+            transition: all 0.3s ease;
         }
+
         .form-group input:focus {
-            border-color: #6C3CE1;
             outline: none;
-            background: white;
-            box-shadow: 0 0 0 4px rgba(108,60,225,0.08);
+            border-color: #6C3CE1;
+            box-shadow: 0 0 0 3px rgba(108, 60, 225, 0.2);
         }
-        .btn-submit {
+
+        .form-group input::placeholder {
+            color: rgba(255, 255, 255, 0.3);
+        }
+
+        .btn-login {
             width: 100%;
             padding: 16px;
-            background: #6C3CE1;
-            color: white;
+            background: linear-gradient(135deg, #6C3CE1 0%, #00D4AA 100%);
             border: none;
-            border-radius: 50px;
-            font-weight: 700;
-            font-size: 17px;
+            border-radius: 12px;
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s;
-            font-family: 'Quicksand', sans-serif;
+            transition: all 0.3s ease;
+            font-family: 'Inter', sans-serif;
+            margin-top: 10px;
         }
-        .btn-submit:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 30px rgba(108,60,225,0.35);
+
+        .btn-login:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(108, 60, 225, 0.4);
         }
-        .auth-footer {
+
+        .btn-login:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .error-message {
+            background: rgba(255, 107, 107, 0.15);
+            border: 1px solid rgba(255, 107, 107, 0.3);
+            color: #FF6B6B;
+            padding: 12px 16px;
+            border-radius: 10px;
+            font-size: 14px;
+            margin-bottom: 16px;
+            display: none;
+        }
+
+        .error-message.show {
+            display: block;
+        }
+
+        .success-message {
+            background: rgba(0, 212, 170, 0.15);
+            border: 1px solid rgba(0, 212, 170, 0.3);
+            color: #00D4AA;
+            padding: 12px 16px;
+            border-radius: 10px;
+            font-size: 14px;
+            margin-bottom: 16px;
+            display: none;
+        }
+
+        .success-message.show {
+            display: block;
+        }
+
+        .signup-link {
             text-align: center;
             margin-top: 20px;
-            color: #888;
+            color: rgba(255, 255, 255, 0.5);
             font-size: 14px;
         }
-        .auth-footer a {
+
+        .signup-link a {
             color: #6C3CE1;
-            font-weight: 600;
             text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s ease;
         }
-        .auth-footer a:hover { text-decoration: underline; }
-        .message-box {
+
+        .signup-link a:hover {
+            color: #8B6BF0;
+        }
+
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-top: 2px solid white;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin-right: 10px;
+            vertical-align: middle;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .demo-credentials {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px dashed rgba(255, 255, 255, 0.15);
+            border-radius: 10px;
             padding: 12px 16px;
-            border-radius: 12px;
-            margin-bottom: 15px;
-            display: none;
-            font-size: 14px;
-        }
-        .message-box.error {
-            display: block;
-            background: #FFE8E8;
-            color: #C62828;
-            border-left: 4px solid #C62828;
-        }
-        .message-box.success {
-            display: block;
-            background: #E8F5E9;
-            color: #2E7D32;
-            border-left: 4px solid #2E7D32;
-        }
-        .signup-cta {
-            background: #f8f4ff;
-            border-radius: 16px;
-            padding: 16px 20px;
-            margin: 16px 0;
+            margin-bottom: 20px;
             text-align: center;
-            border: 2px solid #f0e6ff;
         }
-        .signup-cta p {
-            margin: 0 0 8px 0;
-            color: #2D1B4E;
-            font-weight: 600;
+
+        .demo-credentials p {
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 12px;
+            margin-bottom: 4px;
         }
-        .signup-cta .btn-signup-cta {
-            display: inline-block;
-            padding: 10px 28px;
-            background: linear-gradient(135deg, #6C3CE1, #a855f7);
+
+        .demo-credentials code {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 13px;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 2px 8px;
+            border-radius: 4px;
+        }
+
+        .demo-credentials .demo-btn {
+            background: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: rgba(255, 255, 255, 0.6);
+            padding: 6px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+            font-family: 'Inter', sans-serif;
+            transition: all 0.3s ease;
+            margin-top: 6px;
+        }
+
+        .demo-credentials .demo-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
             color: white;
-            border-radius: 50px;
-            text-decoration: none;
-            font-weight: 700;
-            font-size: 15px;
-            transition: all 0.3s;
         }
-        .signup-cta .btn-signup-cta:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 20px rgba(108,60,225,0.3);
-        }
-        .btn-app-redirect {
-            display: inline-block;
-            margin-top: 10px;
-            padding: 10px 24px;
-            background: #6C3CE1;
-            color: white;
-            border-radius: 50px;
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 14px;
-            transition: all 0.3s;
-        }
-        .btn-app-redirect:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(108,60,225,0.3);
+
+        @media (max-width: 480px) {
+            .login-container {
+                padding: 24px;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="auth-container">
-        <div class="auth-header">
-            <div class="logo">🚀 Futures <span>Abroad</span></div>
-            <h1>Welcome Back!</h1>
-            <p>Login to continue your university journey</p>
+    <div class="login-container">
+        <div class="logo">🚀 Futures Abroad</div>
+        <p class="subtitle">Welcome back! Login to continue your university journey</p>
+
+        <!-- Error Message -->
+        <div id="errorMessage" class="error-message">
+            ❌ Invalid email or password. Please try again.
         </div>
-        
-        <div id="loginMessage" class="message-box"></div>
-        
-        <form id="login-form">
+
+        <!-- Success Message -->
+        <div id="successMessage" class="success-message">
+            ✅ Login successful! Redirecting to dashboard...
+        </div>
+
+        <!-- Demo Credentials -->
+        <div class="demo-credentials">
+            <p>🔑 Demo Account</p>
+            <code>Email: demo@futuresabroad.com</code>
+            <br />
+            <code>Password: password123</code>
+            <br />
+            <button class="demo-btn" onclick="fillDemoCredentials()">📝 Fill Demo Credentials</button>
+        </div>
+
+        <!-- Login Form -->
+        <form id="loginForm" onsubmit="handleLogin(event)">
             <div class="form-group">
-                <label>Email Address</label>
-                <input type="email" id="login-email" placeholder="student@email.com" required />
+                <label for="email">Email Address</label>
+                <input 
+                    type="email" 
+                    id="email" 
+                    placeholder="Enter your email" 
+                    required
+                    value="demo@futuresabroad.com"
+                />
             </div>
+
             <div class="form-group">
-                <label>Password</label>
-                <input type="password" id="login-password" placeholder="Enter your password" required />
+                <label for="password">Password</label>
+                <input 
+                    type="password" 
+                    id="password" 
+                    placeholder="Enter your password" 
+                    required
+                    value="password123"
+                />
             </div>
-            <button type="submit" class="btn-submit">Login 🚀</button>
+
+            <button type="submit" class="btn-login" id="loginBtn">
+                🔐 Login
+            </button>
         </form>
-        
-        <div class="signup-cta">
-            <p>🆕 New to Futures Abroad?</p>
-            <a href="signup.html" class="btn-signup-cta">Create Your Account →</a>
-        </div>
-        
-        <div style="text-align: center; margin-top: 12px;">
-            <a href="student-app.html" class="btn-app-redirect">🚀 Go to Student App</a>
-        </div>
-        
-        <div class="auth-footer">
-            <p><a href="index.html">← Back to Home</a></p>
-            <p style="margin-top:8px;"><a href="admin-login.html" style="color:#FF6B6B;">🔐 Admin Login</a></p>
+
+        <div class="signup-link">
+            New to Futures Abroad? <a href="signup.html">Create Your Account →</a>
         </div>
     </div>
 
-    <script type="module">
+    <script>
         // ============================================================
-        // IMPORTS
+        // LOGIN JAVASCRIPT
         // ============================================================
-        import { 
-            auth, 
-            db,
-            doc,
-            getDoc,
-            setDoc,
-            signInWithEmailAndPassword,
-            ADMIN_UID
-        } from './js/firebase-config.js';
 
-        // ============================================================
-        // LOGIN FORM
-        // ============================================================
-        document.getElementById('login-form').addEventListener('submit', async function(e) {
-            e.preventDefault();
-            const email = document.getElementById('login-email').value.trim();
-            const password = document.getElementById('login-password').value;
-            const msgEl = document.getElementById('loginMessage');
+        // Get DOM elements
+        const emailInput = document.getElementById('email');
+        const passwordInput = document.getElementById('password');
+        const loginBtn = document.getElementById('loginBtn');
+        const errorMessage = document.getElementById('errorMessage');
+        const successMessage = document.getElementById('successMessage');
+        const loginForm = document.getElementById('loginForm');
+
+        // Demo users database (for testing without Firebase)
+        const DEMO_USERS = {
+            'demo@futuresabroad.com': {
+                password: 'password123',
+                name: 'Demo Student',
+                grade: 10,
+                interests: ['STEM', 'Leadership', 'Technology'],
+                school: 'Demo International School',
+                country: 'UAE'
+            },
+            'student@example.com': {
+                password: 'student123',
+                name: 'Test Student',
+                grade: 11,
+                interests: ['Business', 'Entrepreneurship', 'Finance'],
+                school: 'Test School',
+                country: 'UAE'
+            },
+            'sushmithagulivindala@gmail.com': {
+                password: 'password123',
+                name: 'Sushmitha',
+                grade: 10,
+                interests: ['Computer Science', 'Technology', 'STEM'],
+                school: 'Timpany',
+                country: 'Bahrain'
+            }
+        };
+
+        // Fill demo credentials
+        function fillDemoCredentials() {
+            emailInput.value = 'demo@futuresabroad.com';
+            passwordInput.value = 'password123';
             
-            msgEl.className = 'message-box';
-            msgEl.textContent = '';
+            // Also try to fill if there's a pre-filled email
+            const currentEmail = emailInput.value.trim();
+            if (currentEmail && DEMO_USERS[currentEmail]) {
+                passwordInput.value = DEMO_USERS[currentEmail].password;
+            }
+        }
+
+        // Handle login
+        function handleLogin(event) {
+            event.preventDefault();
             
+            const email = emailInput.value.trim();
+            const password = passwordInput.value.trim();
+
+            // Hide previous messages
+            errorMessage.classList.remove('show');
+            successMessage.classList.remove('show');
+
+            // Validate inputs
             if (!email || !password) {
-                msgEl.className = 'message-box error';
-                msgEl.textContent = '⚠️ Please enter both email and password.';
+                errorMessage.textContent = '❌ Please enter both email and password.';
+                errorMessage.classList.add('show');
                 return;
             }
-            
-            try {
-                const userCredential = await signInWithEmailAndPassword(auth, email, password);
-                const user = userCredential.user;
+
+            // Show loading state
+            loginBtn.disabled = true;
+            loginBtn.innerHTML = '<span class="loading-spinner"></span> Logging in...';
+
+            // Simulate network delay
+            setTimeout(() => {
+                // Check if user exists in demo database
+                const user = DEMO_USERS[email];
                 
-                // Check if admin
-                if (user.uid === ADMIN_UID) {
-                    msgEl.className = 'message-box success';
-                    msgEl.textContent = '🔐 Admin login successful!';
-                    setTimeout(() => {
-                        window.location.href = 'admin-dashboard.html';
-                    }, 500);
-                    return;
-                }
-                
-                // Check student exists
-                const studentDoc = await getDoc(doc(db, 'students', user.uid));
-                if (!studentDoc.exists()) {
-                    await setDoc(doc(db, 'students', user.uid), {
-                        uid: user.uid,
+                if (user && user.password === password) {
+                    // ✅ SUCCESSFUL LOGIN
+                    console.log('✅ Login successful for:', email);
+
+                    // Save user data to localStorage
+                    const userData = {
                         email: email,
-                        name: email.split('@')[0],
-                        interests: [],
-                        selectedInterests: [],
-                        profileCompleted: false,
-                        quizCompleted: false,
-                        createdAt: new Date().toISOString()
-                    });
-                }
-                
-                const studentData = (await getDoc(doc(db, 'students', user.uid))).data();
-                
-                // ============================================================
-                // SMART REDIRECT BASED ON PROGRESS
-                // ============================================================
-                
-                // 1. If quiz completed → Phase 2 (Activities)
-                if (studentData?.quizCompleted) {
-                    msgEl.className = 'message-box success';
-                    msgEl.textContent = '✅ Welcome back! Taking you to activities...';
+                        name: user.name,
+                        grade: user.grade,
+                        interests: user.interests,
+                        school: user.school,
+                        country: user.country,
+                        loggedIn: true,
+                        loginTime: new Date().toISOString()
+                    };
+                    
+                    localStorage.setItem('futuresAbroadUser', JSON.stringify(userData));
+
+                    // Show success message
+                    successMessage.textContent = '✅ Login successful! Redirecting to dashboard...';
+                    successMessage.classList.add('show');
+
+                    // Reset button
+                    loginBtn.disabled = false;
+                    loginBtn.innerHTML = '✅ Logged In!';
+
+                    // Redirect to student app (dashboard)
                     setTimeout(() => {
-                        window.location.href = 'activities.html';
-                    }, 500);
-                    return;
-                }
-                
-                // 2. If interests selected but quiz not completed → Quiz
-                if (studentData?.selectedInterests && studentData.selectedInterests.length === 3) {
-                    msgEl.className = 'message-box success';
-                    msgEl.textContent = '✅ You selected your interests! Taking you to the quiz...';
-                    setTimeout(() => {
-                        window.location.href = 'quiz.html?uid=' + user.uid;
-                    }, 500);
-                    return;
-                }
-                
-                // 3. If no interests selected → Interest selection
-                msgEl.className = 'message-box success';
-                msgEl.textContent = '✅ Welcome! Choose your interests first...';
-                setTimeout(() => {
-                    window.location.href = 'select-interests.html?uid=' + user.uid;
-                }, 500);
-                
-            } catch (error) {
-                console.error('Login error:', error);
-                msgEl.className = 'message-box error';
-                
-                if (error.code === 'auth/user-not-found') {
-                    msgEl.innerHTML = '❌ No account found. <a href="signup.html">Create one here</a>';
-                } else if (error.code === 'auth/wrong-password') {
-                    msgEl.textContent = '❌ Incorrect password.';
-                } else if (error.code === 'auth/invalid-email') {
-                    msgEl.textContent = '❌ Invalid email.';
+                        window.location.href = 'student-app.html';
+                    }, 1200);
+
                 } else {
-                    msgEl.textContent = '❌ Login failed: ' + error.message;
+                    // ❌ LOGIN FAILED
+                    console.log('❌ Login failed for:', email);
+                    
+                    errorMessage.textContent = '❌ Invalid email or password. Please try again.';
+                    errorMessage.classList.add('show');
+
+                    // Reset button
+                    loginBtn.disabled = false;
+                    loginBtn.innerHTML = '🔐 Login';
+                }
+            }, 800);
+        }
+
+        // Check if user is already logged in
+        function checkExistingSession() {
+            const userData = localStorage.getItem('futuresAbroadUser');
+            if (userData) {
+                try {
+                    const user = JSON.parse(userData);
+                    if (user.loggedIn) {
+                        console.log('🔵 User already logged in, redirecting...');
+                        window.location.href = 'student-app.html';
+                    }
+                } catch (e) {
+                    console.log('Invalid user data, clearing...');
+                    localStorage.removeItem('futuresAbroadUser');
                 }
             }
+        }
+
+        // Auto-fill demo credentials on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check if already logged in
+            checkExistingSession();
+            
+            // Auto-fill demo credentials
+            const savedEmail = localStorage.getItem('lastLoginEmail');
+            if (savedEmail && DEMO_USERS[savedEmail]) {
+                emailInput.value = savedEmail;
+                passwordInput.value = DEMO_USERS[savedEmail].password;
+            } else {
+                // Default demo
+                emailInput.value = 'demo@futuresabroad.com';
+                passwordInput.value = 'password123';
+            }
         });
+
+        // Save last login email
+        emailInput.addEventListener('change', function() {
+            localStorage.setItem('lastLoginEmail', this.value.trim());
+        });
+
+        console.log('🚀 Login page loaded!');
+        console.log('📧 Demo users available:', Object.keys(DEMO_USERS));
     </script>
 </body>
 </html>
