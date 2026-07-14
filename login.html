@@ -206,13 +206,12 @@
 
     <script type="module">
         // ============================================================
-        // LOGIN - FIXED: No Blinking
+        // LOGIN - COMPLETE REWRITE - NO BLINKING
         // ============================================================
         
         import { 
             auth, 
             signInWithEmailAndPassword,
-            onAuthStateChanged,
             db,
             doc,
             getDoc,
@@ -229,8 +228,32 @@
         const successMessage = document.getElementById('successMessage');
         const loginForm = document.getElementById('loginForm');
 
-        // ✅ PREVENT REDIRECT LOOP - Check if already redirected
-        let isRedirecting = false;
+        // ✅ PREVENT MULTIPLE REDIRECTS
+        let authChecked = false;
+        let isProcessing = false;
+
+        // ============================================================
+        // CHECK EXISTING SESSION - ONLY ONCE
+        // ============================================================
+        function checkExistingSession() {
+            if (authChecked) return;
+            authChecked = true;
+            
+            const userData = localStorage.getItem('futuresAbroadUser');
+            if (userData) {
+                try {
+                    const user = JSON.parse(userData);
+                    if (user.loggedIn) {
+                        console.log('🔵 Already logged in, redirecting...');
+                        window.location.replace('student-app.html');
+                        return true;
+                    }
+                } catch (e) {
+                    localStorage.removeItem('futuresAbroadUser');
+                }
+            }
+            return false;
+        }
 
         // ============================================================
         // HANDLE LOGIN
@@ -238,7 +261,8 @@
         async function handleLogin(event) {
             event.preventDefault();
             
-            if (isRedirecting) return;
+            if (isProcessing) return;
+            isProcessing = true;
 
             const email = emailInput.value.trim();
             const password = passwordInput.value.trim();
@@ -249,6 +273,7 @@
             if (!email || !password) {
                 errorMessage.textContent = '❌ Please enter both email and password.';
                 errorMessage.classList.add('show');
+                isProcessing = false;
                 return;
             }
 
@@ -261,7 +286,6 @@
                 
                 console.log('✅ Login successful:', user.email);
 
-                // Get user data from Firestore
                 try {
                     const userRef = doc(db, COLLECTIONS.users, user.uid);
                     const userDoc = await getDoc(userRef);
@@ -304,10 +328,9 @@
                 loginBtn.disabled = false;
                 loginBtn.innerHTML = '✅ Logged In!';
 
-                isRedirecting = true;
                 setTimeout(() => {
-                    window.location.href = 'student-app.html';
-                }, 1200);
+                    window.location.replace('student-app.html');
+                }, 1000);
 
             } catch (error) {
                 console.error('❌ Login error:', error.code);
@@ -328,47 +351,16 @@
 
                 loginBtn.disabled = false;
                 loginBtn.innerHTML = '🔐 Login';
+                isProcessing = false;
             }
         }
 
         // ============================================================
-        // CHECK IF ALREADY LOGGED IN - WITH GUARD
-        // ============================================================
-        function checkExistingSession() {
-            if (isRedirecting) return false;
-            
-            const userData = localStorage.getItem('futuresAbroadUser');
-            if (userData) {
-                try {
-                    const user = JSON.parse(userData);
-                    if (user.loggedIn) {
-                        console.log('🔵 Already logged in, redirecting...');
-                        isRedirecting = true;
-                        window.location.href = 'student-app.html';
-                        return true;
-                    }
-                } catch (e) {
-                    localStorage.removeItem('futuresAbroadUser');
-                }
-            }
-            return false;
-        }
-
-        // ============================================================
-        // INITIALIZE - WITH GUARD
+        // INITIALIZE - ONLY ONCE
         // ============================================================
         document.addEventListener('DOMContentLoaded', function() {
-            // Check if already logged in (with guard)
-            if (checkExistingSession()) return;
-
-            // Check Firebase auth state - WITH GUARD
-            onAuthStateChanged(auth, (user) => {
-                if (user && !isRedirecting) {
-                    console.log('🔵 Already logged in (Firebase):', user.email);
-                    isRedirecting = true;
-                    window.location.href = 'student-app.html';
-                }
-            });
+            // Check if already logged in (only once)
+            checkExistingSession();
         });
 
         loginForm.addEventListener('submit', handleLogin);
