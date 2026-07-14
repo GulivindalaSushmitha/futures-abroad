@@ -6,14 +6,7 @@
     <title>Activity Registration - Futures Abroad</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
     <style>
-        /* ============================================================
-           COMPLETE STYLES - activity-registration.html
-           ============================================================ */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: 'Inter', sans-serif;
             background: #0F0A1E;
@@ -26,7 +19,6 @@
                 radial-gradient(ellipse at 80% 50%, rgba(0, 212, 170, 0.1) 0%, transparent 60%);
         }
 
-        /* ===== MAIN HEADER ===== */
         .main-header {
             background: rgba(255, 255, 255, 0.05);
             backdrop-filter: blur(20px);
@@ -43,6 +35,7 @@
             margin-left: auto;
             margin-right: auto;
         }
+
         .main-header .logo a {
             font-size: 22px;
             font-weight: 800;
@@ -50,7 +43,14 @@
             text-decoration: none;
         }
         .main-header .logo a span { color: #6C3CE1; }
-        .main-header nav { display: flex; gap: 15px; align-items: center; flex-wrap: wrap; }
+
+        .main-header nav {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
         .main-header nav a {
             text-decoration: none;
             color: rgba(255, 255, 255, 0.7);
@@ -60,17 +60,35 @@
             transition: all 0.3s;
             font-size: 14px;
         }
-        .main-header nav a:hover { background: rgba(108, 60, 225, 0.2); color: #ffffff; }
-        .main-header nav #logout-link { color: #FF6B6B; }
-        .main-header nav #logout-link:hover { background: rgba(255, 107, 107, 0.15); }
 
-        /* ===== APP CONTAINER ===== */
+        .main-header nav a:hover {
+            background: rgba(108, 60, 225, 0.2);
+            color: #ffffff;
+        }
+
+        .logout-btn {
+            padding: 8px 20px;
+            background: rgba(255, 107, 107, 0.15);
+            border: 1px solid rgba(255, 107, 107, 0.3);
+            border-radius: 50px;
+            color: #FF6B6B;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .logout-btn:hover {
+            background: rgba(255, 107, 107, 0.25);
+            transform: translateY(-2px);
+        }
+
         .app-container {
             max-width: 1100px;
             margin: 0 auto;
         }
 
-        /* ===== PHASE NAVIGATION ===== */
         .phase-nav {
             display: flex;
             align-items: center;
@@ -84,6 +102,7 @@
             border-radius: 12px;
             margin-bottom: 30px;
         }
+
         .phase-item {
             display: flex;
             flex-direction: column;
@@ -93,7 +112,9 @@
             min-width: 44px;
             transition: all 0.3s;
         }
+
         .phase-item:hover .phase-circle { transform: scale(1.1); }
+
         .phase-circle {
             width: 34px;
             height: 34px;
@@ -107,6 +128,7 @@
             font-size: 13px;
             transition: all 0.3s;
         }
+
         .phase-circle.active { background: #2563eb; color: white; }
         .phase-circle.completed { background: #22c55e; color: white; }
         .phase-circle.current {
@@ -114,6 +136,7 @@
             color: white;
             box-shadow: 0 0 0 4px rgba(108, 60, 225, 0.25);
         }
+
         .phase-label {
             font-size: 9px;
             color: rgba(255, 255, 255, 0.4);
@@ -122,7 +145,9 @@
             letter-spacing: 0.3px;
             font-weight: 500;
         }
+
         .phase-label.active { color: #ffffff; font-weight: 600; }
+
         .phase-connector {
             width: 25px;
             height: 2px;
@@ -130,9 +155,9 @@
             flex-shrink: 0;
             transition: all 0.5s;
         }
+
         .phase-connector.active { background: #2563eb; }
 
-        /* ===== REGISTRATION CARD ===== */
         .registration-card {
             background: rgba(255, 255, 255, 0.05);
             backdrop-filter: blur(20px);
@@ -140,12 +165,14 @@
             border-radius: 16px;
             padding: 30px;
         }
+
         .registration-card h1 {
             font-size: 28px;
             color: #ffffff;
             margin: 0 0 5px 0;
             font-weight: 700;
         }
+
         .registration-card .subtitle {
             color: rgba(255, 255, 255, 0.6);
             font-size: 16px;
@@ -154,7 +181,6 @@
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
 
-        /* ===== DATES BOX ===== */
         .dates-box {
             background: rgba(255, 255, 255, 0.05);
             padding: 15px 20px;
@@ -162,19 +188,21 @@
             margin-bottom: 20px;
             border: 1px solid rgba(255, 255, 255, 0.1);
         }
+
         .dates-box h3 {
             margin: 0 0 10px 0;
             color: #ffffff;
             font-size: 16px;
         }
+
         .dates-box p {
             margin: 4px 0;
             color: rgba(255, 255, 255, 0.6);
             font-size: 14px;
         }
+
         .dates-box p strong { color: #ffffff; }
 
-        /* ===== REMINDER BOX ===== */
         .reminder-box {
             background: rgba(37, 99, 235, 0.1);
             padding: 12px 16px;
@@ -182,13 +210,13 @@
             border-left: 4px solid #2563eb;
             margin-bottom: 20px;
         }
+
         .reminder-box p {
             margin: 0;
             color: #8B6BF0;
             font-size: 14px;
         }
 
-        /* ===== ACTIVITY INFO ===== */
         .activity-info {
             background: rgba(255, 255, 255, 0.05);
             padding: 20px;
@@ -196,6 +224,7 @@
             margin-bottom: 25px;
             border: 1px solid rgba(255, 255, 255, 0.1);
         }
+
         .activity-info h2 {
             font-size: 24px;
             margin: 0 0 8px 0;
@@ -204,14 +233,15 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
+
         .activity-info p {
             color: rgba(255, 255, 255, 0.6);
             margin: 4px 0;
             font-size: 14px;
         }
+
         .activity-info p strong { color: rgba(255, 255, 255, 0.8); }
 
-        /* ===== CHECKLIST ===== */
         .checklist-item {
             display: flex;
             align-items: flex-start;
@@ -222,11 +252,14 @@
             background: rgba(255, 255, 255, 0.03);
             transition: all 0.3s;
         }
+
         .checklist-item:hover { border-color: #6C3CE1; }
+
         .checklist-item.completed {
             border-color: #22c55e;
             background: rgba(34, 197, 94, 0.05);
         }
+
         .checklist-item input[type="checkbox"] {
             margin-top: 4px;
             margin-right: 15px;
@@ -236,23 +269,28 @@
             flex-shrink: 0;
             accent-color: #6C3CE1;
         }
+
         .checklist-item .check-content { flex: 1; }
+
         .checklist-item .check-content label {
             font-weight: 600;
             color: #ffffff;
             cursor: pointer;
             font-size: 15px;
         }
+
         .checklist-item .check-content .due-date {
             color: rgba(255, 255, 255, 0.4);
             font-size: 12px;
             margin: 2px 0 4px 0;
         }
+
         .checklist-item .check-content .desc {
             color: rgba(255, 255, 255, 0.5);
             font-size: 13px;
             margin: 2px 0 0 0;
         }
+
         .checklist-item textarea {
             width: 100%;
             min-height: 70px;
@@ -267,22 +305,26 @@
             margin-top: 8px;
             transition: all 0.3s;
         }
+
         .checklist-item textarea:focus {
             outline: none;
             border-color: #6C3CE1;
             box-shadow: 0 0 0 3px rgba(108, 60, 225, 0.1);
         }
+
         .checklist-item .tip {
             color: #8B6BF0;
             font-size: 12px;
             margin-top: 4px;
         }
+
         .input-row {
             display: flex;
             flex-wrap: wrap;
             gap: 10px;
             margin-top: 8px;
         }
+
         .input-row input {
             flex: 1;
             min-width: 150px;
@@ -294,16 +336,17 @@
             color: #ffffff;
             transition: all 0.3s;
         }
+
         .input-row input:focus {
             outline: none;
             border-color: #6C3CE1;
             box-shadow: 0 0 0 3px rgba(108, 60, 225, 0.1);
         }
+
         .input-row input::placeholder {
             color: rgba(255, 255, 255, 0.3);
         }
 
-        /* ===== STATUS BOX ===== */
         .status-box {
             background: rgba(34, 197, 94, 0.1);
             padding: 12px 16px;
@@ -311,13 +354,13 @@
             border: 1px solid rgba(34, 197, 94, 0.2);
             margin: 20px 0;
         }
+
         .status-box p {
             margin: 0;
             color: #22c55e;
             font-weight: 500;
         }
 
-        /* ===== ACTION BUTTONS ===== */
         .action-buttons {
             display: flex;
             gap: 12px;
@@ -326,6 +369,7 @@
             padding-top: 20px;
             border-top: 2px solid rgba(255, 255, 255, 0.1);
         }
+
         .btn-back {
             padding: 10px 24px;
             background: rgba(255, 255, 255, 0.1);
@@ -339,10 +383,12 @@
             display: inline-block;
             transition: all 0.3s;
         }
+
         .btn-back:hover {
             background: rgba(255, 255, 255, 0.15);
             color: #ffffff;
         }
+
         .btn-continue {
             padding: 10px 28px;
             background: #6C3CE1;
@@ -354,13 +400,13 @@
             cursor: pointer;
             transition: all 0.3s;
         }
+
         .btn-continue:hover {
             background: #5A2FC1;
             transform: translateY(-2px);
             box-shadow: 0 4px 12px rgba(108, 60, 225, 0.3);
         }
 
-        /* ===== BUTTONS ===== */
         .btn-primary {
             padding: 14px 40px;
             background: #6C3CE1;
@@ -373,20 +419,17 @@
             transition: all 0.3s;
             font-family: 'Inter', sans-serif;
         }
+
         .btn-primary:hover:not(:disabled) {
             transform: translateY(-2px);
             box-shadow: 0 4px 20px rgba(108, 60, 225, 0.4);
         }
+
         .btn-primary:disabled {
             opacity: 0.5;
             cursor: not-allowed;
         }
-        .btn-primary:disabled:hover {
-            transform: none;
-            box-shadow: none;
-        }
 
-        /* ===== PHASE 4 SECTION ===== */
         .phase4-section {
             border: 4px solid #22c55e !important;
             border-radius: 20px !important;
@@ -395,9 +438,11 @@
             background: rgba(34, 197, 94, 0.05) !important;
             display: none !important;
         }
+
         .phase4-section.show {
             display: block !important;
         }
+
         .phase4-section .phase-badge {
             background: #22c55e !important;
             color: white !important;
@@ -410,17 +455,14 @@
             margin-bottom: 10px !important;
             display: inline-block !important;
         }
+
         .phase4-section h3 {
             font-size: 28px !important;
             color: #ffffff !important;
             margin-top: 10px !important;
             margin-bottom: 15px !important;
         }
-        .phase4-section p {
-            color: rgba(255, 255, 255, 0.7) !important;
-        }
 
-        /* ===== PHASE 4 SUCCESS ===== */
         #phase4Success {
             display: none;
             background: rgba(34, 197, 94, 0.1) !important;
@@ -430,24 +472,27 @@
             margin-top: 20px !important;
             border: 3px solid #22c55e !important;
         }
+
         #phase4Success.show {
             display: block !important;
         }
+
         #phase4Success .icon {
             font-size: 56px !important;
             display: block !important;
         }
+
         #phase4Success h3 {
             color: #22c55e !important;
             margin: 10px 0 !important;
             font-size: 24px !important;
         }
+
         #phase4Success p {
             color: rgba(255, 255, 255, 0.7) !important;
             font-size: 16px !important;
         }
 
-        /* ===== PHASE 4 BIG GREEN BUTTON ===== */
         .btn-phase4 {
             background: #22c55e !important;
             color: white !important;
@@ -465,12 +510,12 @@
             width: 100% !important;
             max-width: 450px !important;
         }
+
         .btn-phase4:hover {
             transform: translateY(-3px) scale(1.02) !important;
             box-shadow: 0 6px 30px rgba(34, 197, 94, 0.5) !important;
         }
 
-        /* ===== REGISTERED BADGE ===== */
         .registered-badge {
             background: #22c55e !important;
             color: white !important;
@@ -482,38 +527,11 @@
             font-size: 18px !important;
             text-align: center !important;
         }
+
         .registered-badge.show {
             display: block !important;
         }
 
-        /* ===== COMPLETION STATUS ===== */
-        .completion-status {
-            background: rgba(34, 197, 94, 0.1) !important;
-            border: 3px solid #22c55e !important;
-            border-radius: 16px !important;
-            padding: 24px !important;
-            margin: 20px 0 !important;
-            text-align: center !important;
-            display: none !important;
-        }
-        .completion-status.show {
-            display: block !important;
-        }
-        .completion-status .icon {
-            font-size: 56px !important;
-            display: block !important;
-        }
-        .completion-status h3 {
-            color: #22c55e !important;
-            margin: 10px 0 5px !important;
-            font-size: 24px !important;
-        }
-
-        /* ===== UTILITY ===== */
-        .hidden { display: none !important; }
-        .text-center { text-align: center !important; }
-
-        /* ===== RESPONSIVE ===== */
         @media (max-width: 768px) {
             body { padding: 10px; }
             .main-header { padding: 12px 16px; }
@@ -530,26 +548,14 @@
             .phase-circle { width: 28px; height: 28px; font-size: 11px; }
             .phase-connector { width: 15px; }
             .phase-label { font-size: 7px; }
-            .dates-box { padding: 12px 15px; }
-            .reminder-box { padding: 10px 14px; }
-            .checklist-item { padding: 12px; }
-            .input-row input { min-width: 100%; }
             .phase4-section { padding: 20px !important; }
             .phase4-section h3 { font-size: 22px !important; }
             .btn-phase4 { font-size: 18px !important; padding: 16px 30px !important; }
-            #phase4Success { padding: 20px !important; }
-        }
-        @media (max-width: 480px) {
-            .phase-item { padding: 0 3px; min-width: 30px; }
-            .phase-circle { width: 24px; height: 24px; font-size: 10px; }
-            .phase-connector { width: 10px; }
-            .registration-card h1 { font-size: 19px; }
         }
     </style>
 </head>
 <body>
 
-    <!-- ===== HEADER ===== -->
     <header class="main-header">
         <div class="logo">
             <a href="index.html">Futures <span>Abroad</span></a>
@@ -558,22 +564,19 @@
             <a href="student-app.html">Activities</a>
             <a href="portfolio.html">My Portfolio</a>
             <a href="university-shortlist.html">Universities</a>
-            <a href="#" id="logout-link">Logout</a>
+            <button class="logout-btn" onclick="handleLogout()">🚪 Logout</button>
         </nav>
     </header>
 
     <div class="app-container">
 
-        <!-- ===== PHASE NAVIGATION ===== -->
         <div id="phase-navigation" class="phase-nav"></div>
 
-        <!-- ===== REGISTRATION CARD ===== -->
         <div class="registration-card">
 
             <h1>📋 Activity Registration</h1>
             <p class="subtitle">Complete the registration checklist for your selected activity</p>
 
-            <!-- Important Dates -->
             <div class="dates-box">
                 <h3>📅 Important Dates</h3>
                 <p><strong>Registration Deadline:</strong> <span id="main-deadline">2026-10-01</span></p>
@@ -582,12 +585,10 @@
                 <p><strong>Complete Registration Form:</strong> Due: <span id="main-deadline">2026-10-01</span></p>
             </div>
 
-            <!-- Reminders -->
             <div class="reminder-box">
                 <p><strong>🔔 Reminders:</strong> You'll receive notifications at 2 weeks, 1 week, 3 days, and 1 day before the deadline.</p>
             </div>
 
-            <!-- Activity Info -->
             <div class="activity-info">
                 <h2 id="activity-name">Activity Name</h2>
                 <p><strong>Deadline:</strong> <span id="deadline-date">2026-10-01</span></p>
@@ -596,39 +597,31 @@
                 <p><strong>Cost:</strong> <span id="activity-cost">Free</span></p>
             </div>
 
-            <!-- Readiness Summary -->
             <div style="background: rgba(108, 60, 225, 0.1); padding: 15px 20px; border-radius: 12px; border-left: 4px solid #6C3CE1; margin-bottom: 20px;">
                 <h3 style="font-size: 1rem; color: #ffffff;">🎯 Readiness Summary</h3>
                 <p id="readiness-text" style="color: rgba(255, 255, 255, 0.7); margin: 0;">Based on your interests, this activity is a great match!</p>
             </div>
 
-            <!-- Checklist -->
             <div class="checklist-section">
                 <h3 style="margin-bottom: 5px; font-size: 18px; color: #ffffff;">✅ Registration Checklist</h3>
                 <p style="color: rgba(255, 255, 255, 0.5); font-size: 14px; margin-bottom: 15px;">Complete all items below to register</p>
                 <div id="checklist-container"></div>
             </div>
 
-            <!-- Registered Badge -->
             <div id="registeredBadge" class="registered-badge">
                 ✅ You are already registered for this activity!
             </div>
 
-            <!-- Status -->
             <div class="status-box">
                 <p id="status-text">📌 Complete all checklist items above to register</p>
             </div>
 
-            <!-- Mark as Registered Button -->
             <div style="text-align: center; margin: 15px 0;">
                 <button id="mark-registered-btn" class="btn-primary" disabled>
                     Complete all steps to register
                 </button>
             </div>
 
-            <!-- ============================================================
-            PHASE 4 SECTION
-            ============================================================ -->
             <div id="phase4Section" class="phase4-section">
                 <span class="phase-badge">Phase 4</span>
                 <h3>🎯 After Completing This Activity</h3>
@@ -637,7 +630,6 @@
                     Your experience will be saved to your portfolio for university applications.
                 </p>
 
-                <!-- THE BUTTON -->
                 <div id="completeActivityContainer" class="text-center" style="margin: 20px 0;">
                     <button id="completeActivityBtn" class="btn-phase4">
                         ✅ Mark Activity as Complete
@@ -647,13 +639,9 @@
                     </p>
                 </div>
 
-                <!-- Status messages -->
                 <div id="phase4-status" style="margin-top: 12px; font-size: 1rem; display: none; text-align: center; padding: 15px; border-radius: 12px;"></div>
             </div>
 
-            <!-- ============================================================
-            PHASE 4 SUCCESS
-            ============================================================ -->
             <div id="phase4Success">
                 <div class="icon">🎉</div>
                 <h3>Activity Completed Successfully!</h3>
@@ -668,7 +656,6 @@
                 </div>
             </div>
 
-            <!-- Action Buttons -->
             <div class="action-buttons">
                 <a href="student-app.html" class="btn-back">← Back to Activities</a>
                 <button id="continue-to-phase4-btn" class="btn-continue">Continue to University Pathway →</button>
@@ -676,17 +663,9 @@
         </div>
     </div>
 
-    <!-- ============================================================
-    JAVASCRIPT - Phase 3 Logic (No Firebase needed for basic flow)
-    ============================================================ -->
     <script>
-        // ============================================================
-        // PHASE 3 - Activity Registration (Local Storage Version)
-        // ============================================================
-
         console.log('🚀 Phase 3 - Activity Registration loaded!');
 
-        // DOM Elements
         const activityNameEl = document.getElementById('activity-name');
         const activityTypeEl = document.getElementById('activity-type');
         const activityDurationEl = document.getElementById('activity-duration');
@@ -705,9 +684,13 @@
 
         let currentActivity = null;
 
-        // ============================================================
-        // LOAD ACTIVITY FROM localStorage
-        // ============================================================
+        function handleLogout() {
+            if (confirm('Are you sure you want to logout?')) {
+                localStorage.removeItem('futuresAbroadUser');
+                window.location.href = 'login.html';
+            }
+        }
+
         function loadActivityFromStorage() {
             const saved = localStorage.getItem('selectedActivity');
             if (saved) {
@@ -723,9 +706,6 @@
             return null;
         }
 
-        // ============================================================
-        // DISPLAY ACTIVITY SUMMARY
-        // ============================================================
         function displayActivitySummary(activity) {
             if (!activity) return;
 
@@ -735,7 +715,6 @@
             if (activityCostEl) activityCostEl.textContent = activity.cost || 'Free';
             if (mainDeadlineEl) mainDeadlineEl.textContent = activity.deadline || 'Rolling';
 
-            // Get user interests from localStorage
             const userData = localStorage.getItem('futuresAbroadUser');
             let interests = ['exploration'];
             if (userData) {
@@ -751,9 +730,6 @@
             }
         }
 
-        // ============================================================
-        // RENDER CHECKLIST
-        // ============================================================
         function renderChecklist(requirements) {
             if (!checklistContainer) return;
             checklistContainer.innerHTML = '';
@@ -764,7 +740,6 @@
                 { id: 'registration_form', title: 'Complete Registration Form', description: 'Fill out the official registration form', dueDate: '2026-10-01' }
             ];
 
-            // Use activity requirements or default
             let reqs = defaultRequirements;
             if (currentActivity && currentActivity.registration_requirements) {
                 const req = currentActivity.registration_requirements;
@@ -815,7 +790,6 @@
                 }
             }
 
-            // Add parent consent if not already included
             if (!reqs.some(r => r.id === 'parent_consent')) {
                 reqs.push({
                     id: 'parent_consent',
@@ -825,7 +799,6 @@
                 });
             }
 
-            // Add final review
             reqs.push({
                 id: 'final_review',
                 title: 'Review and confirm all details',
@@ -878,9 +851,6 @@
             });
         }
 
-        // ============================================================
-        // UPDATE REGISTRATION BUTTON STATE
-        // ============================================================
         function updateRegistrationButtonState() {
             if (!markRegisteredBtn) return;
             const allItems = document.querySelectorAll('.checklist-item');
@@ -900,13 +870,9 @@
             }
         }
 
-        // ============================================================
-        // HANDLE REGISTRATION COMPLETE
-        // ============================================================
         function handleRegistrationComplete() {
             if (!markRegisteredBtn || markRegisteredBtn.disabled) return;
 
-            // Check if all items are completed
             const allItems = document.querySelectorAll('.checklist-item');
             let allCompleted = true;
             allItems.forEach(function(item) {
@@ -920,7 +886,6 @@
                 return;
             }
 
-            // Mark as registered
             markRegisteredBtn.textContent = '✅ Registered!';
             markRegisteredBtn.disabled = true;
             markRegisteredBtn.style.background = '#22c55e';
@@ -938,7 +903,6 @@
                 statusText.style.color = '#22c55e';
             }
 
-            // Store in localStorage that this activity is registered
             if (currentActivity) {
                 localStorage.setItem('registered_' + currentActivity.id, 'true');
             }
@@ -952,9 +916,6 @@
             }, 500);
         }
 
-        // ============================================================
-        // PHASE 4: Mark Activity as Complete (Local Storage Version)
-        // ============================================================
         function markActivityAsComplete() {
             console.log('🔵 Complete Activity button clicked!');
 
@@ -963,14 +924,12 @@
                 return;
             }
 
-            // Check if already completed
             const completedKey = 'completed_' + currentActivity.id;
             if (localStorage.getItem(completedKey) === 'true') {
                 alert('This activity is already completed!');
                 return;
             }
 
-            // Get user data
             const userData = localStorage.getItem('futuresAbroadUser');
             let userName = 'Student';
             if (userData) {
@@ -980,10 +939,8 @@
                 } catch (e) {}
             }
 
-            // Save to portfolio
             const portfolio = JSON.parse(localStorage.getItem('futuresAbroadPortfolio') || '[]');
             
-            // Check if already in portfolio
             const existing = portfolio.find(p => p.activityId === currentActivity.id);
             if (existing) {
                 alert('This activity is already in your portfolio!');
@@ -1006,17 +963,14 @@
             portfolio.push(portfolioEntry);
             localStorage.setItem('futuresAbroadPortfolio', JSON.stringify(portfolio));
 
-            // Mark as completed
             localStorage.setItem(completedKey, 'true');
 
             console.log('✅ Activity marked as complete!');
 
-            // Hide the complete button container
             if (completeActivityContainer) {
                 completeActivityContainer.style.display = 'none';
             }
 
-            // Show Phase 4 success
             if (phase4Success) {
                 phase4Success.classList.add('show');
                 phase4Success.scrollIntoView({ behavior: 'smooth' });
@@ -1034,9 +988,6 @@
             localStorage.setItem('phase3Complete', 'true');
         }
 
-        // ============================================================
-        // GO TO REFLECTION (Phase 4)
-        // ============================================================
         window.goToReflection = function() {
             console.log('🔵 goToReflection() called from HTML button!');
 
@@ -1054,9 +1005,6 @@
             window.location.href = 'post-activity.html?id=' + currentActivity.id;
         };
 
-        // ============================================================
-        // CHECK IF ACTIVITY IS ALREADY COMPLETED
-        // ============================================================
         function checkIfActivityCompleted() {
             if (!currentActivity) return false;
 
@@ -1079,7 +1027,6 @@
                 return true;
             }
 
-            // Check if registered
             const registeredKey = 'registered_' + currentActivity.id;
             if (localStorage.getItem(registeredKey) === 'true') {
                 if (registeredBadge) {
@@ -1093,9 +1040,6 @@
             return false;
         }
 
-        // ============================================================
-        // PHASE NAVIGATION
-        // ============================================================
         function getCurrentPhase() {
             try {
                 const student = JSON.parse(localStorage.getItem('studentProfile') || '{}');
@@ -1166,11 +1110,24 @@
 
         window.navigateToPhase = navigateToPhase;
 
-        // ============================================================
-        // INITIALIZATION
-        // ============================================================
+        function setupEventListeners() {
+            if (markRegisteredBtn) {
+                markRegisteredBtn.addEventListener('click', handleRegistrationComplete);
+            }
+
+            if (completeActivityBtn) {
+                completeActivityBtn.addEventListener('click', markActivityAsComplete);
+            }
+
+            const continueBtn = document.getElementById('continue-to-phase4-btn');
+            if (continueBtn) {
+                continueBtn.addEventListener('click', function() {
+                    window.location.href = 'university-shortlist.html';
+                });
+            }
+        }
+
         function initApp() {
-            // Load activity from localStorage
             currentActivity = loadActivityFromStorage();
 
             if (!currentActivity) {
@@ -1181,61 +1138,14 @@
                 return;
             }
 
-            // Display activity summary
             displayActivitySummary(currentActivity);
-
-            // Render checklist
             renderChecklist(currentActivity.registration_requirements || []);
-
-            // Update button state
             updateRegistrationButtonState();
-
-            // Check if already registered or completed
             checkIfActivityCompleted();
-
-            // Setup event listeners
             setupEventListeners();
-
-            // Phase navigation
             initPhaseNavigation();
         }
 
-        // ============================================================
-        // SETUP EVENT LISTENERS
-        // ============================================================
-        function setupEventListeners() {
-            // Mark as Registered button
-            if (markRegisteredBtn) {
-                markRegisteredBtn.addEventListener('click', handleRegistrationComplete);
-            }
-
-            // Complete Activity button
-            if (completeActivityBtn) {
-                completeActivityBtn.addEventListener('click', markActivityAsComplete);
-            }
-
-            // Continue to University Pathway
-            const continueBtn = document.getElementById('continue-to-phase4-btn');
-            if (continueBtn) {
-                continueBtn.addEventListener('click', function() {
-                    window.location.href = 'university-shortlist.html';
-                });
-            }
-
-            // Logout
-            const logoutLink = document.getElementById('logout-link');
-            if (logoutLink) {
-                logoutLink.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    localStorage.removeItem('futuresAbroadUser');
-                    window.location.href = 'login.html';
-                });
-            }
-        }
-
-        // ============================================================
-        // START APP
-        // ============================================================
         document.addEventListener('DOMContentLoaded', function() {
             console.log('🚀 DOM loaded, initializing Phase 3...');
             initApp();
