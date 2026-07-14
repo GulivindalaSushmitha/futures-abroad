@@ -504,7 +504,7 @@
     <script src="js/activity-data.js"></script>
     <script>
         // ============================================================
-        // DASHBOARD JAVASCRIPT
+        // DASHBOARD JAVASCRIPT - FIXED FOR PHASE 2 & 3
         // ============================================================
         
         console.log('🚀 Dashboard loading...');
@@ -522,6 +522,7 @@
                     return null;
                 }
             }
+            // Check if user is in Firebase session
             return null;
         }
 
@@ -677,7 +678,7 @@
             activitiesContainer.innerHTML = `
                 <div class="activities-grid">
                     ${activities.map((activity, index) => `
-                        <div class="activity-card" style="animation-delay: ${index * 0.05}s" onclick="showActivityDetail(${activity.id})">
+                        <div class="activity-card" style="animation-delay: ${index * 0.05}s">
                             <span class="activity-badge ${typeColors[activity.type] || 'course'}">
                                 ${typeEmojis[activity.type] || '📌'} ${activity.type.charAt(0).toUpperCase() + activity.type.slice(1)}
                             </span>
@@ -701,7 +702,8 @@
                                     ⏰ Deadline: ${formatDate(activity.deadline)}
                                     ${isUrgent(activity.deadline) ? ' <span class="urgent">🔴 Urgent</span>' : ''}
                                 </span>
-                                <button class="btn-register" onclick="event.stopPropagation(); startRegistration(${activity.id})">
+                                <!-- ✅ FIXED: Register Now button goes to Phase 3 -->
+                                <button class="btn-register" onclick="event.stopPropagation(); goToPhase3(${activity.id})">
                                     Register Now →
                                 </button>
                             </div>
@@ -709,6 +711,26 @@
                     `).join('')}
                 </div>
             `;
+        }
+
+        // ✅ PHASE 2 → PHASE 3: Go to Registration
+        function goToPhase3(activityId) {
+            console.log('🔵 Going to Phase 3 Registration for activity:', activityId);
+            
+            // Get the full activity data
+            const activity = getActivityById(activityId);
+            if (!activity) {
+                console.error('❌ Activity not found:', activityId);
+                alert('Activity not found. Please try again.');
+                return;
+            }
+            
+            // Save activity to localStorage for Phase 3
+            localStorage.setItem('selectedActivity', JSON.stringify(activity));
+            localStorage.setItem('currentActivityId', activityId);
+            
+            // ✅ Redirect to Phase 3 Registration Page
+            window.location.href = 'activity-registration.html?id=' + activityId;
         }
 
         // Generate AI Rationale
@@ -778,28 +800,6 @@
                     loadActivities();
                 });
             });
-        }
-
-        // Show Activity Detail (goes to registration)
-        function showActivityDetail(activityId) {
-            const activity = getActivityById(activityId);
-            if (!activity) {
-                console.error('Activity not found:', activityId);
-                return;
-            }
-            localStorage.setItem('selectedActivity', JSON.stringify(activity));
-            window.location.href = 'activity-registration.html';
-        }
-
-        // Start Registration
-        function startRegistration(activityId) {
-            const activity = getActivityById(activityId);
-            if (!activity) {
-                console.error('Activity not found:', activityId);
-                return;
-            }
-            localStorage.setItem('selectedActivity', JSON.stringify(activity));
-            window.location.href = 'activity-registration.html';
         }
 
         // Retake Quiz
