@@ -3,301 +3,496 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Sign Up - Futures Abroad</title>
-    <link rel="stylesheet" href="css/style.css" />
+    <title>Sign Up | Futures Abroad</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
     <style>
-        .auth-container {
-            max-width: 420px;
-            margin: 60px auto;
-            padding: 40px;
-            background: white;
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0F0A1E;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            background-image: 
+                radial-gradient(ellipse at 20% 50%, rgba(108, 60, 225, 0.15) 0%, transparent 60%),
+                radial-gradient(ellipse at 80% 50%, rgba(0, 212, 170, 0.1) 0%, transparent 60%);
+        }
+
+        .signup-container {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.12);
             border-radius: 24px;
-            box-shadow: 0 20px 60px rgba(108,60,225,0.12);
+            padding: 40px;
+            max-width: 440px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+            max-height: 95vh;
+            overflow-y: auto;
         }
-        .auth-header {
+
+        .signup-container::-webkit-scrollbar {
+            width: 4px;
+        }
+        .signup-container::-webkit-scrollbar-thumb {
+            background: #6C3CE1;
+            border-radius: 4px;
+        }
+
+        .logo {
             text-align: center;
-            margin-bottom: 30px;
-        }
-        .auth-header .logo {
             font-size: 28px;
             font-weight: 800;
-            color: #2D1B4E;
+            margin-bottom: 4px;
+            background: linear-gradient(135deg, #6C3CE1 0%, #00D4AA 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
-        .auth-header .logo span { color: #6C3CE1; }
-        .auth-header h1 {
-            font-size: 24px;
-            color: #2D1B4E;
-            margin: 10px 0 5px;
+
+        .subtitle {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 14px;
+            margin-bottom: 20px;
         }
-        .auth-header p {
-            color: #888;
-            font-size: 15px;
-        }
+
         .form-group {
-            margin-bottom: 16px;
+            margin-bottom: 14px;
         }
+
         .form-group label {
             display: block;
-            font-weight: 600;
-            margin-bottom: 5px;
-            color: #2D1B4E;
-            font-size: 14px;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 13px;
+            font-weight: 500;
+            margin-bottom: 4px;
         }
+
         .form-group input,
         .form-group select {
             width: 100%;
-            padding: 14px 18px;
-            border: 2px solid #E8E0F0;
-            border-radius: 14px;
-            font-size: 15px;
-            font-family: 'Quicksand', sans-serif;
-            transition: border 0.3s;
-            background: #faf8ff;
+            padding: 12px 14px;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 10px;
+            color: white;
+            font-size: 14px;
+            font-family: 'Inter', sans-serif;
+            transition: all 0.3s ease;
+            appearance: none;
         }
+
+        .form-group select option {
+            background: #1a1a2e;
+            color: white;
+        }
+
         .form-group input:focus,
         .form-group select:focus {
-            border-color: #6C3CE1;
             outline: none;
-            background: white;
-            box-shadow: 0 0 0 4px rgba(108,60,225,0.08);
+            border-color: #6C3CE1;
+            box-shadow: 0 0 0 3px rgba(108, 60, 225, 0.2);
         }
-        .form-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
+
+        .form-group input::placeholder {
+            color: rgba(255, 255, 255, 0.3);
         }
-        .btn-submit {
+
+        .btn-signup {
             width: 100%;
             padding: 16px;
-            background: #6C3CE1;
-            color: white;
+            background: linear-gradient(135deg, #6C3CE1 0%, #00D4AA 100%);
             border: none;
-            border-radius: 50px;
-            font-weight: 700;
-            font-size: 17px;
-            cursor: pointer;
-            transition: all 0.3s;
-            font-family: 'Quicksand', sans-serif;
-            margin-top: 5px;
-        }
-        .btn-submit:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 30px rgba(108,60,225,0.35);
-        }
-        .auth-footer {
-            text-align: center;
-            margin-top: 20px;
-            color: #888;
-            font-size: 14px;
-        }
-        .auth-footer a {
-            color: #6C3CE1;
-            font-weight: 600;
-            text-decoration: none;
-        }
-        .auth-footer a:hover { text-decoration: underline; }
-        .message-box {
-            padding: 12px 16px;
             border-radius: 12px;
-            margin-bottom: 15px;
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Inter', sans-serif;
+            margin-top: 8px;
+        }
+
+        .btn-signup:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(108, 60, 225, 0.4);
+        }
+
+        .btn-signup:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .error-message {
+            background: rgba(255, 107, 107, 0.15);
+            border: 1px solid rgba(255, 107, 107, 0.3);
+            color: #FF6B6B;
+            padding: 10px 14px;
+            border-radius: 10px;
+            font-size: 13px;
+            margin-bottom: 12px;
             display: none;
+        }
+
+        .error-message.show {
+            display: block;
+        }
+
+        .success-message {
+            background: rgba(0, 212, 170, 0.15);
+            border: 1px solid rgba(0, 212, 170, 0.3);
+            color: #00D4AA;
+            padding: 10px 14px;
+            border-radius: 10px;
+            font-size: 13px;
+            margin-bottom: 12px;
+            display: none;
+        }
+
+        .success-message.show {
+            display: block;
+        }
+
+        .login-link {
+            text-align: center;
+            margin-top: 16px;
+            color: rgba(255, 255, 255, 0.5);
             font-size: 14px;
         }
-        .message-box.error {
-            display: block;
-            background: #FFE8E8;
-            color: #C62828;
-            border-left: 4px solid #C62828;
+
+        .login-link a {
+            color: #6C3CE1;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s ease;
         }
-        .message-box.success {
-            display: block;
-            background: #E8F5E9;
-            color: #2E7D32;
-            border-left: 4px solid #2E7D32;
+
+        .login-link a:hover {
+            color: #8B6BF0;
         }
-        @media (max-width: 500px) {
-            .form-row {
-                grid-template-columns: 1fr;
-            }
-            .auth-container {
-                margin: 20px 15px;
-                padding: 25px 20px;
-            }
+
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-top: 2px solid white;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin-right: 10px;
+            vertical-align: middle;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .interests-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6px;
+            margin-top: 4px;
+        }
+
+        .interest-chip {
+            padding: 8px 10px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 12px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .interest-chip:hover {
+            background: rgba(108, 60, 225, 0.15);
+            border-color: #6C3CE1;
+        }
+
+        .interest-chip.selected {
+            background: rgba(108, 60, 225, 0.25);
+            border-color: #6C3CE1;
+            color: white;
+        }
+
+        .interest-label {
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 12px;
+            margin-bottom: 4px;
+            display: block;
+        }
+
+        .interest-hint {
+            color: rgba(255, 255, 255, 0.25);
+            font-size: 11px;
+            margin-top: 4px;
+        }
+
+        @media (max-width: 480px) {
+            .signup-container { padding: 20px; }
+            .interests-grid { grid-template-columns: 1fr 1fr; }
+            .form-group input, .form-group select { padding: 10px 12px; font-size: 13px; }
         }
     </style>
 </head>
 <body>
-    <div class="auth-container">
-        <div class="auth-header">
-            <div class="logo">🚀 Futures <span>Abroad</span></div>
-            <h1>Create Your Account</h1>
-            <p>Start your university journey today</p>
-        </div>
-        
-        <div id="signupMessage" class="message-box"></div>
-        
-        <form id="signup-form">
+    <div class="signup-container">
+        <div class="logo">🚀 Futures Abroad</div>
+        <p class="subtitle">Create your account and start your university journey</p>
+
+        <div id="errorMessage" class="error-message">❌ Error creating account. Please try again.</div>
+        <div id="successMessage" class="success-message">✅ Account created! Redirecting...</div>
+
+        <form id="signupForm">
             <div class="form-group">
-                <label>Full Name</label>
-                <input type="text" id="signup-name" placeholder="Your full name" required />
+                <label for="name">Full Name</label>
+                <input type="text" id="name" placeholder="e.g., John Doe" required />
             </div>
-            
+
             <div class="form-group">
-                <label>Email Address</label>
-                <input type="email" id="signup-email" placeholder="student@email.com" required />
+                <label for="email">Email Address</label>
+                <input type="email" id="email" placeholder="Enter your email" required />
             </div>
-            
+
             <div class="form-group">
-                <label>Password</label>
-                <input type="password" id="signup-password" placeholder="Minimum 6 characters" required minlength="6" />
+                <label for="password">Password</label>
+                <input type="password" id="password" placeholder="Min 6 characters" required minlength="6" />
             </div>
-            
-            <div class="form-row">
-                <div class="form-group">
-                    <label>Grade</label>
-                    <select id="signup-grade" required>
-                        <option value="">Select Grade</option>
-                        <option value="10">Grade 10</option>
-                        <option value="11">Grade 11</option>
-                        <option value="12">Grade 12</option>
-                    </select>
+
+            <div class="form-group">
+                <label for="grade">Grade</label>
+                <select id="grade" required>
+                    <option value="">Select your grade</option>
+                    <option value="10">Grade 10</option>
+                    <option value="11">Grade 11</option>
+                    <option value="12">Grade 12</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="school">School Name</label>
+                <input type="text" id="school" placeholder="e.g., Dubai International School" />
+            </div>
+
+            <div class="form-group">
+                <label for="country">Country</label>
+                <input type="text" id="country" placeholder="e.g., UAE" />
+            </div>
+
+            <div class="form-group">
+                <span class="interest-label">🎯 Select your interests (click to select)</span>
+                <div class="interests-grid" id="interestsGrid">
+                    <button type="button" class="interest-chip" data-value="STEM">🔬 STEM</button>
+                    <button type="button" class="interest-chip" data-value="Leadership">👑 Leadership</button>
+                    <button type="button" class="interest-chip" data-value="Business">💼 Business</button>
+                    <button type="button" class="interest-chip" data-value="Entrepreneurship">🚀 Entrepreneurship</button>
+                    <button type="button" class="interest-chip" data-value="Sustainability">🌍 Sustainability</button>
+                    <button type="button" class="interest-chip" data-value="Environment">🌿 Environment</button>
+                    <button type="button" class="interest-chip" data-value="Computer Science">💻 Computer Science</button>
+                    <button type="button" class="interest-chip" data-value="Technology">📱 Technology</button>
+                    <button type="button" class="interest-chip" data-value="Medicine">🏥 Medicine</button>
+                    <button type="button" class="interest-chip" data-value="Visual Art">🎨 Visual Art</button>
+                    <button type="button" class="interest-chip" data-value="Law">⚖️ Law</button>
+                    <button type="button" class="interest-chip" data-value="International Relations">🌐 International Relations</button>
+                    <button type="button" class="interest-chip" data-value="Community Service">🤝 Community Service</button>
+                    <button type="button" class="interest-chip" data-value="Finance">💰 Finance</button>
                 </div>
-                
-                <div class="form-group">
-                    <label>Country</label>
-                    <select id="signup-country" required>
-                        <option value="">Select Country</option>
-                        <option value="UAE">UAE</option>
-                        <option value="Saudi Arabia">Saudi Arabia</option>
-                        <option value="Qatar">Qatar</option>
-                        <option value="Kuwait">Kuwait</option>
-                        <option value="Oman">Oman</option>
-                        <option value="Bahrain">Bahrain</option>
-                        <option value="Other">Other</option>
-                    </select>
-                </div>
+                <div class="interest-hint">Select 2-4 interests</div>
             </div>
-            
-            <div class="form-group">
-                <label>School Name</label>
-                <input type="text" id="signup-school" placeholder="Your school name" />
-            </div>
-            
-            <button type="submit" class="btn-submit">Create Account 🚀</button>
+
+            <button type="submit" class="btn-signup" id="signupBtn">🚀 Create Account</button>
         </form>
-        
-        <div class="auth-footer">
-            <p>Already have an account? <a href="login.html">Log In</a></p>
-            <p style="margin-top:8px;"><a href="index.html">← Back to Home</a></p>
+
+        <div class="login-link">
+            Already have an account? <a href="login.html">Login →</a>
         </div>
     </div>
 
     <script type="module">
         // ============================================================
-        // IMPORTS
+        // SIGNUP - With Firebase Auth
         // ============================================================
+        
         import { 
             auth, 
+            createUserWithEmailAndPassword,
             db,
             doc,
             setDoc,
-            createUserWithEmailAndPassword,
-            serverTimestamp
+            COLLECTIONS
         } from './js/firebase-config.js';
 
+        console.log('🚀 Signup page loaded!');
+
+        const nameInput = document.getElementById('name');
+        const emailInput = document.getElementById('email');
+        const passwordInput = document.getElementById('password');
+        const gradeSelect = document.getElementById('grade');
+        const schoolInput = document.getElementById('school');
+        const countryInput = document.getElementById('country');
+        const signupBtn = document.getElementById('signupBtn');
+        const errorMessage = document.getElementById('errorMessage');
+        const successMessage = document.getElementById('successMessage');
+        const signupForm = document.getElementById('signupForm');
+        const interestsGrid = document.getElementById('interestsGrid');
+
+        let selectedInterests = [];
+
         // ============================================================
-        // SIGNUP FORM
+        // INTEREST SELECTION
         // ============================================================
-        document.getElementById('signup-form').addEventListener('submit', async function(e) {
-            e.preventDefault();
+        interestsGrid.querySelectorAll('.interest-chip').forEach(chip => {
+            chip.addEventListener('click', function() {
+                const value = this.dataset.value;
+                const index = selectedInterests.indexOf(value);
+                
+                if (index > -1) {
+                    selectedInterests.splice(index, 1);
+                    this.classList.remove('selected');
+                } else {
+                    if (selectedInterests.length >= 4) {
+                        alert('You can select up to 4 interests.');
+                        return;
+                    }
+                    selectedInterests.push(value);
+                    this.classList.add('selected');
+                }
+                
+                console.log('Selected interests:', selectedInterests);
+            });
+        });
+
+        // ============================================================
+        // HANDLE SIGNUP
+        // ============================================================
+        async function handleSignup(event) {
+            event.preventDefault();
             
-            const name = document.getElementById('signup-name').value.trim();
-            const email = document.getElementById('signup-email').value.trim();
-            const password = document.getElementById('signup-password').value;
-            const grade = document.getElementById('signup-grade').value;
-            const country = document.getElementById('signup-country').value;
-            const school = document.getElementById('signup-school').value.trim();
-            
-            const msgEl = document.getElementById('signupMessage');
-            msgEl.className = 'message-box';
-            msgEl.textContent = '';
-            
-            if (!name || !email || !password || !grade || !country) {
-                msgEl.className = 'message-box error';
-                msgEl.textContent = '⚠️ Please fill in all required fields.';
+            const name = nameInput.value.trim();
+            const email = emailInput.value.trim();
+            const password = passwordInput.value.trim();
+            const grade = gradeSelect.value;
+            const school = schoolInput.value.trim();
+            const country = countryInput.value.trim();
+
+            errorMessage.classList.remove('show');
+            successMessage.classList.remove('show');
+
+            // Validate
+            if (!name || !email || !password || !grade) {
+                errorMessage.textContent = '❌ Please fill in all required fields.';
+                errorMessage.classList.add('show');
                 return;
             }
-            
+
             if (password.length < 6) {
-                msgEl.className = 'message-box error';
-                msgEl.textContent = '⚠️ Password must be at least 6 characters.';
+                errorMessage.textContent = '❌ Password must be at least 6 characters.';
+                errorMessage.classList.add('show');
                 return;
             }
-            
+
+            if (selectedInterests.length < 2) {
+                errorMessage.textContent = '❌ Please select at least 2 interests.';
+                errorMessage.classList.add('show');
+                return;
+            }
+
+            signupBtn.disabled = true;
+            signupBtn.innerHTML = '<span class="loading-spinner"></span> Creating account...';
+
             try {
-                // Create user in Firebase Auth
                 const userCredential = await createUserWithEmailAndPassword(auth, email, password);
                 const user = userCredential.user;
                 
-                // ============================================================
-                // SAVE STUDENT DATA TO FIRESTORE
-                // ============================================================
-                await setDoc(doc(db, 'students', user.uid), {
+                console.log('✅ Account created:', user.email);
+
+                // Save user data to Firestore
+                const userData = {
                     uid: user.uid,
+                    email: user.email,
                     name: name,
-                    email: email,
-                    grade: grade,
-                    country: country,
-                    school: school || 'Not specified',
-                    interests: [],
-                    selectedInterests: [], // For the 3 interests they choose
-                    profileCompleted: false,
-                    quizCompleted: false,
-                    onboardingPhase: 1,
-                    phase: 'Phase 1',
-                    createdAt: serverTimestamp(),
-                    updatedAt: serverTimestamp()
-                });
+                    grade: parseInt(grade),
+                    interests: selectedInterests,
+                    school: school || '',
+                    country: country || '',
+                    createdAt: new Date().toISOString(),
+                    loggedIn: true
+                };
+
+                const userRef = doc(db, COLLECTIONS.users, user.uid);
+                await setDoc(userRef, userData);
                 
-                // Also save to studentProfiles for backup
-                await setDoc(doc(db, 'studentProfiles', user.uid), {
-                    name: name,
-                    email: email,
-                    grade: grade,
-                    country: country,
-                    school: school || 'Not specified',
-                    createdAt: serverTimestamp()
-                });
-                
-                console.log('✅ Student saved to Firestore!');
-                console.log('📌 UID:', user.uid);
-                console.log('📌 Name:', name);
-                
-                msgEl.className = 'message-box success';
-                msgEl.textContent = '✅ Account created! Choose your interests...';
-                
-                // ============================================================
-                // REDIRECT TO INTEREST SELECTION (NOT QUIZ YET)
-                // ============================================================
+                localStorage.setItem('futuresAbroadUser', JSON.stringify(userData));
+
+                successMessage.textContent = '✅ Account created successfully!';
+                successMessage.classList.add('show');
+
+                signupBtn.disabled = false;
+                signupBtn.innerHTML = '✅ Account Created!';
+
                 setTimeout(() => {
-                    window.location.href = 'select-interests.html?uid=' + user.uid;
+                    window.location.href = 'student-app.html';
                 }, 1500);
-                
+
             } catch (error) {
-                console.error('Signup error:', error);
-                msgEl.className = 'message-box error';
+                console.error('❌ Signup error:', error.code);
                 
+                let msg = '❌ Error creating account. Please try again.';
                 if (error.code === 'auth/email-already-in-use') {
-                    msgEl.textContent = '❌ This email is already registered. Please login instead.';
+                    msg = '❌ This email is already registered. Please login.';
                 } else if (error.code === 'auth/invalid-email') {
-                    msgEl.textContent = '❌ Invalid email address.';
+                    msg = '❌ Invalid email format. Please check.';
                 } else if (error.code === 'auth/weak-password') {
-                    msgEl.textContent = '❌ Password is too weak. Please use at least 6 characters.';
-                } else {
-                    msgEl.textContent = '❌ Signup failed: ' + error.message;
+                    msg = '❌ Password is too weak. Use at least 6 characters.';
+                } else if (error.code === 'auth/network-request-failed') {
+                    msg = '❌ Network error. Please check your connection.';
+                }
+                
+                errorMessage.textContent = msg;
+                errorMessage.classList.add('show');
+
+                signupBtn.disabled = false;
+                signupBtn.innerHTML = '🚀 Create Account';
+            }
+        }
+
+        // ============================================================
+        // CHECK IF ALREADY LOGGED IN
+        // ============================================================
+        function checkExistingSession() {
+            const userData = localStorage.getItem('futuresAbroadUser');
+            if (userData) {
+                try {
+                    const user = JSON.parse(userData);
+                    if (user.loggedIn) {
+                        console.log('🔵 Already logged in, redirecting...');
+                        window.location.href = 'student-app.html';
+                        return true;
+                    }
+                } catch (e) {
+                    localStorage.removeItem('futuresAbroadUser');
                 }
             }
+            return false;
+        }
+
+        // ============================================================
+        // INITIALIZE
+        // ============================================================
+        document.addEventListener('DOMContentLoaded', function() {
+            if (checkExistingSession()) return;
+            console.log('✅ Signup page ready!');
         });
+
+        signupForm.addEventListener('submit', handleSignup);
     </script>
 </body>
 </html>
