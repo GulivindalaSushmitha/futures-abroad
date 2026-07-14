@@ -178,6 +178,7 @@
             100% { transform: rotate(360deg); }
         }
 
+        /* ===== DEMO CREDENTIALS ===== */
         .demo-credentials {
             background: rgba(255, 255, 255, 0.05);
             border: 1px dashed rgba(255, 255, 255, 0.15);
@@ -199,6 +200,8 @@
             background: rgba(0, 0, 0, 0.3);
             padding: 2px 8px;
             border-radius: 4px;
+            display: inline-block;
+            margin: 2px 0;
         }
 
         .demo-credentials .demo-btn {
@@ -243,7 +246,7 @@
 
         <!-- Demo Credentials -->
         <div class="demo-credentials">
-            <p>🔑 Demo Account</p>
+            <p>🔑 Demo Account (Firebase)</p>
             <code>Email: demo@futuresabroad.com</code>
             <br />
             <code>Password: password123</code>
@@ -285,12 +288,24 @@
         </div>
     </div>
 
-    <script>
-        // ============================================================
-        // LOGIN JAVASCRIPT
-        // ============================================================
+    <!-- ============================================================
+    JAVASCRIPT - Firebase Authentication
+    ============================================================ -->
+    <script type="module">
+        // Import Firebase Auth
+        import { 
+            auth, 
+            signInWithEmailAndPassword,
+            onAuthStateChanged,
+            db,
+            doc,
+            getDoc,
+            COLLECTIONS
+        } from './js/firebase-config.js';
 
-        // Get DOM elements
+        console.log('🚀 Login page loaded with Firebase!');
+
+        // DOM Elements
         const emailInput = document.getElementById('email');
         const passwordInput = document.getElementById('password');
         const loginBtn = document.getElementById('loginBtn');
@@ -298,48 +313,18 @@
         const successMessage = document.getElementById('successMessage');
         const loginForm = document.getElementById('loginForm');
 
-        // Demo users database (for testing without Firebase)
-        const DEMO_USERS = {
-            'demo@futuresabroad.com': {
-                password: 'password123',
-                name: 'Demo Student',
-                grade: 10,
-                interests: ['STEM', 'Leadership', 'Technology'],
-                school: 'Demo International School',
-                country: 'UAE'
-            },
-            'student@example.com': {
-                password: 'student123',
-                name: 'Test Student',
-                grade: 11,
-                interests: ['Business', 'Entrepreneurship', 'Finance'],
-                school: 'Test School',
-                country: 'UAE'
-            },
-            'sushmithagulivindala@gmail.com': {
-                password: 'password123',
-                name: 'Sushmitha',
-                grade: 10,
-                interests: ['Computer Science', 'Technology', 'STEM'],
-                school: 'Timpany',
-                country: 'Bahrain'
-            }
-        };
-
-        // Fill demo credentials
-        function fillDemoCredentials() {
+        // ============================================================
+        // FILL DEMO CREDENTIALS
+        // ============================================================
+        window.fillDemoCredentials = function() {
             emailInput.value = 'demo@futuresabroad.com';
             passwordInput.value = 'password123';
-            
-            // Also try to fill if there's a pre-filled email
-            const currentEmail = emailInput.value.trim();
-            if (currentEmail && DEMO_USERS[currentEmail]) {
-                passwordInput.value = DEMO_USERS[currentEmail].password;
-            }
-        }
+        };
 
-        // Handle login
-        function handleLogin(event) {
+        // ============================================================
+        // HANDLE LOGIN WITH FIREBASE
+        // ============================================================
+        async function handleLogin(event) {
             event.preventDefault();
             
             const email = emailInput.value.trim();
@@ -360,97 +345,194 @@
             loginBtn.disabled = true;
             loginBtn.innerHTML = '<span class="loading-spinner"></span> Logging in...';
 
-            // Simulate network delay
-            setTimeout(() => {
-                // Check if user exists in demo database
-                const user = DEMO_USERS[email];
+            try {
+                // 🔐 Sign in with Firebase
+                const userCredential = await signInWithEmailAndPassword(auth, email, password);
+                const user = userCredential.user;
                 
-                if (user && user.password === password) {
-                    // ✅ SUCCESSFUL LOGIN
-                    console.log('✅ Login successful for:', email);
+                console.log('✅ Login successful for:', user.email);
+                console.log('🆔 User UID:', user.uid);
 
-                    // Save user data to localStorage
-                    const userData = {
-                        email: email,
-                        name: user.name,
-                        grade: user.grade,
-                        interests: user.interests,
-                        school: user.school,
-                        country: user.country,
+                // ✅ Get user data from Firestore
+                try {
+                    const userRef = doc(db, COLLECTIONS.users, user.uid);
+                    const userDoc = await getDoc(userRef);
+                    
+                    if (userDoc.exists()) {
+                        const userData = userDoc.data();
+                        console.log('📦 User data from Firestore:', userData);
+                        
+                        // Save to localStorage for quick access
+                        localStorage.setItem('futuresAbroadUser', JSON.stringify({
+                            uid: user.uid,
+                            email: user.email,
+                            name: userData.name || user.email?.split('@')[0] || 'Student',
+                            grade: userData.grade || 10,
+                            interests: userData.interests || ['STEM', 'Leadership'],
+                            school: userData.school || '',
+                            country: userData.country || '',
+                            loggedIn: true,
+                            loginTime: new Date().toISOString()
+                        }));
+                    } else {
+                        // User exists in Auth but not in Firestore yet
+                        console.log('⚠️ User found in Auth but not in Firestore. Creating profile...');
+                        
+                        // Create basic profile
+                        const userData = {
+                            uid: user.uid,
+                            email: user.email,
+                            name: user.email?.split('@')[0] || 'Student',
+                            grade: 10,
+                            interests: ['STEM', 'Leadership'],
+                            school: '',
+                            country: '',
+                            createdAt: new Date().toISOString()
+                        };
+                        
+                        await setDoc(userRef, userData);
+                        
+                        localStorage.setItem('futuresAbroadUser', JSON.stringify({
+                            uid: user.uid,
+                            email: user.email,
+                            name: userData.name,
+                            grade: userData.grade,
+                            interests: userData.interests,
+                            school: userData.school,
+                            country: userData.country,
+                            loggedIn: true,
+                            loginTime: new Date().toISOString()
+                        }));
+                    }
+                } catch (firestoreError) {
+                    console.warn('⚠️ Could not fetch Firestore data:', firestoreError);
+                    // Still allow login, use basic data
+                    localStorage.setItem('futuresAbroadUser', JSON.stringify({
+                        uid: user.uid,
+                        email: user.email,
+                        name: user.email?.split('@')[0] || 'Student',
+                        grade: 10,
+                        interests: ['STEM', 'Leadership'],
                         loggedIn: true,
                         loginTime: new Date().toISOString()
-                    };
-                    
-                    localStorage.setItem('futuresAbroadUser', JSON.stringify(userData));
-
-                    // Show success message
-                    successMessage.textContent = '✅ Login successful! Redirecting to dashboard...';
-                    successMessage.classList.add('show');
-
-                    // Reset button
-                    loginBtn.disabled = false;
-                    loginBtn.innerHTML = '✅ Logged In!';
-
-                    // Redirect to student app (dashboard)
-                    setTimeout(() => {
-                        window.location.href = 'student-app.html';
-                    }, 1200);
-
-                } else {
-                    // ❌ LOGIN FAILED
-                    console.log('❌ Login failed for:', email);
-                    
-                    errorMessage.textContent = '❌ Invalid email or password. Please try again.';
-                    errorMessage.classList.add('show');
-
-                    // Reset button
-                    loginBtn.disabled = false;
-                    loginBtn.innerHTML = '🔐 Login';
+                    }));
                 }
-            }, 800);
+
+                // Show success message
+                successMessage.textContent = '✅ Login successful! Redirecting to dashboard...';
+                successMessage.classList.add('show');
+
+                // Reset button
+                loginBtn.disabled = false;
+                loginBtn.innerHTML = '✅ Logged In!';
+
+                // 🚀 Redirect to student app
+                setTimeout(() => {
+                    window.location.href = 'student-app.html';
+                }, 1200);
+
+            } catch (error) {
+                // ❌ Login failed
+                console.error('❌ Login error:', error.code, error.message);
+                
+                let errorMsg = '❌ Invalid email or password. Please try again.';
+                
+                // Better error messages
+                if (error.code === 'auth/user-not-found') {
+                    errorMsg = '❌ No account found with this email. Please sign up first.';
+                } else if (error.code === 'auth/wrong-password') {
+                    errorMsg = '❌ Incorrect password. Please try again.';
+                } else if (error.code === 'auth/too-many-requests') {
+                    errorMsg = '❌ Too many failed attempts. Please try again later.';
+                } else if (error.code === 'auth/invalid-email') {
+                    errorMsg = '❌ Invalid email format. Please check your email.';
+                } else if (error.code === 'auth/user-disabled') {
+                    errorMsg = '❌ This account has been disabled. Please contact support.';
+                }
+                
+                errorMessage.textContent = errorMsg;
+                errorMessage.classList.add('show');
+
+                // Reset button
+                loginBtn.disabled = false;
+                loginBtn.innerHTML = '🔐 Login';
+            }
         }
 
-        // Check if user is already logged in
+        // ============================================================
+        // CHECK IF USER IS ALREADY LOGGED IN
+        // ============================================================
         function checkExistingSession() {
+            // Check localStorage first
             const userData = localStorage.getItem('futuresAbroadUser');
             if (userData) {
                 try {
                     const user = JSON.parse(userData);
                     if (user.loggedIn) {
-                        console.log('🔵 User already logged in, redirecting...');
+                        console.log('🔵 User already logged in (localStorage), redirecting...');
                         window.location.href = 'student-app.html';
+                        return true;
                     }
                 } catch (e) {
                     console.log('Invalid user data, clearing...');
                     localStorage.removeItem('futuresAbroadUser');
                 }
             }
+            return false;
         }
 
-        // Auto-fill demo credentials on page load
+        // ============================================================
+        // INITIALIZE
+        // ============================================================
         document.addEventListener('DOMContentLoaded', function() {
             // Check if already logged in
-            checkExistingSession();
-            
-            // Auto-fill demo credentials
-            const savedEmail = localStorage.getItem('lastLoginEmail');
-            if (savedEmail && DEMO_USERS[savedEmail]) {
-                emailInput.value = savedEmail;
-                passwordInput.value = DEMO_USERS[savedEmail].password;
-            } else {
-                // Default demo
-                emailInput.value = 'demo@futuresabroad.com';
-                passwordInput.value = 'password123';
+            if (checkExistingSession()) {
+                return;
             }
+
+            // Check Firebase Auth state
+            onAuthStateChanged(auth, (user) => {
+                if (user) {
+                    console.log('🔵 User already logged in (Firebase):', user.email);
+                    // Check if we have user data in localStorage
+                    const localUser = localStorage.getItem('futuresAbroadUser');
+                    if (!localUser) {
+                        // Fetch user data and redirect
+                        const userRef = doc(db, COLLECTIONS.users, user.uid);
+                        getDoc(userRef).then((docSnap) => {
+                            if (docSnap.exists()) {
+                                const userData = docSnap.data();
+                                localStorage.setItem('futuresAbroadUser', JSON.stringify({
+                                    uid: user.uid,
+                                    email: user.email,
+                                    name: userData.name || user.email?.split('@')[0] || 'Student',
+                                    grade: userData.grade || 10,
+                                    interests: userData.interests || ['STEM', 'Leadership'],
+                                    school: userData.school || '',
+                                    country: userData.country || '',
+                                    loggedIn: true,
+                                    loginTime: new Date().toISOString()
+                                }));
+                            }
+                            window.location.href = 'student-app.html';
+                        }).catch(() => {
+                            window.location.href = 'student-app.html';
+                        });
+                    } else {
+                        window.location.href = 'student-app.html';
+                    }
+                }
+            });
+
+            // Auto-fill demo credentials
+            emailInput.value = 'demo@futuresabroad.com';
+            passwordInput.value = 'password123';
         });
 
-        // Save last login email
-        emailInput.addEventListener('change', function() {
-            localStorage.setItem('lastLoginEmail', this.value.trim());
-        });
+        // Attach login handler to window so inline onsubmit works
+        window.handleLogin = handleLogin;
 
-        console.log('🚀 Login page loaded!');
-        console.log('📧 Demo users available:', Object.keys(DEMO_USERS));
+        console.log('✅ Login page ready with Firebase!');
     </script>
 </body>
 </html>
