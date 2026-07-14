@@ -1,157 +1,182 @@
-// ============================================
-// AUTHENTICATION FUNCTIONS
-// ============================================
+// js/auth.js - Complete Authentication System
+// ============================================================
 
-function isLoggedIn() {
-    return localStorage.getItem('userToken') !== null;
+import { 
+    auth, 
+    signInWithEmailAndPassword,
+    createUserWithEmailAndPassword,
+    signOut,
+    onAuthStateChanged,
+    db,
+    doc,
+    setDoc,
+    getDoc,
+    COLLECTIONS
+} from './firebase-config.js';
+
+// ============================================================
+// LOGIN FUNCTION
+// ============================================================
+export async function loginUser(email, password) {
+    try {
+        const userCredential = await signInWithEmailAndPassword(auth, email, password);
+        const user = userCredential.user;
+        
+        // Get user data from Firestore
+        const userRef = doc(db, COLLECTIONS.users, user.uid);
+        const userDoc = await getDoc(userRef);
+        
+        let userData = {
+            uid: user.uid,
+            email: user.email,
+            name: user.email?.split('@')[0] || 'Student',
+            grade: 10,
+            interests: ['STEM', 'Leadership'],
+            loggedIn: true
+        };
+        
+        if (userDoc.exists()) {
+            const data = userDoc.data();
+            userData = {
+                ...userData,
+                ...data,
+                loggedIn: true
+            };
+        } else {
+            // Create profile if it doesn't exist
+            await setDoc(userRef, userData);
+        }
+        
+        // Save to localStorage
+        localStorage.setItem('futuresAbroadUser', JSON.stringify(userData));
+        
+        return { success: true, user: userData };
+    } catch (error) {
+        console.error('Login error:', error);
+        return { success: false, error: error.message };
+    }
 }
 
-function isAdmin() {
-    return localStorage.getItem('isAdmin') === 'true';
+// ============================================================
+// SIGNUP FUNCTION
+// ============================================================
+export async function signupUser(email, password, userData) {
+    try {
+        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+        const user = userCredential.user;
+        
+        const userProfile = {
+            uid: user.uid,
+            email: user.email,
+            name: userData.name || user.email?.split('@')[0] || 'Student',
+            grade: userData.grade || 10,
+            interests: userData.interests || ['STEM', 'Leadership'],
+            school: userData.school || '',
+            country: userData.country || '',
+            createdAt: new Date().toISOString(),
+            loggedIn: true
+        };
+        
+        // Save to Firestore
+        const userRef = doc(db, COLLECTIONS.users, user.uid);
+        await setDoc(userRef, userProfile);
+        
+        // Save to localStorage
+        localStorage.setItem('futuresAbroadUser', JSON.stringify(userProfile));
+        
+        return { success: true, user: userProfile };
+    } catch (error) {
+        console.error('Signup error:', error);
+        return { success: false, error: error.message };
+    }
 }
 
-function getCurrentUser() {
-    const user = localStorage.getItem('user');
-    return user ? JSON.parse(user) : null;
+// ============================================================
+// LOGOUT FUNCTION
+// ============================================================
+export async function logoutUser() {
+    try {
+        await signOut(auth);
+        localStorage.removeItem('futuresAbroadUser');
+        localStorage.removeItem('selectedActivity');
+        return { success: true };
+    } catch (error) {
+        console.error('Logout error:', error);
+        return { success: false, error: error.message };
+    }
 }
 
-function logoutUser() {
-    localStorage.removeItem('userToken');
-    localStorage.removeItem('user');
-    window.location.href = 'login.html';
-}
-
-// ============================================
-// SIGNUP FORM
-// ============================================
-document.addEventListener('DOMContentLoaded', function() {
-    const signupForm = document.getElementById('signupForm');
-    if (signupForm) {
-        signupForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            const name = document.getElementById('signupName').value;
-            const email = document.getElementById('signupEmail').value;
-            const password = document.getElementById('signupPassword').value;
-            const school = document.getElementById('signupSchool').value;
-            const country = document.getElementById('signupCountry').value;
-            const gradeInput = document.querySelector('input[name="grade"]:checked');
-            const interests = Array.from(document.querySelectorAll('.tag.active')).map(t => t.dataset.tag);
+// ============================================================
+// CHECK AUTH STATE
+// ============================================================
+export function checkAuthState(callback) {
+    return onAuthStateChanged(auth, async (user) => {
+        if (user) {
+            // User is logged in
+            const userRef = doc(db, COLLECTIONS.users, user.uid);
+            const userDoc = await getDoc(userRef);
             
-            if (!name || !email || !password || !gradeInput) {
-                alert('Please fill all required fields.');
-                return;
-            }
-            
-            const user = {
-                id: 'user_' + Date.now(),
-                name: name,
-                email: email,
-                grade: gradeInput.value,
-                school: school || '',
-                country: country || 'UAE',
-                interests: interests,
-                quizCompleted: false,
-                createdAt: new Date().toISOString()
+            let userData = {
+                uid: user.uid,
+                email: user.email,
+                name: user.email?.split('@')[0] || 'Student',
+                grade: 10,
+                interests: ['STEM', 'Leadership'],
+                loggedIn: true
             };
             
-            // Save user to localStorage
-            let users = JSON.parse(localStorage.getItem('users') || '[]');
-            users.push(user);
-            localStorage.setItem('users', JSON.stringify(users));
-            
-            // Set current user
-            localStorage.setItem('userToken', 'token_' + Date.now());
-            localStorage.setItem('user', JSON.stringify(user));
-            
-            // Redirect to quiz
-            window.location.href = 'quiz.html';
-        });
-    }
-
-    // ============================================
-    // STUDENT LOGIN FORM
-    // ============================================
-    const loginForm = document.getElementById('loginForm');
-    if (loginForm) {
-        loginForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            const email = document.getElementById('loginEmail').value;
-            const password = document.getElementById('loginPassword').value;
-            
-            if (!email || !password) {
-                alert('Please enter your email and password.');
-                return;
+            if (userDoc.exists()) {
+                userData = { ...userData, ...userDoc.data(), loggedIn: true };
             }
             
-            // Check users
-            const users = JSON.parse(localStorage.getItem('users') || '[]');
-            const user = users.find(u => u.email === email);
-            
-            if (user) {
-                localStorage.setItem('userToken', 'token_' + Date.now());
-                localStorage.setItem('user', JSON.stringify(user));
-                
-                if (user.quizCompleted) {
-                    window.location.href = 'dashboard.html';
-                } else {
-                    window.location.href = 'quiz.html';
-                }
-            } else {
-                alert('User not found. Please sign up first.');
-            }
-        });
-    }
+            localStorage.setItem('futuresAbroadUser', JSON.stringify(userData));
+            callback(userData);
+        } else {
+            // User is logged out
+            localStorage.removeItem('futuresAbroadUser');
+            callback(null);
+        }
+    });
+}
 
-    // ============================================
-    // PROTECTED ROUTES
-    // ============================================
-    const currentPage = window.location.pathname.split('/').pop();
-    const protectedPages = ['dashboard.html', 'quiz.html'];
-    const adminPages = ['admin-dashboard.html'];
-    
-    // Check admin pages
-    if (adminPages.includes(currentPage)) {
-        if (!isAdmin()) {
-            window.location.href = 'admin-login.html';
+// ============================================================
+// GET CURRENT USER
+// ============================================================
+export function getCurrentUser() {
+    const userData = localStorage.getItem('futuresAbroadUser');
+    if (userData) {
+        try {
+            return JSON.parse(userData);
+        } catch (e) {
+            return null;
         }
     }
+    return null;
+}
+
+// ============================================================
+// UPDATE USER PROFILE
+// ============================================================
+export async function updateUserProfile(updates) {
+    const user = auth.currentUser;
+    if (!user) {
+        return { success: false, error: 'Not logged in' };
+    }
     
-    // Check protected pages
-    if (protectedPages.includes(currentPage) && !isLoggedIn()) {
-        window.location.href = 'login.html';
+    try {
+        const userRef = doc(db, COLLECTIONS.users, user.uid);
+        await setDoc(userRef, updates, { merge: true });
+        
+        // Update localStorage
+        const currentUser = getCurrentUser();
+        if (currentUser) {
+            const updatedUser = { ...currentUser, ...updates };
+            localStorage.setItem('futuresAbroadUser', JSON.stringify(updatedUser));
+        }
+        
+        return { success: true };
+    } catch (error) {
+        console.error('Update error:', error);
+        return { success: false, error: error.message };
     }
-
-    // ============================================
-    // LOGOUT
-    // ============================================
-    const logoutBtn = document.getElementById('logoutBtn');
-    if (logoutBtn) {
-        logoutBtn.addEventListener('click', function(e) {
-            e.preventDefault();
-            logoutUser();
-        });
-    }
-
-    // ============================================
-    // ADMIN LOGOUT
-    // ============================================
-    const adminLogoutBtn = document.getElementById('adminLogoutBtn');
-    if (adminLogoutBtn) {
-        adminLogoutBtn.addEventListener('click', function(e) {
-            e.preventDefault();
-            localStorage.removeItem('isAdmin');
-            localStorage.removeItem('adminToken');
-            window.location.href = 'admin-login.html';
-        });
-    }
-
-    // ============================================
-    // USER BADGE
-    // ============================================
-    const user = getCurrentUser();
-    if (user) {
-        document.querySelectorAll('#userName, #userBadge').forEach(el => {
-            if (el) el.textContent = user.name || 'Student';
-        });
-    }
-});
+}
