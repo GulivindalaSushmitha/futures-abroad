@@ -1,418 +1,456 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Dashboard | Futures Abroad</title>
-    <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body {
-            font-family: 'Quicksand', Arial, sans-serif;
-            background: #f5f7fa;
-            min-height: 100vh;
-        }
+/* css/dashboard.css - Enhanced Professional Design */
+:root {
+    --primary: #6C3CE1;
+    --primary-light: #8B6BF0;
+    --primary-dark: #4A1FA0;
+    --secondary: #00D4AA;
+    --accent: #FF6B6B;
+    --gradient-primary: linear-gradient(135deg, #6C3CE1 0%, #00D4AA 100%);
+    --gradient-warm: linear-gradient(135deg, #FF6B6B 0%, #FFB84D 100%);
+    --gradient-cool: linear-gradient(135deg, #4A90D9 0%, #6C3CE1 100%);
+    --bg-dark: #0F0A1E;
+    --bg-card: rgba(255, 255, 255, 0.05);
+    --text-primary: #FFFFFF;
+    --text-secondary: rgba(255, 255, 255, 0.7);
+    --glass: rgba(255, 255, 255, 0.08);
+    --glass-border: rgba(255, 255, 255, 0.12);
+    --shadow-glow: 0 8px 32px rgba(108, 60, 225, 0.3);
+    --radius: 20px;
+    --radius-sm: 12px;
+}
 
-        /* HEADER */
-        .main-header {
-            background: white;
-            padding: 15px 30px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            z-index: 1000;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-        .main-header .logo a {
-            font-size: 22px;
-            font-weight: 800;
-            color: #2D1B4E;
-            text-decoration: none;
-        }
-        .main-header .logo a span { color: #6C3CE1; }
-        .main-header nav { display: flex; gap: 15px; align-items: center; flex-wrap: wrap; }
-        .main-header nav a {
-            text-decoration: none;
-            color: #555;
-            font-weight: 600;
-            padding: 8px 16px;
-            border-radius: 8px;
-            transition: all 0.3s;
-            font-size: 14px;
-        }
-        .main-header nav a:hover { background: #f0e6ff; color: #6C3CE1; }
-        .main-header nav a.active { background: #6C3CE1; color: white; }
-        .main-header nav #logout-link { color: #e74c3c; }
-        .main-header nav #logout-link:hover { background: #fde8e8; }
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 
-        /* CONTAINER */
-        .dashboard-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 100px 20px 40px;
-        }
+body {
+    font-family: 'Inter', sans-serif;
+    background: var(--bg-dark);
+    color: var(--text-primary);
+    overflow-x: hidden;
+}
 
-        /* WELCOME */
-        .welcome-card {
-            background: linear-gradient(135deg, #6C3CE1, #a855f7);
-            color: white;
-            border-radius: 20px;
-            padding: 30px 40px;
-            margin-bottom: 30px;
-        }
-        .welcome-card h1 {
-            font-size: 32px;
-            margin-bottom: 5px;
-        }
-        .welcome-card h1 span { font-weight: 300; }
-        .welcome-card .subtitle {
-            font-size: 16px;
-            opacity: 0.9;
-        }
-        .welcome-card .grade-badge {
-            display: inline-block;
-            background: rgba(255,255,255,0.2);
-            padding: 4px 16px;
-            border-radius: 20px;
-            font-size: 14px;
-            margin-top: 5px;
-        }
+.dashboard-container {
+    min-height: 100vh;
+    background: var(--bg-dark);
+    background-image: 
+        radial-gradient(ellipse at 20% 50%, rgba(108, 60, 225, 0.15) 0%, transparent 60%),
+        radial-gradient(ellipse at 80% 50%, rgba(0, 212, 170, 0.1) 0%, transparent 60%);
+    padding: 20px;
+    max-width: 1400px;
+    margin: 0 auto;
+}
 
-        /* PHASE PROGRESS */
-        .phase-progress {
-            background: white;
-            border-radius: 16px;
-            padding: 25px 30px;
-            margin-bottom: 30px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-        }
-        .phase-progress h3 {
-            color: #2D1B4E;
-            margin-bottom: 15px;
-            font-size: 18px;
-        }
-        .phase-track {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            position: relative;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-        .phase-track .phase-step {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            flex: 1;
-            min-width: 60px;
-            position: relative;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        .phase-track .phase-step:hover { transform: translateY(-2px); }
-        .phase-track .phase-step .circle {
-            width: 44px;
-            height: 44px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 700;
-            font-size: 14px;
-            background: #e0e0e0;
-            color: #999;
-            transition: all 0.3s;
-            border: 3px solid transparent;
-        }
-        .phase-track .phase-step.active .circle {
-            background: #6C3CE1;
-            color: white;
-            border-color: #6C3CE1;
-            box-shadow: 0 4px 15px rgba(108,60,225,0.3);
-        }
-        .phase-track .phase-step.completed .circle {
-            background: #22c55e;
-            color: white;
-            border-color: #22c55e;
-        }
-        .phase-track .phase-step .label {
-            font-size: 11px;
-            color: #888;
-            margin-top: 5px;
-            text-align: center;
-            font-weight: 600;
-        }
-        .phase-track .phase-step.active .label { color: #6C3CE1; }
-        .phase-track .phase-step.completed .label { color: #22c55e; }
+/* Navigation */
+.dashboard-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 24px;
+    background: var(--glass);
+    backdrop-filter: blur(20px);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius);
+    margin-bottom: 32px;
+}
 
-        /* GRID */
-        .dashboard-grid {
-            display: grid;
-            grid-template-columns: 2fr 1fr;
-            gap: 25px;
-        }
+.dashboard-nav .logo {
+    font-size: 24px;
+    font-weight: 700;
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
 
-        .card {
-            background: white;
-            border-radius: 16px;
-            padding: 25px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-        }
-        .card h3 {
-            color: #2D1B4E;
-            margin-bottom: 15px;
-            font-size: 18px;
-        }
-        .card .card-link {
-            color: #6C3CE1;
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 14px;
-        }
-        .card .card-link:hover { text-decoration: underline; }
+.dashboard-nav .user-info {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    font-size: 14px;
+    color: var(--text-secondary);
+}
 
-        /* PROFILE STRENGTH */
-        .strength-bar {
-            background: #f0e6ff;
-            border-radius: 50px;
-            height: 12px;
-            overflow: hidden;
-            margin: 10px 0;
-        }
-        .strength-bar .fill {
-            height: 100%;
-            background: linear-gradient(90deg, #6C3CE1, #a855f7);
-            border-radius: 50px;
-            transition: width 0.6s ease;
-            width: 0%;
-        }
-        .strength-label {
-            display: flex;
-            justify-content: space-between;
-            font-size: 14px;
-            color: #555;
-        }
+.dashboard-nav .user-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--gradient-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    color: white;
+}
 
-        /* ACTIVITY LIST */
-        .activity-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 12px 0;
-            border-bottom: 1px solid #f0f0f0;
-            flex-wrap: wrap;
-            gap: 8px;
-        }
-        .activity-item:last-child { border-bottom: none; }
-        .activity-item .name {
-            font-weight: 600;
-            color: #2D1B4E;
-        }
-        .activity-item .date {
-            color: #888;
-            font-size: 13px;
-        }
-        .activity-item .status {
-            padding: 2px 12px;
-            border-radius: 50px;
-            font-size: 11px;
-            font-weight: 700;
-        }
-        .activity-item .status.completed { background: #e8f5e9; color: #22c55e; }
-        .activity-item .status.registered { background: #fff3e0; color: #f57c00; }
-        .activity-item .status.pending { background: #fce4ec; color: #e74c3c; }
+/* Welcome Section */
+.welcome-section {
+    margin-bottom: 32px;
+}
 
-        /* QUICK LINKS */
-        .quick-links {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
-        }
-        .quick-links a {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 14px 18px;
-            background: #f8f9fa;
-            border-radius: 12px;
-            text-decoration: none;
-            color: #2D1B4E;
-            font-weight: 600;
-            transition: all 0.3s;
-            font-size: 14px;
-        }
-        .quick-links a:hover {
-            background: #f0e6ff;
-            transform: translateY(-2px);
-        }
-        .quick-links a .icon { font-size: 20px; }
-        .quick-links a.enroll {
-            background: linear-gradient(135deg, #00b09b, #96c93d);
-            color: white;
-        }
-        .quick-links a.enroll:hover { background: linear-gradient(135deg, #009688, #7cb342); }
+.welcome-section h1 {
+    font-size: 32px;
+    font-weight: 700;
+    margin-bottom: 4px;
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
 
-        /* EMPTY STATE */
-        .empty-state {
-            text-align: center;
-            padding: 20px;
-            color: #888;
-        }
-        .empty-state .icon { font-size: 32px; }
-        .empty-state p { margin-top: 5px; }
+.welcome-section p {
+    color: var(--text-secondary);
+    font-size: 16px;
+}
 
-        /* RESPONSIVE */
-        @media (max-width: 768px) {
-            .main-header { padding: 12px 16px; }
-            .main-header nav a { font-size: 12px; padding: 6px 10px; }
-            .dashboard-grid { grid-template-columns: 1fr; }
-            .welcome-card { padding: 20px; }
-            .welcome-card h1 { font-size: 24px; }
-            .phase-track { gap: 5px; }
-            .phase-track .phase-step .circle { width: 36px; height: 36px; font-size: 12px; }
-            .phase-track .phase-step .label { font-size: 9px; }
-            .quick-links { grid-template-columns: 1fr; }
-        }
-    </style>
-</head>
-<body>
+/* Interest Tags */
+.interest-tags {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin: 12px 0 24px 0;
+}
 
-    <!-- HEADER -->
-    <header class="main-header">
-        <div class="logo">
-            <a href="index.html">Futures <span>Abroad</span></a>
-        </div>
-        <nav>
-            <a href="dashboard.html" class="active">Dashboard</a>
-            <a href="portfolio.html">Portfolio</a>
-            <a href="student-app.html">Activities</a>
-            <a href="university-shortlist.html">Universities</a>
-            <a href="#" id="logout-link">Logout</a>
-        </nav>
-    </header>
+.interest-tag {
+    padding: 6px 16px;
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    border-radius: 50px;
+    font-size: 13px;
+    backdrop-filter: blur(10px);
+    color: var(--text-primary);
+    animation: fadeInUp 0.5s ease forwards;
+    transition: all 0.3s ease;
+}
 
-    <!-- DASHBOARD -->
-    <div class="dashboard-container">
+.interest-tag:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-glow);
+}
 
-        <!-- WELCOME -->
-        <div class="welcome-card">
-            <h1>👋 Welcome, <span id="userName">Student</span>!</h1>
-            <div class="subtitle">Track your journey from discovery to university application.</div>
-            <div class="grade-badge" id="gradeBadge">Grade 10</div>
-        </div>
+.interest-tag .tag-icon {
+    margin-right: 6px;
+}
 
-        <!-- PHASE PROGRESS TRACKER -->
-        <div class="phase-progress">
-            <h3>🚀 Your Journey Progress</h3>
-            <div class="phase-track" id="phaseTrack">
-                <div class="phase-step completed" data-phase="1" onclick="goToPhase(1)">
-                    <div class="circle">1</div>
-                    <div class="label">Onboarding</div>
-                </div>
-                <div class="phase-step completed" data-phase="2" onclick="goToPhase(2)">
-                    <div class="circle">2</div>
-                    <div class="label">Activities</div>
-                </div>
-                <div class="phase-step" data-phase="3" onclick="goToPhase(3)">
-                    <div class="circle">3</div>
-                    <div class="label">Register</div>
-                </div>
-                <div class="phase-step" data-phase="4" onclick="goToPhase(4)">
-                    <div class="circle">4</div>
-                    <div class="label">Reflect</div>
-                </div>
-                <div class="phase-step" data-phase="5" onclick="goToPhase(5)">
-                    <div class="circle">5</div>
-                    <div class="label">Universities</div>
-                </div>
-                <div class="phase-step" data-phase="6" onclick="goToPhase(6)">
-                    <div class="circle">6</div>
-                    <div class="label">Enroll</div>
-                </div>
-            </div>
-        </div>
+/* Feed Header */
+.feed-header {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 24px;
+}
 
-        <!-- GRID -->
-        <div class="dashboard-grid">
+.feed-header h2 {
+    font-size: 22px;
+    font-weight: 600;
+}
 
-            <!-- LEFT COLUMN -->
-            <div>
+.feed-header .feed-actions {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
 
-                <!-- PROFILE STRENGTH -->
-                <div class="card" style="margin-bottom:25px;">
-                    <h3>📊 Profile Strength</h3>
-                    <div class="strength-label">
-                        <span id="strengthText">Building your profile</span>
-                        <span id="strengthPercent">0%</span>
-                    </div>
-                    <div class="strength-bar">
-                        <div class="fill" id="strengthFill" style="width:0%;"></div>
-                    </div>
-                    <div style="margin-top:12px;font-size:14px;color:#888;">
-                        <span id="activityCount">0</span> activities completed
-                    </div>
-                </div>
+/* Filter Buttons */
+.filter-btn {
+    padding: 8px 18px;
+    border: 1px solid var(--glass-border);
+    border-radius: 50px;
+    background: var(--glass);
+    color: var(--text-secondary);
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+    font-family: 'Inter', sans-serif;
+}
 
-                <!-- RECENT ACTIVITIES -->
-                <div class="card">
-                    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;flex-wrap:wrap;gap:5px;">
-                        <h3 style="margin-bottom:0;">📋 Recent Activities</h3>
-                        <a href="student-app.html" class="card-link">View All →</a>
-                    </div>
-                    <div id="recentActivities">
-                        <div class="empty-state">
-                            <div class="icon">🔍</div>
-                            <p>No activities yet. <a href="student-app.html" style="color:#6C3CE1;font-weight:600;">Find your first activity →</a></p>
-                        </div>
-                    </div>
-                </div>
-            </div>
+.filter-btn:hover {
+    background: rgba(255, 255, 255, 0.15);
+    color: var(--text-primary);
+    transform: translateY(-2px);
+}
 
-            <!-- RIGHT COLUMN -->
-            <div>
+.filter-btn.active {
+    background: var(--gradient-primary);
+    border-color: transparent;
+    color: white;
+}
 
-                <!-- CURRENT PHASE -->
-                <div class="card" style="margin-bottom:25px;">
-                    <h3>📍 Current Phase</h3>
-                    <div id="currentPhase">
-                        <div style="background:#f8f4ff;padding:16px;border-radius:12px;border-left:4px solid #6C3CE1;">
-                            <div style="font-size:28px;">🔍</div>
-                            <h4 style="margin:5px 0;color:#2D1B4E;">Phase 1-2: Discovery</h4>
-                            <p style="color:#666;font-size:14px;margin:0;">Complete your profile to get started.</p>
-                        </div>
-                    </div>
-                </div>
+/* Activities Grid */
+.activities-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 24px;
+    margin-top: 16px;
+}
 
-                <!-- QUICK LINKS -->
-                <div class="card">
-                    <h3>⚡ Quick Actions</h3>
-                    <div class="quick-links">
-                        <a href="student-app.html">
-                            <span class="icon">🎯</span> Find Activities
-                        </a>
-                        <a href="portfolio.html">
-                            <span class="icon">📂</span> Portfolio
-                        </a>
-                        <a href="university-shortlist.html">
-                            <span class="icon">🏛️</span> Universities
-                        </a>
-                        <a href="futures-abroad-enroll.html" class="enroll">
-                            <span class="icon">🚀</span> Enroll Now
-                        </a>
-                    </div>
-                </div>
+/* Activity Card */
+.activity-card {
+    background: var(--glass);
+    backdrop-filter: blur(20px);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius);
+    padding: 24px;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    animation: fadeInUp 0.6s ease forwards;
+    opacity: 0;
+}
 
-            </div>
-        </div>
+.activity-card:nth-child(1) { animation-delay: 0.05s; }
+.activity-card:nth-child(2) { animation-delay: 0.1s; }
+.activity-card:nth-child(3) { animation-delay: 0.15s; }
+.activity-card:nth-child(4) { animation-delay: 0.2s; }
+.activity-card:nth-child(5) { animation-delay: 0.25s; }
+.activity-card:nth-child(6) { animation-delay: 0.3s; }
 
-    </div>
+.activity-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: var(--gradient-primary);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
 
-    <script type="module" src="js/dashboard.js"></script>
+.activity-card:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--shadow-glow);
+    border-color: var(--primary-light);
+}
 
-</body>
-</html>
+.activity-card:hover::before {
+    opacity: 1;
+}
+
+/* Activity Badge */
+.activity-badge {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 50px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 12px;
+}
+
+.activity-badge.internship { background: rgba(74, 144, 217, 0.3); color: #4A90D9; }
+.activity-badge.competition { background: rgba(255, 107, 107, 0.3); color: #FF6B6B; }
+.activity-badge.volunteering { background: rgba(0, 212, 170, 0.3); color: #00D4AA; }
+.activity-badge.course { background: rgba(108, 60, 225, 0.3); color: #8B6BF0; }
+.activity-badge.workshop { background: rgba(255, 184, 77, 0.3); color: #FFB84D; }
+.activity-badge.summit { background: rgba(255, 107, 107, 0.3); color: #FF6B6B; }
+.activity-badge.research { background: rgba(74, 144, 217, 0.3); color: #4A90D9; }
+
+.activity-card h3 {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+.activity-card .activity-meta {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    font-size: 13px;
+    color: var(--text-secondary);
+    margin-bottom: 12px;
+}
+
+.activity-card .activity-meta span {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+/* AI Rationale */
+.activity-rationale {
+    background: rgba(108, 60, 225, 0.1);
+    border-left: 3px solid var(--primary-light);
+    padding: 10px 14px;
+    border-radius: var(--radius-sm);
+    font-size: 14px;
+    color: var(--text-secondary);
+    margin: 12px 0;
+    line-height: 1.5;
+}
+
+.activity-rationale .rationale-icon {
+    color: var(--primary-light);
+    margin-right: 6px;
+}
+
+/* Activity Tags */
+.activity-tags {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-top: 12px;
+}
+
+.activity-tags .mini-tag {
+    padding: 2px 10px;
+    background: var(--glass);
+    border-radius: 50px;
+    font-size: 11px;
+    color: var(--text-secondary);
+    border: 1px solid var(--glass-border);
+}
+
+/* Card Footer */
+.activity-card .card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px solid var(--glass-border);
+}
+
+.activity-card .card-footer .deadline {
+    font-size: 13px;
+    color: var(--text-secondary);
+}
+
+.activity-card .card-footer .deadline .urgent {
+    color: var(--accent);
+    font-weight: 600;
+}
+
+/* Register Button */
+.btn-register {
+    padding: 10px 28px;
+    background: var(--gradient-primary);
+    border: none;
+    border-radius: 50px;
+    color: white;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: 'Inter', sans-serif;
+}
+
+.btn-register:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 20px rgba(108, 60, 225, 0.4);
+}
+
+/* No Activities State */
+.no-activities {
+    text-align: center;
+    padding: 60px 20px;
+    background: var(--glass);
+    border-radius: var(--radius);
+    border: 2px dashed var(--glass-border);
+}
+
+.no-activities .empty-icon {
+    font-size: 48px;
+    margin-bottom: 16px;
+}
+
+.no-activities h3 {
+    font-size: 20px;
+    margin-bottom: 8px;
+}
+
+.no-activities p {
+    color: var(--text-secondary);
+    margin-bottom: 20px;
+}
+
+.btn-retake-quiz {
+    padding: 12px 32px;
+    background: var(--gradient-warm);
+    border: none;
+    border-radius: 50px;
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: 'Inter', sans-serif;
+}
+
+.btn-retake-quiz:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 20px rgba(255, 107, 107, 0.3);
+}
+
+/* Loading Spinner */
+.loading-spinner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 60px;
+}
+
+.loading-spinner .spinner {
+    width: 48px;
+    height: 48px;
+    border: 4px solid var(--glass-border);
+    border-top: 4px solid var(--primary-light);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+/* Animations */
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .dashboard-nav {
+        flex-direction: column;
+        gap: 12px;
+        align-items: stretch;
+        text-align: center;
+    }
+    
+    .dashboard-nav .user-info {
+        justify-content: center;
+    }
+    
+    .feed-header .feed-actions {
+        justify-content: center;
+    }
+    
+    .activities-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .welcome-section h1 {
+        font-size: 24px;
+    }
+    
+    .activity-card .card-footer {
+        flex-direction: column;
+        gap: 12px;
+        align-items: stretch;
+    }
+    
+    .btn-register {
+        width: 100%;
+        text-align: center;
+    }
+}
