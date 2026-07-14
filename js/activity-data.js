@@ -399,8 +399,19 @@ function getActivityById(id) {
     return ACTIVITY_DATABASE.find(activity => activity.id === id);
 }
 
+// ============================================================
+// ✅ EXPORT FOR MODULE AND GLOBAL USAGE
+// ============================================================
+
+// For Node.js / module exports
 if (typeof module !== 'undefined' && module.exports) {
     module.exports = { ACTIVITY_DATABASE, getActivitiesByInterests, getActivityById };
 }
 
+// ✅ MAKE FUNCTIONS GLOBALLY AVAILABLE (for inline onclick in HTML)
+window.ACTIVITY_DATABASE = ACTIVITY_DATABASE;
+window.getActivitiesByInterests = getActivitiesByInterests;
+window.getActivityById = getActivityById;
+
 console.log('📦 Activity database loaded with', ACTIVITY_DATABASE.length, 'activities');
+console.log('✅ getActivityById is now available globally!');
