@@ -6,7 +6,6 @@
     <title>Futures Abroad | Your Activities</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
     <style>
-        /* ===== COMPLETE STYLES ===== */
         :root {
             --primary: #6C3CE1;
             --primary-light: #8B6BF0;
@@ -45,7 +44,6 @@
             margin: 0 auto;
         }
 
-        /* Navigation */
         .dashboard-nav {
             display: flex;
             justify-content: space-between;
@@ -56,6 +54,8 @@
             border: 1px solid var(--glass-border);
             border-radius: var(--radius);
             margin-bottom: 32px;
+            flex-wrap: wrap;
+            gap: 10px;
         }
 
         .dashboard-nav .logo {
@@ -72,6 +72,7 @@
             gap: 16px;
             font-size: 14px;
             color: var(--text-secondary);
+            flex-wrap: wrap;
         }
 
         .dashboard-nav .user-avatar {
@@ -86,7 +87,24 @@
             color: white;
         }
 
-        /* Welcome Section */
+        .logout-btn {
+            padding: 8px 20px;
+            background: rgba(255, 107, 107, 0.15);
+            border: 1px solid rgba(255, 107, 107, 0.3);
+            border-radius: 50px;
+            color: #FF6B6B;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .logout-btn:hover {
+            background: rgba(255, 107, 107, 0.25);
+            transform: translateY(-2px);
+        }
+
         .welcome-section {
             margin-bottom: 32px;
         }
@@ -105,7 +123,6 @@
             font-size: 16px;
         }
 
-        /* Interest Tags */
         .interest-tags {
             display: flex;
             gap: 8px;
@@ -133,7 +150,6 @@
             margin-right: 6px;
         }
 
-        /* Feed Header */
         .feed-header {
             display: flex;
             flex-direction: column;
@@ -152,7 +168,6 @@
             flex-wrap: wrap;
         }
 
-        /* Filter Buttons */
         .filter-btn {
             padding: 8px 18px;
             border: 1px solid var(--glass-border);
@@ -178,7 +193,6 @@
             color: white;
         }
 
-        /* Activities Grid */
         .activities-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
@@ -186,7 +200,6 @@
             margin-top: 16px;
         }
 
-        /* Activity Card */
         .activity-card {
             background: var(--glass);
             backdrop-filter: blur(20px);
@@ -309,6 +322,8 @@
             margin-top: 16px;
             padding-top: 16px;
             border-top: 1px solid var(--glass-border);
+            flex-wrap: wrap;
+            gap: 10px;
         }
 
         .activity-card .card-footer .deadline {
@@ -339,7 +354,6 @@
             box-shadow: 0 4px 20px rgba(108, 60, 225, 0.4);
         }
 
-        /* No Activities */
         .no-activities {
             text-align: center;
             padding: 60px 20px;
@@ -380,7 +394,6 @@
             box-shadow: 0 4px 20px rgba(255, 107, 107, 0.3);
         }
 
-        /* Loading */
         .loading-spinner {
             display: flex;
             justify-content: center;
@@ -413,7 +426,6 @@
             }
         }
 
-        /* Responsive */
         @media (max-width: 768px) {
             .dashboard-nav {
                 flex-direction: column;
@@ -424,6 +436,7 @@
             
             .dashboard-nav .user-info {
                 justify-content: center;
+                flex-wrap: wrap;
             }
             
             .feed-header .feed-actions {
@@ -440,7 +453,6 @@
             
             .activity-card .card-footer {
                 flex-direction: column;
-                gap: 12px;
                 align-items: stretch;
             }
             
@@ -453,26 +465,22 @@
 </head>
 <body>
     <div class="dashboard-container" id="app">
-        <!-- Navigation -->
         <nav class="dashboard-nav">
             <div class="logo">🚀 Futures Abroad</div>
             <div class="user-info">
                 <span id="userGrade">Grade 10</span>
                 <span id="userName">Student</span>
                 <div class="user-avatar" id="userAvatar">S</div>
+                <button class="logout-btn" onclick="handleLogout()">🚪 Logout</button>
             </div>
         </nav>
 
-        <!-- Welcome Section -->
         <section class="welcome-section">
             <h1>👋 Welcome back, <span id="userNameDisplay">Student</span></h1>
             <p>Here are activities tailored to your interests. Pick one and start building your future!</p>
-            <div class="interest-tags" id="interestTags">
-                <!-- Dynamically populated -->
-            </div>
+            <div class="interest-tags" id="interestTags"></div>
         </section>
 
-        <!-- Feed Header -->
         <div class="feed-header">
             <h2>🎯 Recommended Activities</h2>
             <div class="feed-actions">
@@ -492,7 +500,6 @@
             </div>
         </div>
 
-        <!-- Activities Grid -->
         <div id="activitiesContainer">
             <div class="loading-spinner">
                 <div class="spinner"></div>
@@ -500,18 +507,10 @@
         </div>
     </div>
 
-    <!-- ===== JAVASCRIPT - LOAD YOUR ACTIVITY DATA ===== -->
     <script src="js/activity-data.js"></script>
     <script>
-        // ============================================================
-        // DASHBOARD JAVASCRIPT - FIXED FOR PHASE 2 & 3
-        // ============================================================
-        
         console.log('🚀 Dashboard loading...');
-        console.log('📦 ACTIVITY_DATABASE exists?', typeof ACTIVITY_DATABASE !== 'undefined');
-        console.log('📦 getActivitiesByInterests exists?', typeof getActivitiesByInterests !== 'undefined');
 
-        // Get user data from localStorage
         function getUserData() {
             const userData = localStorage.getItem('futuresAbroadUser');
             if (userData) {
@@ -522,79 +521,56 @@
                     return null;
                 }
             }
-            // Check if user is in Firebase session
             return null;
         }
 
-        // State
         let currentUser = null;
         let currentTypeFilter = 'All Types';
         let currentCostFilter = 'All Costs';
 
-        // DOM Elements
         const activitiesContainer = document.getElementById('activitiesContainer');
         const interestTagsContainer = document.getElementById('interestTags');
         const userNameDisplay = document.getElementById('userNameDisplay');
         const userGradeDisplay = document.getElementById('userGrade');
         const userAvatar = document.getElementById('userAvatar');
 
-        // Initialize Dashboard
+        function handleLogout() {
+            if (confirm('Are you sure you want to logout?')) {
+                localStorage.removeItem('futuresAbroadUser');
+                window.location.href = 'login.html';
+            }
+        }
+
         function initDashboard() {
             currentUser = getUserData();
             
-            console.log('👤 Current user:', currentUser);
-            
-            // If no user, redirect to signup
             if (!currentUser) {
-                console.log('❌ No user found, redirecting to signup');
-                window.location.href = 'signup.html';
+                console.log('❌ No user found, redirecting to login');
+                window.location.href = 'login.html';
                 return;
             }
 
-            // Display user info
             userNameDisplay.textContent = currentUser.name || 'Student';
             userGradeDisplay.textContent = `Grade ${currentUser.grade || 10}`;
             userAvatar.textContent = (currentUser.name || 'S')[0].toUpperCase();
             document.getElementById('userName').textContent = currentUser.name || 'Student';
 
-            // Display interest tags
             const interests = currentUser.interests || ['STEM', 'Leadership'];
             displayInterestTags(interests);
-
-            // Load and display activities
             loadActivities();
-
-            // Setup filter buttons
             setupFilters();
         }
 
-        // Display Interest Tags with Emojis
         function displayInterestTags(interests) {
             const tagEmojis = {
-                'STEM': '🔬',
-                'Leadership': '👑',
-                'Community Service': '🤝',
-                'Social Enterprise': '🌱',
-                'Business': '💼',
-                'Entrepreneurship': '🚀',
-                'Finance': '💰',
-                'Sustainability': '🌍',
-                'Environment': '🌿',
-                'Computer Science': '💻',
-                'Engineering': '⚙️',
-                'Data Science': '📊',
-                'Technology': '📱',
-                'Medicine': '🏥',
-                'Biology': '🧬',
-                'Public Health': '🩺',
-                'Visual Art': '🎨',
-                'Graphic Design': '🖌️',
-                'Law': '⚖️',
-                'Political Science': '🏛️',
-                'International Relations': '🌐',
-                'AI & Machine Learning': '🤖',
-                'Robotics': '⚡',
-                'Mental Health': '🧠'
+                'STEM': '🔬', 'Leadership': '👑', 'Community Service': '🤝',
+                'Social Enterprise': '🌱', 'Business': '💼', 'Entrepreneurship': '🚀',
+                'Finance': '💰', 'Sustainability': '🌍', 'Environment': '🌿',
+                'Computer Science': '💻', 'Engineering': '⚙️', 'Data Science': '📊',
+                'Technology': '📱', 'Medicine': '🏥', 'Biology': '🧬',
+                'Public Health': '🩺', 'Visual Art': '🎨', 'Graphic Design': '🖌️',
+                'Law': '⚖️', 'Political Science': '🏛️', 'International Relations': '🌐',
+                'AI & Machine Learning': '🤖', 'Robotics': '⚡', 'Mental Health': '🧠'
             };
 
             if (interestTagsContainer) {
@@ -607,19 +583,12 @@
             }
         }
 
-        // Load Activities from the database
         function loadActivities() {
-            if (!currentUser) {
-                console.error('No user found');
-                return;
-            }
+            if (!currentUser) return;
             
             const interests = currentUser.interests || ['STEM', 'Leadership'];
             const grade = parseInt(currentUser.grade) || 10;
             
-            console.log('🔍 Looking for activities with interests:', interests, 'grade:', grade);
-            
-            // Use the global function from activity-data.js
             let activities = [];
             if (typeof getActivitiesByInterests === 'function') {
                 activities = getActivitiesByInterests(interests, grade, {
@@ -627,21 +596,11 @@
                     cost: currentCostFilter
                 });
                 console.log('✅ Found', activities.length, 'activities');
-            } else {
-                console.error('❌ getActivitiesByInterests function not found!');
-                // Fallback: try to load from window
-                if (window.getActivitiesByInterests) {
-                    activities = window.getActivitiesByInterests(interests, grade, {
-                        type: currentTypeFilter,
-                        cost: currentCostFilter
-                    });
-                }
             }
             
             renderActivities(activities);
         }
 
-        // Render Activities
         function renderActivities(activities) {
             if (!activities || activities.length === 0) {
                 activitiesContainer.innerHTML = `
@@ -656,23 +615,14 @@
             }
 
             const typeColors = {
-                'internship': 'internship',
-                'competition': 'competition',
-                'volunteering': 'volunteering',
-                'course': 'course',
-                'workshop': 'workshop',
-                'summit': 'summit',
-                'research': 'research'
+                'internship': 'internship', 'competition': 'competition',
+                'volunteering': 'volunteering', 'course': 'course',
+                'workshop': 'workshop', 'summit': 'summit', 'research': 'research'
             };
 
             const typeEmojis = {
-                'internship': '💼',
-                'competition': '🏆',
-                'volunteering': '🤝',
-                'course': '📚',
-                'workshop': '🔧',
-                'summit': '🌍',
-                'research': '🔬'
+                'internship': '💼', 'competition': '🏆', 'volunteering': '🤝',
+                'course': '📚', 'workshop': '🔧', 'summit': '🌍', 'research': '🔬'
             };
 
             activitiesContainer.innerHTML = `
@@ -702,7 +652,6 @@
                                     ⏰ Deadline: ${formatDate(activity.deadline)}
                                     ${isUrgent(activity.deadline) ? ' <span class="urgent">🔴 Urgent</span>' : ''}
                                 </span>
-                                <!-- ✅ FIXED: Register Now button goes to Phase 3 -->
                                 <button class="btn-register" onclick="event.stopPropagation(); goToPhase3(${activity.id})">
                                     Register Now →
                                 </button>
@@ -713,40 +662,31 @@
             `;
         }
 
-        // ✅ PHASE 2 → PHASE 3: Go to Registration
         function goToPhase3(activityId) {
             console.log('🔵 Going to Phase 3 Registration for activity:', activityId);
             
-            // Get the full activity data
             const activity = getActivityById(activityId);
             if (!activity) {
-                console.error('❌ Activity not found:', activityId);
                 alert('Activity not found. Please try again.');
                 return;
             }
             
-            // Save activity to localStorage for Phase 3
             localStorage.setItem('selectedActivity', JSON.stringify(activity));
             localStorage.setItem('currentActivityId', activityId);
-            
-            // ✅ Redirect to Phase 3 Registration Page
             window.location.href = 'activity-registration.html?id=' + activityId;
         }
 
-        // Generate AI Rationale
         function getAIRationale(activity, user) {
-            if (activity.ai_rationale) {
-                return activity.ai_rationale;
-            }
+            if (activity.ai_rationale) return activity.ai_rationale;
             
             const rationales = {
-                'Leadership': `Develops leadership skills essential for university applications and future careers.`,
-                'Community Service': `Shows your commitment to making a difference — universities love this!`,
-                'Business': `Perfect if you're interested in business and entrepreneurship.`,
-                'Sustainability': `Great for students passionate about the environment and leadership.`,
-                'STEM': `Builds strong technical skills that top universities look for.`,
-                'Medicine': `Great preparation for medical school applications.`,
-                'Technology': `Develops future-ready tech skills in high demand.`
+                'Leadership': 'Develops leadership skills essential for university applications.',
+                'Community Service': 'Shows your commitment to making a difference — universities love this!',
+                'Business': 'Perfect if you\'re interested in business and entrepreneurship.',
+                'Sustainability': 'Great for students passionate about the environment.',
+                'STEM': 'Builds strong technical skills that top universities look for.',
+                'Medicine': 'Great preparation for medical school applications.',
+                'Technology': 'Develops future-ready tech skills in high demand.'
             };
 
             for (const tag of user.interests || []) {
@@ -754,10 +694,9 @@
                     return rationales[tag] || `Recommended because you're interested in ${tag}.`;
                 }
             }
-            return `This activity aligns with your interests and goals.`;
+            return 'This activity aligns with your interests and goals.';
         }
 
-        // Format Date
         function formatDate(dateStr) {
             try {
                 const date = new Date(dateStr);
@@ -767,7 +706,6 @@
             }
         }
 
-        // Check if deadline is urgent (within 2 weeks)
         function isUrgent(dateStr) {
             try {
                 const deadline = new Date(dateStr);
@@ -779,9 +717,7 @@
             }
         }
 
-        // Setup Filter Buttons
         function setupFilters() {
-            // Type filters
             document.querySelectorAll('[data-filter]').forEach(btn => {
                 btn.addEventListener('click', function() {
                     document.querySelectorAll('[data-filter]').forEach(b => b.classList.remove('active'));
@@ -791,7 +727,6 @@
                 });
             });
 
-            // Cost filters
             document.querySelectorAll('[data-cost]').forEach(btn => {
                 btn.addEventListener('click', function() {
                     document.querySelectorAll('[data-cost]').forEach(b => b.classList.remove('active'));
@@ -802,7 +737,6 @@
             });
         }
 
-        // Retake Quiz
         function retakeQuiz() {
             if (confirm('Retaking the quiz will update your recommendations. Continue?')) {
                 localStorage.removeItem('futuresAbroadUser');
@@ -810,7 +744,6 @@
             }
         }
 
-        // Initialize on page load
         document.addEventListener('DOMContentLoaded', function() {
             console.log('🚀 DOM loaded, initializing...');
             initDashboard();
