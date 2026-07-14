@@ -6,11 +6,7 @@
     <title>Login | Futures Abroad</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         
         body {
             font-family: 'Inter', sans-serif;
@@ -178,7 +174,6 @@
             100% { transform: rotate(360deg); }
         }
 
-        /* ===== DEMO CREDENTIALS ===== */
         .demo-credentials {
             background: rgba(255, 255, 255, 0.05);
             border: 1px dashed rgba(255, 255, 255, 0.15);
@@ -223,9 +218,7 @@
         }
 
         @media (max-width: 480px) {
-            .login-container {
-                padding: 24px;
-            }
+            .login-container { padding: 24px; }
         }
     </style>
 </head>
@@ -234,53 +227,28 @@
         <div class="logo">🚀 Futures Abroad</div>
         <p class="subtitle">Welcome back! Login to continue your university journey</p>
 
-        <!-- Error Message -->
-        <div id="errorMessage" class="error-message">
-            ❌ Invalid email or password. Please try again.
-        </div>
+        <div id="errorMessage" class="error-message">❌ Invalid email or password. Please try again.</div>
+        <div id="successMessage" class="success-message">✅ Login successful! Redirecting to dashboard...</div>
 
-        <!-- Success Message -->
-        <div id="successMessage" class="success-message">
-            ✅ Login successful! Redirecting to dashboard...
-        </div>
-
-        <!-- Demo Credentials -->
         <div class="demo-credentials">
-            <p>🔑 Demo Account (Firebase)</p>
-            <code>Email: demo@futuresabroad.com</code>
+            <p>🔑 Demo Accounts</p>
+            <code>demo@futuresabroad.com / password123</code>
             <br />
-            <code>Password: password123</code>
+            <code>student1@example.com / password123</code>
             <br />
             <button class="demo-btn" onclick="fillDemoCredentials()">📝 Fill Demo Credentials</button>
         </div>
 
-        <!-- Login Form -->
-        <form id="loginForm" onsubmit="handleLogin(event)">
+        <form id="loginForm">
             <div class="form-group">
                 <label for="email">Email Address</label>
-                <input 
-                    type="email" 
-                    id="email" 
-                    placeholder="Enter your email" 
-                    required
-                    value="demo@futuresabroad.com"
-                />
+                <input type="email" id="email" placeholder="Enter your email" required value="demo@futuresabroad.com" />
             </div>
-
             <div class="form-group">
                 <label for="password">Password</label>
-                <input 
-                    type="password" 
-                    id="password" 
-                    placeholder="Enter your password" 
-                    required
-                    value="password123"
-                />
+                <input type="password" id="password" placeholder="Enter your password" required value="password123" />
             </div>
-
-            <button type="submit" class="btn-login" id="loginBtn">
-                🔐 Login
-            </button>
+            <button type="submit" class="btn-login" id="loginBtn">🔐 Login</button>
         </form>
 
         <div class="signup-link">
@@ -288,11 +256,7 @@
         </div>
     </div>
 
-    <!-- ============================================================
-    JAVASCRIPT - Firebase Authentication
-    ============================================================ -->
     <script type="module">
-        // Import Firebase Auth
         import { 
             auth, 
             signInWithEmailAndPassword,
@@ -300,12 +264,12 @@
             db,
             doc,
             getDoc,
+            setDoc,
             COLLECTIONS
         } from './js/firebase-config.js';
 
         console.log('🚀 Login page loaded with Firebase!');
 
-        // DOM Elements
         const emailInput = document.getElementById('email');
         const passwordInput = document.getElementById('password');
         const loginBtn = document.getElementById('loginBtn');
@@ -313,100 +277,61 @@
         const successMessage = document.getElementById('successMessage');
         const loginForm = document.getElementById('loginForm');
 
-        // ============================================================
-        // FILL DEMO CREDENTIALS
-        // ============================================================
         window.fillDemoCredentials = function() {
             emailInput.value = 'demo@futuresabroad.com';
             passwordInput.value = 'password123';
         };
 
-        // ============================================================
-        // HANDLE LOGIN WITH FIREBASE
-        // ============================================================
         async function handleLogin(event) {
             event.preventDefault();
             
             const email = emailInput.value.trim();
             const password = passwordInput.value.trim();
 
-            // Hide previous messages
             errorMessage.classList.remove('show');
             successMessage.classList.remove('show');
 
-            // Validate inputs
             if (!email || !password) {
                 errorMessage.textContent = '❌ Please enter both email and password.';
                 errorMessage.classList.add('show');
                 return;
             }
 
-            // Show loading state
             loginBtn.disabled = true;
             loginBtn.innerHTML = '<span class="loading-spinner"></span> Logging in...';
 
             try {
-                // 🔐 Sign in with Firebase
                 const userCredential = await signInWithEmailAndPassword(auth, email, password);
                 const user = userCredential.user;
                 
                 console.log('✅ Login successful for:', user.email);
-                console.log('🆔 User UID:', user.uid);
 
-                // ✅ Get user data from Firestore
                 try {
                     const userRef = doc(db, COLLECTIONS.users, user.uid);
                     const userDoc = await getDoc(userRef);
                     
+                    let userData = {
+                        uid: user.uid,
+                        email: user.email,
+                        name: user.email?.split('@')[0] || 'Student',
+                        grade: 10,
+                        interests: ['STEM', 'Leadership'],
+                        school: '',
+                        country: '',
+                        loggedIn: true,
+                        loginTime: new Date().toISOString()
+                    };
+                    
                     if (userDoc.exists()) {
-                        const userData = userDoc.data();
-                        console.log('📦 User data from Firestore:', userData);
-                        
-                        // Save to localStorage for quick access
-                        localStorage.setItem('futuresAbroadUser', JSON.stringify({
-                            uid: user.uid,
-                            email: user.email,
-                            name: userData.name || user.email?.split('@')[0] || 'Student',
-                            grade: userData.grade || 10,
-                            interests: userData.interests || ['STEM', 'Leadership'],
-                            school: userData.school || '',
-                            country: userData.country || '',
-                            loggedIn: true,
-                            loginTime: new Date().toISOString()
-                        }));
+                        const data = userDoc.data();
+                        userData = { ...userData, ...data, loggedIn: true };
                     } else {
-                        // User exists in Auth but not in Firestore yet
-                        console.log('⚠️ User found in Auth but not in Firestore. Creating profile...');
-                        
-                        // Create basic profile
-                        const userData = {
-                            uid: user.uid,
-                            email: user.email,
-                            name: user.email?.split('@')[0] || 'Student',
-                            grade: 10,
-                            interests: ['STEM', 'Leadership'],
-                            school: '',
-                            country: '',
-                            createdAt: new Date().toISOString()
-                        };
-                        
                         await setDoc(userRef, userData);
-                        
-                        localStorage.setItem('futuresAbroadUser', JSON.stringify({
-                            uid: user.uid,
-                            email: user.email,
-                            name: userData.name,
-                            grade: userData.grade,
-                            interests: userData.interests,
-                            school: userData.school,
-                            country: userData.country,
-                            loggedIn: true,
-                            loginTime: new Date().toISOString()
-                        }));
                     }
+                    
+                    localStorage.setItem('futuresAbroadUser', JSON.stringify(userData));
                 } catch (firestoreError) {
                     console.warn('⚠️ Could not fetch Firestore data:', firestoreError);
-                    // Still allow login, use basic data
                     localStorage.setItem('futuresAbroadUser', JSON.stringify({
                         uid: user.uid,
                         email: user.email,
@@ -418,26 +343,20 @@
                     }));
                 }
 
-                // Show success message
                 successMessage.textContent = '✅ Login successful! Redirecting to dashboard...';
                 successMessage.classList.add('show');
 
-                // Reset button
                 loginBtn.disabled = false;
                 loginBtn.innerHTML = '✅ Logged In!';
 
-                // 🚀 Redirect to student app
                 setTimeout(() => {
                     window.location.href = 'student-app.html';
                 }, 1200);
 
             } catch (error) {
-                // ❌ Login failed
                 console.error('❌ Login error:', error.code, error.message);
                 
                 let errorMsg = '❌ Invalid email or password. Please try again.';
-                
-                // Better error messages
                 if (error.code === 'auth/user-not-found') {
                     errorMsg = '❌ No account found with this email. Please sign up first.';
                 } else if (error.code === 'auth/wrong-password') {
@@ -453,85 +372,43 @@
                 errorMessage.textContent = errorMsg;
                 errorMessage.classList.add('show');
 
-                // Reset button
                 loginBtn.disabled = false;
                 loginBtn.innerHTML = '🔐 Login';
             }
         }
 
-        // ============================================================
-        // CHECK IF USER IS ALREADY LOGGED IN
-        // ============================================================
         function checkExistingSession() {
-            // Check localStorage first
             const userData = localStorage.getItem('futuresAbroadUser');
             if (userData) {
                 try {
                     const user = JSON.parse(userData);
                     if (user.loggedIn) {
-                        console.log('🔵 User already logged in (localStorage), redirecting...');
+                        console.log('🔵 User already logged in, redirecting...');
                         window.location.href = 'student-app.html';
                         return true;
                     }
                 } catch (e) {
-                    console.log('Invalid user data, clearing...');
                     localStorage.removeItem('futuresAbroadUser');
                 }
             }
             return false;
         }
 
-        // ============================================================
-        // INITIALIZE
-        // ============================================================
         document.addEventListener('DOMContentLoaded', function() {
-            // Check if already logged in
-            if (checkExistingSession()) {
-                return;
-            }
+            if (checkExistingSession()) return;
 
-            // Check Firebase Auth state
             onAuthStateChanged(auth, (user) => {
                 if (user) {
                     console.log('🔵 User already logged in (Firebase):', user.email);
-                    // Check if we have user data in localStorage
-                    const localUser = localStorage.getItem('futuresAbroadUser');
-                    if (!localUser) {
-                        // Fetch user data and redirect
-                        const userRef = doc(db, COLLECTIONS.users, user.uid);
-                        getDoc(userRef).then((docSnap) => {
-                            if (docSnap.exists()) {
-                                const userData = docSnap.data();
-                                localStorage.setItem('futuresAbroadUser', JSON.stringify({
-                                    uid: user.uid,
-                                    email: user.email,
-                                    name: userData.name || user.email?.split('@')[0] || 'Student',
-                                    grade: userData.grade || 10,
-                                    interests: userData.interests || ['STEM', 'Leadership'],
-                                    school: userData.school || '',
-                                    country: userData.country || '',
-                                    loggedIn: true,
-                                    loginTime: new Date().toISOString()
-                                }));
-                            }
-                            window.location.href = 'student-app.html';
-                        }).catch(() => {
-                            window.location.href = 'student-app.html';
-                        });
-                    } else {
-                        window.location.href = 'student-app.html';
-                    }
+                    window.location.href = 'student-app.html';
                 }
             });
 
-            // Auto-fill demo credentials
             emailInput.value = 'demo@futuresabroad.com';
             passwordInput.value = 'password123';
         });
 
-        // Attach login handler to window so inline onsubmit works
-        window.handleLogin = handleLogin;
-
+        loginForm.addEventListener('submit', handleLogin);
         console.log('✅ Login page ready with Firebase!');
     </script>
 </body>
