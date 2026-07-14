@@ -318,12 +318,13 @@
 
     <script type="module">
         // ============================================================
-        // SIGNUP - With Firebase Auth
+        // SIGNUP - FIXED: No Blinking
         // ============================================================
         
         import { 
             auth, 
             createUserWithEmailAndPassword,
+            onAuthStateChanged,
             db,
             doc,
             setDoc,
@@ -345,6 +346,7 @@
         const interestsGrid = document.getElementById('interestsGrid');
 
         let selectedInterests = [];
+        let isRedirecting = false;
 
         // ============================================================
         // INTEREST SELECTION
@@ -376,6 +378,8 @@
         async function handleSignup(event) {
             event.preventDefault();
             
+            if (isRedirecting) return;
+
             const name = nameInput.value.trim();
             const email = emailInput.value.trim();
             const password = passwordInput.value.trim();
@@ -438,6 +442,7 @@
                 signupBtn.disabled = false;
                 signupBtn.innerHTML = '✅ Account Created!';
 
+                isRedirecting = true;
                 setTimeout(() => {
                     window.location.href = 'student-app.html';
                 }, 1500);
@@ -465,15 +470,18 @@
         }
 
         // ============================================================
-        // CHECK IF ALREADY LOGGED IN
+        // CHECK IF ALREADY LOGGED IN - WITH GUARD
         // ============================================================
         function checkExistingSession() {
+            if (isRedirecting) return false;
+            
             const userData = localStorage.getItem('futuresAbroadUser');
             if (userData) {
                 try {
                     const user = JSON.parse(userData);
                     if (user.loggedIn) {
                         console.log('🔵 Already logged in, redirecting...');
+                        isRedirecting = true;
                         window.location.href = 'student-app.html';
                         return true;
                     }
@@ -485,14 +493,23 @@
         }
 
         // ============================================================
-        // INITIALIZE
+        // INITIALIZE - WITH GUARD
         // ============================================================
         document.addEventListener('DOMContentLoaded', function() {
             if (checkExistingSession()) return;
-            console.log('✅ Signup page ready!');
+
+            // Check Firebase auth state - WITH GUARD
+            onAuthStateChanged(auth, (user) => {
+                if (user && !isRedirecting) {
+                    console.log('🔵 Already logged in (Firebase):', user.email);
+                    isRedirecting = true;
+                    window.location.href = 'student-app.html';
+                }
+            });
         });
 
         signupForm.addEventListener('submit', handleSignup);
+        console.log('✅ Signup page ready!');
     </script>
 </body>
 </html>
