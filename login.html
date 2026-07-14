@@ -206,7 +206,7 @@
 
     <script type="module">
         // ============================================================
-        // LOGIN - With Firebase Auth
+        // LOGIN - FIXED: No Blinking
         // ============================================================
         
         import { 
@@ -229,12 +229,17 @@
         const successMessage = document.getElementById('successMessage');
         const loginForm = document.getElementById('loginForm');
 
+        // ✅ PREVENT REDIRECT LOOP - Check if already redirected
+        let isRedirecting = false;
+
         // ============================================================
         // HANDLE LOGIN
         // ============================================================
         async function handleLogin(event) {
             event.preventDefault();
             
+            if (isRedirecting) return;
+
             const email = emailInput.value.trim();
             const password = passwordInput.value.trim();
 
@@ -277,7 +282,6 @@
                         const data = userDoc.data();
                         userData = { ...userData, ...data, loggedIn: true };
                     } else {
-                        // Create profile if doesn't exist
                         await setDoc(userRef, userData);
                     }
                     
@@ -300,6 +304,7 @@
                 loginBtn.disabled = false;
                 loginBtn.innerHTML = '✅ Logged In!';
 
+                isRedirecting = true;
                 setTimeout(() => {
                     window.location.href = 'student-app.html';
                 }, 1200);
@@ -316,8 +321,6 @@
                     msg = '❌ Too many failed attempts. Please try again later.';
                 } else if (error.code === 'auth/invalid-email') {
                     msg = '❌ Invalid email format.';
-                } else if (error.code === 'auth/user-disabled') {
-                    msg = '❌ This account has been disabled.';
                 }
                 
                 errorMessage.textContent = msg;
@@ -329,15 +332,18 @@
         }
 
         // ============================================================
-        // CHECK IF ALREADY LOGGED IN
+        // CHECK IF ALREADY LOGGED IN - WITH GUARD
         // ============================================================
         function checkExistingSession() {
+            if (isRedirecting) return false;
+            
             const userData = localStorage.getItem('futuresAbroadUser');
             if (userData) {
                 try {
                     const user = JSON.parse(userData);
                     if (user.loggedIn) {
                         console.log('🔵 Already logged in, redirecting...');
+                        isRedirecting = true;
                         window.location.href = 'student-app.html';
                         return true;
                     }
@@ -349,16 +355,17 @@
         }
 
         // ============================================================
-        // INITIALIZE
+        // INITIALIZE - WITH GUARD
         // ============================================================
         document.addEventListener('DOMContentLoaded', function() {
-            // Check if already logged in
+            // Check if already logged in (with guard)
             if (checkExistingSession()) return;
 
-            // Check Firebase auth state
+            // Check Firebase auth state - WITH GUARD
             onAuthStateChanged(auth, (user) => {
-                if (user) {
+                if (user && !isRedirecting) {
                     console.log('🔵 Already logged in (Firebase):', user.email);
+                    isRedirecting = true;
                     window.location.href = 'student-app.html';
                 }
             });
