@@ -471,7 +471,7 @@
                 <span id="userGrade">Grade 10</span>
                 <span id="userName">Student</span>
                 <div class="user-avatar" id="userAvatar">S</div>
-                <button class="logout-btn" onclick="handleLogout()">🚪 Logout</button>
+                <button class="logout-btn" id="logoutBtn">🚪 Logout</button>
             </div>
         </nav>
 
@@ -508,7 +508,13 @@
     </div>
 
     <script src="js/activity-data.js"></script>
-    <script>
+    <script type="module">
+        // ============================================================
+        // STUDENT APP - COMPLETE WITH FIREBASE LOGOUT
+        // ============================================================
+        
+        import { auth, signOut } from './js/firebase-config.js';
+
         console.log('🚀 Dashboard loading...');
 
         function getUserData() {
@@ -533,20 +539,40 @@
         const userNameDisplay = document.getElementById('userNameDisplay');
         const userGradeDisplay = document.getElementById('userGrade');
         const userAvatar = document.getElementById('userAvatar');
+        const logoutBtn = document.getElementById('logoutBtn');
 
-        function handleLogout() {
+        // ============================================================
+        // HANDLE LOGOUT - WITH FIREBASE SIGNOUT
+        // ============================================================
+        async function handleLogout() {
             if (confirm('Are you sure you want to logout?')) {
+                try {
+                    // Sign out from Firebase
+                    await signOut(auth);
+                    console.log('✅ Signed out from Firebase');
+                } catch (error) {
+                    console.error('Logout error:', error);
+                }
+                
+                // Clear localStorage
                 localStorage.removeItem('futuresAbroadUser');
-                window.location.href = 'login.html';
+                localStorage.removeItem('selectedActivity');
+                localStorage.removeItem('currentActivityId');
+                
+                // Redirect to login
+                window.location.replace('login.html');
             }
         }
 
+        // ============================================================
+        // INIT DASHBOARD
+        // ============================================================
         function initDashboard() {
             currentUser = getUserData();
             
             if (!currentUser) {
                 console.log('❌ No user found, redirecting to login');
-                window.location.href = 'login.html';
+                window.location.replace('login.html');
                 return;
             }
 
@@ -743,6 +769,11 @@
                 window.location.href = 'signup.html';
             }
         }
+
+        // ============================================================
+        // EVENT LISTENERS
+        // ============================================================
+        logoutBtn.addEventListener('click', handleLogout);
 
         document.addEventListener('DOMContentLoaded', function() {
             console.log('🚀 DOM loaded, initializing...');
