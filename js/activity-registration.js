@@ -9,6 +9,8 @@ import {
     query, where, collection
 } from './firebase-config.js';
 
+console.log('🚀 activity-registration.js loaded!');
+
 // DOM Elements
 const activityNameEl = document.getElementById('activity-name');
 const activityTypeEl = document.getElementById('activity-type');
@@ -81,20 +83,22 @@ function renderChecklist(requirements) {
     if (!checklistContainer) return;
     checklistContainer.innerHTML = '';
 
-    if (!requirements || requirements.length === 0) {
-        checklistContainer.innerHTML = '<li style="padding:10px;color:#888;">No specific requirements for this activity.</li>';
-        return;
-    }
+    const defaultRequirements = [
+        { id: 'personal_statement', title: 'Personal Statement', description: 'Write a short statement explaining your interest in this activity', dueDate: '2026-10-01' },
+        { id: 'parent_consent', title: 'Parent/Guardian Consent', description: 'Get permission from your parents or guardian', dueDate: '2026-10-01' },
+        { id: 'registration_form', title: 'Complete Registration Form', description: 'Fill out the official registration form', dueDate: '2026-10-01' }
+    ];
 
-    requirements.forEach(function(req, index) {
-        const listItem = document.createElement('li');
+    const reqs = requirements && requirements.length > 0 ? requirements : defaultRequirements;
+
+    reqs.forEach(function(req, index) {
+        const listItem = document.createElement('div');
         listItem.className = 'checklist-item';
         listItem.id = 'checklist-item-' + (req.id || index);
         listItem.dataset.completed = 'false';
 
         const checkbox = document.createElement('input');
         checkbox.type = 'checkbox';
-        checkbox.className = 'checkbox';
         checkbox.id = 'checkbox-' + (req.id || index);
         checkbox.addEventListener('change', function(e) {
             if (e.target.checked) {
@@ -108,23 +112,23 @@ function renderChecklist(requirements) {
         });
 
         const contentDiv = document.createElement('div');
-        contentDiv.className = 'content';
+        contentDiv.className = 'check-content';
 
-        const titleSpan = document.createElement('div');
-        titleSpan.className = 'title';
-        titleSpan.textContent = (index + 1) + '. ' + (req.title || 'Requirement');
+        const label = document.createElement('label');
+        label.htmlFor = 'checkbox-' + (req.id || index);
+        label.textContent = (index + 1) + '. ' + (req.title || 'Requirement');
 
-        const descSpan = document.createElement('div');
-        descSpan.className = 'desc';
-        descSpan.textContent = req.description || '';
+        const dueDate = document.createElement('div');
+        dueDate.className = 'due-date';
+        dueDate.textContent = req.dueDate ? '📅 Due: ' + req.dueDate : '';
 
-        const dueSpan = document.createElement('div');
-        dueSpan.className = 'due';
-        dueSpan.textContent = req.dueDate ? '📅 Due: ' + req.dueDate : '';
+        const desc = document.createElement('div');
+        desc.className = 'desc';
+        desc.textContent = req.description || '';
 
-        contentDiv.appendChild(titleSpan);
-        contentDiv.appendChild(descSpan);
-        contentDiv.appendChild(dueSpan);
+        contentDiv.appendChild(label);
+        contentDiv.appendChild(dueDate);
+        contentDiv.appendChild(desc);
 
         listItem.appendChild(checkbox);
         listItem.appendChild(contentDiv);
@@ -206,7 +210,7 @@ async function handleRegistrationComplete(activityId) {
 }
 
 // ============================================================
-// PHASE 4: Mark Activity as Complete (UPDATED)
+// PHASE 4: Mark Activity as Complete
 // ============================================================
 
 async function markActivityAsComplete() {
@@ -228,7 +232,6 @@ async function markActivityAsComplete() {
     const activityType = document.getElementById('activity-type')?.textContent?.toLowerCase() || 'default';
     const duration = document.getElementById('activity-duration')?.textContent || 'N/A';
 
-    // Get activity data for skills
     const activity = await fetchActivityData(activityId);
     const skills = activity?.skills_gained || [];
 
@@ -239,7 +242,6 @@ async function markActivityAsComplete() {
     }
 
     try {
-        // Check if already in portfolio
         const portfolioRef = collection(db, COLLECTIONS.studentPortfolio);
         const q = query(portfolioRef, 
             where("userId", "==", user.uid), 
@@ -257,7 +259,6 @@ async function markActivityAsComplete() {
             return;
         }
 
-        // Create portfolio entry
         const portfolioEntry = {
             userId: user.uid,
             activityId: activityId,
@@ -274,7 +275,6 @@ async function markActivityAsComplete() {
 
         await addDoc(portfolioRef, portfolioEntry);
 
-        // Update user profile
         const userRef = doc(db, COLLECTIONS.users, user.uid);
         await updateDoc(userRef, {
             completed_activities: arrayUnion(activityId),
@@ -283,33 +283,25 @@ async function markActivityAsComplete() {
 
         console.log('✅ Activity marked as complete!');
 
-        // ============================================================
-        // SHOW PHASE 4 SUCCESS SECTION (INSTEAD OF REDIRECTING)
-        // ============================================================
-
-        // Hide the "Mark as Complete" button container
+        // Hide the complete button container
         if (completeActivityContainer) {
             completeActivityContainer.style.display = 'none';
         }
 
-        // Show the Phase 4 success section with "Continue to Reflection" button
+        // Show Phase 4 success
         if (phase4Success) {
             phase4Success.style.display = 'block';
             phase4Success.scrollIntoView({ behavior: 'smooth' });
         }
 
-        // Update status message
         if (phase4Status) {
             phase4Status.style.display = 'block';
             phase4Status.style.color = '#22c55e';
             phase4Status.innerHTML = '✅ Activity marked as complete! Click "Continue to Reflection" to proceed.';
         }
 
-        // Store in localStorage that this activity is completed
         localStorage.setItem('activityCompleted_' + activityId, 'true');
         localStorage.setItem('phase3Complete', 'true');
-
-        console.log('✅ Phase 4 success section shown! User can now click "Continue to Reflection"');
 
     } catch (error) {
         console.error('❌ Error completing activity:', error);
@@ -323,17 +315,15 @@ async function markActivityAsComplete() {
 }
 
 // ============================================================
-// GO TO REFLECTION (Phase 4) - Called from HTML button
+// GO TO REFLECTION (Phase 4)
 // ============================================================
 
 window.goToReflection = function() {
     console.log('🔵 goToReflection() called from HTML button!');
     
-    // Get activity ID from URL
     const params = new URLSearchParams(window.location.search);
     let activityId = params.get('id');
     
-    // If no ID in URL, try localStorage
     if (!activityId) {
         activityId = localStorage.getItem('currentActivityId');
     }
@@ -346,11 +336,9 @@ window.goToReflection = function() {
     
     console.log('🔄 Redirecting to Phase 4 Reflection for activity:', activityId);
     
-    // Store that Phase 3 is complete
     localStorage.setItem('phase3Complete', 'true');
     localStorage.setItem('currentActivityId', activityId);
     
-    // Navigate to Phase 4 (post-activity.html)
     window.location.href = 'post-activity.html?id=' + activityId;
 };
 
@@ -367,8 +355,7 @@ async function checkIfActivityCompleted(userId, activityId) {
         );
         const snapshot = await getDocs(q);
         
-        if (!snapshot.empty) {
-            // Activity is already completed - show Phase 4 success
+        if (!snapshot.empty()) {
             if (completeActivityContainer) {
                 completeActivityContainer.style.display = 'none';
             }
@@ -422,7 +409,93 @@ function setupEventListeners() {
             }
         });
     }
+
+    const continueBtn = document.getElementById('continue-to-phase4-btn');
+    if (continueBtn) {
+        continueBtn.addEventListener('click', function() {
+            const activityId = getActivityIdFromURL() || localStorage.getItem('currentActivityId');
+            if (activityId) {
+                window.location.href = 'university-shortlist.html';
+            } else {
+                window.location.href = 'university-shortlist.html';
+            }
+        });
+    }
 }
+
+// ============================================================
+// PHASE NAVIGATION
+// ============================================================
+
+function getCurrentPhase() {
+    try {
+        const student = JSON.parse(localStorage.getItem('studentProfile') || '{}');
+        return student.currentPhase || 3;
+    } catch { return 3; }
+}
+
+function navigateToPhase(phase) {
+    const phasePages = {
+        1: 'quiz.html',
+        2: 'student-app.html',
+        3: 'activity-registration.html',
+        4: 'post-activity.html',
+        5: 'university-shortlist.html',
+        6: 'futures-abroad-enroll.html'
+    };
+    window.location.href = phasePages[phase] || 'dashboard.html';
+}
+
+function renderPhaseNavigation() {
+    const currentPhase = getCurrentPhase();
+    const phases = [
+        { num: 1, label: 'Discovery' },
+        { num: 2, label: 'Activities' },
+        { num: 3, label: 'Register' },
+        { num: 4, label: 'Reflect' },
+        { num: 5, label: 'Pathway' },
+        { num: 6, label: 'Enroll' }
+    ];
+
+    let html = '';
+    phases.forEach((phase, index) => {
+        const isActive = phase.num <= currentPhase;
+        const isCompleted = phase.num < currentPhase;
+        const isCurrent = phase.num === currentPhase;
+
+        let circleClass = 'phase-circle';
+        if (isActive) circleClass += ' active';
+        if (isCompleted) circleClass += ' completed';
+        if (isCurrent) circleClass += ' current';
+
+        let labelClass = 'phase-label';
+        if (isActive) labelClass += ' active';
+
+        let circleContent = phase.num;
+        if (isCompleted) circleContent = '✓';
+
+        html += `
+            <div class="phase-item" onclick="navigateToPhase(${phase.num})">
+                <div class="${circleClass}"><span>${circleContent}</span></div>
+                <span class="${labelClass}">${phase.label}</span>
+            </div>
+        `;
+        if (index < phases.length - 1) {
+            html += `<div class="phase-connector ${phase.num < currentPhase ? 'active' : ''}"></div>`;
+        }
+    });
+
+    return html;
+}
+
+function initPhaseNavigation() {
+    const navContainer = document.getElementById('phase-navigation');
+    if (navContainer) {
+        navContainer.innerHTML = renderPhaseNavigation();
+    }
+}
+
+window.navigateToPhase = navigateToPhase;
 
 // ============================================================
 // INITIALIZATION
@@ -478,21 +551,17 @@ async function initApp() {
                 phase4Section.style.display = 'block';
             }
         }
-        
-        // Check if activity is already completed
+
         await checkIfActivityCompleted(user.uid, activityId);
     });
+
+    initPhaseNavigation();
 }
 
-// ============================================================
-// START APP
-// ============================================================
-
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('🚀 activity-registration.js loaded!');
+    console.log('🚀 DOM loaded, initializing...');
     setupEventListeners();
     initApp();
 });
 
 console.log('✅ activity-registration.js initialized!');
-console.log('📌 Phase 4: Click "Mark as Complete" → Shows Phase 4 success → Click "Continue to Reflection" → post-activity.html');
