@@ -226,6 +226,45 @@
             transition: all 0.3s;
         }
         .btn-primary:hover { background: #1d4ed8; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(37,99,235,0.3); }
+        .btn-logout {
+            padding: 8px 20px;
+            background: #ef4444;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+        }
+        .btn-logout:hover { background: #dc2626; transform: translateY(-1px); }
+        .header-bar {
+            background: white;
+            padding: 12px 24px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .header-bar .logo {
+            font-size: 20px;
+            font-weight: 700;
+            color: #1e293b;
+        }
+        .header-bar .logo span {
+            color: #2563eb;
+        }
+        .header-actions {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
         @media (max-width: 768px) {
             .shortlist-card { padding: 20px; }
             .shortlist-card h1 { font-size: 22px; }
@@ -236,6 +275,7 @@
             .phase-connector { width: 15px; }
             .phase-label { font-size: 7px; }
             .milestone-month, .deadline-date { min-width: 70px; font-size: 12px; }
+            .header-bar { flex-direction: column; text-align: center; }
         }
         @media (max-width: 480px) {
             .phase-item { padding: 0 3px; min-width: 30px; }
@@ -247,11 +287,21 @@
 </head>
 <body>
     <div class="app-container">
+        <!-- Header with Logout -->
+        <div class="header-bar">
+            <div class="logo">🚀 Futures <span>Abroad</span></div>
+            <div class="header-actions">
+                <a href="student-app.html" class="btn-secondary" style="padding: 8px 16px; font-size: 13px; text-decoration: none;">🎯 Activities</a>
+                <a href="portfolio.html" class="btn-secondary" style="padding: 8px 16px; font-size: 13px; text-decoration: none;">📂 Portfolio</a>
+                <button onclick="handleLogout()" class="btn-logout" style="padding: 8px 20px; font-size: 13px;">🚪 Logout</button>
+            </div>
+        </div>
+
         <div id="phase-navigation" class="phase-nav"></div>
 
         <div class="shortlist-card">
             <h1>Phase 5: University Pathway</h1>
-            <p class="subtitle">Your personalized university recommendations based on your interests</p>
+            <p class="subtitle">Your personalized university recommendations based on your interests</div>
 
             <!-- Grade 11 Content -->
             <div id="grade-11-content" style="display:none;">
@@ -335,6 +385,16 @@
 
         let universityShortlist = { reach: [], target: [], safety: [] };
 
+        // ============================================================
+        // LOGOUT FUNCTION
+        // ============================================================
+        function handleLogout() {
+            if (confirm('Are you sure you want to logout?')) {
+                localStorage.removeItem('futuresAbroadUser');
+                window.location.href = 'login.html';
+            }
+        }
+
         function getCurrentPhase() {
             try {
                 const student = JSON.parse(localStorage.getItem('studentProfile') || '{}');
@@ -345,7 +405,7 @@
         function navigateToPhase(phase) {
             const currentPhase = getCurrentPhase();
             const phasePages = {
-                1: 'quiz.html', 2: 'activities.html', 3: 'activity-registration.html',
+                1: 'quiz.html', 2: 'student-app.html', 3: 'activity-registration.html',
                 4: 'post-activity.html', 5: 'university-shortlist.html', 6: 'futures-abroad-enroll.html'
             };
             if (phase > currentPhase) {
