@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Activity Registration - Futures Abroad</title>
-    <link rel="stylesheet" href="css/activity-registration.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
     <style>
         /* ============================================================
            COMPLETE STYLES - activity-registration.html
@@ -15,18 +15,23 @@
             box-sizing: border-box;
         }
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-            background: #f1f5f9;
-            color: #1e293b;
+            font-family: 'Inter', sans-serif;
+            background: #0F0A1E;
+            color: #ffffff;
             line-height: 1.6;
             padding: 20px;
+            min-height: 100vh;
+            background-image: 
+                radial-gradient(ellipse at 20% 50%, rgba(108, 60, 225, 0.15) 0%, transparent 60%),
+                radial-gradient(ellipse at 80% 50%, rgba(0, 212, 170, 0.1) 0%, transparent 60%);
         }
 
         /* ===== MAIN HEADER ===== */
         .main-header {
-            background: white;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
             padding: 15px 30px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            border: 1px solid rgba(255, 255, 255, 0.12);
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -41,23 +46,23 @@
         .main-header .logo a {
             font-size: 22px;
             font-weight: 800;
-            color: #2D1B4E;
+            color: #ffffff;
             text-decoration: none;
         }
         .main-header .logo a span { color: #6C3CE1; }
         .main-header nav { display: flex; gap: 15px; align-items: center; flex-wrap: wrap; }
         .main-header nav a {
             text-decoration: none;
-            color: #555;
+            color: rgba(255, 255, 255, 0.7);
             font-weight: 600;
             padding: 8px 16px;
             border-radius: 8px;
             transition: all 0.3s;
             font-size: 14px;
         }
-        .main-header nav a:hover { background: #f0e6ff; color: #6C3CE1; }
-        .main-header nav #logout-link { color: #e74c3c; }
-        .main-header nav #logout-link:hover { background: #fde8e8; }
+        .main-header nav a:hover { background: rgba(108, 60, 225, 0.2); color: #ffffff; }
+        .main-header nav #logout-link { color: #FF6B6B; }
+        .main-header nav #logout-link:hover { background: rgba(255, 107, 107, 0.15); }
 
         /* ===== APP CONTAINER ===== */
         .app-container {
@@ -72,10 +77,11 @@
             justify-content: center;
             gap: 0;
             flex-wrap: wrap;
-            background: white;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.12);
             padding: 15px 20px;
             border-radius: 12px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
             margin-bottom: 30px;
         }
         .phase-item {
@@ -92,35 +98,35 @@
             width: 34px;
             height: 34px;
             border-radius: 50%;
-            background: #e2e8f0;
+            background: rgba(255, 255, 255, 0.1);
             display: flex;
             align-items: center;
             justify-content: center;
             font-weight: 700;
-            color: #94a3b8;
+            color: rgba(255, 255, 255, 0.4);
             font-size: 13px;
             transition: all 0.3s;
         }
         .phase-circle.active { background: #2563eb; color: white; }
         .phase-circle.completed { background: #22c55e; color: white; }
         .phase-circle.current {
-            background: #1e40af;
+            background: #6C3CE1;
             color: white;
-            box-shadow: 0 0 0 4px rgba(37,99,235,0.25);
+            box-shadow: 0 0 0 4px rgba(108, 60, 225, 0.25);
         }
         .phase-label {
             font-size: 9px;
-            color: #94a3b8;
+            color: rgba(255, 255, 255, 0.4);
             margin-top: 4px;
             text-transform: uppercase;
             letter-spacing: 0.3px;
             font-weight: 500;
         }
-        .phase-label.active { color: #1e293b; font-weight: 600; }
+        .phase-label.active { color: #ffffff; font-weight: 600; }
         .phase-connector {
             width: 25px;
             height: 2px;
-            background: #e2e8f0;
+            background: rgba(255, 255, 255, 0.1);
             flex-shrink: 0;
             transition: all 0.5s;
         }
@@ -128,48 +134,49 @@
 
         /* ===== REGISTRATION CARD ===== */
         .registration-card {
-            background: white;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.12);
             border-radius: 16px;
             padding: 30px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
         }
         .registration-card h1 {
             font-size: 28px;
-            color: #1e293b;
+            color: #ffffff;
             margin: 0 0 5px 0;
             font-weight: 700;
         }
         .registration-card .subtitle {
-            color: #64748b;
+            color: rgba(255, 255, 255, 0.6);
             font-size: 16px;
             margin-bottom: 25px;
             padding-bottom: 15px;
-            border-bottom: 1px solid #e2e8f0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         /* ===== DATES BOX ===== */
         .dates-box {
-            background: #f8fafc;
+            background: rgba(255, 255, 255, 0.05);
             padding: 15px 20px;
             border-radius: 8px;
             margin-bottom: 20px;
-            border: 1px solid #e2e8f0;
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
         .dates-box h3 {
             margin: 0 0 10px 0;
-            color: #1e293b;
+            color: #ffffff;
             font-size: 16px;
         }
         .dates-box p {
             margin: 4px 0;
-            color: #475569;
+            color: rgba(255, 255, 255, 0.6);
             font-size: 14px;
         }
-        .dates-box p strong { color: #1e293b; }
+        .dates-box p strong { color: #ffffff; }
 
         /* ===== REMINDER BOX ===== */
         .reminder-box {
-            background: #eff6ff;
+            background: rgba(37, 99, 235, 0.1);
             padding: 12px 16px;
             border-radius: 8px;
             border-left: 4px solid #2563eb;
@@ -177,41 +184,49 @@
         }
         .reminder-box p {
             margin: 0;
-            color: #1e40af;
+            color: #8B6BF0;
             font-size: 14px;
         }
 
         /* ===== ACTIVITY INFO ===== */
         .activity-info {
-            background: white;
+            background: rgba(255, 255, 255, 0.05);
             padding: 20px;
             border-radius: 8px;
             margin-bottom: 25px;
-            border: 1px solid #e2e8f0;
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
         .activity-info h2 {
-            font-size: 20px;
+            font-size: 24px;
             margin: 0 0 8px 0;
-            color: #1e293b;
+            color: #ffffff;
+            background: linear-gradient(135deg, #6C3CE1 0%, #00D4AA 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
         .activity-info p {
-            color: #64748b;
+            color: rgba(255, 255, 255, 0.6);
             margin: 4px 0;
             font-size: 14px;
         }
+        .activity-info p strong { color: rgba(255, 255, 255, 0.8); }
 
         /* ===== CHECKLIST ===== */
         .checklist-item {
             display: flex;
             align-items: flex-start;
             padding: 15px;
-            border: 1px solid #e2e8f0;
+            border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 8px;
             margin-bottom: 10px;
-            background: white;
+            background: rgba(255, 255, 255, 0.03);
             transition: all 0.3s;
         }
-        .checklist-item:hover { border-color: #2563eb; }
+        .checklist-item:hover { border-color: #6C3CE1; }
+        .checklist-item.completed {
+            border-color: #22c55e;
+            background: rgba(34, 197, 94, 0.05);
+        }
         .checklist-item input[type="checkbox"] {
             margin-top: 4px;
             margin-right: 15px;
@@ -219,22 +234,22 @@
             height: 18px;
             cursor: pointer;
             flex-shrink: 0;
-            accent-color: #2563eb;
+            accent-color: #6C3CE1;
         }
         .checklist-item .check-content { flex: 1; }
         .checklist-item .check-content label {
             font-weight: 600;
-            color: #1e293b;
+            color: #ffffff;
             cursor: pointer;
             font-size: 15px;
         }
         .checklist-item .check-content .due-date {
-            color: #94a3b8;
+            color: rgba(255, 255, 255, 0.4);
             font-size: 12px;
             margin: 2px 0 4px 0;
         }
         .checklist-item .check-content .desc {
-            color: #64748b;
+            color: rgba(255, 255, 255, 0.5);
             font-size: 13px;
             margin: 2px 0 0 0;
         }
@@ -242,21 +257,23 @@
             width: 100%;
             min-height: 70px;
             padding: 10px;
-            border: 1px solid #cbd5e1;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 6px;
             font-size: 14px;
             font-family: inherit;
+            color: #ffffff;
             resize: vertical;
             margin-top: 8px;
             transition: all 0.3s;
         }
         .checklist-item textarea:focus {
             outline: none;
-            border-color: #2563eb;
-            box-shadow: 0 0 0 3px rgba(37,99,235,0.1);
+            border-color: #6C3CE1;
+            box-shadow: 0 0 0 3px rgba(108, 60, 225, 0.1);
         }
         .checklist-item .tip {
-            color: #2563eb;
+            color: #8B6BF0;
             font-size: 12px;
             margin-top: 4px;
         }
@@ -270,28 +287,33 @@
             flex: 1;
             min-width: 150px;
             padding: 8px 12px;
-            border: 1px solid #cbd5e1;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 6px;
             font-size: 14px;
+            color: #ffffff;
             transition: all 0.3s;
         }
         .input-row input:focus {
             outline: none;
-            border-color: #2563eb;
-            box-shadow: 0 0 0 3px rgba(37,99,235,0.1);
+            border-color: #6C3CE1;
+            box-shadow: 0 0 0 3px rgba(108, 60, 225, 0.1);
+        }
+        .input-row input::placeholder {
+            color: rgba(255, 255, 255, 0.3);
         }
 
         /* ===== STATUS BOX ===== */
         .status-box {
-            background: #f0fdf4;
+            background: rgba(34, 197, 94, 0.1);
             padding: 12px 16px;
             border-radius: 8px;
-            border: 1px solid #86efac;
+            border: 1px solid rgba(34, 197, 94, 0.2);
             margin: 20px 0;
         }
         .status-box p {
             margin: 0;
-            color: #166534;
+            color: #22c55e;
             font-weight: 500;
         }
 
@@ -302,13 +324,13 @@
             flex-wrap: wrap;
             margin-top: 25px;
             padding-top: 20px;
-            border-top: 2px solid #e2e8f0;
+            border-top: 2px solid rgba(255, 255, 255, 0.1);
         }
         .btn-back {
             padding: 10px 24px;
-            background: #64748b;
-            color: white;
-            border: none;
+            background: rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 6px;
             font-size: 14px;
             font-weight: 500;
@@ -318,12 +340,12 @@
             transition: all 0.3s;
         }
         .btn-back:hover {
-            background: #475569;
-            transform: translateY(-1px);
+            background: rgba(255, 255, 255, 0.15);
+            color: #ffffff;
         }
         .btn-continue {
             padding: 10px 28px;
-            background: #2563eb;
+            background: #6C3CE1;
             color: white;
             border: none;
             border-radius: 6px;
@@ -333,9 +355,35 @@
             transition: all 0.3s;
         }
         .btn-continue:hover {
-            background: #1d4ed8;
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(37,99,235,0.3);
+            background: #5A2FC1;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(108, 60, 225, 0.3);
+        }
+
+        /* ===== BUTTONS ===== */
+        .btn-primary {
+            padding: 14px 40px;
+            background: #6C3CE1;
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: 'Inter', sans-serif;
+        }
+        .btn-primary:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(108, 60, 225, 0.4);
+        }
+        .btn-primary:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        .btn-primary:disabled:hover {
+            transform: none;
+            box-shadow: none;
         }
 
         /* ===== PHASE 4 SECTION ===== */
@@ -344,7 +392,10 @@
             border-radius: 20px !important;
             padding: 35px !important;
             margin-top: 24px !important;
-            background: #fafffe !important;
+            background: rgba(34, 197, 94, 0.05) !important;
+            display: none !important;
+        }
+        .phase4-section.show {
             display: block !important;
         }
         .phase4-section .phase-badge {
@@ -361,36 +412,38 @@
         }
         .phase4-section h3 {
             font-size: 28px !important;
-            color: #2D1B4E !important;
+            color: #ffffff !important;
             margin-top: 10px !important;
             margin-bottom: 15px !important;
         }
-        .phase4-section .button-wrapper {
-            text-align: center !important;
-            margin: 20px 0 !important;
+        .phase4-section p {
+            color: rgba(255, 255, 255, 0.7) !important;
         }
 
         /* ===== PHASE 4 SUCCESS ===== */
         #phase4Success {
             display: none;
-            background: #e8f5e9 !important;
+            background: rgba(34, 197, 94, 0.1) !important;
             padding: 30px !important;
             border-radius: 16px !important;
             text-align: center !important;
             margin-top: 20px !important;
             border: 3px solid #22c55e !important;
         }
+        #phase4Success.show {
+            display: block !important;
+        }
         #phase4Success .icon {
             font-size: 56px !important;
             display: block !important;
         }
         #phase4Success h3 {
-            color: #16a34a !important;
+            color: #22c55e !important;
             margin: 10px 0 !important;
             font-size: 24px !important;
         }
         #phase4Success p {
-            color: #555 !important;
+            color: rgba(255, 255, 255, 0.7) !important;
             font-size: 16px !important;
         }
 
@@ -405,7 +458,7 @@
             font-size: 22px !important;
             cursor: pointer !important;
             transition: all 0.3s ease !important;
-            font-family: inherit !important;
+            font-family: 'Inter', sans-serif !important;
             text-decoration: none !important;
             display: inline-block !important;
             box-shadow: 0 4px 20px rgba(34, 197, 94, 0.4) !important;
@@ -416,36 +469,44 @@
             transform: translateY(-3px) scale(1.02) !important;
             box-shadow: 0 6px 30px rgba(34, 197, 94, 0.5) !important;
         }
-        .btn-phase4:active { transform: scale(0.98) !important; }
 
-        /* ===== NOTIFICATION ===== */
-        .notification {
-            padding: 12px 20px;
-            border-radius: 6px;
-            margin: 10px 0;
-            animation: slideDown 0.3s ease;
+        /* ===== REGISTERED BADGE ===== */
+        .registered-badge {
+            background: #22c55e !important;
+            color: white !important;
+            padding: 10px 24px !important;
+            border-radius: 50px !important;
+            font-weight: 700 !important;
+            display: none !important;
+            margin: 10px 0 !important;
+            font-size: 18px !important;
+            text-align: center !important;
         }
-        .notification.success {
-            background: #f0fdf4;
-            color: #166534;
-            border: 1px solid #86efac;
+        .registered-badge.show {
+            display: block !important;
         }
-        .notification.error {
-            background: #fef2f2;
-            color: #991b1b;
-            border: 1px solid #fca5a5;
+
+        /* ===== COMPLETION STATUS ===== */
+        .completion-status {
+            background: rgba(34, 197, 94, 0.1) !important;
+            border: 3px solid #22c55e !important;
+            border-radius: 16px !important;
+            padding: 24px !important;
+            margin: 20px 0 !important;
+            text-align: center !important;
+            display: none !important;
         }
-        @keyframes slideDown {
-            from { opacity: 0; transform: translateY(-10px); }
-            to { opacity: 1; transform: translateY(0); }
+        .completion-status.show {
+            display: block !important;
         }
-        #notification-container {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            z-index: 9999;
-            max-width: 400px;
-            width: 100%;
+        .completion-status .icon {
+            font-size: 56px !important;
+            display: block !important;
+        }
+        .completion-status h3 {
+            color: #22c55e !important;
+            margin: 10px 0 5px !important;
+            font-size: 24px !important;
         }
 
         /* ===== UTILITY ===== */
@@ -494,7 +555,7 @@
             <a href="index.html">Futures <span>Abroad</span></a>
         </div>
         <nav>
-            <a href="dashboard.html">Dashboard</a>
+            <a href="student-app.html">Activities</a>
             <a href="portfolio.html">My Portfolio</a>
             <a href="university-shortlist.html">Universities</a>
             <a href="#" id="logout-link">Logout</a>
@@ -536,20 +597,20 @@
             </div>
 
             <!-- Readiness Summary -->
-            <div style="background: #f8faff; padding: 15px 20px; border-radius: 12px; border-left: 4px solid #6C3CE1; margin-bottom: 20px;">
-                <h3 style="font-size: 1rem; color: #1a2b4c;">🎯 Readiness Summary</h3>
-                <p id="readiness-text" style="color: #2c3e5a; margin: 0;">Based on your interests, this activity is a great match!</p>
+            <div style="background: rgba(108, 60, 225, 0.1); padding: 15px 20px; border-radius: 12px; border-left: 4px solid #6C3CE1; margin-bottom: 20px;">
+                <h3 style="font-size: 1rem; color: #ffffff;">🎯 Readiness Summary</h3>
+                <p id="readiness-text" style="color: rgba(255, 255, 255, 0.7); margin: 0;">Based on your interests, this activity is a great match!</p>
             </div>
 
             <!-- Checklist -->
             <div class="checklist-section">
-                <h3 style="margin-bottom: 5px; font-size: 18px; color: #1e293b;">✅ Registration Checklist</h3>
-                <p style="color: #64748b; font-size: 14px; margin-bottom: 15px;">Complete all items below to register</p>
+                <h3 style="margin-bottom: 5px; font-size: 18px; color: #ffffff;">✅ Registration Checklist</h3>
+                <p style="color: rgba(255, 255, 255, 0.5); font-size: 14px; margin-bottom: 15px;">Complete all items below to register</p>
                 <div id="checklist-container"></div>
             </div>
 
             <!-- Registered Badge -->
-            <div id="registeredBadge" class="registered-badge" style="display:none;">
+            <div id="registeredBadge" class="registered-badge">
                 ✅ You are already registered for this activity!
             </div>
 
@@ -560,45 +621,28 @@
 
             <!-- Mark as Registered Button -->
             <div style="text-align: center; margin: 15px 0;">
-                <button id="mark-registered-btn" class="btn-primary" style="
-                    padding: 14px 40px;
-                    background: #6C3CE1;
-                    color: white;
-                    border: none;
-                    border-radius: 50px;
-                    font-size: 18px;
-                    font-weight: 600;
-                    cursor: pointer;
-                    transition: all 0.3s;
-                    font-family: inherit;
-                    opacity: 0.6;
-                " disabled>Complete all steps to register</button>
+                <button id="mark-registered-btn" class="btn-primary" disabled>
+                    Complete all steps to register
+                </button>
             </div>
 
             <!-- ============================================================
-            PHASE 4 SECTION - BIG AND CLEAR
+            PHASE 4 SECTION
             ============================================================ -->
-            <div id="phase4Section" class="phase4-section" style="display:none;">
-                <span class="phase-badge phase-badge-green">Phase 4</span>
+            <div id="phase4Section" class="phase4-section">
+                <span class="phase-badge">Phase 4</span>
                 <h3>🎯 After Completing This Activity</h3>
-                <p style="color: #555; font-size: 18px; margin-bottom: 20px;">
+                <p style="color: rgba(255, 255, 255, 0.7); font-size: 18px; margin-bottom: 20px;">
                     Once you've finished this activity, click the green button below to mark it as complete.
                     Your experience will be saved to your portfolio for university applications.
                 </p>
 
-                <!-- Completion Status -->
-                <div id="completionStatus" class="completion-status" style="display:none;">
-                    <div class="icon">✅</div>
-                    <h3>Activity Completed!</h3>
-                    <p id="completionMessage" style="font-size: 18px;">Great job! Your progress has been saved.</p>
-                </div>
-
                 <!-- THE BUTTON -->
-                <div id="completeActivityContainer" class="button-wrapper">
+                <div id="completeActivityContainer" class="text-center" style="margin: 20px 0;">
                     <button id="completeActivityBtn" class="btn-phase4">
                         ✅ Mark Activity as Complete
                     </button>
-                    <p style="color: #888; font-size: 0.9rem; margin-top: 10px;">
+                    <p style="color: rgba(255, 255, 255, 0.4); font-size: 0.9rem; margin-top: 10px;">
                         After completion, you'll proceed to reflection.
                     </p>
                 </div>
@@ -608,13 +652,13 @@
             </div>
 
             <!-- ============================================================
-            PHASE 4 SUCCESS (shown after clicking "Mark as Complete")
+            PHASE 4 SUCCESS
             ============================================================ -->
             <div id="phase4Success">
                 <div class="icon">🎉</div>
                 <h3>Activity Completed Successfully!</h3>
                 <p>Your activity has been saved to your portfolio.</p>
-                <p style="font-size: 14px; color: #666; margin-top: 10px;">
+                <p style="font-size: 14px; margin-top: 10px;">
                     You can now proceed to reflect on your experience.
                 </p>
                 <div style="margin-top: 20px;">
@@ -630,26 +674,17 @@
                 <button id="continue-to-phase4-btn" class="btn-continue">Continue to University Pathway →</button>
             </div>
         </div>
-
-        <div id="notification-container"></div>
     </div>
 
     <!-- ============================================================
-    JAVASCRIPT - activity-registration.js
+    JAVASCRIPT - Phase 3 Logic (No Firebase needed for basic flow)
     ============================================================ -->
-    <script type="module">
+    <script>
         // ============================================================
-        // js/activity-registration.js - Phase 3 + 4 (COMPLETE)
+        // PHASE 3 - Activity Registration (Local Storage Version)
         // ============================================================
 
-        import {
-            auth, db, COLLECTIONS,
-            doc, getDoc, getDocs, updateDoc, arrayUnion,
-            onAuthStateChanged, signOut, addDoc, serverTimestamp,
-            query, where, collection
-        } from './js/firebase-config.js';
-
-        console.log('🚀 activity-registration.js loaded!');
+        console.log('🚀 Phase 3 - Activity Registration loaded!');
 
         // DOM Elements
         const activityNameEl = document.getElementById('activity-name');
@@ -662,63 +697,63 @@
         const markRegisteredBtn = document.getElementById('mark-registered-btn');
         const completeActivityBtn = document.getElementById('completeActivityBtn');
         const phase4Status = document.getElementById('phase4-status');
-        const completionStatus = document.getElementById('completionStatus');
-        const completionMessage = document.getElementById('completionMessage');
         const completeActivityContainer = document.getElementById('completeActivityContainer');
         const registeredBadge = document.getElementById('registeredBadge');
         const phase4Section = document.getElementById('phase4Section');
         const phase4Success = document.getElementById('phase4Success');
+        const statusText = document.getElementById('status-text');
 
-        let currentActivityId = null;
-        let currentActivityData = null;
+        let currentActivity = null;
 
-        function getActivityIdFromURL() {
-            const params = new URLSearchParams(window.location.search);
-            return params.get('id');
-        }
-
-        async function fetchActivityData(activityId) {
-            try {
-                const activityRef = doc(db, COLLECTIONS.activities, activityId);
-                const activityDoc = await getDoc(activityRef);
-                if (activityDoc.exists()) {
-                    return { id: activityDoc.id, ...activityDoc.data() };
+        // ============================================================
+        // LOAD ACTIVITY FROM localStorage
+        // ============================================================
+        function loadActivityFromStorage() {
+            const saved = localStorage.getItem('selectedActivity');
+            if (saved) {
+                try {
+                    currentActivity = JSON.parse(saved);
+                    console.log('✅ Activity loaded:', currentActivity.name);
+                    return currentActivity;
+                } catch (e) {
+                    console.error('Error parsing activity:', e);
+                    return null;
                 }
-                return null;
-            } catch (error) {
-                console.error('Error fetching activity:', error);
-                return null;
             }
+            return null;
         }
 
-        async function getUserProfile(userId) {
-            try {
-                const userRef = doc(db, COLLECTIONS.users, userId);
-                const userDoc = await getDoc(userRef);
-                if (userDoc.exists()) {
-                    return userDoc.data();
-                }
-                return null;
-            } catch (error) {
-                console.error('Error fetching user:', error);
-                return null;
-            }
-        }
+        // ============================================================
+        // DISPLAY ACTIVITY SUMMARY
+        // ============================================================
+        function displayActivitySummary(activity) {
+            if (!activity) return;
 
-        function displayActivitySummary(activity, userInterests) {
             if (activityNameEl) activityNameEl.textContent = activity.name || 'Activity';
             if (activityTypeEl) activityTypeEl.textContent = activity.type || 'General';
             if (activityDurationEl) activityDurationEl.textContent = activity.duration || 'N/A';
             if (activityCostEl) activityCostEl.textContent = activity.cost || 'Free';
             if (mainDeadlineEl) mainDeadlineEl.textContent = activity.deadline || 'Rolling';
 
-            const interests = userInterests || ['exploration'];
+            // Get user interests from localStorage
+            const userData = localStorage.getItem('futuresAbroadUser');
+            let interests = ['exploration'];
+            if (userData) {
+                try {
+                    const user = JSON.parse(userData);
+                    interests = user.interests || ['exploration'];
+                } catch (e) {}
+            }
+
             const interestString = Array.isArray(interests) ? interests.join(', ') : interests;
             if (readinessTextEl) {
                 readinessTextEl.textContent = 'Based on your interest in ' + interestString + ', this activity is a great match! Complete the checklist below to register.';
             }
         }
 
+        // ============================================================
+        // RENDER CHECKLIST
+        // ============================================================
         function renderChecklist(requirements) {
             if (!checklistContainer) return;
             checklistContainer.innerHTML = '';
@@ -729,7 +764,74 @@
                 { id: 'registration_form', title: 'Complete Registration Form', description: 'Fill out the official registration form', dueDate: '2026-10-01' }
             ];
 
-            const reqs = requirements && requirements.length > 0 ? requirements : defaultRequirements;
+            // Use activity requirements or default
+            let reqs = defaultRequirements;
+            if (currentActivity && currentActivity.registration_requirements) {
+                const req = currentActivity.registration_requirements;
+                const customReqs = [];
+                
+                if (req.documents && req.documents.length > 0) {
+                    req.documents.forEach((doc, i) => {
+                        customReqs.push({
+                            id: 'doc_' + i,
+                            title: 'Upload: ' + doc,
+                            description: 'Prepare and upload your ' + doc,
+                            dueDate: '2026-10-01'
+                        });
+                    });
+                }
+                
+                if (req.essays && req.essays.length > 0) {
+                    req.essays.forEach((essay, i) => {
+                        customReqs.push({
+                            id: 'essay_' + i,
+                            title: 'Write: ' + essay,
+                            description: 'Keep it clear and concise. Focus on your motivation.',
+                            dueDate: '2026-10-01'
+                        });
+                    });
+                }
+                
+                if (req.fees) {
+                    customReqs.push({
+                        id: 'fees',
+                        title: 'Pay registration fee' + (req.fee_amount ? ' (' + req.fee_amount + ')' : ''),
+                        description: 'Complete the payment to secure your spot.',
+                        dueDate: '2026-10-01'
+                    });
+                }
+                
+                if (req.recommendations && req.recommendations > 0) {
+                    customReqs.push({
+                        id: 'recommendations',
+                        title: 'Request ' + req.recommendations + ' teacher recommendation' + (req.recommendations > 1 ? 's' : ''),
+                        description: 'Ask a teacher who knows you well.',
+                        dueDate: '2026-10-01'
+                    });
+                }
+                
+                if (customReqs.length > 0) {
+                    reqs = customReqs;
+                }
+            }
+
+            // Add parent consent if not already included
+            if (!reqs.some(r => r.id === 'parent_consent')) {
+                reqs.push({
+                    id: 'parent_consent',
+                    title: 'Parent/Guardian Consent',
+                    description: 'Get permission from your parents or guardian',
+                    dueDate: '2026-10-01'
+                });
+            }
+
+            // Add final review
+            reqs.push({
+                id: 'final_review',
+                title: 'Review and confirm all details',
+                description: 'Double-check everything before submitting.',
+                dueDate: '2026-10-01'
+            });
 
             reqs.forEach(function(req, index) {
                 const listItem = document.createElement('div');
@@ -760,7 +862,7 @@
 
                 const dueDate = document.createElement('div');
                 dueDate.className = 'due-date';
-                dueDate.textContent = req.dueDate ? '📅 Due: ' + req.dueDate : '';
+                dueDate.textContent = '📅 Due: ' + (req.dueDate || '2026-10-01');
 
                 const desc = document.createElement('div');
                 desc.className = 'desc';
@@ -776,6 +878,9 @@
             });
         }
 
+        // ============================================================
+        // UPDATE REGISTRATION BUTTON STATE
+        // ============================================================
         function updateRegistrationButtonState() {
             if (!markRegisteredBtn) return;
             const allItems = document.querySelectorAll('.checklist-item');
@@ -789,284 +894,208 @@
             markRegisteredBtn.disabled = !allCompleted;
             markRegisteredBtn.textContent = allCompleted ? '✅ Mark as Registered' : 'Complete all steps to register';
             markRegisteredBtn.style.opacity = allCompleted ? '1' : '0.6';
+
+            if (statusText) {
+                statusText.textContent = allCompleted ? '✅ All steps complete! Click "Mark as Registered" to continue.' : '📌 Complete all checklist items above to register';
+            }
         }
 
-        async function handleRegistrationComplete(activityId) {
+        // ============================================================
+        // HANDLE REGISTRATION COMPLETE
+        // ============================================================
+        function handleRegistrationComplete() {
             if (!markRegisteredBtn || markRegisteredBtn.disabled) return;
 
-            const user = auth.currentUser;
-            if (!user) {
-                alert('Please log in first.');
+            // Check if all items are completed
+            const allItems = document.querySelectorAll('.checklist-item');
+            let allCompleted = true;
+            allItems.forEach(function(item) {
+                if (item.dataset.completed === 'false') {
+                    allCompleted = false;
+                }
+            });
+
+            if (!allCompleted) {
+                alert('Please complete all checklist items first.');
                 return;
             }
 
-            try {
-                const userRef = doc(db, COLLECTIONS.users, user.uid);
-                const userDoc = await getDoc(userRef);
+            // Mark as registered
+            markRegisteredBtn.textContent = '✅ Registered!';
+            markRegisteredBtn.disabled = true;
+            markRegisteredBtn.style.background = '#22c55e';
 
-                if (userDoc.exists()) {
-                    const userData = userDoc.data();
-                    const registered = userData.registered_activities || [];
-
-                    if (!registered.includes(activityId)) {
-                        await updateDoc(userRef, {
-                            registered_activities: arrayUnion(activityId)
-                        });
-
-                        markRegisteredBtn.textContent = '✅ Registered!';
-                        markRegisteredBtn.disabled = true;
-                        markRegisteredBtn.style.background = '#22c55e';
-
-                        if (registeredBadge) {
-                            registeredBadge.style.display = 'block';
-                        }
-
-                        if (phase4Section) {
-                            phase4Section.style.display = 'block';
-                        }
-
-                        alert('🎉 Congratulations! You have successfully registered for this activity!');
-
-                        setTimeout(function() {
-                            if (phase4Section) {
-                                phase4Section.scrollIntoView({ behavior: 'smooth' });
-                            }
-                        }, 500);
-
-                    } else {
-                        alert('You are already registered for this activity.');
-                        if (registeredBadge) {
-                            registeredBadge.style.display = 'block';
-                        }
-                        if (phase4Section) {
-                            phase4Section.style.display = 'block';
-                        }
-                    }
-                }
-            } catch (error) {
-                console.error('Error registering:', error);
-                alert('Error registering. Please try again.');
+            if (registeredBadge) {
+                registeredBadge.classList.add('show');
             }
+
+            if (phase4Section) {
+                phase4Section.classList.add('show');
+            }
+
+            if (statusText) {
+                statusText.textContent = '✅ You are now registered for this activity!';
+                statusText.style.color = '#22c55e';
+            }
+
+            // Store in localStorage that this activity is registered
+            if (currentActivity) {
+                localStorage.setItem('registered_' + currentActivity.id, 'true');
+            }
+
+            alert('🎉 Congratulations! You have successfully registered for this activity!');
+
+            setTimeout(function() {
+                if (phase4Section) {
+                    phase4Section.scrollIntoView({ behavior: 'smooth' });
+                }
+            }, 500);
         }
 
         // ============================================================
-        // PHASE 4: Mark Activity as Complete
+        // PHASE 4: Mark Activity as Complete (Local Storage Version)
         // ============================================================
-
-        async function markActivityAsComplete() {
+        function markActivityAsComplete() {
             console.log('🔵 Complete Activity button clicked!');
 
-            const user = auth.currentUser;
-            if (!user) {
-                alert('Please log in first.');
-                return;
-            }
-
-            const activityId = getActivityIdFromURL();
-            if (!activityId) {
+            if (!currentActivity) {
                 alert('No activity selected.');
                 return;
             }
 
-            const activityName = document.getElementById('activity-name')?.textContent || 'Activity';
-            const activityType = document.getElementById('activity-type')?.textContent?.toLowerCase() || 'default';
-            const duration = document.getElementById('activity-duration')?.textContent || 'N/A';
-
-            const activity = await fetchActivityData(activityId);
-            const skills = activity?.skills_gained || [];
-
-            if (completeActivityBtn) {
-                completeActivityBtn.textContent = '⏳ Processing...';
-                completeActivityBtn.disabled = true;
-                completeActivityBtn.style.opacity = '0.6';
+            // Check if already completed
+            const completedKey = 'completed_' + currentActivity.id;
+            if (localStorage.getItem(completedKey) === 'true') {
+                alert('This activity is already completed!');
+                return;
             }
 
-            try {
-                const portfolioRef = collection(db, COLLECTIONS.studentPortfolio);
-                const q = query(portfolioRef,
-                    where("userId", "==", user.uid),
-                    where("activityId", "==", activityId)
-                );
-                const existing = await getDocs(q);
-
-                if (!existing.empty) {
-                    alert('This activity is already in your portfolio!');
-                    if (completeActivityBtn) {
-                        completeActivityBtn.textContent = '✅ Already Completed';
-                        completeActivityBtn.disabled = true;
-                        completeActivityBtn.style.opacity = '0.6';
-                    }
-                    return;
-                }
-
-                const portfolioEntry = {
-                    userId: user.uid,
-                    activityId: activityId,
-                    activityName: activityName,
-                    type: activityType,
-                    duration: duration,
-                    skills: skills,
-                    studentNote: '',
-                    dateCompleted: new Date().toISOString().split('T')[0],
-                    reflectionResponses: {},
-                    essayPotentialFlag: false,
-                    createdAt: serverTimestamp()
-                };
-
-                await addDoc(portfolioRef, portfolioEntry);
-
-                const userRef = doc(db, COLLECTIONS.users, user.uid);
-                await updateDoc(userRef, {
-                    completed_activities: arrayUnion(activityId),
-                    lastActivityDate: new Date().toISOString()
-                });
-
-                console.log('✅ Activity marked as complete!');
-
-                // Hide the complete button container
-                if (completeActivityContainer) {
-                    completeActivityContainer.style.display = 'none';
-                }
-
-                // Show Phase 4 success
-                if (phase4Success) {
-                    phase4Success.style.display = 'block';
-                    phase4Success.scrollIntoView({ behavior: 'smooth' });
-                }
-
-                if (phase4Status) {
-                    phase4Status.style.display = 'block';
-                    phase4Status.style.color = '#22c55e';
-                    phase4Status.innerHTML = '✅ Activity marked as complete! Click "Continue to Reflection" to proceed.';
-                }
-
-                localStorage.setItem('activityCompleted_' + activityId, 'true');
-                localStorage.setItem('phase3Complete', 'true');
-
-            } catch (error) {
-                console.error('❌ Error completing activity:', error);
-                alert('Error completing activity: ' + error.message);
-                if (completeActivityBtn) {
-                    completeActivityBtn.textContent = '✅ Mark Activity as Complete';
-                    completeActivityBtn.disabled = false;
-                    completeActivityBtn.style.opacity = '1';
-                }
+            // Get user data
+            const userData = localStorage.getItem('futuresAbroadUser');
+            let userName = 'Student';
+            if (userData) {
+                try {
+                    const user = JSON.parse(userData);
+                    userName = user.name || 'Student';
+                } catch (e) {}
             }
+
+            // Save to portfolio
+            const portfolio = JSON.parse(localStorage.getItem('futuresAbroadPortfolio') || '[]');
+            
+            // Check if already in portfolio
+            const existing = portfolio.find(p => p.activityId === currentActivity.id);
+            if (existing) {
+                alert('This activity is already in your portfolio!');
+                return;
+            }
+
+            const portfolioEntry = {
+                activityId: currentActivity.id,
+                activityName: currentActivity.name,
+                type: currentActivity.type || 'General',
+                duration: currentActivity.duration || 'N/A',
+                skills: currentActivity.skills_gained || [],
+                studentNote: '',
+                dateCompleted: new Date().toISOString().split('T')[0],
+                userName: userName,
+                reflectionResponses: {},
+                essayPotentialFlag: false
+            };
+
+            portfolio.push(portfolioEntry);
+            localStorage.setItem('futuresAbroadPortfolio', JSON.stringify(portfolio));
+
+            // Mark as completed
+            localStorage.setItem(completedKey, 'true');
+
+            console.log('✅ Activity marked as complete!');
+
+            // Hide the complete button container
+            if (completeActivityContainer) {
+                completeActivityContainer.style.display = 'none';
+            }
+
+            // Show Phase 4 success
+            if (phase4Success) {
+                phase4Success.classList.add('show');
+                phase4Success.scrollIntoView({ behavior: 'smooth' });
+            }
+
+            if (phase4Status) {
+                phase4Status.style.display = 'block';
+                phase4Status.style.color = '#22c55e';
+                phase4Status.style.background = 'rgba(34, 197, 94, 0.1)';
+                phase4Status.style.padding = '15px';
+                phase4Status.style.borderRadius = '12px';
+                phase4Status.innerHTML = '✅ Activity marked as complete! Click "Continue to Reflection" to proceed.';
+            }
+
+            localStorage.setItem('phase3Complete', 'true');
         }
 
         // ============================================================
         // GO TO REFLECTION (Phase 4)
         // ============================================================
-
         window.goToReflection = function() {
             console.log('🔵 goToReflection() called from HTML button!');
 
-            const params = new URLSearchParams(window.location.search);
-            let activityId = params.get('id');
-
-            if (!activityId) {
-                activityId = localStorage.getItem('currentActivityId');
-            }
-
-            if (!activityId) {
+            if (!currentActivity) {
                 alert('No activity selected. Please go back and select an activity.');
                 window.location.href = 'student-app.html';
                 return;
             }
 
-            console.log('🔄 Redirecting to Phase 4 Reflection for activity:', activityId);
+            console.log('🔄 Redirecting to Phase 4 Reflection for activity:', currentActivity.id);
 
             localStorage.setItem('phase3Complete', 'true');
-            localStorage.setItem('currentActivityId', activityId);
+            localStorage.setItem('currentActivityId', currentActivity.id);
 
-            window.location.href = 'post-activity.html?id=' + activityId;
+            window.location.href = 'post-activity.html?id=' + currentActivity.id;
         };
 
         // ============================================================
         // CHECK IF ACTIVITY IS ALREADY COMPLETED
         // ============================================================
+        function checkIfActivityCompleted() {
+            if (!currentActivity) return false;
 
-        async function checkIfActivityCompleted(userId, activityId) {
-            try {
-                const portfolioRef = collection(db, COLLECTIONS.studentPortfolio);
-                const q = query(portfolioRef,
-                    where("userId", "==", userId),
-                    where("activityId", "==", activityId)
-                );
-                const snapshot = await getDocs(q);
-
-                if (!snapshot.empty()) {
-                    if (completeActivityContainer) {
-                        completeActivityContainer.style.display = 'none';
-                    }
-                    if (phase4Success) {
-                        phase4Success.style.display = 'block';
-                    }
-                    if (phase4Status) {
-                        phase4Status.style.display = 'block';
-                        phase4Status.style.color = '#22c55e';
-                        phase4Status.innerHTML = '✅ This activity is already in your portfolio. Click "Continue to Reflection" to proceed.';
-                    }
-                    return true;
+            const completedKey = 'completed_' + currentActivity.id;
+            if (localStorage.getItem(completedKey) === 'true') {
+                if (completeActivityContainer) {
+                    completeActivityContainer.style.display = 'none';
                 }
-                return false;
-            } catch (error) {
-                console.error('Error checking activity completion:', error);
-                return false;
-            }
-        }
-
-        // ============================================================
-        // SETUP EVENT LISTENERS
-        // ============================================================
-
-        function setupEventListeners() {
-            if (completeActivityBtn) {
-                console.log('🔵 Found completeActivityBtn, adding click listener');
-                completeActivityBtn.addEventListener('click', markActivityAsComplete);
-            } else {
-                console.warn('⚠️ completeActivityBtn not found in DOM');
+                if (phase4Success) {
+                    phase4Success.classList.add('show');
+                }
+                if (phase4Status) {
+                    phase4Status.style.display = 'block';
+                    phase4Status.style.color = '#22c55e';
+                    phase4Status.style.background = 'rgba(34, 197, 94, 0.1)';
+                    phase4Status.style.padding = '15px';
+                    phase4Status.style.borderRadius = '12px';
+                    phase4Status.innerHTML = '✅ This activity is already in your portfolio. Click "Continue to Reflection" to proceed.';
+                }
+                return true;
             }
 
-            if (markRegisteredBtn) {
-                markRegisteredBtn.addEventListener('click', function() {
-                    const activityId = getActivityIdFromURL();
-                    if (activityId) {
-                        handleRegistrationComplete(activityId);
-                    }
-                });
+            // Check if registered
+            const registeredKey = 'registered_' + currentActivity.id;
+            if (localStorage.getItem(registeredKey) === 'true') {
+                if (registeredBadge) {
+                    registeredBadge.classList.add('show');
+                }
+                if (phase4Section) {
+                    phase4Section.classList.add('show');
+                }
             }
 
-            const logoutLink = document.getElementById('logout-link');
-            if (logoutLink) {
-                logoutLink.addEventListener('click', async function(e) {
-                    e.preventDefault();
-                    try {
-                        await signOut(auth);
-                        window.location.href = 'login.html';
-                    } catch (error) {
-                        console.error('Logout error:', error);
-                    }
-                });
-            }
-
-            const continueBtn = document.getElementById('continue-to-phase4-btn');
-            if (continueBtn) {
-                continueBtn.addEventListener('click', function() {
-                    const activityId = getActivityIdFromURL() || localStorage.getItem('currentActivityId');
-                    if (activityId) {
-                        window.location.href = 'university-shortlist.html';
-                    } else {
-                        window.location.href = 'university-shortlist.html';
-                    }
-                });
-            }
+            return false;
         }
 
         // ============================================================
         // PHASE NAVIGATION
         // ============================================================
-
         function getCurrentPhase() {
             try {
                 const student = JSON.parse(localStorage.getItem('studentProfile') || '{}');
@@ -1083,7 +1112,7 @@
                 5: 'university-shortlist.html',
                 6: 'futures-abroad-enroll.html'
             };
-            window.location.href = phasePages[phase] || 'dashboard.html';
+            window.location.href = phasePages[phase] || 'student-app.html';
         }
 
         function renderPhaseNavigation() {
@@ -1135,16 +1164,16 @@
             }
         }
 
-        // Make navigateToPhase available globally
         window.navigateToPhase = navigateToPhase;
 
         // ============================================================
         // INITIALIZATION
         // ============================================================
+        function initApp() {
+            // Load activity from localStorage
+            currentActivity = loadActivityFromStorage();
 
-        async function initApp() {
-            const activityId = getActivityIdFromURL();
-            if (!activityId) {
+            if (!currentActivity) {
                 alert('No activity selected. Please choose an activity first.');
                 setTimeout(function() {
                     window.location.href = 'student-app.html';
@@ -1152,60 +1181,67 @@
                 return;
             }
 
-            currentActivityId = activityId;
+            // Display activity summary
+            displayActivitySummary(currentActivity);
 
-            onAuthStateChanged(auth, async function(user) {
-                if (!user) {
-                    window.location.href = 'login.html';
-                    return;
-                }
+            // Render checklist
+            renderChecklist(currentActivity.registration_requirements || []);
 
-                const activity = await fetchActivityData(activityId);
-                if (!activity) {
-                    alert('Activity not found. Please try again.');
-                    setTimeout(function() {
-                        window.location.href = 'student-app.html';
-                    }, 1500);
-                    return;
-                }
+            // Update button state
+            updateRegistrationButtonState();
 
-                currentActivityData = activity;
+            // Check if already registered or completed
+            checkIfActivityCompleted();
 
-                const userProfile = await getUserProfile(user.uid);
-                const interests = userProfile?.interests || [];
+            // Setup event listeners
+            setupEventListeners();
 
-                displayActivitySummary(activity, interests);
-                renderChecklist(activity.registrationRequirements || []);
-                updateRegistrationButtonState();
-
-                const registered = userProfile?.registered_activities || [];
-                if (registered.includes(activityId)) {
-                    if (markRegisteredBtn) {
-                        markRegisteredBtn.textContent = '✅ Already Registered';
-                        markRegisteredBtn.disabled = true;
-                        markRegisteredBtn.style.background = '#22c55e';
-                    }
-                    if (registeredBadge) {
-                        registeredBadge.style.display = 'block';
-                    }
-                    if (phase4Section) {
-                        phase4Section.style.display = 'block';
-                    }
-                }
-
-                await checkIfActivityCompleted(user.uid, activityId);
-            });
-
+            // Phase navigation
             initPhaseNavigation();
         }
 
+        // ============================================================
+        // SETUP EVENT LISTENERS
+        // ============================================================
+        function setupEventListeners() {
+            // Mark as Registered button
+            if (markRegisteredBtn) {
+                markRegisteredBtn.addEventListener('click', handleRegistrationComplete);
+            }
+
+            // Complete Activity button
+            if (completeActivityBtn) {
+                completeActivityBtn.addEventListener('click', markActivityAsComplete);
+            }
+
+            // Continue to University Pathway
+            const continueBtn = document.getElementById('continue-to-phase4-btn');
+            if (continueBtn) {
+                continueBtn.addEventListener('click', function() {
+                    window.location.href = 'university-shortlist.html';
+                });
+            }
+
+            // Logout
+            const logoutLink = document.getElementById('logout-link');
+            if (logoutLink) {
+                logoutLink.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    localStorage.removeItem('futuresAbroadUser');
+                    window.location.href = 'login.html';
+                });
+            }
+        }
+
+        // ============================================================
+        // START APP
+        // ============================================================
         document.addEventListener('DOMContentLoaded', function() {
-            console.log('🚀 DOM loaded, initializing...');
-            setupEventListeners();
+            console.log('🚀 DOM loaded, initializing Phase 3...');
             initApp();
         });
 
-        console.log('✅ activity-registration.js initialized!');
+        console.log('✅ Phase 3 - Activity Registration initialized!');
     </script>
 
 </body>
