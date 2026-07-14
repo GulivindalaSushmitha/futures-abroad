@@ -3,450 +3,374 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Futures Abroad - Student App</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="css/student-app.css" />
+    <title>Futures Abroad | Your Activities</title>
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/dashboard.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
     <style>
-        /* Additional styles for new features */
-        .reminder-toast {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background: linear-gradient(135deg, #6C3CE1, #a855f7);
-            color: white;
-            padding: 16px 24px;
-            border-radius: 16px;
-            box-shadow: 0 8px 30px rgba(108, 60, 225, 0.3);
-            z-index: 10000;
-            max-width: 400px;
-            animation: slideUp 0.5s ease;
-            font-family: 'Inter', sans-serif;
-            font-weight: 500;
-        }
-        @keyframes slideUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        .calendar-section {
-            background: #f8f6ff;
-            border-radius: 16px;
-            padding: 16px;
-            margin: 16px 0;
-        }
-        .calendar-event {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 10px 14px;
-            background: white;
-            border-radius: 10px;
-            margin-bottom: 6px;
-            border-left: 4px solid #6C3CE1;
-        }
-        .calendar-event:last-child {
-            margin-bottom: 0;
-        }
-        .calendar-event .event-icon {
-            font-size: 20px;
-        }
-        .calendar-event .event-details {
-            flex: 1;
-        }
-        .calendar-event .event-details strong {
-            color: #1a1a2e;
-            font-size: 0.95rem;
-        }
-        .calendar-event .event-details .event-date {
-            font-size: 0.85rem;
-            color: #6b6b8a;
-        }
-        .calendar-event .event-badge {
-            background: #c44536;
-            color: white;
-            padding: 2px 12px;
-            border-radius: 50px;
-            font-size: 0.7rem;
-            font-weight: 700;
-        }
-        .calendar-event .event-badge.upcoming {
-            background: #f59e0b;
-        }
-        .external-link-box {
-            margin: 16px 0;
-            padding: 16px;
-            background: #f0f7ff;
-            border-radius: 12px;
-            border: 2px dashed #6C3CE1;
-        }
-        .external-link-box p {
-            color: #1a1a2e;
-            font-weight: 600;
-        }
-        .external-link-box .sub-text {
-            color: #4a4a6a;
-            font-size: 14px;
-            font-weight: 400;
-        }
-        .external-link-box .btn-external {
-            display: inline-block;
-            margin-top: 8px;
-            padding: 10px 24px;
-            background: #6C3CE1;
-            color: white;
-            border: none;
-            border-radius: 50px;
-            font-weight: 600;
-            text-decoration: none;
-            transition: all 0.3s;
-            font-family: inherit;
-        }
-        .external-link-box .btn-external:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 20px rgba(108, 60, 225, 0.3);
-        }
-        .reminder-schedule {
-            font-size: 0.8rem;
-            color: #6b6b8a;
-            padding: 8px 12px;
-            background: #fef3c7;
-            border-radius: 8px;
-            margin: 8px 0;
-        }
-        .reminder-schedule strong {
-            color: #b45309;
-        }
-        /* Completed badge */
-        .completed-badge {
-            display: inline-block;
-            background: #dcfce7;
-            color: #16a34a;
-            padding: 2px 12px;
-            border-radius: 50px;
-            font-size: 0.7rem;
-            font-weight: 700;
-            margin-top: 6px;
-        }
-        /* Notification permission prompt */
-        .notification-prompt {
-            background: #fef3c7;
-            border-radius: 12px;
-            padding: 12px 16px;
-            margin: 10px 0;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-        .notification-prompt p {
-            color: #78350f;
-            font-size: 0.9rem;
-            margin: 0;
-        }
-        .notification-prompt .btn-enable {
-            background: #78350f;
-            color: white;
-            border: none;
-            padding: 6px 20px;
-            border-radius: 50px;
-            font-weight: 600;
-            cursor: pointer;
-            font-family: inherit;
-        }
-        .notification-prompt .btn-enable:hover {
-            background: #451a03;
-        }
-        @media (max-width: 768px) {
-            .calendar-event {
-                flex-wrap: wrap;
-            }
-            .reminder-toast {
-                left: 20px;
-                right: 20px;
-                max-width: none;
-                font-size: 0.9rem;
-                padding: 14px 18px;
-            }
-            .notification-prompt {
-                flex-direction: column;
-                text-align: center;
-            }
-        }
+        /* Quick reset */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: #0F0A1E; }
     </style>
 </head>
 <body>
-    <!-- ===== MODERN HEADER ===== -->
-    <header class="app-header">
-        <div class="container">
-            <div class="logo">
-                <span class="logo-icon">🚀</span>
-                Futures <span class="logo-highlight">Abroad</span>
+    <div class="dashboard-container" id="app">
+        <!-- Navigation -->
+        <nav class="dashboard-nav">
+            <div class="logo">🚀 Futures Abroad</div>
+            <div class="user-info">
+                <span id="userGrade">Grade 10</span>
+                <span id="userName">Student</span>
+                <div class="user-avatar" id="userAvatar">S</div>
             </div>
-            <div class="header-right">
-                <span class="user-greeting" id="userNameDisplay">👋 Welcome</span>
-                <button id="logoutBtn" class="btn-logout-modern">Sign Out</button>
+        </nav>
+
+        <!-- Welcome Section -->
+        <section class="welcome-section">
+            <h1 id="welcomeMessage">👋 Welcome back, <span id="userNameDisplay">Student</span></h1>
+            <p>Here are activities tailored to your interests. Pick one and start building your future!</p>
+            <div class="interest-tags" id="interestTags">
+                <!-- Dynamically populated -->
+            </div>
+        </section>
+
+        <!-- Feed Header -->
+        <div class="feed-header">
+            <h2>🎯 Recommended Activities</h2>
+            <div class="feed-actions">
+                <button class="filter-btn active" data-filter="All Types">All Types</button>
+                <button class="filter-btn" data-filter="internship">💼 Internship</button>
+                <button class="filter-btn" data-filter="competition">🏆 Competition</button>
+                <button class="filter-btn" data-filter="volunteering">🤝 Volunteering</button>
+                <button class="filter-btn" data-filter="course">📚 Course</button>
+                <button class="filter-btn" data-filter="workshop">🔧 Workshop</button>
+                <button class="filter-btn" data-filter="summit">🌍 Summit</button>
+            </div>
+            <div class="feed-actions">
+                <button class="filter-btn active" data-cost="All Costs">All Costs</button>
+                <button class="filter-btn" data-cost="Free">🆓 Free</button>
+                <button class="filter-btn" data-cost="Paid">💰 Paid</button>
+                <button class="filter-btn" data-cost="Scholarship">🎓 Scholarship</button>
             </div>
         </div>
-    </header>
 
-    <main class="app-main">
-        <!-- ======================================== -->
-        <!-- PHASE 1: ONBOARDING - BEAUTIFUL DESIGN -->
-        <!-- ======================================== -->
-        <section id="phase1" class="phase active">
-            <div class="container">
-                <div class="onboarding-card">
-                    <div class="onboarding-header">
-                        <span class="phase-badge">Phase 1</span>
-                        <h1>🎯 Discover Your <span class="gradient-text">Future Path</span></h1>
-                        <p class="subtitle">Let's understand your interests and build your personalized university journey</p>
-                    </div>
-                    
-                    <!-- Step 1: Profile -->
-                    <div id="step1-profile">
-                        <form id="profileForm" class="modern-form">
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label>Full Name</label>
-                                    <input type="text" id="studentName" placeholder="e.g., Alex Johnson" required />
-                                </div>
-                                <div class="form-group">
-                                    <label>Email</label>
-                                    <input type="email" id="studentEmail" placeholder="your@email.com" required disabled />
-                                </div>
-                            </div>
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label>Grade</label>
-                                    <select id="studentGrade" required>
-                                        <option value="">Select your grade</option>
-                                        <option value="10">Grade 10</option>
-                                        <option value="11">Grade 11</option>
-                                        <option value="12">Grade 12</option>
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label>School Name</label>
-                                    <input type="text" id="studentSchool" placeholder="e.g., Dubai International School" />
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label>Country</label>
-                                <input type="text" id="studentCountry" placeholder="e.g., UAE" />
-                            </div>
-                            <button type="submit" class="btn-primary btn-full btn-glow">
-                                🚀 Start Your Journey
-                            </button>
-                        </form>
-                    </div>
-
-                    <!-- Step 2: Adaptive Quiz -->
-                    <div id="step2-quiz" style="display: none;">
-                        <div class="quiz-container">
-                            <div class="quiz-progress-bar">
-                                <div class="quiz-progress-fill" id="quizProgressFill" style="width: 0%;"></div>
-                            </div>
-                            <div class="quiz-header">
-                                <span class="quiz-step" id="quizProgress">Question 1 of 8</span>
-                                <h2 id="quizQuestion">What subject do you look forward to most at school?</h2>
-                            </div>
-                            <div class="quiz-options-grid" id="quizOptions">
-                                <!-- Options rendered by JS -->
-                            </div>
-                            <div class="quiz-actions">
-                                <button id="quizNextBtn" class="btn-primary" disabled>Next Question →</button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Step 3: Profile Review -->
-                    <div id="step3-profile-review" style="display: none;">
-                        <div class="profile-review">
-                            <div class="review-header">
-                                <span class="badge-success">✨ Your Profile</span>
-                                <h2>Here's Your Interest Profile</h2>
-                                <p>Based on your answers, we've identified your key interest areas:</p>
-                            </div>
-                            <div id="interestProfileDisplay" class="interest-tags-container"></div>
-                            <div class="profile-actions">
-                                <button id="confirmProfileBtn" class="btn-primary btn-glow">✅ Confirm & Continue</button>
-                                <button id="editProfileBtn" class="btn-secondary">✏️ Retake Quiz</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- ======================================== -->
-        <!-- PHASE 2: ACTIVITIES - BEAUTIFUL DESIGN -->
-        <!-- ======================================== -->
-        <section id="phase2" class="phase">
-            <div class="container">
-                <div class="activities-header-modern">
-                    <div>
-                        <span class="phase-badge">Phase 2</span>
-                        <h2>🎯 Recommended <span class="gradient-text">Activities</span></h2>
-                        <p id="interestProfileDisplay2" class="interests-chip"></p>
-                    </div>
-                    <button id="refreshActivitiesBtn" class="btn-refresh">🔄 Refresh</button>
-                </div>
-
-                <!-- Filters -->
-                <div class="filters-modern">
-                    <select id="filterType" class="filter-select-modern">
-                        <option value="all">📌 All Types</option>
-                        <option value="competition">🏆 Competition</option>
-                        <option value="internship">💼 Internship</option>
-                        <option value="volunteering">🤝 Volunteering</option>
-                        <option value="course">📚 Course</option>
-                        <option value="workshop">🔧 Workshop</option>
-                        <option value="research">🔬 Research</option>
-                    </select>
-                    <select id="filterCost" class="filter-select-modern">
-                        <option value="all">💰 All Costs</option>
-                        <option value="Free">🆓 Free</option>
-                        <option value="Paid">💳 Paid</option>
-                        <option value="Scholarship available">🎓 Scholarship</option>
-                    </select>
-                    <button id="applyFiltersBtn" class="btn-filter">Apply Filters</button>
-                </div>
-
-                <!-- Activity Cards -->
-                <div id="activityCardsGrid" class="activity-grid-modern"></div>
-            </div>
-        </section>
-
-        <!-- ======================================== -->
-        <!-- PHASE 3: REGISTRATION - BEAUTIFUL DESIGN -->
-        <!-- ======================================== -->
-        <section id="phase3" class="phase">
-            <div class="container">
-                <div class="registration-card">
-                    <div class="registration-header">
-                        <button id="backToActivitiesBtn" class="btn-back-modern">← Back</button>
-                        <div>
-                            <span class="phase-badge">Phase 3</span>
-                            <h2 id="phase3ActivityName">📝 Activity Registration</h2>
-                        </div>
-                    </div>
-                    <div id="phase3Content"></div>
-                </div>
-            </div>
-        </section>
-
-        <!-- ======================================== -->
-        <!-- DETAIL MODAL - BEAUTIFUL DESIGN -->
-        <!-- ======================================== -->
-        <div id="activityDetailModal" class="modal-modern">
-            <div class="modal-content-modern">
-                <button class="modal-close-modern" id="closeModalBtn">✕</button>
-                <div id="activityDetailContent"></div>
+        <!-- Activities Grid -->
+        <div id="activitiesContainer">
+            <div class="loading-spinner">
+                <div class="spinner"></div>
             </div>
         </div>
-    </main>
-
-    <!-- Reminder Toast Container -->
-    <div id="reminderToastContainer"></div>
-
-    <!-- Notification Permission Prompt -->
-    <div id="notificationPrompt" class="notification-prompt" style="display: none; position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%); z-index: 9999; max-width: 500px; width: 90%; background: #fef3c7; border-radius: 12px; padding: 12px 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.1);">
-        <p>🔔 Enable notifications to receive registration reminders</p>
-        <button id="enableNotificationsBtn" class="btn-enable">Enable Notifications</button>
     </div>
 
+    <!-- Scripts - ORDER MATTERS! -->
+    <script src="js/activity-data.js"></script>
     <script>
-        // ========================================
-        // NOTIFICATION PERMISSION
-        // ========================================
-        (function setupNotifications() {
-            const prompt = document.getElementById('notificationPrompt');
+        // ============================================================
+        // DASHBOARD JAVASCRIPT - Inline to ensure it works
+        // ============================================================
+        
+        // Get user data from localStorage
+        function getUserData() {
+            const userData = localStorage.getItem('futuresAbroadUser');
+            if (userData) {
+                try {
+                    return JSON.parse(userData);
+                } catch (e) {
+                    console.error('Error parsing user data:', e);
+                    return null;
+                }
+            }
+            return null;
+        }
+
+        // State
+        let currentUser = null;
+        let currentActivities = [];
+        let currentTypeFilter = 'All Types';
+        let currentCostFilter = 'All Costs';
+
+        // DOM Elements
+        const activitiesContainer = document.getElementById('activitiesContainer');
+        const interestTagsContainer = document.getElementById('interestTags');
+        const userNameDisplay = document.getElementById('userNameDisplay');
+        const userGradeDisplay = document.getElementById('userGrade');
+        const userAvatar = document.getElementById('userAvatar');
+
+        // Initialize Dashboard
+        function initDashboard() {
+            currentUser = getUserData();
             
-            // Check if notifications are supported
-            if (!('Notification' in window)) {
+            // If no user, redirect to signup
+            if (!currentUser) {
+                window.location.href = 'signup.html';
+                return;
+            }
+
+            // Display user info
+            userNameDisplay.textContent = currentUser.name || 'Student';
+            userGradeDisplay.textContent = `Grade ${currentUser.grade || 10}`;
+            userAvatar.textContent = (currentUser.name || 'S')[0].toUpperCase();
+            document.getElementById('userName').textContent = currentUser.name || 'Student';
+
+            // Display interest tags
+            const interests = currentUser.interests || ['STEM', 'Leadership'];
+            displayInterestTags(interests);
+
+            // Load and display activities
+            loadActivities();
+
+            // Setup filter buttons
+            setupFilters();
+        }
+
+        // Display Interest Tags with Emojis
+        function displayInterestTags(interests) {
+            const tagEmojis = {
+                'STEM': '🔬',
+                'Leadership': '👑',
+                'Community Service': '🤝',
+                'Social Enterprise': '🌱',
+                'Business': '💼',
+                'Entrepreneurship': '🚀',
+                'Finance': '💰',
+                'Sustainability': '🌍',
+                'Environment': '🌿',
+                'Computer Science': '💻',
+                'Engineering': '⚙️',
+                'Data Science': '📊',
+                'Technology': '📱',
+                'Medicine': '🏥',
+                'Biology': '🧬',
+                'Public Health': '🩺',
+                'Visual Art': '🎨',
+                'Graphic Design': '🖌️',
+                'Law': '⚖️',
+                'Political Science': '🏛️',
+                'International Relations': '🌐',
+                'AI & Machine Learning': '🤖',
+                'Robotics': '⚡',
+                'Mental Health': '🧠'
+            };
+
+            if (interestTagsContainer) {
+                interestTagsContainer.innerHTML = interests.map(tag => 
+                    `<span class="interest-tag">
+                        <span class="tag-icon">${tagEmojis[tag] || '⭐'}</span>
+                        ${tag}
+                    </span>`
+                ).join('');
+            }
+        }
+
+        // Load Activities from the database
+        function loadActivities() {
+            if (!currentUser) {
+                console.error('No user found');
                 return;
             }
             
-            // Check permission status
-            if (Notification.permission === 'default') {
-                prompt.style.display = 'flex';
-            }
+            const interests = currentUser.interests || ['STEM', 'Leadership'];
+            const grade = parseInt(currentUser.grade) || 10;
             
-            document.getElementById('enableNotificationsBtn')?.addEventListener('click', async () => {
-                const result = await Notification.requestPermission();
-                if (result === 'granted') {
-                    prompt.style.display = 'none';
-                    console.log('🔔 Notifications enabled!');
-                    // Show a test notification
-                    new Notification('✅ Notifications Enabled!', {
-                        body: 'You will now receive registration reminders.',
-                        icon: 'https://gulivindalasushmitha.github.io/futures-abroad/favicon.ico'
+            // Use the global function from activity-data.js
+            let activities = [];
+            if (typeof getActivitiesByInterests === 'function') {
+                activities = getActivitiesByInterests(interests, grade, {
+                    type: currentTypeFilter,
+                    cost: currentCostFilter
+                });
+            } else {
+                console.error('getActivitiesByInterests function not found');
+                // Fallback: try to load from window
+                if (window.getActivitiesByInterests) {
+                    activities = window.getActivitiesByInterests(interests, grade, {
+                        type: currentTypeFilter,
+                        cost: currentCostFilter
                     });
-                } else {
-                    prompt.style.display = 'none';
-                    console.log('❌ Notifications denied');
                 }
-            });
-            
-            // Hide after 10 seconds if not interacted
-            setTimeout(() => {
-                if (prompt.style.display !== 'none') {
-                    prompt.style.display = 'none';
-                }
-            }, 10000);
-        })();
-
-        // ========================================
-        // REMINDER TOAST FUNCTION
-        // ========================================
-        window.showReminderToast = function(message) {
-            const container = document.getElementById('reminderToastContainer');
-            if (!container) return;
-            
-            const toast = document.createElement('div');
-            toast.className = 'reminder-toast';
-            toast.textContent = message;
-            container.appendChild(toast);
-            
-            setTimeout(() => {
-                toast.style.opacity = '0';
-                toast.style.transition = 'opacity 0.5s';
-                setTimeout(() => toast.remove(), 500);
-            }, 6000);
-        };
-
-        // ========================================
-        // CHECK FOR REMINDERS ON LOAD
-        // ========================================
-        document.addEventListener('DOMContentLoaded', () => {
-            // Check if there are any reminders in localStorage
-            try {
-                const reminders = JSON.parse(localStorage.getItem('reminders') || '[]');
-                const pending = reminders.filter(r => !r.sent);
-                if (pending.length > 0) {
-                    console.log(`⏰ ${pending.length} pending reminders found`);
-                }
-            } catch (e) {
-                // Ignore
             }
+            
+            currentActivities = activities;
+            renderActivities(activities);
+        }
+
+        // Render Activities
+        function renderActivities(activities) {
+            if (!activities || activities.length === 0) {
+                activitiesContainer.innerHTML = `
+                    <div class="no-activities">
+                        <div class="empty-icon">🔍</div>
+                        <h3>No activities found</h3>
+                        <p>Try adjusting your filters or complete more of the quiz.</p>
+                        <button class="btn-retake-quiz" onclick="retakeQuiz()">🔄 Retake Interest Quiz</button>
+                    </div>
+                `;
+                return;
+            }
+
+            const typeColors = {
+                'internship': 'internship',
+                'competition': 'competition',
+                'volunteering': 'volunteering',
+                'course': 'course',
+                'workshop': 'workshop',
+                'summit': 'summit',
+                'research': 'research'
+            };
+
+            const typeEmojis = {
+                'internship': '💼',
+                'competition': '🏆',
+                'volunteering': '🤝',
+                'course': '📚',
+                'workshop': '🔧',
+                'summit': '🌍',
+                'research': '🔬'
+            };
+
+            activitiesContainer.innerHTML = `
+                <div class="activities-grid">
+                    ${activities.map((activity, index) => `
+                        <div class="activity-card" style="animation-delay: ${index * 0.05}s" onclick="showActivityDetail(${activity.id})">
+                            <span class="activity-badge ${typeColors[activity.type] || 'course'}">
+                                ${typeEmojis[activity.type] || '📌'} ${activity.type.charAt(0).toUpperCase() + activity.type.slice(1)}
+                            </span>
+                            <h3>${activity.name}</h3>
+                            <div class="activity-meta">
+                                <span>📅 ${activity.duration}</span>
+                                <span>💰 ${activity.cost}</span>
+                                <span>📌 ${activity.country}</span>
+                            </div>
+                            <div class="activity-rationale">
+                                <span class="rationale-icon">🧠</span>
+                                ${getAIRationale(activity, currentUser)}
+                            </div>
+                            <div class="activity-tags">
+                                ${activity.interest_tags.map(tag => 
+                                    `<span class="mini-tag">#${tag}</span>`
+                                ).join('')}
+                            </div>
+                            <div class="card-footer">
+                                <span class="deadline">
+                                    ⏰ Deadline: ${formatDate(activity.deadline)}
+                                    ${isUrgent(activity.deadline) ? ' <span class="urgent">🔴 Urgent</span>' : ''}
+                                </span>
+                                <button class="btn-register" onclick="event.stopPropagation(); startRegistration(${activity.id})">
+                                    Register Now →
+                                </button>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+        }
+
+        // Generate AI Rationale
+        function getAIRationale(activity, user) {
+            // Use the activity's stored rationale if available
+            if (activity.ai_rationale) {
+                return activity.ai_rationale;
+            }
+            
+            const rationales = {
+                'Leadership': `Develops leadership skills essential for university applications and future careers.`,
+                'Community Service': `Shows your commitment to making a difference — universities love this!`,
+                'Business': `Perfect if you're interested in business and entrepreneurship.`,
+                'Sustainability': `Great for students passionate about the environment and leadership.`,
+                'STEM': `Builds strong technical skills that top universities look for.`,
+                'Medicine': `Great preparation for medical school applications.`,
+                'Technology': `Develops future-ready tech skills in high demand.`
+            };
+
+            for (const tag of user.interests || []) {
+                if (activity.interest_tags.some(at => at.includes(tag) || tag.includes(at))) {
+                    return rationales[tag] || `Recommended because you're interested in ${tag}.`;
+                }
+            }
+            return `This activity aligns with your interests and goals.`;
+        }
+
+        // Format Date
+        function formatDate(dateStr) {
+            try {
+                const date = new Date(dateStr);
+                return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+            } catch (e) {
+                return dateStr;
+            }
+        }
+
+        // Check if deadline is urgent (within 2 weeks)
+        function isUrgent(dateStr) {
+            try {
+                const deadline = new Date(dateStr);
+                const now = new Date();
+                const diffDays = (deadline - now) / (1000 * 60 * 60 * 24);
+                return diffDays <= 14 && diffDays > 0;
+            } catch (e) {
+                return false;
+            }
+        }
+
+        // Setup Filter Buttons
+        function setupFilters() {
+            // Type filters
+            document.querySelectorAll('[data-filter]').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('[data-filter]').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    currentTypeFilter = this.dataset.filter;
+                    loadActivities();
+                });
+            });
+
+            // Cost filters
+            document.querySelectorAll('[data-cost]').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('[data-cost]').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    currentCostFilter = this.dataset.cost;
+                    loadActivities();
+                });
+            });
+        }
+
+        // Show Activity Detail (goes to registration)
+        function showActivityDetail(activityId) {
+            const activity = getActivityById(activityId);
+            if (!activity) {
+                console.error('Activity not found:', activityId);
+                return;
+            }
+            localStorage.setItem('selectedActivity', JSON.stringify(activity));
+            window.location.href = 'activity-registration.html';
+        }
+
+        // Start Registration
+        function startRegistration(activityId) {
+            const activity = getActivityById(activityId);
+            if (!activity) {
+                console.error('Activity not found:', activityId);
+                return;
+            }
+            localStorage.setItem('selectedActivity', JSON.stringify(activity));
+            window.location.href = 'activity-registration.html';
+        }
+
+        // Retake Quiz
+        function retakeQuiz() {
+            if (confirm('Retaking the quiz will update your recommendations. Continue?')) {
+                localStorage.removeItem('futuresAbroadUser');
+                window.location.href = 'signup.html';
+            }
+        }
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🚀 Dashboard loading...');
+            console.log('🔍 Checking if getActivitiesByInterests exists:', typeof getActivitiesByInterests);
+            initDashboard();
         });
-
-        console.log('🚀 Student App loaded with full Phase 1, 2, 3 features!');
-        console.log('✅ Adaptive branching quiz');
-        console.log('✅ Vector matching for activities');
-        console.log('✅ In-app calendar');
-        console.log('✅ Email & push reminders (2w, 1w, 3d, 1d)');
-        console.log('✅ Deep-linking to external registration');
-    </script>
-
-    <script type="module">
-        import './js/student-app.js';
     </script>
 </body>
 </html>
