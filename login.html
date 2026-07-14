@@ -206,7 +206,7 @@
 
     <script type="module">
         // ============================================================
-        // LOGIN - COMPLETE REWRITE - NO BLINKING
+        // LOGIN - ULTIMATE FIX - NO BLINKING
         // ============================================================
         
         import { 
@@ -229,15 +229,15 @@
         const loginForm = document.getElementById('loginForm');
 
         // ✅ PREVENT MULTIPLE REDIRECTS
-        let authChecked = false;
         let isProcessing = false;
+        let redirectDone = false;
 
         // ============================================================
         // CHECK EXISTING SESSION - ONLY ONCE
         // ============================================================
         function checkExistingSession() {
-            if (authChecked) return;
-            authChecked = true;
+            // Don't redirect if already done
+            if (redirectDone) return;
             
             const userData = localStorage.getItem('futuresAbroadUser');
             if (userData) {
@@ -245,6 +245,7 @@
                     const user = JSON.parse(userData);
                     if (user.loggedIn) {
                         console.log('🔵 Already logged in, redirecting...');
+                        redirectDone = true;
                         window.location.replace('student-app.html');
                         return true;
                     }
@@ -261,7 +262,7 @@
         async function handleLogin(event) {
             event.preventDefault();
             
-            if (isProcessing) return;
+            if (isProcessing || redirectDone) return;
             isProcessing = true;
 
             const email = emailInput.value.trim();
@@ -328,6 +329,7 @@
                 loginBtn.disabled = false;
                 loginBtn.innerHTML = '✅ Logged In!';
 
+                redirectDone = true;
                 setTimeout(() => {
                     window.location.replace('student-app.html');
                 }, 1000);
@@ -363,6 +365,7 @@
             checkExistingSession();
         });
 
+        // Attach login handler
         loginForm.addEventListener('submit', handleLogin);
         console.log('✅ Login page ready!');
     </script>
