@@ -1,361 +1,299 @@
-// ============================================================
-// js/dashboard.js - User Dashboard (COMPLETE)
-// ============================================================
+// js/dashboard.js
+// Enhanced Dashboard with proper activity loading
 
-import { 
-    auth, db, COLLECTIONS,
-    doc, getDoc, getDocs,
-    onAuthStateChanged, signOut,
-    query, where, collection
-} from './firebase-config.js';
+// Get user data from localStorage (set during signup)
+function getUserData() {
+    const userData = localStorage.getItem('futuresAbroadUser');
+    if (userData) {
+        try {
+            return JSON.parse(userData);
+        } catch (e) {
+            console.error('Error parsing user data:', e);
+            return null;
+        }
+    }
+    return null;
+}
+
+// State
+let currentUser = null;
+let currentActivities = [];
+let currentTypeFilter = 'All Types';
+let currentCostFilter = 'All Costs';
 
 // DOM Elements
-const userNameEl = document.getElementById('userName');
-const gradeBadge = document.getElementById('gradeBadge');
-const strengthFill = document.getElementById('strengthFill');
-const strengthPercent = document.getElementById('strengthPercent');
-const strengthText = document.getElementById('strengthText');
-const activityCountEl = document.getElementById('activityCount');
-const recentActivitiesEl = document.getElementById('recentActivities');
-const currentPhaseEl = document.getElementById('currentPhase');
-const phaseSteps = document.querySelectorAll('.phase-step');
+const activitiesContainer = document.getElementById('activitiesContainer');
+const interestTagsContainer = document.getElementById('interestTags');
+const userNameDisplay = document.getElementById('userNameDisplay');
+const userGradeDisplay = document.getElementById('userGrade');
+const userAvatar = document.getElementById('userAvatar');
 
-// ============================================================
-// NAVIGATION FUNCTIONS
-// ============================================================
+// Initialize Dashboard
+function initDashboard() {
+    currentUser = getUserData();
+    
+    // If no user, redirect to signup
+    if (!currentUser) {
+        window.location.href = 'signup.html';
+        return;
+    }
 
-window.goToPhase = function(phaseNumber) {
-    const phaseMap = {
-        1: 'student-app.html',
-        2: 'student-app.html',
-        3: 'activity-registration.html',
-        4: 'post-activity.html',
-        5: 'university-shortlist.html',
-        6: 'futures-abroad-enroll.html'
+    // Display user info
+    userNameDisplay.textContent = currentUser.name || 'Student';
+    userGradeDisplay.textContent = `Grade ${currentUser.grade || 10}`;
+    userAvatar.textContent = (currentUser.name || 'S')[0].toUpperCase();
+    document.getElementById('userName').textContent = currentUser.name || 'Student';
+
+    // Display interest tags
+    const interests = currentUser.interests || ['STEM', 'Leadership'];
+    displayInterestTags(interests);
+
+    // Load and display activities
+    loadActivities();
+
+    // Setup filter buttons
+    setupFilters();
+}
+
+// Display Interest Tags with Emojis
+function displayInterestTags(interests) {
+    const tagEmojis = {
+        'STEM': '🔬',
+        'Leadership': '👑',
+        'Community Service': '🤝',
+        'Social Enterprise': '🌱',
+        'Business': '💼',
+        'Entrepreneurship': '🚀',
+        'Finance': '💰',
+        'Sustainability': '🌍',
+        'Environment': '🌿',
+        'Computer Science': '💻',
+        'Engineering': '⚙️',
+        'Data Science': '📊',
+        'Technology': '📱',
+        'Medicine': '🏥',
+        'Biology': '🧬',
+        'Public Health': '🩺',
+        'Visual Art': '🎨',
+        'Graphic Design': '🖌️',
+        'Law': '⚖️',
+        'Political Science': '🏛️',
+        'International Relations': '🌐',
+        'AI & Machine Learning': '🤖',
+        'Robotics': '⚡',
+        'Mental Health': '🧠'
     };
-    
-    const url = phaseMap[phaseNumber] || 'dashboard.html';
-    window.location.href = url;
-};
 
-// ============================================================
-// LOAD USER DATA
-// ============================================================
-
-async function loadUserData(userId) {
-    try {
-        const userRef = doc(db, COLLECTIONS.users, userId);
-        const userDoc = await getDoc(userRef);
-        
-        if (userDoc.exists()) {
-            const data = userDoc.data();
-            
-            // Display user info
-            if (userNameEl) userNameEl.textContent = data.name || 'Student';
-            if (gradeBadge) gradeBadge.textContent = 'Grade ' + (data.grade || '10');
-            
-            // Load portfolio and phase
-            await loadPortfolioData(userId);
-            await loadPhaseInfo(data.grade || '10');
-            await updatePhaseProgress(data.grade || '10');
-            
-            return data;
-        }
-        return null;
-    } catch (error) {
-        console.error('Error loading user data:', error);
-        return null;
-    }
+    interestTagsContainer.innerHTML = interests.map(tag => 
+        `<span class="interest-tag">
+            <span class="tag-icon">${tagEmojis[tag] || '⭐'}</span>
+            ${tag}
+        </span>`
+    ).join('');
 }
 
-// ============================================================
-// LOAD PORTFOLIO DATA
-// ============================================================
-
-async function loadPortfolioData(userId) {
-    try {
-        // Get portfolio entries
-        const portfolioRef = collection(db, COLLECTIONS.studentPortfolio);
-        const q = query(portfolioRef, where("userId", "==", userId));
-        const snapshot = await getDocs(q);
-        
-        const activities = [];
-        snapshot.forEach(doc => {
-            activities.push({ id: doc.id, ...doc.data() });
+// Load Activities from the database
+function loadActivities() {
+    if (!currentUser) {
+        console.error('No user found');
+        return;
+    }
+    
+    const interests = currentUser.interests || ['STEM', 'Leadership'];
+    const grade = parseInt(currentUser.grade) || 10;
+    
+    // Use the global function from activity-data.js
+    let activities = [];
+    if (typeof getActivitiesByInterests === 'function') {
+        activities = getActivitiesByInterests(interests, grade, {
+            type: currentTypeFilter,
+            cost: currentCostFilter
         });
-        
-        // Update activity count
-        if (activityCountEl) {
-            activityCountEl.textContent = activities.length;
+    } else {
+        console.error('getActivitiesByInterests function not found');
+        // Fallback: try to load from window
+        if (window.getActivitiesByInterests) {
+            activities = window.getActivitiesByInterests(interests, grade, {
+                type: currentTypeFilter,
+                cost: currentCostFilter
+            });
         }
-        
-        // Calculate profile strength
-        const strength = calculateProfileStrength(activities);
-        
-        if (strengthFill) {
-            strengthFill.style.width = strength + '%';
-        }
-        if (strengthPercent) {
-            strengthPercent.textContent = strength + '%';
-        }
-        if (strengthText) {
-            if (strength >= 80) strengthText.textContent = '🎯 University Ready!';
-            else if (strength >= 60) strengthText.textContent = '🏆 Competitive Candidate';
-            else if (strength >= 40) strengthText.textContent = '⭐ Strong Profile';
-            else if (strength >= 20) strengthText.textContent = '📈 Building Momentum';
-            else strengthText.textContent = '🌱 Just Getting Started';
-        }
-        
-        // Show recent activities
-        renderRecentActivities(activities);
-        
-        return activities;
-    } catch (error) {
-        console.error('Error loading portfolio:', error);
-        return [];
     }
+    
+    currentActivities = activities;
+    renderActivities(activities);
 }
 
-// ============================================================
-// CALCULATE PROFILE STRENGTH
-// ============================================================
-
-function calculateProfileStrength(activities) {
-    if (!activities || activities.length === 0) return 0;
-    
-    let score = 0;
-    const now = new Date();
-    
-    // Factor 1: Number of activities (max 30 pts)
-    const count = Math.min(activities.length, 5);
-    score += (count / 5) * 30;
-    
-    // Factor 2: Diversity of types (max 20 pts)
-    const types = new Set(activities.map(a => a.type));
-    const typeCount = Math.min(types.size, 4);
-    score += (typeCount / 4) * 20;
-    
-    // Factor 3: Leadership indicators (max 20 pts)
-    const hasLeadership = activities.some(a => 
-        a.skills && a.skills.some(s => 
-            ['leadership', 'initiative', 'management', 'coordinator', 'organizer'].includes(s.toLowerCase())
-        )
-    );
-    if (hasLeadership) score += 20;
-    
-    // Factor 4: Recency (max 15 pts)
-    const recentActivities = activities.filter(a => {
-        if (!a.dateCompleted) return false;
-        const completed = new Date(a.dateCompleted);
-        const monthsDiff = (now - completed) / (1000 * 60 * 60 * 24 * 30);
-        return monthsDiff <= 12;
-    });
-    const recencyScore = Math.min(recentActivities.length / 3, 1) * 15;
-    score += recencyScore;
-    
-    // Factor 5: Reflection quality (max 15 pts)
-    const hasReflections = activities.filter(a => 
-        a.reflectionResponses && Object.keys(a.reflectionResponses).length > 0
-    );
-    const reflectionScore = Math.min(hasReflections.length / 3, 1) * 15;
-    score += reflectionScore;
-    
-    // Bonus: Essay potential
-    const hasEssayPotential = activities.some(a => a.essayPotentialFlag);
-    if (hasEssayPotential) score += 5;
-    
-    return Math.round(Math.min(score, 100));
-}
-
-// ============================================================
-// RENDER RECENT ACTIVITIES
-// ============================================================
-
-function renderRecentActivities(activities) {
-    if (!recentActivitiesEl) return;
-    
-    const sorted = activities.sort((a, b) => {
-        return new Date(b.dateCompleted || 0) - new Date(a.dateCompleted || 0);
-    });
-    
-    const recent = sorted.slice(0, 5);
-    
-    if (recent.length === 0) {
-        recentActivitiesEl.innerHTML = `
-            <div class="empty-state">
-                <div class="icon">🔍</div>
-                <p>No activities yet. <a href="student-app.html" style="color:#6C3CE1;font-weight:600;">Find your first activity →</a></p>
+// Render Activities
+function renderActivities(activities) {
+    if (!activities || activities.length === 0) {
+        activitiesContainer.innerHTML = `
+            <div class="no-activities">
+                <div class="empty-icon">🔍</div>
+                <h3>No activities found</h3>
+                <p>Try adjusting your filters or complete more of the quiz.</p>
+                <button class="btn-retake-quiz" onclick="retakeQuiz()">🔄 Retake Interest Quiz</button>
             </div>
         `;
         return;
     }
-    
-    recentActivitiesEl.innerHTML = recent.map(activity => `
-        <div class="activity-item">
-            <div>
-                <div class="name">${activity.activityName || 'Activity'}</div>
-                <div style="font-size:13px;color:#888;">${activity.type || 'General'}</div>
-            </div>
-            <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
-                <span class="date">${activity.dateCompleted || 'N/A'}</span>
-                <span class="status completed">✅ Completed</span>
-            </div>
-        </div>
-    `).join('');
-}
 
-// ============================================================
-// LOAD PHASE INFO
-// ============================================================
-
-function loadPhaseInfo(grade) {
-    if (!currentPhaseEl) return;
-    
-    const phaseMap = {
-        '10': {
-            phase: 'Phase 1-2',
-            name: 'Discovery & Exploration',
-            description: 'Complete your profile and discover activities that match your interests.',
-            icon: '🔍'
-        },
-        '11': {
-            phase: 'Phase 5',
-            name: 'University Pathway',
-            description: 'Build your university shortlist and get ready for applications.',
-            icon: '🏛️'
-        },
-        '12': {
-            phase: 'Phase 6',
-            name: 'Application Ready',
-            description: 'Prepare your applications and essays with expert guidance.',
-            icon: '📝'
-        }
+    const typeColors = {
+        'internship': 'internship',
+        'competition': 'competition',
+        'volunteering': 'volunteering',
+        'course': 'course',
+        'workshop': 'workshop',
+        'summit': 'summit',
+        'research': 'research'
     };
-    
-    const phase = phaseMap[grade] || phaseMap['10'];
-    
-    currentPhaseEl.innerHTML = `
-        <div style="background:#f8f4ff;padding:16px;border-radius:12px;border-left:4px solid #6C3CE1;">
-            <div style="font-size:28px;">${phase.icon}</div>
-            <h4 style="margin:5px 0;color:#2D1B4E;">${phase.phase}: ${phase.name}</h4>
-            <p style="color:#666;font-size:14px;margin:0;">${phase.description}</p>
+
+    const typeEmojis = {
+        'internship': '💼',
+        'competition': '🏆',
+        'volunteering': '🤝',
+        'course': '📚',
+        'workshop': '🔧',
+        'summit': '🌍',
+        'research': '🔬'
+    };
+
+    activitiesContainer.innerHTML = `
+        <div class="activities-grid">
+            ${activities.map((activity, index) => `
+                <div class="activity-card" style="animation-delay: ${index * 0.05}s" onclick="showActivityDetail(${activity.id})">
+                    <span class="activity-badge ${typeColors[activity.type] || 'course'}">
+                        ${typeEmojis[activity.type] || '📌'} ${activity.type.charAt(0).toUpperCase() + activity.type.slice(1)}
+                    </span>
+                    <h3>${activity.name}</h3>
+                    <div class="activity-meta">
+                        <span>📅 ${activity.duration}</span>
+                        <span>💰 ${activity.cost}</span>
+                        <span>📌 ${activity.country}</span>
+                    </div>
+                    <div class="activity-rationale">
+                        <span class="rationale-icon">🧠</span>
+                        ${getAIRationale(activity, currentUser)}
+                    </div>
+                    <div class="activity-tags">
+                        ${activity.interest_tags.map(tag => 
+                            `<span class="mini-tag">#${tag}</span>`
+                        ).join('')}
+                    </div>
+                    <div class="card-footer">
+                        <span class="deadline">
+                            ⏰ Deadline: ${formatDate(activity.deadline)}
+                            ${isUrgent(activity.deadline) ? ' <span class="urgent">🔴 Urgent</span>' : ''}
+                        </span>
+                        <button class="btn-register" onclick="event.stopPropagation(); startRegistration(${activity.id})">
+                            Register Now →
+                        </button>
+                    </div>
+                </div>
+            `).join('')}
         </div>
     `;
 }
 
-// ============================================================
-// UPDATE PHASE PROGRESS
-// ============================================================
-
-async function updatePhaseProgress(grade) {
-    const user = auth.currentUser;
-    if (!user) return;
+// Generate AI Rationale
+function getAIRationale(activity, user) {
+    // Use the activity's stored rationale if available
+    if (activity.ai_rationale) {
+        return activity.ai_rationale;
+    }
     
-    try {
-        // Get completed activities
-        const portfolioRef = collection(db, COLLECTIONS.studentPortfolio);
-        const q = query(portfolioRef, where("userId", "==", user.uid));
-        const snapshot = await getDocs(q);
-        const completedCount = snapshot.size;
-        
-        // Determine phases completed
-        let phasesCompleted = 0;
-        
-        // Phase 1 & 2: Always completed if user has profile
-        phasesCompleted = 2;
-        
-        // Phase 3: Completed if registered for at least one activity
-        const userRef = doc(db, COLLECTIONS.users, user.uid);
-        const userDoc = await getDoc(userRef);
-        const registered = userDoc.exists() ? userDoc.data().registered_activities || [] : [];
-        if (registered.length > 0) phasesCompleted = 3;
-        
-        // Phase 4: Completed if at least one reflection saved
-        const hasReflection = snapshot.docs.some(doc => {
-            const data = doc.data();
-            return data.reflectionResponses && Object.keys(data.reflectionResponses).length > 0;
-        });
-        if (hasReflection) phasesCompleted = 4;
-        
-        // Phase 5: Check if university shortlist viewed
-        // We'll track this via local storage or a flag
-        const hasViewedUniversities = localStorage.getItem('viewedUniversities') === 'true';
-        if (hasViewedUniversities) phasesCompleted = 5;
-        
-        // Phase 6: Check if enrolled
-        const isEnrolled = userDoc.exists() ? userDoc.data().status === 'futures_abroad_enrolled' : false;
-        if (isEnrolled) phasesCompleted = 6;
-        
-        // Update UI
-        phaseSteps.forEach((step, index) => {
-            const phaseNum = index + 1;
-            step.classList.remove('completed', 'active');
-            
-            if (phaseNum <= phasesCompleted) {
-                step.classList.add('completed');
-            } else if (phaseNum === phasesCompleted + 1) {
-                step.classList.add('active');
-            }
-        });
-        
-    } catch (error) {
-        console.error('Error updating phase progress:', error);
-    }
-}
+    const rationales = {
+        'Leadership': `Develops leadership skills essential for university applications and future careers.`,
+        'Community Service': `Shows your commitment to making a difference — universities love this!`,
+        'Business': `Perfect if you're interested in business and entrepreneurship.`,
+        'Sustainability': `Great for students passionate about the environment and leadership.`,
+        'STEM': `Builds strong technical skills that top universities look for.`,
+        'Medicine': `Great preparation for medical school applications.`,
+        'Technology': `Develops future-ready tech skills in high demand.`
+    };
 
-// ============================================================
-// MARK UNIVERSITY SHORTLIST VIEWED
-// ============================================================
-
-// This function is called from university-shortlist.html
-window.markUniversitiesViewed = function() {
-    localStorage.setItem('viewedUniversities', 'true');
-};
-
-// ============================================================
-// LOGOUT
-// ============================================================
-
-async function logoutUser() {
-    try {
-        await signOut(auth);
-        window.location.href = 'login.html';
-    } catch (error) {
-        console.error('Logout error:', error);
-    }
-}
-
-// ============================================================
-// INITIALIZATION
-// ============================================================
-
-async function initDashboard() {
-    onAuthStateChanged(auth, async function(user) {
-        if (!user) {
-            window.location.href = 'login.html';
-            return;
+    for (const tag of user.interests || []) {
+        if (activity.interest_tags.some(at => at.includes(tag) || tag.includes(at))) {
+            return rationales[tag] || `Recommended because you're interested in ${tag}.`;
         }
-        
-        await loadUserData(user.uid);
+    }
+    return `This activity aligns with your interests and goals.`;
+}
+
+// Format Date
+function formatDate(dateStr) {
+    try {
+        const date = new Date(dateStr);
+        return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+    } catch (e) {
+        return dateStr;
+    }
+}
+
+// Check if deadline is urgent (within 2 weeks)
+function isUrgent(dateStr) {
+    try {
+        const deadline = new Date(dateStr);
+        const now = new Date();
+        const diffDays = (deadline - now) / (1000 * 60 * 60 * 24);
+        return diffDays <= 14 && diffDays > 0;
+    } catch (e) {
+        return false;
+    }
+}
+
+// Setup Filter Buttons
+function setupFilters() {
+    // Type filters
+    document.querySelectorAll('[data-filter]').forEach(btn => {
+        btn.addEventListener('click', function() {
+            document.querySelectorAll('[data-filter]').forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+            currentTypeFilter = this.dataset.filter;
+            loadActivities();
+        });
     });
 
-    // Logout
-    const logoutLink = document.getElementById('logout-link');
-    if (logoutLink) {
-        logoutLink.addEventListener('click', async function(e) {
-            e.preventDefault();
-            await logoutUser();
+    // Cost filters
+    document.querySelectorAll('[data-cost]').forEach(btn => {
+        btn.addEventListener('click', function() {
+            document.querySelectorAll('[data-cost]').forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+            currentCostFilter = this.dataset.cost;
+            loadActivities();
         });
+    });
+}
+
+// Show Activity Detail (goes to registration)
+function showActivityDetail(activityId) {
+    const activity = getActivityById(activityId);
+    if (!activity) {
+        console.error('Activity not found:', activityId);
+        return;
+    }
+    localStorage.setItem('selectedActivity', JSON.stringify(activity));
+    window.location.href = 'activity-registration.html';
+}
+
+// Start Registration
+function startRegistration(activityId) {
+    const activity = getActivityById(activityId);
+    if (!activity) {
+        console.error('Activity not found:', activityId);
+        return;
+    }
+    localStorage.setItem('selectedActivity', JSON.stringify(activity));
+    window.location.href = 'activity-registration.html';
+}
+
+// Retake Quiz
+function retakeQuiz() {
+    if (confirm('Retaking the quiz will update your recommendations. Continue?')) {
+        localStorage.removeItem('futuresAbroadUser');
+        window.location.href = 'signup.html';
     }
 }
 
-document.addEventListener('DOMContentLoaded', function() {
-    console.log('🚀 Dashboard loaded!');
-    initDashboard();
-});
-
-// Make functions globally available
-window.logoutUser = logoutUser;
-window.updatePhaseProgress = updatePhaseProgress;
-
-console.log('✅ dashboard.js initialized!');
+// Initialize on page load
+document.addEventListener('DOMContentLoaded', initDashboard);
