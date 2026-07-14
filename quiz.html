@@ -243,7 +243,8 @@
                 <p style="color:#666;">Based on your selected interests and quiz answers:</p>
                 <div id="interestTags" style="margin:20px 0;"></div>
                 <p style="color:#888; font-size:14px;">These tags will help us recommend the best activities for you.</p>
-                <button class="btn-finish" id="goToPhase2Btn">🚀 Go to Phase 2 - Activities</button>
+                <!-- ✅ UPDATED: Redirects to student-app.html (Phase 2) -->
+                <button class="btn-finish" id="goToPhase2Btn">🚀 Go to Activities</button>
             </div>
         </div>
     </div>
@@ -394,6 +395,37 @@
         // LOAD SELECTED INTERESTS
         // ============================================================
         async function loadSelectedInterests() {
+            // First try to get from localStorage
+            const localUser = localStorage.getItem('futuresAbroadUser');
+            if (localUser) {
+                try {
+                    const userData = JSON.parse(localUser);
+                    if (userData.interests && userData.interests.length > 0) {
+                        selectedInterests = userData.interests;
+                        // Display them
+                        const tagsContainer = document.getElementById('selectedTags');
+                        tagsContainer.innerHTML = '';
+                        selectedInterests.forEach(interest => {
+                            const span = document.createElement('span');
+                            span.className = 'tag';
+                            span.textContent = interest;
+                            tagsContainer.appendChild(span);
+                        });
+                        // Add to userInterests
+                        selectedInterests.forEach(interest => {
+                            if (!userInterests.includes(interest)) {
+                                userInterests.push(interest);
+                            }
+                        });
+                        console.log('✅ Loaded interests from localStorage:', selectedInterests);
+                        return;
+                    }
+                } catch (e) {
+                    console.error('Error parsing localStorage:', e);
+                }
+            }
+
+            // If not in localStorage, try Firestore
             if (!currentUid) return;
             
             try {
@@ -420,7 +452,7 @@
                         }
                     });
                     
-                    console.log('✅ Loaded selected interests:', selectedInterests);
+                    console.log('✅ Loaded selected interests from Firestore:', selectedInterests);
                 }
             } catch (error) {
                 console.error('Error loading interests:', error);
@@ -546,6 +578,21 @@
                 tagsContainer.appendChild(span);
             });
             
+            // Update localStorage
+            const localUser = localStorage.getItem('futuresAbroadUser');
+            if (localUser) {
+                try {
+                    const userData = JSON.parse(localUser);
+                    userData.interests = sortedInterests;
+                    userData.quizCompleted = true;
+                    userData.phase = 2;
+                    localStorage.setItem('futuresAbroadUser', JSON.stringify(userData));
+                    console.log('✅ Updated localStorage with quiz results:', sortedInterests);
+                } catch (e) {
+                    console.error('Error updating localStorage:', e);
+                }
+            }
+            
             // Save to Firestore
             if (currentUid) {
                 try {
@@ -556,7 +603,7 @@
                         quizCompletedAt: serverTimestamp(),
                         phase: 'Phase 2'
                     });
-                    console.log('✅ Quiz results saved!');
+                    console.log('✅ Quiz results saved to Firestore!');
                 } catch (error) {
                     console.error('Error saving quiz:', error);
                 }
@@ -564,16 +611,27 @@
         }
 
         // ============================================================
-        // GO TO PHASE 2 - ACTIVITIES
+        // GO TO PHASE 2 - ACTIVITIES (student-app.html)
         // ============================================================
         document.getElementById('goToPhase2Btn').addEventListener('click', function() {
-            window.location.href = 'activities.html';
+            window.location.href = 'student-app.html';
         });
 
         // ============================================================
         // INIT
         // ============================================================
         async function init() {
+            // First try to get user from localStorage
+            const localUser = localStorage.getItem('futuresAbroadUser');
+            if (localUser) {
+                try {
+                    const userData = JSON.parse(localUser);
+                    if (userData.uid) {
+                        currentUid = userData.uid;
+                    }
+                } catch (e) {}
+            }
+
             // If no UID, try to get from auth
             if (!currentUid) {
                 const user = auth.currentUser;
