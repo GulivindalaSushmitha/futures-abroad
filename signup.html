@@ -249,7 +249,7 @@
         <p class="subtitle">Create your account and start your university journey</p>
 
         <div id="errorMessage" class="error-message">❌ Error creating account. Please try again.</div>
-        <div id="successMessage" class="success-message">✅ Account created! Redirecting...</div>
+        <div id="successMessage" class="success-message">✅ Account created! Redirecting to quiz...</div>
 
         <form id="signupForm">
             <div class="form-group">
@@ -318,7 +318,7 @@
 
     <script type="module">
         // ============================================================
-        // SIGNUP - COMPLETE REWRITE - NO BLINKING
+        // SIGNUP - UPDATED: Redirects to QUIZ after signup
         // ============================================================
         
         import { 
@@ -370,7 +370,7 @@
         });
 
         // ============================================================
-        // HANDLE SIGNUP
+        // HANDLE SIGNUP - ✅ REDIRECTS TO QUIZ
         // ============================================================
         async function handleSignup(event) {
             event.preventDefault();
@@ -427,7 +427,8 @@
                     school: school || '',
                     country: country || '',
                     createdAt: new Date().toISOString(),
-                    loggedIn: true
+                    loggedIn: true,
+                    phase: 1
                 };
 
                 const userRef = doc(db, COLLECTIONS.users, user.uid);
@@ -435,14 +436,15 @@
                 
                 localStorage.setItem('futuresAbroadUser', JSON.stringify(userData));
 
-                successMessage.textContent = '✅ Account created successfully!';
+                successMessage.textContent = '✅ Account created! Taking you to the quiz...';
                 successMessage.classList.add('show');
 
                 signupBtn.disabled = false;
                 signupBtn.innerHTML = '✅ Account Created!';
 
+                // ✅ REDIRECT TO QUIZ (PHASE 1)
                 setTimeout(() => {
-                    window.location.replace('student-app.html');
+                    window.location.replace('quiz.html');
                 }, 1500);
 
             } catch (error) {
@@ -475,8 +477,8 @@
                 try {
                     const user = JSON.parse(userData);
                     if (user.loggedIn) {
-                        console.log('🔵 Already logged in, redirecting...');
-                        window.location.replace('student-app.html');
+                        console.log('🔵 Already logged in, redirecting to quiz...');
+                        window.location.replace('quiz.html');
                         return true;
                     }
                 } catch (e) {
