@@ -3,137 +3,652 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Phase 4: Post-Activity Guidance</title>
-    <link rel="stylesheet" href="css/post-activity.css">
+    <title>Phase 4: Post-Activity Reflection</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        /* ============================================================
+           PHASE 4 - POST ACTIVITY REFLECTION
+           ============================================================ */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+            background: #0a0a1a;
+            overflow-x: hidden;
+        }
+
+        /* ===== BACKGROUND WITH STUDENTS DISCUSSION ===== */
+        .phase4-wrapper {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+            background: linear-gradient(135deg, #0a0a1a 0%, #1a1040 30%, #2d1b69 60%, #1a1040 100%);
+            overflow: hidden;
+        }
+
+        /* Animated Background Particles */
+        .bg-particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .particle {
+            position: absolute;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(108, 60, 225, 0.3), transparent);
+            animation: floatParticle 15s ease-in-out infinite;
+        }
+
+        .particle:nth-child(1) { width: 300px; height: 300px; top: -100px; left: -100px; animation-delay: 0s; }
+        .particle:nth-child(2) { width: 400px; height: 400px; bottom: -150px; right: -150px; animation-delay: 3s; }
+        .particle:nth-child(3) { width: 200px; height: 200px; top: 50%; left: 50%; animation-delay: 6s; }
+        .particle:nth-child(4) { width: 250px; height: 250px; top: 20%; right: -50px; animation-delay: 2s; }
+        .particle:nth-child(5) { width: 350px; height: 350px; bottom: 20%; left: -80px; animation-delay: 4s; }
+
+        @keyframes floatParticle {
+            0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.3; }
+            25% { transform: translate(50px, -30px) scale(1.2); opacity: 0.5; }
+            50% { transform: translate(-20px, 50px) scale(0.8); opacity: 0.4; }
+            75% { transform: translate(30px, -20px) scale(1.1); opacity: 0.6; }
+        }
+
+        /* ===== STUDENT DISCUSSION SCENE (Watermark) ===== */
+        .student-scene {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0.08;
+        }
+
+        .student-scene svg {
+            width: 100%;
+            height: 100%;
+            max-width: 1200px;
+            max-height: 800px;
+        }
+
+        /* ===== MAIN CONTENT ===== */
+        .phase4-container {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            max-width: 900px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 28px;
+            padding: 45px 50px;
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5), 0 0 40px rgba(108, 60, 225, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            animation: slideUp 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px) scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        /* ===== HEADER ===== */
+        .phase4-header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #f0e6ff;
+        }
+
+        .phase4-header .phase-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #6C3CE1, #a855f7);
+            color: white;
+            padding: 6px 20px;
+            border-radius: 50px;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+        }
+
+        .phase4-header h1 {
+            font-size: 28px;
+            font-weight: 800;
+            color: #1a1040;
+            margin-bottom: 4px;
+        }
+
+        .phase4-header h2 {
+            font-size: 16px;
+            font-weight: 400;
+            color: #6b5b8a;
+        }
+
+        .phase4-header h2 span {
+            font-weight: 700;
+            color: #6C3CE1;
+        }
+
+        /* ===== DATE ===== */
+        .reflection-date {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: #f8f4ff;
+            padding: 12px 20px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+        }
+
+        .reflection-date label {
+            font-weight: 600;
+            color: #1a1040;
+            font-size: 14px;
+        }
+
+        .reflection-date input {
+            border: 1px solid #e2d5f0;
+            padding: 8px 14px;
+            border-radius: 8px;
+            background: white;
+            font-size: 14px;
+            color: #1a1040;
+            font-weight: 500;
+            font-family: 'Inter', sans-serif;
+        }
+
+        /* ===== PROGRESS ===== */
+        .progress-container {
+            background: #f8f4ff;
+            border-radius: 16px;
+            padding: 24px 28px;
+            margin-bottom: 30px;
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .progress-title {
+            font-weight: 700;
+            color: #1a1040;
+            font-size: 15px;
+        }
+
+        .progress-percentage {
+            font-weight: 800;
+            color: #6C3CE1;
+            font-size: 20px;
+        }
+
+        .progress-bar-track {
+            height: 10px;
+            background: #e8e0f0;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 14px;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #6C3CE1, #a855f7, #6C3CE1);
+            background-size: 200% 100%;
+            border-radius: 10px;
+            transition: width 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            animation: shimmer 2s ease-in-out infinite;
+        }
+
+        @keyframes shimmer {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .progress-items {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }
+
+        .progress-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 14px;
+            background: white;
+            border-radius: 8px;
+            border: 1px solid #e8e0f0;
+            font-size: 13px;
+            font-weight: 500;
+            color: #1a1040;
+            transition: all 0.3s;
+        }
+
+        .progress-item.filled {
+            border-color: #6C3CE1;
+            background: #f4edff;
+        }
+
+        .progress-item .status {
+            font-size: 18px;
+        }
+
+        .progress-item .status.done {
+            color: #22c55e;
+        }
+
+        .progress-item .status.pending {
+            color: #c4b5d4;
+        }
+
+        /* ===== QUESTIONS ===== */
+        .reflection-questions {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+            margin-bottom: 30px;
+        }
+
+        .question-card {
+            background: #f8f4ff;
+            border-radius: 14px;
+            padding: 20px 24px;
+            border-left: 4px solid #6C3CE1;
+            transition: all 0.3s;
+        }
+
+        .question-card:hover {
+            transform: translateX(4px);
+            box-shadow: 0 4px 20px rgba(108, 60, 225, 0.08);
+        }
+
+        .question-card .q-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 6px;
+        }
+
+        .question-card .q-header h4 {
+            font-size: 14px;
+            font-weight: 700;
+            color: #1a1040;
+        }
+
+        .question-card .q-number {
+            font-size: 12px;
+            color: #6b5b8a;
+            background: white;
+            padding: 2px 12px;
+            border-radius: 20px;
+            font-weight: 600;
+        }
+
+        .question-card .q-text {
+            font-size: 15px;
+            font-weight: 500;
+            color: #2d1b4e;
+            margin-bottom: 10px;
+        }
+
+        .question-card textarea {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e2d5f0;
+            border-radius: 10px;
+            font-size: 14px;
+            font-family: 'Inter', sans-serif;
+            resize: vertical;
+            min-height: 80px;
+            transition: all 0.3s;
+            background: white;
+            color: #1a1040;
+        }
+
+        .question-card textarea:focus {
+            outline: none;
+            border-color: #6C3CE1;
+            box-shadow: 0 0 0 4px rgba(108, 60, 225, 0.1);
+        }
+
+        .question-card textarea::placeholder {
+            color: #a898b8;
+        }
+
+        /* ===== BUTTONS ===== */
+        .action-buttons {
+            display: flex;
+            gap: 14px;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .btn-save {
+            padding: 14px 44px;
+            background: linear-gradient(135deg, #6C3CE1, #a855f7);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            font-family: 'Inter', sans-serif;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-save:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 12px 40px rgba(108, 60, 225, 0.4);
+        }
+
+        .btn-next {
+            padding: 14px 44px;
+            background: linear-gradient(135deg, #22c55e, #16a34a);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            font-family: 'Inter', sans-serif;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+        }
+
+        .btn-next:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 12px 40px rgba(34, 197, 94, 0.4);
+        }
+
+        .btn-next:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .save-success {
+            padding: 12px 24px;
+            background: #d4edda;
+            border-radius: 10px;
+            color: #155724;
+            font-weight: 600;
+            animation: fadeInUp 0.5s ease;
+            text-align: center;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 768px) {
+            .phase4-container {
+                padding: 28px 20px;
+            }
+
+            .phase4-header h1 {
+                font-size: 22px;
+            }
+
+            .progress-items {
+                grid-template-columns: 1fr;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+                width: 100%;
+            }
+
+            .btn-save, .btn-next {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .reflection-date {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .question-card {
+                padding: 16px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .phase4-container {
+                padding: 20px 14px;
+                border-radius: 20px;
+            }
+
+            .phase4-header h1 {
+                font-size: 19px;
+            }
+
+            .progress-container {
+                padding: 16px;
+            }
+        }
+    </style>
 </head>
 <body>
-    <div class="phase4-container">
-        <div class="phase4-content">
-            <div class="header-section">
-                <h1>Phase 4: Post-Activity Guidance</h1>
+
+    <div class="phase4-wrapper">
+        <!-- Background Particles -->
+        <div class="bg-particles">
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+        </div>
+
+        <!-- Student Discussion Scene (Watermark) -->
+        <div class="student-scene">
+            <svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
+                <!-- Students discussing - Simple silhouettes -->
+                <circle cx="200" cy="350" r="60" fill="rgba(255,255,255,0.3)"/>
+                <circle cx="280" cy="380" r="55" fill="rgba(255,255,255,0.25)"/>
+                <circle cx="360" cy="340" r="58" fill="rgba(255,255,255,0.3)"/>
+                <circle cx="440" cy="370" r="50" fill="rgba(255,255,255,0.2)"/>
+                <circle cx="520" cy="350" r="62" fill="rgba(255,255,255,0.28)"/>
+                <circle cx="600" cy="380" r="52" fill="rgba(255,255,255,0.22)"/>
+                <circle cx="680" cy="340" r="56" fill="rgba(255,255,255,0.26)"/>
+                <circle cx="760" cy="360" r="60" fill="rgba(255,255,255,0.24)"/>
+                <circle cx="840" cy="350" r="54" fill="rgba(255,255,255,0.28)"/>
+
+                <!-- Speech bubbles -->
+                <rect x="140" y="180" width="100" height="50" rx="20" fill="rgba(255,255,255,0.15)"/>
+                <rect x="300" y="160" width="120" height="50" rx="20" fill="rgba(255,255,255,0.12)"/>
+                <rect x="480" y="170" width="90" height="50" rx="20" fill="rgba(255,255,255,0.14)"/>
+                <rect x="650" y="155" width="110" height="50" rx="20" fill="rgba(255,255,255,0.13)"/>
+                <rect x="800" y="175" width="100" height="50" rx="20" fill="rgba(255,255,255,0.11)"/>
+
+                <!-- Books/table -->
+                <rect x="300" y="450" width="600" height="20" rx="5" fill="rgba(255,255,255,0.1)"/>
+                <rect x="350" y="440" width="30" height="30" rx="3" fill="rgba(255,255,255,0.08)"/>
+                <rect x="400" y="435" width="25" height="35" rx="3" fill="rgba(255,255,255,0.07)"/>
+                <rect x="450" y="438" width="28" height="32" rx="3" fill="rgba(255,255,255,0.09)"/>
+                <rect x="500" y="442" width="22" height="28" rx="3" fill="rgba(255,255,255,0.06)"/>
+                <rect x="550" y="436" width="30" height="34" rx="3" fill="rgba(255,255,255,0.08)"/>
+
+                <!-- Text "FUTURES ABROAD" watermark -->
+                <text x="600" y="700" text-anchor="middle" font-size="80" font-weight="900" fill="rgba(255,255,255,0.04)" letter-spacing="15">FUTURES ABROAD</text>
+            </svg>
+        </div>
+
+        <!-- Main Content -->
+        <div class="phase4-container">
+            <div class="phase4-header">
+                <span class="phase-badge">📝 Phase 4</span>
+                <h1>Post-Activity Reflection</h1>
                 <h2>Reflect on your experience with <span>Youth Leadership Academy</span></h2>
             </div>
-            
+
+            <!-- Date -->
             <div class="reflection-date">
                 <label>📅 Date Completed:</label>
-                <input type="date" id="completionDate" value="2026-07-13" readonly>
+                <input type="date" id="completionDate" value="2026-07-13">
             </div>
 
-            <!-- Progress Section -->
+            <!-- Progress -->
             <div class="progress-container">
                 <div class="progress-header">
-                    <span class="progress-title">Reflection Progress</span>
-                    <span class="progress-percentage" id="progressPercentage">0%</span>
+                    <span class="progress-title">📊 Reflection Progress</span>
+                    <span class="progress-percentage" id="progressPercent">0%</span>
                 </div>
-                
-                <div class="progress-bar">
-                    <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+                <div class="progress-bar-track">
+                    <div class="progress-bar-fill" id="progressFill" style="width: 0%"></div>
                 </div>
-                
-                <div class="progress-details" id="progressDetails">
-                    <div class="progress-item">
-                        <span class="question-label">Question 1</span>
-                        <span class="status-icon empty" id="status1">⬜</span>
+                <div class="progress-items" id="progressItems">
+                    <div class="progress-item" id="pItem1">
+                        <span>Question 1</span>
+                        <span class="status pending" id="status1">⬜</span>
                     </div>
-                    <div class="progress-item">
-                        <span class="question-label">Question 2</span>
-                        <span class="status-icon empty" id="status2">⬜</span>
+                    <div class="progress-item" id="pItem2">
+                        <span>Question 2</span>
+                        <span class="status pending" id="status2">⬜</span>
                     </div>
-                    <div class="progress-item">
-                        <span class="question-label">Question 3</span>
-                        <span class="status-icon empty" id="status3">⬜</span>
+                    <div class="progress-item" id="pItem3">
+                        <span>Question 3</span>
+                        <span class="status pending" id="status3">⬜</span>
                     </div>
-                    <div class="progress-item">
-                        <span class="question-label">Question 4</span>
-                        <span class="status-icon empty" id="status4">⬜</span>
+                    <div class="progress-item" id="pItem4">
+                        <span>Question 4</span>
+                        <span class="status pending" id="status4">⬜</span>
                     </div>
                 </div>
             </div>
 
-            <!-- Reflection Questions -->
+            <!-- Questions -->
             <div class="reflection-questions">
-                <div class="question-item">
-                    <div class="question-header">
+                <div class="question-card">
+                    <div class="q-header">
                         <h4>Question 1</h4>
-                        <span class="question-number">1/4</span>
+                        <span class="q-number">1/4</span>
                     </div>
-                    <p class="question-text">What was the most important thing you learned?</p>
-                    <textarea rows="4" placeholder="Write your reflection here..." class="reflection-textarea" id="q1" oninput="updateProgress()"></textarea>
+                    <p class="q-text">What was the most important thing you learned?</p>
+                    <textarea rows="3" placeholder="Write your reflection here..." id="q1" oninput="updateProgress()"></textarea>
                 </div>
 
-                <div class="question-item">
-                    <div class="question-header">
+                <div class="question-card">
+                    <div class="q-header">
                         <h4>Question 2</h4>
-                        <span class="question-number">2/4</span>
+                        <span class="q-number">2/4</span>
                     </div>
-                    <p class="question-text">How will you apply what you learned in the future?</p>
-                    <textarea rows="4" placeholder="Write your reflection here..." class="reflection-textarea" id="q2" oninput="updateProgress()"></textarea>
+                    <p class="q-text">How will you apply what you learned in the future?</p>
+                    <textarea rows="3" placeholder="Write your reflection here..." id="q2" oninput="updateProgress()"></textarea>
                 </div>
 
-                <div class="question-item">
-                    <div class="question-header">
+                <div class="question-card">
+                    <div class="q-header">
                         <h4>Question 3</h4>
-                        <span class="question-number">3/4</span>
+                        <span class="q-number">3/4</span>
                     </div>
-                    <p class="question-text">What challenges did you face and how did you overcome them?</p>
-                    <textarea rows="4" placeholder="Write your reflection here..." class="reflection-textarea" id="q3" oninput="updateProgress()"></textarea>
+                    <p class="q-text">What challenges did you face and how did you overcome them?</p>
+                    <textarea rows="3" placeholder="Write your reflection here..." id="q3" oninput="updateProgress()"></textarea>
                 </div>
 
-                <div class="question-item">
-                    <div class="question-header">
+                <div class="question-card">
+                    <div class="q-header">
                         <h4>Question 4</h4>
-                        <span class="question-number">4/4</span>
+                        <span class="q-number">4/4</span>
                     </div>
-                    <p class="question-text">What advice would you give to others in this program?</p>
-                    <textarea rows="4" placeholder="Write your reflection here..." class="reflection-textarea" id="q4" oninput="updateProgress()"></textarea>
+                    <p class="q-text">What advice would you give to others in this program?</p>
+                    <textarea rows="3" placeholder="Write your reflection here..." id="q4" oninput="updateProgress()"></textarea>
                 </div>
             </div>
 
+            <!-- Buttons -->
             <div class="action-buttons">
-                <button onclick="saveReflections()" class="save-button">💾 Save Reflection</button>
-                <div id="saveSuccess" class="save-success" style="display:none;">
-                    ✅ Reflections saved successfully!
-                </div>
+                <button class="btn-save" onclick="saveReflections()">
+                    💾 Save Reflection
+                </button>
+                <a href="dashboard.html" class="btn-next" id="nextBtn" style="pointer-events:none; opacity:0.5;">
+                    Continue to Phase 5 →
+                </a>
+            </div>
+
+            <div id="saveSuccess" style="display:none; margin-top:16px; text-align:center;">
+                <div class="save-success">✅ Reflections saved successfully! You can now continue to Phase 5.</div>
             </div>
         </div>
     </div>
 
     <script>
-        // Load saved reflections from localStorage
-        window.onload = function() {
-            const savedReflections = localStorage.getItem('phase4Reflections');
-            if (savedReflections) {
-                const parsed = JSON.parse(savedReflections);
-                for (let key in parsed) {
-                    const element = document.getElementById(key);
-                    if (element) {
-                        element.value = parsed[key];
-                    }
-                }
-                updateProgress();
-            }
-        };
+        // ============================================================
+        // PHASE 4 - COMPLETE
+        // ============================================================
 
         function updateProgress() {
             const questions = ['q1', 'q2', 'q3', 'q4'];
-            let filledCount = 0;
-            
+            let filled = 0;
+
             questions.forEach((id, index) => {
                 const textarea = document.getElementById(id);
-                const statusIcon = document.getElementById(`status${index + 1}`);
+                const status = document.getElementById(`status${index + 1}`);
+                const item = document.getElementById(`pItem${index + 1}`);
+
                 if (textarea.value.trim() !== '') {
-                    filledCount++;
-                    statusIcon.className = 'status-icon filled';
-                    statusIcon.textContent = '✅';
+                    filled++;
+                    status.textContent = '✅';
+                    status.className = 'status done';
+                    item.classList.add('filled');
                 } else {
-                    statusIcon.className = 'status-icon empty';
-                    statusIcon.textContent = '⬜';
+                    status.textContent = '⬜';
+                    status.className = 'status pending';
+                    item.classList.remove('filled');
                 }
             });
 
-            const progress = (filledCount / questions.length) * 100;
-            document.getElementById('progressFill').style.width = `${progress}%`;
-            document.getElementById('progressPercentage').textContent = `${Math.round(progress)}%`;
+            const percent = Math.round((filled / questions.length) * 100);
+            document.getElementById('progressPercent').textContent = `${percent}%`;
+            document.getElementById('progressFill').style.width = `${percent}%`;
+
+            // Enable next button if all questions are filled
+            const nextBtn = document.getElementById('nextBtn');
+            if (filled === 4) {
+                nextBtn.style.pointerEvents = 'auto';
+                nextBtn.style.opacity = '1';
+                nextBtn.style.background = 'linear-gradient(135deg, #22c55e, #16a34a)';
+            } else {
+                nextBtn.style.pointerEvents = 'none';
+                nextBtn.style.opacity = '0.5';
+                nextBtn.style.background = '';
+            }
         }
 
         function saveReflections() {
@@ -145,13 +660,36 @@
             };
 
             localStorage.setItem('phase4Reflections', JSON.stringify(reflections));
-            
+
             const successDiv = document.getElementById('saveSuccess');
             successDiv.style.display = 'block';
             setTimeout(() => {
                 successDiv.style.display = 'none';
-            }, 3000);
+            }, 4000);
+
+            // Check if all filled
+            const allFilled = Object.values(reflections).every(v => v.trim() !== '');
+            if (allFilled) {
+                const nextBtn = document.getElementById('nextBtn');
+                nextBtn.style.pointerEvents = 'auto';
+                nextBtn.style.opacity = '1';
+                nextBtn.style.background = 'linear-gradient(135deg, #22c55e, #16a34a)';
+            }
         }
+
+        // Load saved reflections on page load
+        window.onload = function() {
+            const saved = localStorage.getItem('phase4Reflections');
+            if (saved) {
+                const data = JSON.parse(saved);
+                for (let key in data) {
+                    const el = document.getElementById(key);
+                    if (el) el.value = data[key];
+                }
+                updateProgress();
+            }
+        };
     </script>
+
 </body>
 </html>
