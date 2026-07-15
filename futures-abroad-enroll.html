@@ -7,7 +7,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
         /* ============================================================
-           PHASE 6 - ENROLLMENT
+           PHASE 6 - ENROLLMENT (COMPLETE)
            ============================================================ */
         * {
             margin: 0;
@@ -22,7 +22,7 @@
             overflow-x: hidden;
         }
 
-        /* ===== BACKGROUND WITH STUDENTS ===== */
+        /* ===== BACKGROUND ===== */
         .phase6-wrapper {
             position: relative;
             min-height: 100vh;
@@ -64,7 +64,7 @@
             66% { transform: translate(-30px, 40px) scale(0.8); opacity: 0.3; }
         }
 
-        /* ===== ENROLLMENT SCENE (Watermark) ===== */
+        /* ===== WATERMARK SCENE ===== */
         .enrollment-scene {
             position: absolute;
             top: 0;
@@ -352,6 +352,71 @@
             margin-bottom: 16px;
         }
 
+        /* ===== QR CODE / PAYMENT SCANNER ===== */
+        .qr-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 16px;
+            margin: 16px 0;
+            padding: 24px;
+            background: white;
+            border-radius: 16px;
+            border: 2px dashed #6C3CE1;
+        }
+
+        .qr-box {
+            width: 200px;
+            height: 200px;
+            background: linear-gradient(135deg, #f0e6ff, #e8d5ff);
+            border-radius: 16px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            border: 3px solid #6C3CE1;
+        }
+
+        .qr-box .qr-code {
+            font-size: 80px;
+            line-height: 1;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.8; }
+            50% { transform: scale(1.05); opacity: 1; }
+        }
+
+        .qr-box .scan-line {
+            position: absolute;
+            bottom: 0;
+            left: 10%;
+            width: 80%;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, #6C3CE1, transparent);
+            animation: scanMove 2s ease-in-out infinite;
+        }
+
+        @keyframes scanMove {
+            0% { bottom: 5%; opacity: 0; }
+            50% { bottom: 85%; opacity: 1; }
+            100% { bottom: 5%; opacity: 0; }
+        }
+
+        .qr-label {
+            font-size: 14px;
+            font-weight: 600;
+            color: #1a1040;
+            margin-top: 8px;
+        }
+
+        .qr-sub {
+            font-size: 13px;
+            color: #6b5b8a;
+        }
+
         .pay-btn {
             padding: 16px 50px;
             background: linear-gradient(135deg, #6C3CE1, #a855f7);
@@ -363,6 +428,7 @@
             cursor: pointer;
             transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             font-family: 'Inter', sans-serif;
+            margin-top: 8px;
         }
 
         .pay-btn:hover {
@@ -399,17 +465,18 @@
         /* ===== UNIVERSITIES ===== */
         .universities-section {
             margin: 20px 0 24px;
-            padding: 20px;
+            padding: 24px;
             background: #f8f4ff;
             border-radius: 16px;
             border: 1px solid #e8e0f0;
         }
 
         .universities-section h3 {
-            font-size: 16px;
+            font-size: 18px;
             font-weight: 700;
             color: #1a1040;
-            margin-bottom: 12px;
+            margin-bottom: 16px;
+            text-align: center;
         }
 
         .uni-grid {
@@ -419,7 +486,7 @@
         }
 
         .uni-item {
-            padding: 10px 14px;
+            padding: 12px 14px;
             background: white;
             border-radius: 10px;
             border: 1px solid #e8e0f0;
@@ -434,6 +501,14 @@
             border-color: #6C3CE1;
             transform: translateY(-2px);
             box-shadow: 0 4px 15px rgba(108, 60, 225, 0.08);
+        }
+
+        .uni-item .uni-rank {
+            display: block;
+            font-size: 10px;
+            color: #6b5b8a;
+            font-weight: 400;
+            margin-top: 2px;
         }
 
         /* ===== COMPLETION ===== */
@@ -569,6 +644,15 @@
                 width: 100%;
                 justify-content: center;
             }
+
+            .qr-box {
+                width: 160px;
+                height: 160px;
+            }
+
+            .qr-box .qr-code {
+                font-size: 60px;
+            }
         }
 
         @media (max-width: 480px) {
@@ -594,6 +678,15 @@
             .step-line {
                 width: 15px;
             }
+
+            .qr-box {
+                width: 140px;
+                height: 140px;
+            }
+
+            .qr-box .qr-code {
+                font-size: 50px;
+            }
         }
     </style>
 </head>
@@ -609,10 +702,9 @@
             <div class="particle"></div>
         </div>
 
-        <!-- Enrollment Scene (Watermark) -->
+        <!-- Watermark Scene -->
         <div class="enrollment-scene">
             <svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
-                <!-- Students celebrating -->
                 <circle cx="250" cy="350" r="55" fill="rgba(255,255,255,0.2)"/>
                 <circle cx="350" cy="370" r="50" fill="rgba(255,255,255,0.17)"/>
                 <circle cx="460" cy="340" r="58" fill="rgba(255,255,255,0.22)"/>
@@ -620,23 +712,9 @@
                 <circle cx="680" cy="350" r="54" fill="rgba(255,255,255,0.20)"/>
                 <circle cx="790" cy="370" r="52" fill="rgba(255,255,255,0.16)"/>
                 <circle cx="900" cy="345" r="56" fill="rgba(255,255,255,0.21)"/>
-
-                <!-- Celebration stars -->
                 <text x="320" y="200" font-size="30" fill="rgba(255,215,0,0.1)">✦</text>
                 <text x="520" y="180" font-size="40" fill="rgba(255,215,0,0.08)">✦</text>
                 <text x="720" y="190" font-size="35" fill="rgba(255,215,0,0.09)">✦</text>
-                <text x="420" y="160" font-size="25" fill="rgba(255,215,0,0.07)">✦</text>
-                <text x="620" y="170" font-size="28" fill="rgba(255,215,0,0.08)">✦</text>
-                <text x="820" y="155" font-size="32" fill="rgba(255,215,0,0.06)">✦</text>
-
-                <!-- Certificate/Diploma -->
-                <rect x="450" y="430" width="300" height="180" rx="8" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.06)" stroke-width="2"/>
-                <rect x="470" y="450" width="260" height="30" rx="3" fill="rgba(255,255,255,0.04)"/>
-                <rect x="470" y="490" width="200" height="20" rx="3" fill="rgba(255,255,255,0.03)"/>
-                <rect x="470" y="520" width="180" height="20" rx="3" fill="rgba(255,255,255,0.03)"/>
-                <rect x="470" y="550" width="220" height="20" rx="3" fill="rgba(255,255,255,0.03)"/>
-
-                <!-- Text "ENROLLMENT" -->
                 <text x="600" y="700" text-anchor="middle" font-size="70" font-weight="900" fill="rgba(255,255,255,0.04)" letter-spacing="12">ENROLLMENT</text>
             </svg>
         </div>
@@ -661,7 +739,9 @@
             </div>
             <div class="step-counter" id="stepCounter">Step 1 of 4</div>
 
-            <!-- STEP 1: Profile -->
+            <!-- ============================================================ -->
+            <!-- STEP 1: Profile Review -->
+            <!-- ============================================================ -->
             <div class="step-content active" id="step1">
                 <h2>Step 1: Review Your Profile</h2>
                 <p class="step-desc">Please review your profile before sharing with counselors.</p>
@@ -682,7 +762,9 @@
                 </div>
             </div>
 
-            <!-- STEP 2: Program -->
+            <!-- ============================================================ -->
+            <!-- STEP 2: Choose Program -->
+            <!-- ============================================================ -->
             <div class="step-content" id="step2">
                 <h2>Step 2: Choose Your Program</h2>
                 <p class="step-desc">Select the program that best fits your academic journey.</p>
@@ -708,15 +790,32 @@
                 </div>
             </div>
 
-            <!-- STEP 3: Payment -->
+            <!-- ============================================================ -->
+            <!-- STEP 3: Payment with QR Scanner -->
+            <!-- ============================================================ -->
             <div class="step-content" id="step3">
                 <h2>Step 3: Complete Payment</h2>
-                <p class="step-desc">Complete payment to finalize your enrollment.</p>
+                <p class="step-desc">Scan the QR code or click the button to complete your payment.</p>
 
                 <div class="payment-section">
                     <div class="selected-program" id="selectedProgramDisplay">No program selected</div>
                     <div class="amount" id="amountDisplay">$0</div>
-                    <button class="pay-btn" id="payBtn" onclick="processPayment()">💳 Proceed to Payment</button>
+
+                    <!-- QR Code Scanner -->
+                    <div class="qr-container">
+                        <div class="qr-box">
+                            <span class="qr-code">📱</span>
+                            <div class="scan-line"></div>
+                        </div>
+                        <div class="qr-label">🔍 Scan to Pay</div>
+                        <div class="qr-sub">or click the button below to proceed</div>
+                    </div>
+
+                    <button class="pay-btn" id="payBtn" onclick="processPayment()">💳 Pay Now</button>
+
+                    <!-- Payment Link (hidden, opens in new tab) -->
+                    <a id="paymentLink" href="https://pay.nomodapp.com/en/l/8ea80e8e835c4b86" target="_blank" style="display:none;">Pay</a>
+
                     <div class="payment-success" id="paymentSuccess">
                         ✅ Payment Successful! Your universities have been shortlisted.
                     </div>
@@ -728,7 +827,9 @@
                 </div>
             </div>
 
-            <!-- STEP 4: Completion -->
+            <!-- ============================================================ -->
+            <!-- STEP 4: Completion & University Shortlist -->
+            <!-- ============================================================ -->
             <div class="step-content" id="step4">
                 <div class="completion">
                     <span class="big-icon">🎉</span>
@@ -738,18 +839,18 @@
                     <div class="universities-section">
                         <h3>🏛️ Universities Shortlisted for You</h3>
                         <div class="uni-grid" id="uniGrid">
-                            <div class="uni-item">Harvard University</div>
-                            <div class="uni-item">Stanford University</div>
-                            <div class="uni-item">MIT</div>
-                            <div class="uni-item">Oxford University</div>
-                            <div class="uni-item">Cambridge University</div>
-                            <div class="uni-item">Princeton University</div>
-                            <div class="uni-item">Yale University</div>
-                            <div class="uni-item">Columbia University</div>
-                            <div class="uni-item">University of Toronto</div>
-                            <div class="uni-item">University of Tokyo</div>
-                            <div class="uni-item">ETH Zurich</div>
-                            <div class="uni-item">NUS Singapore</div>
+                            <div class="uni-item">Harvard University <span class="uni-rank">⭐ Reach</span></div>
+                            <div class="uni-item">Stanford University <span class="uni-rank">⭐ Reach</span></div>
+                            <div class="uni-item">MIT <span class="uni-rank">⭐ Reach</span></div>
+                            <div class="uni-item">Oxford University <span class="uni-rank">🎯 Target</span></div>
+                            <div class="uni-item">Cambridge University <span class="uni-rank">🎯 Target</span></div>
+                            <div class="uni-item">Princeton University <span class="uni-rank">🎯 Target</span></div>
+                            <div class="uni-item">Yale University <span class="uni-rank">🛡️ Safety</span></div>
+                            <div class="uni-item">Columbia University <span class="uni-rank">🛡️ Safety</span></div>
+                            <div class="uni-item">University of Toronto <span class="uni-rank">🛡️ Safety</span></div>
+                            <div class="uni-item">University of Tokyo <span class="uni-rank">🎯 Target</span></div>
+                            <div class="uni-item">ETH Zurich <span class="uni-rank">🎯 Target</span></div>
+                            <div class="uni-item">NUS Singapore <span class="uni-rank">🛡️ Safety</span></div>
                         </div>
                     </div>
                 </div>
@@ -764,13 +865,12 @@
 
     <script>
         // ============================================================
-        // PHASE 6 - COMPLETE
+        // PHASE 6 - COMPLETE JAVASCRIPT
         // ============================================================
 
         let currentStep = 1;
         let selectedProgram = null;
         let paymentProcessed = false;
-        let paymentWindow = null;
 
         // ===== LOAD USER DATA =====
         function loadUserData() {
@@ -783,16 +883,13 @@
                     document.getElementById('pCountry').textContent = userData.country || 'Not set';
                     document.getElementById('pInterests').textContent = (userData.interests || []).join(', ') || 'Not set';
 
-                    // Activities completed
                     try {
                         const portfolio = JSON.parse(localStorage.getItem('studentPortfolio') || '[]');
                         document.getElementById('pActivities').textContent = portfolio.length;
                     } catch (e) {}
 
-                    // Profile strength
                     document.getElementById('pStrength').textContent = `${userData.profileStrengthScore || 60}%`;
 
-                    // Universities shortlisted
                     const uniCount = localStorage.getItem('universitiesShortlisted') || 0;
                     document.getElementById('pUniversities').textContent = uniCount;
                 }
@@ -805,13 +902,9 @@
         function goToStep(step) {
             currentStep = step;
 
-            // Hide all steps
             document.querySelectorAll('.step-content').forEach(el => el.classList.remove('active'));
-
-            // Show current step
             document.getElementById(`step${step}`).classList.add('active');
 
-            // Update dots
             for (let i = 1; i <= 4; i++) {
                 const dot = document.getElementById(`dot${i}`);
                 const line = document.getElementById(`line${i}`);
@@ -831,6 +924,11 @@
             }
 
             document.getElementById('stepCounter').textContent = `Step ${step} of 4`;
+
+            // If going to step 4, show universities
+            if (step === 4) {
+                showUniversities();
+            }
         }
 
         // ===== SELECT PROGRAM =====
@@ -840,8 +938,8 @@
             selectedProgram = program;
 
             document.getElementById('nextStep2').disabled = false;
+            localStorage.setItem('selectedProgram', program);
 
-            // Update payment display
             const names = {
                 'grade10-12': 'Grade 10-12 Track',
                 'grade11-fast': 'Grade 11 Fast-Track'
@@ -865,9 +963,9 @@
             payBtn.disabled = true;
             payBtn.textContent = '⏳ Processing...';
 
-            // Open payment link
+            // Open payment link in new tab
             const paymentUrl = 'https://pay.nomodapp.com/en/l/8ea80e8e835c4b86';
-            paymentWindow = window.open(paymentUrl, '_blank', 'width=800,height=600');
+            const paymentWindow = window.open(paymentUrl, '_blank', 'width=800,height=600');
 
             // Simulate payment verification
             const checkPayment = setInterval(() => {
@@ -892,24 +990,48 @@
             }, 1000);
         }
 
+        // ===== SHOW UNIVERSITIES =====
+        function showUniversities() {
+            // Universities already displayed in HTML
+            // Just animate them
+            const items = document.querySelectorAll('.uni-item');
+            items.forEach((item, index) => {
+                item.style.opacity = '0';
+                item.style.transform = 'translateY(20px)';
+                setTimeout(() => {
+                    item.style.transition = 'all 0.4s ease';
+                    item.style.opacity = '1';
+                    item.style.transform = 'translateY(0)';
+                }, 100 + (index * 50));
+            });
+        }
+
         // ===== INIT =====
         window.onload = function() {
             loadUserData();
             goToStep(1);
 
-            // Load saved program selection
             const savedProgram = localStorage.getItem('selectedProgram');
             if (savedProgram) {
                 const cards = document.querySelectorAll('.program-card');
                 cards.forEach(card => {
-                    if (card.dataset.program === savedProgram) {
+                    if (card.getAttribute('onclick')?.includes(savedProgram)) {
                         selectProgram(card, savedProgram);
                     }
                 });
             }
+
+            // Check if payment was already processed
+            if (localStorage.getItem('universitiesShortlisted') > 0) {
+                paymentProcessed = true;
+                document.getElementById('nextStep3').disabled = false;
+                document.getElementById('paymentSuccess').classList.add('show');
+                document.getElementById('payBtn').textContent = '✅ Already Paid';
+                document.getElementById('payBtn').style.background = 'linear-gradient(135deg, #22c55e, #16a34a)';
+                document.getElementById('payBtn').disabled = true;
+            }
         };
 
-        // Make functions global
         window.goToStep = goToStep;
         window.selectProgram = selectProgram;
         window.processPayment = processPayment;
