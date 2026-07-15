@@ -3,254 +3,659 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard - Futures Abroad</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/dashboard.css">
+    <title>Phase 5: University Pathway</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        /* ============================================================
+           PHASE 5 - UNIVERSITY PATHWAY
+           ============================================================ */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+            background: #0a0a1a;
+            overflow-x: hidden;
+        }
+
+        /* ===== BACKGROUND WITH STUDENT DISCUSSION ===== */
+        .phase5-wrapper {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+            background: linear-gradient(135deg, #0a0a1a 0%, #0d2847 30%, #1a3a6b 60%, #0d2847 100%);
+            overflow: hidden;
+        }
+
+        /* Animated Background Particles */
+        .bg-particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .particle {
+            position: absolute;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(37, 99, 235, 0.3), transparent);
+            animation: floatParticle 18s ease-in-out infinite;
+        }
+
+        .particle:nth-child(1) { width: 350px; height: 350px; top: -120px; right: -80px; animation-delay: 0s; }
+        .particle:nth-child(2) { width: 280px; height: 280px; bottom: -100px; left: -60px; animation-delay: 4s; }
+        .particle:nth-child(3) { width: 200px; height: 200px; top: 30%; right: 10%; animation-delay: 7s; }
+        .particle:nth-child(4) { width: 300px; height: 300px; bottom: 30%; left: 5%; animation-delay: 2s; }
+        .particle:nth-child(5) { width: 180px; height: 180px; top: 10%; left: 20%; animation-delay: 5s; }
+
+        @keyframes floatParticle {
+            0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.2; }
+            33% { transform: translate(-40px, -50px) scale(1.3); opacity: 0.4; }
+            66% { transform: translate(40px, 30px) scale(0.7); opacity: 0.3; }
+        }
+
+        /* ===== UNIVERSITY DISCUSSION SCENE (Watermark) ===== */
+        .university-scene {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0.07;
+        }
+
+        .university-scene svg {
+            width: 100%;
+            height: 100%;
+            max-width: 1200px;
+            max-height: 800px;
+        }
+
+        /* ===== MAIN CONTENT ===== */
+        .phase5-container {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            max-width: 950px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 28px;
+            padding: 45px 50px;
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5), 0 0 40px rgba(37, 99, 235, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            animation: slideUp 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px) scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        /* ===== HEADER ===== */
+        .phase5-header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #e6edf5;
+        }
+
+        .phase5-header .phase-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #2563eb, #1e40af);
+            color: white;
+            padding: 6px 20px;
+            border-radius: 50px;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+        }
+
+        .phase5-header h1 {
+            font-size: 28px;
+            font-weight: 800;
+            color: #0d2847;
+            margin-bottom: 4px;
+        }
+
+        .phase5-header p {
+            font-size: 16px;
+            color: #5a6b8a;
+        }
+
+        /* ===== USER PROFILE CARD ===== */
+        .profile-card {
+            background: linear-gradient(135deg, #f0f4ff, #e6edf5);
+            border-radius: 16px;
+            padding: 24px 28px;
+            margin-bottom: 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+            border: 1px solid rgba(37, 99, 235, 0.1);
+        }
+
+        .profile-info h3 {
+            font-size: 20px;
+            font-weight: 700;
+            color: #0d2847;
+        }
+
+        .profile-info .details {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-top: 4px;
+            font-size: 14px;
+            color: #4a5a7a;
+        }
+
+        .profile-info .details span {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .strength-circle {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            background: conic-gradient(#2563eb 0% 60%, #dce3ef 60% 100%);
+        }
+
+        .strength-circle .inner {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .strength-circle .inner .val {
+            font-size: 22px;
+            font-weight: 800;
+            color: #2563eb;
+        }
+
+        .strength-circle .inner .label {
+            font-size: 10px;
+            color: #5a6b8a;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        /* ===== STRENGTH BAR ===== */
+        .strength-bar-container {
+            background: #f0f4ff;
+            border-radius: 12px;
+            padding: 16px 20px;
+            margin-bottom: 25px;
+        }
+
+        .strength-bar-container .bar-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 14px;
+            font-weight: 600;
+            color: #0d2847;
+            margin-bottom: 6px;
+        }
+
+        .strength-bar-container .bar-track {
+            height: 10px;
+            background: #dce3ef;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .strength-bar-container .bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #2563eb, #3b82f6, #2563eb);
+            background-size: 200% 100%;
+            border-radius: 10px;
+            transition: width 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            animation: shimmerBar 2s ease-in-out infinite;
+        }
+
+        @keyframes shimmerBar {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        /* ===== INTERESTS ===== */
+        .interests-display {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-bottom: 25px;
+        }
+
+        .interest-chip {
+            padding: 6px 16px;
+            background: linear-gradient(135deg, #2563eb, #3b82f6);
+            color: white;
+            border-radius: 50px;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        /* ===== GAP ANALYSIS ===== */
+        .gap-analysis {
+            background: #f0f4ff;
+            border-radius: 16px;
+            padding: 24px 28px;
+            margin-bottom: 25px;
+        }
+
+        .gap-analysis h3 {
+            font-size: 16px;
+            font-weight: 700;
+            color: #0d2847;
+            margin-bottom: 12px;
+        }
+
+        .gap-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 14px;
+            background: white;
+            border-radius: 10px;
+            margin-bottom: 8px;
+            border-left: 4px solid;
+            font-size: 14px;
+            color: #2a3a5a;
+        }
+
+        .gap-item:last-child { margin-bottom: 0; }
+
+        .gap-item.critical { border-left-color: #ef4444; }
+        .gap-item.warning { border-left-color: #f59e0b; }
+        .gap-item.info { border-left-color: #3b82f6; }
+
+        .gap-item .icon { font-size: 18px; }
+
+        /* ===== MILESTONES ===== */
+        .milestones {
+            background: linear-gradient(135deg, #2563eb, #1e40af);
+            border-radius: 16px;
+            padding: 24px 28px;
+            margin-bottom: 30px;
+            color: white;
+        }
+
+        .milestones h3 {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .milestone-item {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 14px 20px;
+            border-radius: 12px;
+            backdrop-filter: blur(10px);
+        }
+
+        .milestone-item .month {
+            font-weight: 700;
+            font-size: 14px;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 4px 14px;
+            border-radius: 20px;
+        }
+
+        .milestone-item .text {
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .milestone-item .status {
+            margin-left: auto;
+            font-size: 13px;
+            opacity: 0.7;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* ===== BUTTONS ===== */
+        .action-buttons {
+            display: flex;
+            gap: 14px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .btn-next {
+            padding: 14px 50px;
+            background: linear-gradient(135deg, #2563eb, #1e40af);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            font-family: 'Inter', sans-serif;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-next:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 12px 40px rgba(37, 99, 235, 0.4);
+        }
+
+        .btn-back {
+            padding: 14px 36px;
+            background: transparent;
+            color: #2563eb;
+            border: 2px solid #2563eb;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: 'Inter', sans-serif;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-back:hover {
+            background: #f0f4ff;
+            transform: translateY(-2px);
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 768px) {
+            .phase5-container {
+                padding: 28px 20px;
+            }
+
+            .phase5-header h1 {
+                font-size: 22px;
+            }
+
+            .profile-card {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .profile-info .details {
+                justify-content: center;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+                width: 100%;
+            }
+
+            .btn-next, .btn-back {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .gap-analysis {
+                padding: 18px;
+            }
+
+            .milestone-item {
+                flex-wrap: wrap;
+                justify-content: center;
+                text-align: center;
+            }
+
+            .milestone-item .status {
+                margin-left: 0;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .phase5-container {
+                padding: 20px 14px;
+                border-radius: 20px;
+            }
+
+            .phase5-header h1 {
+                font-size: 19px;
+            }
+
+            .strength-circle {
+                width: 70px;
+                height: 70px;
+            }
+
+            .strength-circle .inner {
+                width: 54px;
+                height: 54px;
+            }
+
+            .strength-circle .inner .val {
+                font-size: 17px;
+            }
+        }
+    </style>
 </head>
 <body>
-    <div class="dashboard-container">
-        <!-- Navigation -->
-        <nav class="dashboard-nav">
-            <div class="logo">🚀 Futures <span>Abroad</span></div>
-            <div class="user-info">
-                <span id="userNameDisplay">Student</span>
-                <div class="user-avatar" id="userAvatar">S</div>
-            </div>
-        </nav>
 
-        <!-- Welcome Section -->
-        <div class="welcome-section">
-            <h1 id="welcomeMessage">Welcome back, Student! 👋</h1>
-            <p>Here are activities recommended based on your interests and profile.</p>
-            <div class="interest-tags" id="interestTags">
-                <!-- Interests will be dynamically loaded -->
-            </div>
+    <div class="phase5-wrapper">
+        <!-- Background Particles -->
+        <div class="bg-particles">
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
         </div>
 
-        <!-- Feed Header -->
-        <div class="feed-header">
-            <h2>📋 Recommended Activities</h2>
-            <div class="feed-actions">
-                <button class="filter-btn active" data-filter="all">All</button>
-                <button class="filter-btn" data-filter="internship">💼 Internships</button>
-                <button class="filter-btn" data-filter="competition">🏆 Competitions</button>
-                <button class="filter-btn" data-filter="volunteering">🤝 Volunteering</button>
-                <button class="filter-btn" data-filter="course">📚 Courses</button>
-                <button class="filter-btn" data-filter="workshop">🔧 Workshops</button>
-            </div>
+        <!-- University Discussion Scene (Watermark) -->
+        <div class="university-scene">
+            <svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
+                <!-- Students with graduation caps -->
+                <rect x="180" y="310" width="70" height="80" rx="10" fill="rgba(255,255,255,0.12)"/>
+                <rect x="195" y="280" width="40" height="40" rx="20" fill="rgba(255,255,255,0.15)"/>
+                <rect x="195" y="270" width="40" height="15" rx="3" fill="rgba(255,255,255,0.08)"/>
+
+                <rect x="300" y="320" width="65" height="75" rx="10" fill="rgba(255,255,255,0.10)"/>
+                <rect x="315" y="295" width="35" height="35" rx="17" fill="rgba(255,255,255,0.12)"/>
+                <rect x="315" y="285" width="35" height="12" rx="3" fill="rgba(255,255,255,0.06)"/>
+
+                <rect x="430" y="305" width="72" height="82" rx="10" fill="rgba(255,255,255,0.13)"/>
+                <rect x="445" y="275" width="42" height="42" rx="21" fill="rgba(255,255,255,0.16)"/>
+                <rect x="445" y="265" width="42" height="14" rx="3" fill="rgba(255,255,255,0.09)"/>
+
+                <rect x="560" y="315" width="60" height="78" rx="10" fill="rgba(255,255,255,0.11)"/>
+                <rect x="575" y="290" width="30" height="35" rx="17" fill="rgba(255,255,255,0.13)"/>
+                <rect x="575" y="280" width="30" height="12" rx="3" fill="rgba(255,255,255,0.07)"/>
+
+                <rect x="680" y="300" width="68" height="80" rx="10" fill="rgba(255,255,255,0.12)"/>
+                <rect x="695" y="270" width="38" height="40" rx="19" fill="rgba(255,255,255,0.14)"/>
+                <rect x="695" y="260" width="38" height="13" rx="3" fill="rgba(255,255,255,0.08)"/>
+
+                <rect x="820" y="310" width="64" height="76" rx="10" fill="rgba(255,255,255,0.10)"/>
+                <rect x="835" y="285" width="34" height="35" rx="17" fill="rgba(255,255,255,0.12)"/>
+                <rect x="835" y="275" width="34" height="12" rx="3" fill="rgba(255,255,255,0.06)"/>
+
+                <!-- University building in background -->
+                <rect x="350" y="180" width="500" height="100" rx="5" fill="rgba(255,255,255,0.04)"/>
+                <rect x="380" y="150" width="40" height="40" rx="3" fill="rgba(255,255,255,0.04)"/>
+                <rect x="450" y="140" width="40" height="50" rx="3" fill="rgba(255,255,255,0.03)"/>
+                <rect x="520" y="150" width="40" height="40" rx="3" fill="rgba(255,255,255,0.04)"/>
+                <rect x="590" y="140" width="40" height="50" rx="3" fill="rgba(255,255,255,0.03)"/>
+                <rect x="660" y="150" width="40" height="40" rx="3" fill="rgba(255,255,255,0.04)"/>
+                <rect x="730" y="160" width="40" height="30" rx="3" fill="rgba(255,255,255,0.03)"/>
+
+                <!-- Text "UNIVERSITY PATHWAY" -->
+                <text x="600" y="700" text-anchor="middle" font-size="70" font-weight="900" fill="rgba(255,255,255,0.04)" letter-spacing="12">UNIVERSITY PATHWAY</text>
+            </svg>
         </div>
 
-        <!-- Activities Grid -->
-        <div class="activities-grid" id="activitiesGrid">
-            <!-- Activities will be dynamically loaded -->
+        <!-- Main Content -->
+        <div class="phase5-container">
+            <div class="phase5-header">
+                <span class="phase-badge">🎓 Phase 5</span>
+                <h1>University Pathway</h1>
+                <p>Your personalized university recommendations based on your interests</p>
+            </div>
+
+            <!-- Profile Card -->
+            <div class="profile-card">
+                <div class="profile-info">
+                    <h3 id="userName">Student</h3>
+                    <div class="details">
+                        <span>📚 <span id="userGrade">Grade not set</span></span>
+                        <span>🏫 <span id="userSchool">School not set</span></span>
+                        <span>🌍 <span id="userCountry">Country not set</span></span>
+                    </div>
+                </div>
+                <div class="strength-circle" id="strengthCircle">
+                    <div class="inner">
+                        <span class="val" id="strengthVal">60%</span>
+                        <span class="label">Strength</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Strength Bar -->
+            <div class="strength-bar-container">
+                <div class="bar-label">
+                    <span>Profile Strength</span>
+                    <span id="strengthPercent">60%</span>
+                </div>
+                <div class="bar-track">
+                    <div class="bar-fill" id="strengthFill" style="width: 60%"></div>
+                </div>
+            </div>
+
+            <!-- Interests -->
+            <div class="interests-display" id="interestsContainer">
+                <!-- Dynamically loaded -->
+            </div>
+
+            <!-- Gap Analysis -->
+            <div class="gap-analysis">
+                <h3>🔍 Gap Analysis</h3>
+                <div class="gap-item critical">
+                    <span class="icon">🔴</span>
+                    <span>You have strong academics but no volunteering experience yet</span>
+                </div>
+                <div class="gap-item warning">
+                    <span class="icon">🟡</span>
+                    <span>Consider joining a competition to build your profile</span>
+                </div>
+                <div class="gap-item info">
+                    <span class="icon">🔵</span>
+                    <span>Internships are valuable for university applications</span>
+                </div>
+            </div>
+
+            <!-- Milestones -->
+            <div class="milestones">
+                <h3>📋 Recommended Milestones</h3>
+                <div class="milestone-item">
+                    <span class="month">Month 1</span>
+                    <span class="text">Start volunteering or community service</span>
+                    <span class="status">⏳ Not started</span>
+                </div>
+            </div>
+
+            <!-- Buttons -->
+            <div class="action-buttons">
+                <a href="post-activity.html" class="btn-back">← Back</a>
+                <a href="futures-abroad-enroll.html" class="btn-next">
+                    Continue to Phase 6 →
+                </a>
+            </div>
         </div>
     </div>
 
     <script>
         // ============================================================
-        // DASHBOARD - COMPLETE WITH ALL FUNCTIONALITY
+        // PHASE 5 - COMPLETE
         // ============================================================
 
-        // ===== ACTIVITY DATA =====
-        const activitiesData = [
-            {
-                id: 1,
-                title: "AI & Machine Learning Internship",
-                type: "internship",
-                badge: "Internship",
-                badgeClass: "internship",
-                meta: { duration: "6 weeks", location: "Remote" },
-                rationale: "Perfect for students interested in technology and computer science.",
-                tags: ["Technology", "STEM", "AI"],
-                deadline: "2026-08-15"
-            },
-            {
-                id: 2,
-                title: "UAE National Science Competition",
-                type: "competition",
-                badge: "Competition",
-                badgeClass: "competition",
-                meta: { duration: "2 days", location: "Dubai, UAE" },
-                rationale: "Showcase your scientific skills and compete with top students.",
-                tags: ["STEM", "Science", "Research"],
-                deadline: "2026-09-01"
-            },
-            {
-                id: 3,
-                title: "Community Service Program",
-                type: "volunteering",
-                badge: "Volunteering",
-                badgeClass: "volunteering",
-                meta: { duration: "12 weeks", location: "Various locations" },
-                rationale: "Build your profile while making a positive impact in the community.",
-                tags: ["Community Service", "Leadership", "Social Impact"],
-                deadline: "2026-07-30"
-            },
-            {
-                id: 4,
-                title: "Business & Entrepreneurship Course",
-                type: "course",
-                badge: "Course",
-                badgeClass: "course",
-                meta: { duration: "8 weeks", location: "Online" },
-                rationale: "Learn essential business skills and entrepreneurial thinking.",
-                tags: ["Business", "Entrepreneurship", "Finance"],
-                deadline: "2026-08-20"
-            },
-            {
-                id: 5,
-                title: "Design Thinking Workshop",
-                type: "workshop",
-                badge: "Workshop",
-                badgeClass: "workshop",
-                meta: { duration: "2 days", location: "Abu Dhabi, UAE" },
-                rationale: "Develop creative problem-solving skills through design thinking.",
-                tags: ["Design", "Innovation", "Creative"],
-                deadline: "2026-08-10"
-            },
-            {
-                id: 6,
-                title: "Sustainability & Environment Summit",
-                type: "summit",
-                badge: "Summit",
-                badgeClass: "summit",
-                meta: { duration: "3 days", location: "Dubai, UAE" },
-                rationale: "Join the conversation on environmental sustainability and climate action.",
-                tags: ["Sustainability", "Environment", "Global"],
-                deadline: "2026-09-15"
-            },
-            {
-                id: 7,
-                title: "Medical Research Program",
-                type: "research",
-                badge: "Research",
-                badgeClass: "research",
-                meta: { duration: "10 weeks", location: "Various locations" },
-                rationale: "Gain hands-on experience in medical research and healthcare.",
-                tags: ["Medicine", "Healthcare", "Research"],
-                deadline: "2026-08-25"
-            }
-        ];
-
-        // ===== LOAD USER DATA =====
         function loadUserData() {
             try {
                 const userData = JSON.parse(localStorage.getItem('futuresAbroadUser'));
                 if (userData) {
-                    document.getElementById('userNameDisplay').textContent = userData.name || 'Student';
-                    document.getElementById('welcomeMessage').textContent = `Welcome back, ${userData.name || 'Student'}! 👋`;
-                    
-                    const initial = (userData.name || 'S').charAt(0).toUpperCase();
-                    document.getElementById('userAvatar').textContent = initial;
+                    document.getElementById('userName').textContent = userData.name || 'Student';
+                    document.getElementById('userGrade').textContent = userData.grade ? `Grade ${userData.grade}` : 'Grade not set';
+                    document.getElementById('userSchool').textContent = userData.school || 'School not set';
+                    document.getElementById('userCountry').textContent = userData.country || 'Country not set';
 
                     // Load interests
                     const interests = userData.interests || [];
-                    const interestContainer = document.getElementById('interestTags');
-                    interestContainer.innerHTML = '';
+                    const container = document.getElementById('interestsContainer');
+                    container.innerHTML = '';
                     if (interests.length > 0) {
                         interests.forEach(interest => {
-                            const tag = document.createElement('span');
-                            tag.className = 'interest-tag';
-                            tag.innerHTML = `<span class="tag-icon">🎯</span> ${interest}`;
-                            interestContainer.appendChild(tag);
+                            const chip = document.createElement('span');
+                            chip.className = 'interest-chip';
+                            chip.textContent = `🎯 ${interest}`;
+                            container.appendChild(chip);
                         });
                     } else {
-                        interestContainer.innerHTML = '<span class="interest-tag" style="opacity:0.5;">No interests selected yet</span>';
+                        container.innerHTML = '<span style="color:#5a6b8a; font-size:14px;">No interests selected yet</span>';
                     }
 
-                    return userData;
+                    // Calculate profile strength (from user data or default)
+                    const strength = userData.profileStrengthScore || 60;
+                    document.getElementById('strengthVal').textContent = `${strength}%`;
+                    document.getElementById('strengthPercent').textContent = `${strength}%`;
+                    document.getElementById('strengthFill').style.width = `${strength}%`;
+
+                    // Update circle
+                    document.getElementById('strengthCircle').style.background = `conic-gradient(#2563eb 0% ${strength}%, #dce3ef ${strength}% 100%)`;
                 }
             } catch (e) {
                 console.log('No user data found');
             }
-            return null;
         }
 
-        // ===== RENDER ACTIVITIES =====
-        function renderActivities(filter = 'all') {
-            const grid = document.getElementById('activitiesGrid');
-            grid.innerHTML = '';
-
-            const filtered = filter === 'all' 
-                ? activitiesData 
-                : activitiesData.filter(a => a.type === filter);
-
-            if (filtered.length === 0) {
-                grid.innerHTML = `
-                    <div class="no-activities">
-                        <div class="empty-icon">🔍</div>
-                        <h3>No activities found</h3>
-                        <p>Try adjusting your filter or check back later for new opportunities.</p>
-                        <button class="btn-retake-quiz" onclick="window.location.href='quiz.html'">🔄 Retake Quiz</button>
-                    </div>
-                `;
-                return;
-            }
-
-            filtered.forEach((activity, index) => {
-                const card = document.createElement('div');
-                card.className = 'activity-card';
-                card.style.animationDelay = `${index * 0.05}s`;
-                
-                const daysUntil = Math.ceil((new Date(activity.deadline) - new Date()) / (1000 * 60 * 60 * 24));
-                const deadlineText = daysUntil <= 7 
-                    ? `<span class="urgent">⚠️ ${daysUntil} days left</span>` 
-                    : `${daysUntil} days left`;
-
-                card.innerHTML = `
-                    <span class="activity-badge ${activity.badgeClass}">${activity.badge}</span>
-                    <h3>${activity.title}</h3>
-                    <div class="activity-meta">
-                        <span>⏱️ ${activity.meta.duration}</span>
-                        <span>📍 ${activity.meta.location}</span>
-                    </div>
-                    <div class="activity-rationale">
-                        <span class="rationale-icon">💡</span>
-                        ${activity.rationale}
-                    </div>
-                    <div class="activity-tags">
-                        ${activity.tags.map(tag => `<span class="mini-tag">#${tag}</span>`).join('')}
-                    </div>
-                    <div class="card-footer">
-                        <span class="deadline">📅 ${deadlineText}</span>
-                        <button class="btn-register" onclick="registerForActivity('${activity.title}')">Register →</button>
-                    </div>
-                `;
-                grid.appendChild(card);
-            });
-        }
-
-        // ===== REGISTER FOR ACTIVITY =====
-        function registerForActivity(title) {
-            // Save registration to localStorage
-            let registrations = JSON.parse(localStorage.getItem('activityRegistrations') || '[]');
-            if (!registrations.includes(title)) {
-                registrations.push(title);
-                localStorage.setItem('activityRegistrations', JSON.stringify(registrations));
-                alert(`✅ You have successfully registered for: ${title}\n\nYou can view your registrations in your portfolio.`);
-            } else {
-                alert(`⚠️ You are already registered for: ${title}`);
-            }
-        }
-
-        // ===== FILTER BUTTONS =====
-        document.addEventListener('DOMContentLoaded', function() {
+        window.onload = function() {
             loadUserData();
-            renderActivities('all');
-
-            document.querySelectorAll('.filter-btn').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-                    this.classList.add('active');
-                    renderActivities(this.dataset.filter);
-                });
-            });
-        });
-
-        // ===== MAKE REGISTER FUNCTION GLOBAL =====
-        window.registerForActivity = registerForActivity;
-
-        console.log('🚀 Dashboard loaded successfully!');
+        };
     </script>
+
 </body>
 </html>
