@@ -3,115 +3,254 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Phase 5: University Pathway</title>
+    <title>Dashboard - Futures Abroad</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/dashboard.css">
 </head>
 <body>
-    <div class="phase5-container">
-        <div class="phase5-content">
-            <div class="header-section">
-                <h1>🎓 Phase 5: University Pathway</h1>
-                <p class="subtitle">Your personalized university recommendations based on your interests</p>
+    <div class="dashboard-container">
+        <!-- Navigation -->
+        <nav class="dashboard-nav">
+            <div class="logo">🚀 Futures <span>Abroad</span></div>
+            <div class="user-info">
+                <span id="userNameDisplay">Student</span>
+                <div class="user-avatar" id="userAvatar">S</div>
             </div>
+        </nav>
 
-            <div class="journey-section">
-                <h2>Your Grade 10 Journey</h2>
-                <p class="journey-desc">
-                    You're building a strong foundation. Here's your progress and what's next.
-                </p>
-
-                <div class="profile-card">
-                    <div class="profile-header">
-                        <div class="profile-info">
-                            <h3 id="userName">Student</h3>
-                            <p class="school-info" id="userSchool">School not set • <span id="userCountry">Country not set</span></p>
-                            <p class="grade-info" id="userGrade">Grade not set</p>
-                            <p class="interests-info">🎯 <span id="userInterests">Interests not set</span></p>
-                        </div>
-                        <div class="strength-circle">
-                            <div class="circle-content">
-                                <span class="strength-value" id="profileStrength">60%</span>
-                                <span class="strength-label">Strength</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="profile-strength-bar">
-                    <div class="strength-label">
-                        <span>Profile Strength</span>
-                        <span id="strengthPercent">60%</span>
-                    </div>
-                    <div class="strength-bar-bg">
-                        <div class="strength-bar-fill" id="strengthFill" style="width: 60%"></div>
-                    </div>
-                </div>
+        <!-- Welcome Section -->
+        <div class="welcome-section">
+            <h1 id="welcomeMessage">Welcome back, Student! 👋</h1>
+            <p>Here are activities recommended based on your interests and profile.</p>
+            <div class="interest-tags" id="interestTags">
+                <!-- Interests will be dynamically loaded -->
             </div>
+        </div>
 
-            <div class="gap-analysis">
-                <h3>🔍 Gap Analysis</h3>
-                <div class="gap-list">
-                    <div class="gap-item critical">
-                        <span class="gap-icon">🔴</span>
-                        <span>You have strong academics but no volunteering experience yet</span>
-                    </div>
-                    <div class="gap-item warning">
-                        <span class="gap-icon">🔴</span>
-                        <span>Consider joining a competition to build your profile</span>
-                    </div>
-                    <div class="gap-item info">
-                        <span class="gap-icon">🔴</span>
-                        <span>Internships are valuable for university applications</span>
-                    </div>
-                </div>
+        <!-- Feed Header -->
+        <div class="feed-header">
+            <h2>📋 Recommended Activities</h2>
+            <div class="feed-actions">
+                <button class="filter-btn active" data-filter="all">All</button>
+                <button class="filter-btn" data-filter="internship">💼 Internships</button>
+                <button class="filter-btn" data-filter="competition">🏆 Competitions</button>
+                <button class="filter-btn" data-filter="volunteering">🤝 Volunteering</button>
+                <button class="filter-btn" data-filter="course">📚 Courses</button>
+                <button class="filter-btn" data-filter="workshop">🔧 Workshops</button>
             </div>
+        </div>
 
-            <div class="milestones-section">
-                <h3>📋 Recommended Milestones</h3>
-                <div class="milestone-card">
-                    <div class="milestone-month">
-                        <span class="month-badge">Month 1</span>
-                    </div>
-                    <div class="milestone-content">
-                        <p class="milestone-title">Start volunteering or community service</p>
-                        <div class="milestone-progress">
-                            <span class="progress-text">Not started</span>
-                            <span class="progress-icon">⏳</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="action-section">
-                <button onclick="goToEnrollment()" class="continue-button">Continue to Phase 6 →</button>
-            </div>
+        <!-- Activities Grid -->
+        <div class="activities-grid" id="activitiesGrid">
+            <!-- Activities will be dynamically loaded -->
         </div>
     </div>
 
     <script>
-        // Load user data from localStorage
-        window.onload = function() {
-            const savedData = localStorage.getItem('userProfileData');
-            if (savedData) {
-                const parsedData = JSON.parse(savedData);
-                document.getElementById('userName').textContent = parsedData.name || 'Student';
-                document.getElementById('userSchool').textContent = parsedData.school || 'School not set';
-                document.getElementById('userCountry').textContent = parsedData.country || 'Country not set';
-                document.getElementById('userGrade').textContent = parsedData.grade ? `Grade ${parsedData.grade}` : 'Grade not set';
-                document.getElementById('userInterests').textContent = parsedData.interests || 'Interests not set';
+        // ============================================================
+        // DASHBOARD - COMPLETE WITH ALL FUNCTIONALITY
+        // ============================================================
+
+        // ===== ACTIVITY DATA =====
+        const activitiesData = [
+            {
+                id: 1,
+                title: "AI & Machine Learning Internship",
+                type: "internship",
+                badge: "Internship",
+                badgeClass: "internship",
+                meta: { duration: "6 weeks", location: "Remote" },
+                rationale: "Perfect for students interested in technology and computer science.",
+                tags: ["Technology", "STEM", "AI"],
+                deadline: "2026-08-15"
+            },
+            {
+                id: 2,
+                title: "UAE National Science Competition",
+                type: "competition",
+                badge: "Competition",
+                badgeClass: "competition",
+                meta: { duration: "2 days", location: "Dubai, UAE" },
+                rationale: "Showcase your scientific skills and compete with top students.",
+                tags: ["STEM", "Science", "Research"],
+                deadline: "2026-09-01"
+            },
+            {
+                id: 3,
+                title: "Community Service Program",
+                type: "volunteering",
+                badge: "Volunteering",
+                badgeClass: "volunteering",
+                meta: { duration: "12 weeks", location: "Various locations" },
+                rationale: "Build your profile while making a positive impact in the community.",
+                tags: ["Community Service", "Leadership", "Social Impact"],
+                deadline: "2026-07-30"
+            },
+            {
+                id: 4,
+                title: "Business & Entrepreneurship Course",
+                type: "course",
+                badge: "Course",
+                badgeClass: "course",
+                meta: { duration: "8 weeks", location: "Online" },
+                rationale: "Learn essential business skills and entrepreneurial thinking.",
+                tags: ["Business", "Entrepreneurship", "Finance"],
+                deadline: "2026-08-20"
+            },
+            {
+                id: 5,
+                title: "Design Thinking Workshop",
+                type: "workshop",
+                badge: "Workshop",
+                badgeClass: "workshop",
+                meta: { duration: "2 days", location: "Abu Dhabi, UAE" },
+                rationale: "Develop creative problem-solving skills through design thinking.",
+                tags: ["Design", "Innovation", "Creative"],
+                deadline: "2026-08-10"
+            },
+            {
+                id: 6,
+                title: "Sustainability & Environment Summit",
+                type: "summit",
+                badge: "Summit",
+                badgeClass: "summit",
+                meta: { duration: "3 days", location: "Dubai, UAE" },
+                rationale: "Join the conversation on environmental sustainability and climate action.",
+                tags: ["Sustainability", "Environment", "Global"],
+                deadline: "2026-09-15"
+            },
+            {
+                id: 7,
+                title: "Medical Research Program",
+                type: "research",
+                badge: "Research",
+                badgeClass: "research",
+                meta: { duration: "10 weeks", location: "Various locations" },
+                rationale: "Gain hands-on experience in medical research and healthcare.",
+                tags: ["Medicine", "Healthcare", "Research"],
+                deadline: "2026-08-25"
+            }
+        ];
+
+        // ===== LOAD USER DATA =====
+        function loadUserData() {
+            try {
+                const userData = JSON.parse(localStorage.getItem('futuresAbroadUser'));
+                if (userData) {
+                    document.getElementById('userNameDisplay').textContent = userData.name || 'Student';
+                    document.getElementById('welcomeMessage').textContent = `Welcome back, ${userData.name || 'Student'}! 👋`;
+                    
+                    const initial = (userData.name || 'S').charAt(0).toUpperCase();
+                    document.getElementById('userAvatar').textContent = initial;
+
+                    // Load interests
+                    const interests = userData.interests || [];
+                    const interestContainer = document.getElementById('interestTags');
+                    interestContainer.innerHTML = '';
+                    if (interests.length > 0) {
+                        interests.forEach(interest => {
+                            const tag = document.createElement('span');
+                            tag.className = 'interest-tag';
+                            tag.innerHTML = `<span class="tag-icon">🎯</span> ${interest}`;
+                            interestContainer.appendChild(tag);
+                        });
+                    } else {
+                        interestContainer.innerHTML = '<span class="interest-tag" style="opacity:0.5;">No interests selected yet</span>';
+                    }
+
+                    return userData;
+                }
+            } catch (e) {
+                console.log('No user data found');
+            }
+            return null;
+        }
+
+        // ===== RENDER ACTIVITIES =====
+        function renderActivities(filter = 'all') {
+            const grid = document.getElementById('activitiesGrid');
+            grid.innerHTML = '';
+
+            const filtered = filter === 'all' 
+                ? activitiesData 
+                : activitiesData.filter(a => a.type === filter);
+
+            if (filtered.length === 0) {
+                grid.innerHTML = `
+                    <div class="no-activities">
+                        <div class="empty-icon">🔍</div>
+                        <h3>No activities found</h3>
+                        <p>Try adjusting your filter or check back later for new opportunities.</p>
+                        <button class="btn-retake-quiz" onclick="window.location.href='quiz.html'">🔄 Retake Quiz</button>
+                    </div>
+                `;
+                return;
             }
 
-            // Animate strength bar
-            setTimeout(() => {
-                const strength = 60;
-                document.getElementById('strengthFill').style.width = `${strength}%`;
-                document.getElementById('strengthPercent').textContent = `${strength}%`;
-            }, 500);
-        };
+            filtered.forEach((activity, index) => {
+                const card = document.createElement('div');
+                card.className = 'activity-card';
+                card.style.animationDelay = `${index * 0.05}s`;
+                
+                const daysUntil = Math.ceil((new Date(activity.deadline) - new Date()) / (1000 * 60 * 60 * 24));
+                const deadlineText = daysUntil <= 7 
+                    ? `<span class="urgent">⚠️ ${daysUntil} days left</span>` 
+                    : `${daysUntil} days left`;
 
-        function goToEnrollment() {
-            window.location.href = 'futures-abroad-enroll.html';
+                card.innerHTML = `
+                    <span class="activity-badge ${activity.badgeClass}">${activity.badge}</span>
+                    <h3>${activity.title}</h3>
+                    <div class="activity-meta">
+                        <span>⏱️ ${activity.meta.duration}</span>
+                        <span>📍 ${activity.meta.location}</span>
+                    </div>
+                    <div class="activity-rationale">
+                        <span class="rationale-icon">💡</span>
+                        ${activity.rationale}
+                    </div>
+                    <div class="activity-tags">
+                        ${activity.tags.map(tag => `<span class="mini-tag">#${tag}</span>`).join('')}
+                    </div>
+                    <div class="card-footer">
+                        <span class="deadline">📅 ${deadlineText}</span>
+                        <button class="btn-register" onclick="registerForActivity('${activity.title}')">Register →</button>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
         }
+
+        // ===== REGISTER FOR ACTIVITY =====
+        function registerForActivity(title) {
+            // Save registration to localStorage
+            let registrations = JSON.parse(localStorage.getItem('activityRegistrations') || '[]');
+            if (!registrations.includes(title)) {
+                registrations.push(title);
+                localStorage.setItem('activityRegistrations', JSON.stringify(registrations));
+                alert(`✅ You have successfully registered for: ${title}\n\nYou can view your registrations in your portfolio.`);
+            } else {
+                alert(`⚠️ You are already registered for: ${title}`);
+            }
+        }
+
+        // ===== FILTER BUTTONS =====
+        document.addEventListener('DOMContentLoaded', function() {
+            loadUserData();
+            renderActivities('all');
+
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    renderActivities(this.dataset.filter);
+                });
+            });
+        });
+
+        // ===== MAKE REGISTER FUNCTION GLOBAL =====
+        window.registerForActivity = registerForActivity;
+
+        console.log('🚀 Dashboard loaded successfully!');
     </script>
 </body>
 </html>
