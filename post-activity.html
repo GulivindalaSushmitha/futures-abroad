@@ -3,718 +3,155 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Post-Activity Reflection - Futures Abroad</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-            background: #f1f5f9;
-            color: #1e293b;
-            line-height: 1.6;
-        }
-        .app-container {
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 30px 20px;
-        }
-        /* Phase Navigation */
-        .phase-nav {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0;
-            flex-wrap: wrap;
-            background: white;
-            padding: 15px 20px;
-            border-radius: 12px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-            margin-bottom: 30px;
-        }
-        .phase-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            cursor: pointer;
-            padding: 0 8px;
-            min-width: 44px;
-            transition: all 0.3s;
-        }
-        .phase-item:hover .phase-circle {
-            transform: scale(1.1);
-        }
-        .phase-circle {
-            width: 34px;
-            height: 34px;
-            border-radius: 50%;
-            background: #e2e8f0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 700;
-            color: #94a3b8;
-            font-size: 13px;
-            transition: all 0.3s;
-        }
-        .phase-circle.active {
-            background: #2563eb;
-            color: white;
-        }
-        .phase-circle.completed {
-            background: #22c55e;
-            color: white;
-        }
-        .phase-circle.current {
-            background: #1e40af;
-            color: white;
-            box-shadow: 0 0 0 4px rgba(37,99,235,0.25);
-        }
-        .phase-label {
-            font-size: 9px;
-            color: #94a3b8;
-            margin-top: 4px;
-            text-transform: uppercase;
-            letter-spacing: 0.3px;
-            font-weight: 500;
-        }
-        .phase-label.active {
-            color: #1e293b;
-            font-weight: 600;
-        }
-        .phase-connector {
-            width: 25px;
-            height: 2px;
-            background: #e2e8f0;
-            flex-shrink: 0;
-            transition: all 0.5s;
-        }
-        .phase-connector.active {
-            background: #2563eb;
-        }
-        /* Main Card */
-        .reflection-card {
-            background: white;
-            border-radius: 12px;
-            padding: 30px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-        }
-        .reflection-card h1 {
-            font-size: 28px;
-            color: #1e293b;
-            margin: 0 0 5px 0;
-            font-weight: 700;
-        }
-        .reflection-card .subtitle {
-            color: #64748b;
-            font-size: 16px;
-            margin-bottom: 25px;
-            padding-bottom: 15px;
-            border-bottom: 1px solid #e2e8f0;
-        }
-        .reflection-card .subtitle strong {
-            color: #2563eb;
-        }
-        .form-group {
-            margin: 15px 0;
-        }
-        .form-group label {
-            display: block;
-            font-weight: 600;
-            color: #1e293b;
-            margin-bottom: 5px;
-            font-size: 14px;
-        }
-        .form-group input,
-        .form-group textarea {
-            width: 100%;
-            padding: 10px 12px;
-            border: 1px solid #cbd5e1;
-            border-radius: 6px;
-            font-size: 14px;
-            font-family: inherit;
-            transition: all 0.3s;
-        }
-        .form-group input:focus,
-        .form-group textarea:focus {
-            outline: none;
-            border-color: #2563eb;
-            box-shadow: 0 0 0 3px rgba(37,99,235,0.1);
-        }
-        .form-group textarea {
-            min-height: 80px;
-            resize: vertical;
-        }
-        .reflection-item {
-            margin: 15px 0;
-            padding: 15px;
-            background: #f8fafc;
-            border-radius: 8px;
-            border: 1px solid #e2e8f0;
-            transition: all 0.3s;
-        }
-        .reflection-item:hover {
-            border-color: #2563eb;
-        }
-        .reflection-item .prompt {
-            font-weight: 600;
-            color: #1e293b;
-            margin-bottom: 8px;
-            font-size: 14px;
-        }
-        .reflection-item textarea {
-            width: 100%;
-            min-height: 70px;
-            padding: 10px;
-            border: 1px solid #cbd5e1;
-            border-radius: 6px;
-            font-size: 14px;
-            font-family: inherit;
-            resize: vertical;
-            transition: all 0.3s;
-        }
-        .reflection-item textarea:focus {
-            outline: none;
-            border-color: #2563eb;
-            box-shadow: 0 0 0 3px rgba(37,99,235,0.1);
-        }
-        .section-title {
-            font-size: 18px;
-            margin: 20px 0 10px 0;
-            color: #1e293b;
-        }
-        .section-hint {
-            color: #64748b;
-            font-size: 14px;
-            margin-bottom: 15px;
-        }
-        .action-buttons {
-            display: flex;
-            gap: 12px;
-            flex-wrap: wrap;
-            margin-top: 25px;
-            padding-top: 20px;
-            border-top: 2px solid #e2e8f0;
-        }
-        .btn-primary {
-            padding: 12px 28px;
-            background: #2563eb;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            font-size: 15px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        .btn-primary:hover {
-            background: #1d4ed8;
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(37,99,235,0.3);
-        }
-        .btn-secondary {
-            padding: 12px 28px;
-            background: transparent;
-            color: #2563eb;
-            border: 2px solid #2563eb;
-            border-radius: 6px;
-            font-size: 15px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        .btn-secondary:hover {
-            background: #eff6ff;
-            transform: translateY(-1px);
-        }
-        .btn-success {
-            padding: 12px 28px;
-            background: #22c55e;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            font-size: 15px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        .btn-success:hover {
-            background: #16a34a;
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(34,197,94,0.3);
-        }
-        .btn-logout {
-            padding: 10px 24px;
-            background: #ef4444;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            font-size: 14px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        .btn-logout:hover {
-            background: #dc2626;
-            transform: translateY(-1px);
-        }
-        .strength-section {
-            margin-top: 30px;
-            padding: 20px;
-            background: #f8fafc;
-            border-radius: 8px;
-            border: 1px solid #e2e8f0;
-        }
-        .strength-section h3 {
-            font-size: 16px;
-            margin-bottom: 10px;
-            color: #1e293b;
-        }
-        .progress-bar {
-            width: 100%;
-            height: 20px;
-            background: #e2e8f0;
-            border-radius: 10px;
-            overflow: hidden;
-        }
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, #2563eb, #7c3aed);
-            border-radius: 10px;
-            transition: width 1s ease;
-        }
-        .strength-text {
-            margin-top: 8px;
-            font-size: 14px;
-            color: #475569;
-        }
-        .strength-text span {
-            font-weight: 600;
-            color: #1e293b;
-        }
-        .notification {
-            padding: 12px 20px;
-            border-radius: 6px;
-            margin: 10px 0;
-            animation: slideDown 0.3s ease;
-        }
-        .notification.success {
-            background: #f0fdf4;
-            color: #166534;
-            border: 1px solid #86efac;
-        }
-        .notification.error {
-            background: #fef2f2;
-            color: #991b1b;
-            border: 1px solid #fca5a5;
-        }
-        @keyframes slideDown {
-            from { opacity: 0; transform: translateY(-10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        #notification-container {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            z-index: 9999;
-            max-width: 400px;
-            width: 100%;
-        }
-        /* Logout button in header */
-        .header-bar {
-            background: white;
-            padding: 12px 24px;
-            border-radius: 12px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-            margin-bottom: 30px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-        .header-bar .logo {
-            font-size: 20px;
-            font-weight: 700;
-            color: #1e293b;
-        }
-        .header-bar .logo span {
-            color: #2563eb;
-        }
-        .header-actions {
-            display: flex;
-            gap: 10px;
-            align-items: center;
-            flex-wrap: wrap;
-        }
-        @media (max-width: 768px) {
-            .reflection-card { padding: 20px; }
-            .reflection-card h1 { font-size: 22px; }
-            .action-buttons { flex-direction: column; }
-            .action-buttons button { width: 100%; }
-            .phase-item { padding: 0 4px; min-width: 36px; }
-            .phase-circle { width: 28px; height: 28px; font-size: 11px; }
-            .phase-connector { width: 15px; }
-            .phase-label { font-size: 7px; }
-            .header-bar { flex-direction: column; text-align: center; }
-        }
-        @media (max-width: 480px) {
-            .phase-item { padding: 0 3px; min-width: 30px; }
-            .phase-circle { width: 24px; height: 24px; font-size: 10px; }
-            .phase-connector { width: 10px; }
-            .reflection-card h1 { font-size: 19px; }
-        }
-    </style>
+    <title>Phase 4: Post-Activity Guidance</title>
+    <link rel="stylesheet" href="css/post-activity.css">
 </head>
 <body>
-    <div class="app-container">
-        <!-- Header with Logout -->
-        <div class="header-bar">
-            <div class="logo">🚀 Futures <span>Abroad</span></div>
-            <div class="header-actions">
-                <a href="student-app.html" class="btn-secondary" style="padding: 8px 16px; font-size: 13px; text-decoration: none;">🎯 Activities</a>
-                <a href="portfolio.html" class="btn-secondary" style="padding: 8px 16px; font-size: 13px; text-decoration: none;">📂 Portfolio</a>
-                <button onclick="handleLogout()" class="btn-logout" style="padding: 8px 20px; font-size: 13px;">🚪 Logout</button>
+    <div class="phase4-container">
+        <div class="phase4-content">
+            <div class="header-section">
+                <h1>Phase 4: Post-Activity Guidance</h1>
+                <h2>Reflect on your experience with <span>Youth Leadership Academy</span></h2>
             </div>
-        </div>
-
-        <!-- Phase Navigation -->
-        <div id="phase-navigation" class="phase-nav"></div>
-
-        <div class="reflection-card">
-            <h1>Phase 4: Post-Activity Guidance</h1>
-            <p class="subtitle">Reflect on your experience with <strong id="activity-name-display">this activity</strong></p>
-
-            <!-- Date -->
-            <div class="form-group">
-                <label for="completion-date">📅 Date Completed:</label>
-                <input type="date" id="completion-date" />
+            
+            <div class="reflection-date">
+                <label>📅 Date Completed:</label>
+                <input type="date" id="completionDate" value="2026-07-13" readonly>
             </div>
 
-            <!-- Outcome Note -->
-            <div class="form-group">
-                <label for="outcome-note">📝 What did you gain from this experience?</label>
-                <textarea id="outcome-note" rows="3" placeholder="Write a brief outcome note..."></textarea>
-            </div>
-
-            <!-- Reflection Prompts -->
-            <h3 class="section-title">💭 Reflection Prompts</h3>
-            <p class="section-hint">Answer these questions to capture your learning. These can be used in future essays.</p>
-            <div id="reflection-prompts"></div>
-
-            <!-- Action Buttons -->
-            <div class="action-buttons">
-                <button id="save-reflection" class="btn-primary">💾 Save Reflection</button>
-                <button id="phase5-button" class="btn-secondary" style="display: none;">
-                    Continue to University Pathway →
-                </button>
-            </div>
-
-            <!-- Profile Strength -->
-            <div class="strength-section">
-                <h3>📊 Your Profile Strength</h3>
-                <div class="progress-bar">
-                    <div id="strength-bar" class="progress-fill" style="width: 0%"></div>
+            <!-- Progress Section -->
+            <div class="progress-container">
+                <div class="progress-header">
+                    <span class="progress-title">Reflection Progress</span>
+                    <span class="progress-percentage" id="progressPercentage">0%</span>
                 </div>
-                <p class="strength-text">Score: <span id="profile-strength-score">0</span>% &bull; Activities in portfolio: <span id="portfolio-count">0</span></p>
+                
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+                </div>
+                
+                <div class="progress-details" id="progressDetails">
+                    <div class="progress-item">
+                        <span class="question-label">Question 1</span>
+                        <span class="status-icon empty" id="status1">⬜</span>
+                    </div>
+                    <div class="progress-item">
+                        <span class="question-label">Question 2</span>
+                        <span class="status-icon empty" id="status2">⬜</span>
+                    </div>
+                    <div class="progress-item">
+                        <span class="question-label">Question 3</span>
+                        <span class="status-icon empty" id="status3">⬜</span>
+                    </div>
+                    <div class="progress-item">
+                        <span class="question-label">Question 4</span>
+                        <span class="status-icon empty" id="status4">⬜</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Reflection Questions -->
+            <div class="reflection-questions">
+                <div class="question-item">
+                    <div class="question-header">
+                        <h4>Question 1</h4>
+                        <span class="question-number">1/4</span>
+                    </div>
+                    <p class="question-text">What was the most important thing you learned?</p>
+                    <textarea rows="4" placeholder="Write your reflection here..." class="reflection-textarea" id="q1" oninput="updateProgress()"></textarea>
+                </div>
+
+                <div class="question-item">
+                    <div class="question-header">
+                        <h4>Question 2</h4>
+                        <span class="question-number">2/4</span>
+                    </div>
+                    <p class="question-text">How will you apply what you learned in the future?</p>
+                    <textarea rows="4" placeholder="Write your reflection here..." class="reflection-textarea" id="q2" oninput="updateProgress()"></textarea>
+                </div>
+
+                <div class="question-item">
+                    <div class="question-header">
+                        <h4>Question 3</h4>
+                        <span class="question-number">3/4</span>
+                    </div>
+                    <p class="question-text">What challenges did you face and how did you overcome them?</p>
+                    <textarea rows="4" placeholder="Write your reflection here..." class="reflection-textarea" id="q3" oninput="updateProgress()"></textarea>
+                </div>
+
+                <div class="question-item">
+                    <div class="question-header">
+                        <h4>Question 4</h4>
+                        <span class="question-number">4/4</span>
+                    </div>
+                    <p class="question-text">What advice would you give to others in this program?</p>
+                    <textarea rows="4" placeholder="Write your reflection here..." class="reflection-textarea" id="q4" oninput="updateProgress()"></textarea>
+                </div>
+            </div>
+
+            <div class="action-buttons">
+                <button onclick="saveReflections()" class="save-button">💾 Save Reflection</button>
+                <div id="saveSuccess" class="save-success" style="display:none;">
+                    ✅ Reflections saved successfully!
+                </div>
             </div>
         </div>
-
-        <div id="notification-container"></div>
     </div>
 
     <script>
-        // ============================================================
-        // PHASE 4 - POST-ACTIVITY GUIDANCE
-        // ============================================================
-
-        const REFLECTION_PROMPTS = [
-            "What was the most important thing you learned?",
-            "How did this activity change your perspective?",
-            "What would you do differently next time?",
-            "How does this connect to your future goals?"
-        ];
-
-        let currentReflection = {
-            completionDate: '',
-            outcomeNote: '',
-            reflectionAnswers: [],
-            activityId: null,
-            activityName: ''
+        // Load saved reflections from localStorage
+        window.onload = function() {
+            const savedReflections = localStorage.getItem('phase4Reflections');
+            if (savedReflections) {
+                const parsed = JSON.parse(savedReflections);
+                for (let key in parsed) {
+                    const element = document.getElementById(key);
+                    if (element) {
+                        element.value = parsed[key];
+                    }
+                }
+                updateProgress();
+            }
         };
 
-        // ============================================================
-        // LOGOUT FUNCTION
-        // ============================================================
-        function handleLogout() {
-            if (confirm('Are you sure you want to logout?')) {
-                localStorage.removeItem('futuresAbroadUser');
-                window.location.href = 'login.html';
-            }
+        function updateProgress() {
+            const questions = ['q1', 'q2', 'q3', 'q4'];
+            let filledCount = 0;
+            
+            questions.forEach((id, index) => {
+                const textarea = document.getElementById(id);
+                const statusIcon = document.getElementById(`status${index + 1}`);
+                if (textarea.value.trim() !== '') {
+                    filledCount++;
+                    statusIcon.className = 'status-icon filled';
+                    statusIcon.textContent = '✅';
+                } else {
+                    statusIcon.className = 'status-icon empty';
+                    statusIcon.textContent = '⬜';
+                }
+            });
+
+            const progress = (filledCount / questions.length) * 100;
+            document.getElementById('progressFill').style.width = `${progress}%`;
+            document.getElementById('progressPercentage').textContent = `${Math.round(progress)}%`;
         }
 
-        // Phase Navigation
-        function getCurrentPhase() {
-            try {
-                const student = JSON.parse(localStorage.getItem('studentProfile') || '{}');
-                return student.currentPhase || 1;
-            } catch { return 1; }
-        }
-
-        function navigateToPhase(phase) {
-            const currentPhase = getCurrentPhase();
-            const phasePages = {
-                1: 'quiz.html', 2: 'student-app.html', 3: 'activity-registration.html',
-                4: 'post-activity.html', 5: 'university-shortlist.html', 6: 'futures-abroad-enroll.html'
+        function saveReflections() {
+            const reflections = {
+                q1: document.getElementById('q1').value,
+                q2: document.getElementById('q2').value,
+                q3: document.getElementById('q3').value,
+                q4: document.getElementById('q4').value
             };
-            if (phase > currentPhase) {
-                window.location.href = phasePages[currentPhase] || 'dashboard.html';
-                return;
-            }
-            window.location.href = phasePages[phase] || 'dashboard.html';
+
+            localStorage.setItem('phase4Reflections', JSON.stringify(reflections));
+            
+            const successDiv = document.getElementById('saveSuccess');
+            successDiv.style.display = 'block';
+            setTimeout(() => {
+                successDiv.style.display = 'none';
+            }, 3000);
         }
-
-        function renderPhaseNavigation() {
-            const currentPhase = getCurrentPhase();
-            const phases = [
-                { num: 1, label: 'Discovery' }, { num: 2, label: 'Activities' },
-                { num: 3, label: 'Register' }, { num: 4, label: 'Reflect' },
-                { num: 5, label: 'Pathway' }, { num: 6, label: 'Enroll' }
-            ];
-            let html = '';
-            phases.forEach((phase, index) => {
-                const isActive = phase.num <= currentPhase;
-                const isCompleted = phase.num < currentPhase;
-                const isCurrent = phase.num === currentPhase;
-                let circleClass = 'phase-circle' + (isActive ? ' active' : '') + (isCompleted ? ' completed' : '') + (isCurrent ? ' current' : '');
-                let labelClass = 'phase-label' + (isActive ? ' active' : '');
-                let circleContent = isCompleted ? '✓' : phase.num;
-                html += `
-                    <div class="phase-item" onclick="navigateToPhase(${phase.num})">
-                        <div class="${circleClass}"><span>${circleContent}</span></div>
-                        <span class="${labelClass}">${phase.label}</span>
-                    </div>
-                `;
-                if (index < phases.length - 1) {
-                    html += `<div class="phase-connector ${phase.num < currentPhase ? 'active' : ''}"></div>`;
-                }
-            });
-            return html;
-        }
-
-        function initPhaseNavigation() {
-            const navContainer = document.getElementById('phase-navigation');
-            if (navContainer) navContainer.innerHTML = renderPhaseNavigation();
-        }
-
-        // Load activity data
-        function loadActivityData() {
-            try {
-                const saved = localStorage.getItem('selectedActivity');
-                if (saved) {
-                    const activity = JSON.parse(saved);
-                    currentReflection.activityId = activity.id || 'activity_1';
-                    currentReflection.activityName = activity.name || 'this activity';
-                    document.getElementById('activity-name-display').textContent = currentReflection.activityName;
-                }
-            } catch (error) { console.log('Error loading activity data:', error); }
-        }
-
-        // Render reflection prompts
-        function renderReflectionPrompts() {
-            const container = document.getElementById('reflection-prompts');
-            if (!container) return;
-            container.innerHTML = '';
-            REFLECTION_PROMPTS.forEach((prompt, index) => {
-                const div = document.createElement('div');
-                div.className = 'reflection-item';
-                div.innerHTML = `
-                    <p class="prompt">${index + 1}. ${prompt}</p>
-                    <textarea id="reflection-${index}" placeholder="Write your reflection here..." rows="3"></textarea>
-                `;
-                container.appendChild(div);
-            });
-        }
-
-        // Load saved reflection
-        function loadSavedReflection() {
-            try {
-                const saved = localStorage.getItem('currentReflection');
-                if (saved) {
-                    const data = JSON.parse(saved);
-                    if (data.completionDate) {
-                        document.getElementById('completion-date').value = data.completionDate;
-                    }
-                    if (data.outcomeNote) {
-                        document.getElementById('outcome-note').value = data.outcomeNote;
-                    }
-                    if (data.reflectionAnswers) {
-                        data.reflectionAnswers.forEach((answer, index) => {
-                            const textarea = document.getElementById(`reflection-${index}`);
-                            if (textarea) textarea.value = answer || '';
-                        });
-                    }
-                }
-            } catch (error) { console.log('Error loading saved reflection:', error); }
-        }
-
-        // Load portfolio count
-        function loadPortfolioCount() {
-            try {
-                const portfolio = JSON.parse(localStorage.getItem('studentPortfolio') || '[]');
-                document.getElementById('portfolio-count').textContent = portfolio.length;
-            } catch (error) { console.log('Error loading portfolio count:', error); }
-        }
-
-        // Calculate profile strength
-        function calculateProfileStrength() {
-            try {
-                let portfolio = JSON.parse(localStorage.getItem('studentPortfolio') || '[]');
-                let student = JSON.parse(localStorage.getItem('studentProfile') || '{}');
-                let score = 0;
-
-                const activityCount = Math.min(portfolio.length, 5);
-                score += activityCount * 6;
-
-                const types = new Set();
-                portfolio.forEach(e => { if (e.activityType) types.add(e.activityType); });
-                score += Math.min(types.size * 5, 20);
-
-                let hasLeadership = false;
-                portfolio.forEach(entry => {
-                    if (entry.reflectionResponses) {
-                        entry.reflectionResponses.forEach(response => {
-                            if (response && (response.toLowerCase().includes('lead') || 
-                                response.toLowerCase().includes('initiative') ||
-                                response.toLowerCase().includes('organiz'))) {
-                                hasLeadership = true;
-                            }
-                        });
-                    }
-                });
-                score += hasLeadership ? 20 : 0;
-
-                const recent = portfolio.some(entry => {
-                    if (entry.dateCompleted) {
-                        const date = new Date(entry.dateCompleted);
-                        const yearAgo = new Date();
-                        yearAgo.setFullYear(yearAgo.getFullYear() - 1);
-                        return date > yearAgo;
-                    }
-                    return false;
-                });
-                score += recent ? 15 : 0;
-
-                let totalChars = 0;
-                portfolio.forEach(entry => {
-                    if (entry.reflectionResponses) {
-                        entry.reflectionResponses.forEach(response => {
-                            if (response) totalChars += response.length;
-                        });
-                    }
-                });
-                score += Math.min(Math.floor(totalChars / 50), 15);
-
-                student.profileStrengthScore = Math.min(score, 100);
-                localStorage.setItem('studentProfile', JSON.stringify(student));
-
-                document.getElementById('profile-strength-score').textContent = student.profileStrengthScore || 0;
-                document.getElementById('strength-bar').style.width = (student.profileStrengthScore || 0) + '%';
-            } catch (error) { console.log('Error calculating profile strength:', error); }
-        }
-
-        // Show notification
-        function showNotification(message, type = 'info') {
-            const container = document.getElementById('notification-container');
-            if (!container) { alert(message); return; }
-            const div = document.createElement('div');
-            div.className = `notification ${type}`;
-            div.textContent = message;
-            container.appendChild(div);
-            setTimeout(() => { if (div.parentNode) div.remove(); }, 5000);
-        }
-
-        // Save reflection
-        function saveReflection() {
-            try {
-                const completionDate = document.getElementById('completion-date')?.value || new Date().toISOString().split('T')[0];
-                const outcomeNote = document.getElementById('outcome-note')?.value || '';
-                
-                const reflectionAnswers = [];
-                REFLECTION_PROMPTS.forEach((_, index) => {
-                    const textarea = document.getElementById(`reflection-${index}`);
-                    if (textarea) reflectionAnswers.push(textarea.value || '');
-                });
-
-                const portfolioEntry = {
-                    id: Date.now().toString(),
-                    activityId: currentReflection.activityId || 'activity_1',
-                    activityName: currentReflection.activityName || 'Activity',
-                    dateCompleted: completionDate,
-                    outcomeNote: outcomeNote,
-                    reflectionResponses: reflectionAnswers,
-                    essayPotentialFlag: true,
-                    timestamp: new Date().toISOString()
-                };
-
-                let portfolio = JSON.parse(localStorage.getItem('studentPortfolio') || '[]');
-                portfolio.push(portfolioEntry);
-                localStorage.setItem('studentPortfolio', JSON.stringify(portfolio));
-
-                let student = JSON.parse(localStorage.getItem('studentProfile') || '{}');
-                if (!student.completedActivities) student.completedActivities = [];
-                if (!student.completedActivities.includes(currentReflection.activityId)) {
-                    student.completedActivities.push(currentReflection.activityId);
-                }
-                student.phase4Completed = true;
-                student.currentPhase = 4;
-                localStorage.setItem('studentProfile', JSON.stringify(student));
-
-                calculateProfileStrength();
-                showNotification('✅ Reflection saved successfully!', 'success');
-
-                document.getElementById('phase5-button').style.display = 'inline-block';
-
-                localStorage.setItem('currentReflection', JSON.stringify({
-                    ...currentReflection,
-                    completionDate,
-                    outcomeNote,
-                    reflectionAnswers
-                }));
-
-                loadPortfolioCount();
-            } catch (error) {
-                console.log('Error saving reflection:', error);
-                showNotification('❌ Error saving reflection. Please try again.', 'error');
-            }
-        }
-
-        // Go to Phase 5
-        function goToPhase5() {
-            window.location.href = 'university-shortlist.html';
-        }
-
-        // Initialize
-        document.addEventListener('DOMContentLoaded', function() {
-            loadActivityData();
-            renderReflectionPrompts();
-            loadSavedReflection();
-            loadPortfolioCount();
-            calculateProfileStrength();
-            initPhaseNavigation();
-
-            document.getElementById('save-reflection')?.addEventListener('click', saveReflection);
-            document.getElementById('phase5-button')?.addEventListener('click', goToPhase5);
-
-            try {
-                const student = JSON.parse(localStorage.getItem('studentProfile') || '{}');
-                if (student.phase4Completed) {
-                    document.getElementById('phase5-button').style.display = 'inline-block';
-                }
-            } catch { /* ignore */ }
-        });
     </script>
 </body>
 </html>
