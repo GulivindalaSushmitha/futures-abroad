@@ -4,369 +4,129 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Enrollment - Futures Abroad</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-            background: #f1f5f9;
-            color: #1e293b;
-            line-height: 1.6;
-        }
-        .app-container {
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 30px 20px;
-        }
-        .phase-nav {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0;
-            flex-wrap: wrap;
-            background: white;
-            padding: 15px 20px;
-            border-radius: 12px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-            margin-bottom: 30px;
-        }
-        .phase-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            cursor: pointer;
-            padding: 0 8px;
-            min-width: 44px;
-            transition: all 0.3s;
-        }
-        .phase-item:hover .phase-circle { transform: scale(1.1); }
-        .phase-circle {
-            width: 34px;
-            height: 34px;
-            border-radius: 50%;
-            background: #e2e8f0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 700;
-            color: #94a3b8;
-            font-size: 13px;
-            transition: all 0.3s;
-        }
-        .phase-circle.active { background: #2563eb; color: white; }
-        .phase-circle.completed { background: #22c55e; color: white; }
-        .phase-circle.current { background: #1e40af; color: white; box-shadow: 0 0 0 4px rgba(37,99,235,0.25); }
-        .phase-label {
-            font-size: 9px;
-            color: #94a3b8;
-            margin-top: 4px;
-            text-transform: uppercase;
-            letter-spacing: 0.3px;
-            font-weight: 500;
-        }
-        .phase-label.active { color: #1e293b; font-weight: 600; }
-        .phase-connector {
-            width: 25px;
-            height: 2px;
-            background: #e2e8f0;
-            flex-shrink: 0;
-            transition: all 0.5s;
-        }
-        .phase-connector.active { background: #2563eb; }
-        .enrollment-card {
-            background: white;
-            border-radius: 12px;
-            padding: 30px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-        }
-        .enrollment-card h1 {
-            font-size: 28px;
-            color: #1e293b;
-            margin: 0 0 5px 0;
-            font-weight: 700;
-        }
-        .enrollment-card .subtitle {
-            color: #64748b;
-            font-size: 16px;
-            margin-bottom: 25px;
-            padding-bottom: 15px;
-            border-bottom: 1px solid #e2e8f0;
-        }
-        .step-progress {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 20px 0 30px 0;
-        }
-        .step-dot {
-            width: 34px;
-            height: 34px;
-            border-radius: 50%;
-            background: #e2e8f0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 700;
-            color: #94a3b8;
-            font-size: 14px;
-            transition: all 0.5s;
-        }
-        .step-dot.active { background: #2563eb; color: white; box-shadow: 0 0 0 4px rgba(37,99,235,0.2); }
-        .step-line {
-            width: 40px;
-            height: 2px;
-            background: #e2e8f0;
-            transition: all 0.5s;
-        }
-        .step-line.active { background: #2563eb; }
-        .step-counter { text-align: center; color: #64748b; margin-bottom: 20px; }
-        .handoff-step { margin: 20px 0; animation: fadeIn 0.4s ease; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        .program-card {
-            padding: 20px 24px;
-            margin: 10px 0;
-            border: 2px solid #e2e8f0;
-            border-radius: 10px;
-            cursor: pointer;
-            transition: all 0.3s;
-            background: white;
-        }
-        .program-card:hover { border-color: #2563eb; box-shadow: 0 4px 16px rgba(37,99,235,0.1); transform: translateY(-2px); }
-        .program-card.selected { border-color: #2563eb; background: #eff6ff; }
-        .program-card .price { font-size: 22px; font-weight: 700; color: #2563eb; margin-top: 8px; }
-        .form-group { margin: 15px 0; }
-        .form-group label { display: block; font-weight: 600; color: #1e293b; margin-bottom: 5px; }
-        .form-group input, .form-group select {
-            width: 100%;
-            padding: 10px 12px;
-            border: 1px solid #cbd5e1;
-            border-radius: 6px;
-            font-size: 14px;
-            transition: all 0.3s;
-        }
-        .form-group input:focus, .form-group select:focus {
-            outline: none;
-            border-color: #2563eb;
-            box-shadow: 0 0 0 3px rgba(37,99,235,0.1);
-        }
-        .btn-primary {
-            padding: 12px 28px;
-            background: #2563eb;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            font-size: 15px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        .btn-primary:hover { background: #1d4ed8; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(37,99,235,0.3); }
-        .btn-primary:disabled { background: #94a3b8; cursor: not-allowed; transform: none; box-shadow: none; }
-        .btn-secondary {
-            padding: 10px 24px;
-            background: transparent;
-            color: #2563eb;
-            border: 2px solid #2563eb;
-            border-radius: 6px;
-            font-size: 15px;
-            font-weight: 500;
-            cursor: pointer;
-            margin-right: 10px;
-            transition: all 0.3s;
-            text-decoration: none;
-            display: inline-block;
-        }
-        .btn-secondary:hover { background: #eff6ff; transform: translateY(-1px); }
-        .btn-logout {
-            padding: 8px 20px;
-            background: #ef4444;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            font-size: 13px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.3s;
-            text-decoration: none;
-        }
-        .btn-logout:hover { background: #dc2626; transform: translateY(-1px); }
-        .summary-box { background: #f8fafc; padding: 20px; border-radius: 8px; margin: 15px 0; border: 1px solid #e2e8f0; }
-        .summary-box p { margin: 6px 0; }
-        .profile-details p { margin: 6px 0; font-size: 14px; }
-        .action-buttons {
-            display: flex;
-            gap: 12px;
-            flex-wrap: wrap;
-            margin-top: 20px;
-            padding-top: 20px;
-            border-top: 2px solid #e2e8f0;
-        }
-        .enrollment-success {
-            text-align: center;
-            padding: 40px 20px;
-            animation: fadeIn 0.6s ease;
-        }
-        .success-icon { font-size: 72px; margin-bottom: 20px; display: block; }
-        .enrollment-success h2 { color: #1e293b; font-size: 28px; margin-bottom: 10px; }
-        .enrollment-success p { color: #64748b; font-size: 16px; margin-bottom: 25px; }
-        .next-steps {
-            text-align: left;
-            max-width: 420px;
-            margin: 25px auto;
-            padding: 24px 30px;
-            background: #f8fafc;
-            border-radius: 10px;
-            border: 1px solid #e2e8f0;
-        }
-        .next-steps h3 { margin-bottom: 12px; font-size: 16px; color: #1e293b; }
-        .next-steps li { padding: 8px 0; border-bottom: 1px solid #e2e8f0; color: #475569; font-size: 14px; list-style: none; }
-        .next-steps li:last-child { border-bottom: none; }
-        .next-steps li::before { content: '✓ '; color: #22c55e; font-weight: 700; }
-        .header-bar {
-            background: white;
-            padding: 12px 24px;
-            border-radius: 12px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-            margin-bottom: 30px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-        .header-bar .logo {
-            font-size: 20px;
-            font-weight: 700;
-            color: #1e293b;
-        }
-        .header-bar .logo span {
-            color: #2563eb;
-        }
-        .header-actions {
-            display: flex;
-            gap: 10px;
-            align-items: center;
-            flex-wrap: wrap;
-        }
-        @media (max-width: 768px) {
-            .enrollment-card { padding: 20px; }
-            .enrollment-card h1 { font-size: 22px; }
-            .action-buttons { flex-direction: column; }
-            .action-buttons button { width: 100%; }
-            .phase-item { padding: 0 4px; min-width: 36px; }
-            .phase-circle { width: 28px; height: 28px; font-size: 11px; }
-            .phase-connector { width: 15px; }
-            .phase-label { font-size: 7px; }
-            .step-line { width: 20px; }
-            .step-dot { width: 28px; height: 28px; font-size: 12px; }
-            .header-bar { flex-direction: column; text-align: center; }
-        }
-        @media (max-width: 480px) {
-            .phase-item { padding: 0 3px; min-width: 30px; }
-            .phase-circle { width: 24px; height: 24px; font-size: 10px; }
-            .phase-connector { width: 10px; }
-            .enrollment-card h1 { font-size: 19px; }
-        }
-    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/enrollment.css">
 </head>
 <body>
     <div class="app-container">
-        <!-- Header with Logout -->
+        <!-- Header -->
         <div class="header-bar">
             <div class="logo">🚀 Futures <span>Abroad</span></div>
             <div class="header-actions">
                 <a href="student-app.html" class="btn-secondary" style="padding: 8px 16px; font-size: 13px; text-decoration: none;">🎯 Activities</a>
                 <a href="portfolio.html" class="btn-secondary" style="padding: 8px 16px; font-size: 13px; text-decoration: none;">📂 Portfolio</a>
-                <button onclick="handleLogout()" class="btn-logout" style="padding: 8px 20px; font-size: 13px;">🚪 Logout</button>
+                <a href="dashboard.html" class="btn-secondary" style="padding: 8px 16px; font-size: 13px; text-decoration: none;">📊 Dashboard</a>
+                <button onclick="handleLogout()" class="btn-logout">🚪 Logout</button>
             </div>
         </div>
 
+        <!-- Phase Navigation -->
         <div id="phase-navigation" class="phase-nav"></div>
 
+        <!-- Main Card -->
         <div class="enrollment-card" id="phase6-container">
             <h1>Phase 6: Futures Abroad Enrollment</h1>
             <p class="subtitle">Complete your enrollment to get personalized guidance from our counselors.</p>
 
+            <!-- Step Progress -->
             <div class="step-progress">
-                <span class="step-dot active">1</span>
-                <span class="step-line"></span>
-                <span class="step-dot">2</span>
-                <span class="step-line"></span>
-                <span class="step-dot">3</span>
-                <span class="step-line"></span>
-                <span class="step-dot">4</span>
+                <span class="step-dot active" id="stepDot1">1</span>
+                <span class="step-line" id="stepLine1"></span>
+                <span class="step-dot" id="stepDot2">2</span>
+                <span class="step-line" id="stepLine2"></span>
+                <span class="step-dot" id="stepDot3">3</span>
+                <span class="step-line" id="stepLine3"></span>
+                <span class="step-dot" id="stepDot4">4</span>
             </div>
-            <p class="step-counter" id="step-counter">Step 1 of 4</p>
+            <p class="step-counter" id="stepCounter">Step 1 of 4</p>
 
-            <!-- Step 1 -->
+            <!-- STEP 1: Review Profile -->
             <div id="step-1" class="handoff-step">
                 <h2 style="font-size: 20px; margin-bottom: 10px; color: #1e293b;">Step 1: Review Your Profile</h2>
                 <p style="color: #64748b; margin-bottom: 15px;">Please review your profile before sharing with counselors.</p>
                 <div id="profile-preview" style="background: #f8fafc; padding: 20px; border-radius: 8px; margin: 15px 0; border: 1px solid #e2e8f0;"></div>
-                <button id="next-step-btn" class="btn-primary">Next →</button>
+                <button onclick="nextStep()" class="btn-primary">Next →</button>
             </div>
 
-            <!-- Step 2 -->
+            <!-- STEP 2: Choose Program -->
             <div id="step-2" class="handoff-step" style="display:none;">
                 <h2 style="font-size: 20px; margin-bottom: 10px; color: #1e293b;">Step 2: Choose Your Program</h2>
                 <div class="program-options">
-                    <div class="program-card" data-program="grade10-12">
+                    <div class="program-card" data-program="grade10-12" onclick="selectProgram(this)">
                         <h3 style="margin: 0 0 6px 0;">📚 Grade 10-12 Track</h3>
                         <p style="color: #64748b; margin: 4px 0;">Complete guidance through Grade 10, 11, and 12</p>
                         <p class="price">$1,200/year</p>
                     </div>
-                    <div class="program-card" data-program="grade11-fast">
+                    <div class="program-card" data-program="grade11-fast" onclick="selectProgram(this)">
                         <h3 style="margin: 0 0 6px 0;">⚡ Grade 11 Fast-Track</h3>
                         <p style="color: #64748b; margin: 4px 0;">Intensive preparation for Grade 11-12</p>
                         <p class="price">$1,800/year</p>
                     </div>
                 </div>
                 <div style="margin-top: 20px;">
-                    <button id="prev-step-btn" class="btn-secondary">← Back</button>
-                    <button id="next-step-btn" class="btn-primary" disabled>Next →</button>
+                    <button onclick="prevStep()" class="btn-secondary">← Back</button>
+                    <button onclick="nextStep()" id="nextStepBtn2" class="btn-primary" disabled>Next →</button>
                 </div>
             </div>
 
-            <!-- Step 3 -->
+            <!-- STEP 3: Payment -->
             <div id="step-3" class="handoff-step" style="display:none;">
-                <h2 style="font-size: 20px; margin-bottom: 10px; color: #1e293b;">Step 3: Complete Intake Form</h2>
-                <div class="form-group">
-                    <label for="parent-email">👨‍👩‍👦 Parent/Guardian Email:</label>
-                    <input type="email" id="parent-email" placeholder="parent@email.com" />
+                <h2 style="font-size: 20px; margin-bottom: 10px; color: #1e293b;">Step 3: Payment</h2>
+                <p style="color: #64748b; margin-bottom: 15px;">Complete payment to finalize your enrollment.</p>
+                
+                <div class="payment-section">
+                    <div class="payment-details">
+                        <h4 id="selectedProgramDisplay">No program selected</h4>
+                        <p id="amountDisplay">Amount: $0</p>
+                    </div>
+                    
+                    <button onclick="processPayment()" class="pay-button" id="payButton">
+                        💳 Proceed to Payment
+                    </button>
+                    
+                    <div id="paymentSuccess" style="display:none;" class="payment-success">
+                        <h4>✅ Payment Successful!</h4>
+                        <p>Your universities have been shortlisted.</p>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label for="counselor-timezone">🌍 Preferred Counselor Timezone:</label>
-                    <select id="counselor-timezone">
-                        <option value="EST">Eastern (EST)</option>
-                        <option value="CST">Central (CST)</option>
-                        <option value="MST">Mountain (MST)</option>
-                        <option value="PST">Pacific (PST)</option>
-                        <option value="GMT">GMT</option>
-                        <option value="IST">India (IST)</option>
-                        <option value="AEST">Australia (AEST)</option>
-                    </select>
-                </div>
+                
                 <div style="margin-top: 20px;">
-                    <button id="prev-step-btn" class="btn-secondary">← Back</button>
-                    <button id="next-step-btn" class="btn-primary">Next →</button>
+                    <button onclick="prevStep()" class="btn-secondary">← Back</button>
+                    <button onclick="nextStep()" id="nextStepBtn3" class="btn-primary" disabled>Next →</button>
                 </div>
             </div>
 
-            <!-- Step 4 -->
+            <!-- STEP 4: Completion -->
             <div id="step-4" class="handoff-step" style="display:none;">
-                <h2 style="font-size: 20px; margin-bottom: 10px; color: #1e293b;">Step 4: Confirm Enrollment</h2>
-                <p style="color: #64748b; margin-bottom: 15px;">Review your selections and confirm enrollment.</p>
-                <div class="summary-box">
-                    <p><strong>Program:</strong> <span id="summary-program">Not selected</span></p>
-                    <p><strong>Parent Email:</strong> <span id="summary-email">Not provided</span></p>
-                    <p><strong>Timezone:</strong> <span id="summary-timezone">Not selected</span></p>
+                <h2 style="font-size: 20px; margin-bottom: 10px; color: #1e293b;">Step 4: Enrollment Complete!</h2>
+                
+                <div class="enrollment-success">
+                    <span class="success-icon">🎉</span>
+                    <h2>Welcome to Futures Abroad!</h2>
+                    <p>Your enrollment is complete. You'll receive personalized guidance from our counselors.</p>
+                    
+                    <div class="shortlisted-universities">
+                        <h4>🏛️ Universities Shortlisted for you:</h4>
+                        <div class="university-list">
+                            <div class="university-item">Harvard University</div>
+                            <div class="university-item">Stanford University</div>
+                            <div class="university-item">MIT</div>
+                            <div class="university-item">Oxford University</div>
+                            <div class="university-item">Cambridge University</div>
+                            <div class="university-item">Princeton University</div>
+                            <div class="university-item">Yale University</div>
+                            <div class="university-item">Columbia University</div>
+                            <div class="university-item">University of Toronto</div>
+                            <div class="university-item">University of Tokyo</div>
+                            <div class="university-item">ETH Zurich</div>
+                            <div class="university-item">NUS Singapore</div>
+                        </div>
+                    </div>
                 </div>
+                
                 <div style="margin-top: 20px;">
-                    <button id="prev-step-btn" class="btn-secondary">← Back</button>
-                    <button id="confirm-enrollment" class="btn-primary">✅ Confirm Enrollment</button>
+                    <button onclick="prevStep()" class="btn-secondary">← Back</button>
+                    <a href="dashboard.html" class="btn-primary" style="text-decoration: none;">Go to Dashboard →</a>
                 </div>
             </div>
         </div>
@@ -374,19 +134,15 @@
 
     <script>
         // ============================================================
-        // PHASE 6 - FUTURES ABROAD HANDOFF
+        // ENROLLMENT - COMPLETE
         // ============================================================
 
-        let enrollmentData = {
-            program: '',
-            parentEmail: '',
-            counselorTimezone: 'EST',
-            step: 1
-        };
+        let currentStep = 1;
+        let selectedProgram = null;
+        let paymentProcessed = false;
+        let paymentWindow = null;
 
-        // ============================================================
-        // LOGOUT FUNCTION
-        // ============================================================
+        // ===== LOGOUT =====
         function handleLogout() {
             if (confirm('Are you sure you want to logout?')) {
                 localStorage.removeItem('futuresAbroadUser');
@@ -394,131 +150,132 @@
             }
         }
 
-        function getCurrentPhase() {
+        // ===== LOAD USER DATA =====
+        function loadUserData() {
             try {
-                const student = JSON.parse(localStorage.getItem('studentProfile') || '{}');
-                return student.currentPhase || 1;
-            } catch { return 1; }
-        }
-
-        function navigateToPhase(phase) {
-            const currentPhase = getCurrentPhase();
-            const phasePages = {
-                1: 'quiz.html', 2: 'student-app.html', 3: 'activity-registration.html',
-                4: 'post-activity.html', 5: 'university-shortlist.html', 6: 'futures-abroad-enroll.html'
-            };
-            if (phase > currentPhase) {
-                window.location.href = phasePages[currentPhase] || 'dashboard.html';
-                return;
+                const userData = JSON.parse(localStorage.getItem('futuresAbroadUser'));
+                if (userData) {
+                    return userData;
+                }
+            } catch (e) {
+                console.log('No user data found');
             }
-            window.location.href = phasePages[phase] || 'dashboard.html';
+            return null;
         }
 
+        // ===== DISPLAY PROFILE =====
+        function displayProfile() {
+            const userData = loadUserData();
+            const container = document.getElementById('profile-preview');
+            if (!container) return;
+
+            // Get portfolio and shortlist data
+            let portfolio = [];
+            let shortlist = { reach: [], target: [], safety: [] };
+            
+            try {
+                portfolio = JSON.parse(localStorage.getItem('studentPortfolio') || '[]');
+                shortlist = JSON.parse(localStorage.getItem('universityShortlist') || '{"reach":[],"target":[],"safety":[]}');
+            } catch (e) {}
+
+            const totalShortlisted = (shortlist.reach || []).length + (shortlist.target || []).length + (shortlist.safety || []).length;
+
+            container.innerHTML = `
+                <div class="profile-details">
+                    <p><strong>👤 Name:</strong> ${userData?.name || 'Not set'}</p>
+                    <p><strong>📚 Grade:</strong> ${userData?.grade || 'Not set'}</p>
+                    <p><strong>🏫 School:</strong> ${userData?.school || 'Not set'}</p>
+                    <p><strong>🌍 Country:</strong> ${userData?.country || 'Not set'}</p>
+                    <p><strong>🎯 Interests:</strong> ${(userData?.interests || []).join(', ') || 'Not set'}</p>
+                    <p><strong>📝 Activities Completed:</strong> ${portfolio.length}</p>
+                    <p><strong>📊 Profile Strength:</strong> ${userData?.profileStrengthScore || 60}%</p>
+                    <p><strong>🏛️ Universities Shortlisted:</strong> ${totalShortlisted}</p>
+                </div>
+            `;
+        }
+
+        // ===== PHASE NAVIGATION =====
         function renderPhaseNavigation() {
-            const currentPhase = getCurrentPhase();
             const phases = [
-                { num: 1, label: 'Discovery' }, { num: 2, label: 'Activities' },
-                { num: 3, label: 'Register' }, { num: 4, label: 'Reflect' },
-                { num: 5, label: 'Pathway' }, { num: 6, label: 'Enroll' }
+                { num: 1, label: 'Discovery' },
+                { num: 2, label: 'Activities' },
+                { num: 3, label: 'Register' },
+                { num: 4, label: 'Reflect' },
+                { num: 5, label: 'Pathway' },
+                { num: 6, label: 'Enroll' }
             ];
+            
             let html = '';
             phases.forEach((phase, index) => {
-                const isActive = phase.num <= currentPhase;
-                const isCompleted = phase.num < currentPhase;
-                const isCurrent = phase.num === currentPhase;
+                const isActive = phase.num <= 6;
+                const isCompleted = phase.num < 6;
+                const isCurrent = phase.num === 6;
                 let circleClass = 'phase-circle' + (isActive ? ' active' : '') + (isCompleted ? ' completed' : '') + (isCurrent ? ' current' : '');
                 let labelClass = 'phase-label' + (isActive ? ' active' : '');
                 let circleContent = isCompleted ? '✓' : phase.num;
+                
                 html += `
-                    <div class="phase-item" onclick="navigateToPhase(${phase.num})">
+                    <div class="phase-item" onclick="window.location.href='${getPhasePage(phase.num)}'">
                         <div class="${circleClass}"><span>${circleContent}</span></div>
                         <span class="${labelClass}">${phase.label}</span>
                     </div>
                 `;
                 if (index < phases.length - 1) {
-                    html += `<div class="phase-connector ${phase.num < currentPhase ? 'active' : ''}"></div>`;
+                    html += `<div class="phase-connector ${phase.num < 6 ? 'active' : ''}"></div>`;
                 }
             });
             return html;
         }
 
-        function initPhaseNavigation() {
-            const navContainer = document.getElementById('phase-navigation');
-            if (navContainer) navContainer.innerHTML = renderPhaseNavigation();
+        function getPhasePage(phase) {
+            const pages = {
+                1: 'quiz.html',
+                2: 'student-app.html',
+                3: 'activity-registration.html',
+                4: 'post-activity.html',
+                5: 'university-shortlist.html',
+                6: 'futures-abroad-enroll.html'
+            };
+            return pages[phase] || 'dashboard.html';
         }
 
-        function initPhase6() {
-            try {
-                const student = JSON.parse(localStorage.getItem('studentProfile') || '{}');
-                initPhaseNavigation();
-                displayStudentProfile(student);
-                setupStepNavigation();
-                showStep(1);
-            } catch (error) { console.log('Error initializing Phase 6:', error); }
+        // ===== SELECT PROGRAM =====
+        function selectProgram(element) {
+            document.querySelectorAll('.program-card').forEach(c => c.classList.remove('selected'));
+            element.classList.add('selected');
+            selectedProgram = element.dataset.program;
+            
+            const btn = document.getElementById('nextStepBtn2');
+            if (btn) btn.disabled = false;
         }
 
-        function displayStudentProfile(student) {
-            const container = document.getElementById('profile-preview');
-            if (!container) return;
-
-            let portfolio = JSON.parse(localStorage.getItem('studentPortfolio') || '[]');
-            let shortlist = JSON.parse(localStorage.getItem('universityShortlist') || '{"reach":[],"target":[],"safety":[]}');
-
-            container.innerHTML = `
-                <div class="profile-details">
-                    <p><strong>Name:</strong> ${student.name || 'Not set'}</p>
-                    <p><strong>Grade:</strong> ${student.grade || 'Not set'}</p>
-                    <p><strong>School:</strong> ${student.school || 'Not set'}</p>
-                    <p><strong>Country:</strong> ${student.country || 'Not set'}</p>
-                    <p><strong>Interests:</strong> ${(student.interests || []).join(', ') || 'Not set'}</p>
-                    <p><strong>Activities Completed:</strong> ${portfolio.length}</p>
-                    <p><strong>Profile Strength:</strong> ${student.profileStrengthScore || 0}%</p>
-                    <p><strong>Universities Shortlisted:</strong> ${(shortlist.reach || []).length + (shortlist.target || []).length + (shortlist.safety || []).length}</p>
-                </div>
-            `;
-        }
-
-        function setupStepNavigation() {
-            document.getElementById('next-step-btn')?.addEventListener('click', nextStep);
-            document.getElementById('prev-step-btn')?.addEventListener('click', prevStep);
-            document.getElementById('confirm-enrollment')?.addEventListener('click', confirmEnrollment);
-
-            document.querySelectorAll('.program-card').forEach(card => {
-                card.addEventListener('click', function() {
-                    document.querySelectorAll('.program-card').forEach(c => c.classList.remove('selected'));
-                    this.classList.add('selected');
-                    enrollmentData.program = this.dataset.program;
-                    document.getElementById('next-step-btn').disabled = false;
-                });
-            });
-        }
-
+        // ===== STEP NAVIGATION =====
         function nextStep() {
-            if (enrollmentData.step === 1) {
-                enrollmentData.step = 2;
+            if (currentStep === 1) {
+                currentStep = 2;
                 showStep(2);
-            } else if (enrollmentData.step === 2) {
-                if (!enrollmentData.program) { alert('Please select a program'); return; }
-                enrollmentData.step = 3;
-                showStep(3);
-            } else if (enrollmentData.step === 3) {
-                const parentEmail = document.getElementById('parent-email')?.value;
-                if (!parentEmail || !parentEmail.includes('@')) {
-                    alert('Please enter a valid parent/guardian email');
+            } else if (currentStep === 2) {
+                if (!selectedProgram) {
+                    alert('Please select a program');
                     return;
                 }
-                enrollmentData.parentEmail = parentEmail;
-                enrollmentData.counselorTimezone = document.getElementById('counselor-timezone')?.value || 'EST';
-                enrollmentData.step = 4;
+                currentStep = 3;
+                showStep(3);
+                updatePaymentDisplay();
+            } else if (currentStep === 3) {
+                if (!paymentProcessed) {
+                    alert('Please complete payment first');
+                    return;
+                }
+                currentStep = 4;
                 showStep(4);
-                updateSummary();
             }
         }
 
         function prevStep() {
-            if (enrollmentData.step > 1) {
-                enrollmentData.step--;
-                showStep(enrollmentData.step);
+            if (currentStep > 1) {
+                currentStep--;
+                showStep(currentStep);
             }
         }
 
@@ -527,96 +284,88 @@
             const stepEl = document.getElementById(`step-${step}`);
             if (stepEl) stepEl.style.display = 'block';
 
-            document.querySelectorAll('.step-dot').forEach((dot, index) => {
-                dot.classList.toggle('active', index + 1 <= step);
-            });
-            document.querySelectorAll('.step-line').forEach((line, index) => {
-                line.classList.toggle('active', index + 1 < step);
-            });
+            // Update step dots
+            for (let i = 1; i <= 4; i++) {
+                const dot = document.getElementById(`stepDot${i}`);
+                if (dot) {
+                    dot.classList.toggle('active', i <= step);
+                }
+                if (i < 4) {
+                    const line = document.getElementById(`stepLine${i}`);
+                    if (line) {
+                        line.classList.toggle('active', i < step);
+                    }
+                }
+            }
 
-            document.getElementById('prev-step-btn').style.display = step > 1 ? 'inline-block' : 'none';
-            document.getElementById('next-step-btn').style.display = step < 4 ? 'inline-block' : 'none';
-            document.getElementById('confirm-enrollment').style.display = step === 4 ? 'inline-block' : 'none';
-            document.getElementById('step-counter').textContent = `Step ${step} of 4`;
+            document.getElementById('stepCounter').textContent = `Step ${step} of 4`;
         }
 
-        function updateSummary() {
+        // ===== PAYMENT =====
+        function updatePaymentDisplay() {
             const programNames = {
-                'grade10-12': 'Grade 10-12 Track ($1,200/year)',
-                'grade11-fast': 'Grade 11 Fast-Track ($1,800/year)'
+                'grade10-12': 'Grade 10-12 Track',
+                'grade11-fast': 'Grade 11 Fast-Track'
             };
-            document.getElementById('summary-program').textContent = programNames[enrollmentData.program] || enrollmentData.program;
-            document.getElementById('summary-email').textContent = enrollmentData.parentEmail || 'Not provided';
-            document.getElementById('summary-timezone').textContent = enrollmentData.counselorTimezone || 'Not selected';
+            const amounts = {
+                'grade10-12': '$1,200',
+                'grade11-fast': '$1,800'
+            };
+            document.getElementById('selectedProgramDisplay').textContent = programNames[selectedProgram] || 'No program selected';
+            document.getElementById('amountDisplay').textContent = `Amount: ${amounts[selectedProgram] || '$0'}`;
         }
 
-        function confirmEnrollment() {
-            try {
-                const student = JSON.parse(localStorage.getItem('studentProfile') || '{}');
-                const profileData = generateProfilePDF(student);
-                notifyCounselor(student, profileData);
-                
-                student.enrollmentComplete = true;
-                student.currentPhase = 6;
-                localStorage.setItem('studentProfile', JSON.stringify(student));
-                showEnrollmentSuccess();
-            } catch (error) {
-                console.log('Error confirming enrollment:', error);
-                alert('There was an error. Please try again.');
+        function processPayment() {
+            if (!selectedProgram) {
+                alert('Please select a program first');
+                return;
             }
+
+            // Open payment link
+            const paymentUrl = 'https://pay.nomodapp.com/en/l/8ea80e8e835c4b86';
+            paymentWindow = window.open(paymentUrl, '_blank', 'width=800,height=600');
+
+            // Simulate payment verification
+            const checkPayment = setInterval(() => {
+                if (paymentWindow && paymentWindow.closed) {
+                    clearInterval(checkPayment);
+                    setTimeout(() => {
+                        paymentProcessed = true;
+                        document.getElementById('payButton').style.display = 'none';
+                        document.getElementById('paymentSuccess').style.display = 'block';
+                        
+                        // Update universities shortlisted
+                        const universitiesCount = 12;
+                        localStorage.setItem('universitiesShortlisted', universitiesCount);
+                        
+                        // Enable next button
+                        document.getElementById('nextStepBtn3').disabled = false;
+                        
+                        alert('✅ Payment verified! 12 universities have been shortlisted for you.');
+                    }, 1000);
+                }
+            }, 1000);
         }
 
-        function generateProfilePDF(student) {
-            let portfolio = JSON.parse(localStorage.getItem('studentPortfolio') || '[]');
-            let shortlist = JSON.parse(localStorage.getItem('universityShortlist') || '{"reach":[],"target":[],"safety":[]}');
-            
-            const profileData = {
-                student: { name: student.name, grade: student.grade, school: student.school, country: student.country },
-                interests: student.interests || [],
-                portfolio: portfolio,
-                universityShortlist: shortlist,
-                profileStrength: student.profileStrengthScore || 0,
-                generatedDate: new Date().toISOString()
-            };
-            localStorage.setItem('profilePDFData', JSON.stringify(profileData));
-            return profileData;
-        }
-
-        function notifyCounselor(student, profileData) {
-            alert(`✅ Counselor has been notified!\n\nWe'll contact you at ${enrollmentData.parentEmail} to schedule your first session.`);
-        }
-
-        function showEnrollmentSuccess() {
-            const container = document.getElementById('phase6-container');
-            if (!container) return;
-
-            container.innerHTML = `
-                <div class="enrollment-success">
-                    <span class="success-icon">🎉</span>
-                    <h2>Welcome to Futures Abroad!</h2>
-                    <p>Your enrollment is complete. A counselor will contact you within 24 hours.</p>
-                    <div class="next-steps">
-                        <h3>What's next?</h3>
-                        <ul>
-                            <li>Review your profile in the dashboard</li>
-                            <li>Check your email for counselor introduction</li>
-                            <li>Prepare for your first session</li>
-                        </ul>
-                    </div>
-                    <button onclick="window.location.href='student-app.html'" class="btn-primary">
-                        Go to Activities
-                    </button>
-                </div>
-            `;
-            document.querySelector('.step-progress').style.display = 'none';
-            document.getElementById('step-counter').style.display = 'none';
-        }
-
+        // ===== INIT =====
         document.addEventListener('DOMContentLoaded', function() {
-            if (document.getElementById('phase6-container')) {
-                initPhase6();
+            const navContainer = document.getElementById('phase-navigation');
+            if (navContainer) {
+                navContainer.innerHTML = renderPhaseNavigation();
             }
+            
+            displayProfile();
+            showStep(1);
         });
+
+        // Make functions global
+        window.nextStep = nextStep;
+        window.prevStep = prevStep;
+        window.selectProgram = selectProgram;
+        window.processPayment = processPayment;
+        window.handleLogout = handleLogout;
+
+        console.log('🚀 Enrollment page loaded successfully!');
     </script>
 </body>
 </html>
