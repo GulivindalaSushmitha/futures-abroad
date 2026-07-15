@@ -3,130 +3,760 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Enrollment - Futures Abroad</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/enrollment.css">
+    <title>Phase 6: Enrollment</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        /* ============================================================
+           PHASE 6 - ENROLLMENT
+           ============================================================ */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+            background: #0a0a1a;
+            overflow-x: hidden;
+        }
+
+        /* ===== BACKGROUND WITH STUDENTS ===== */
+        .phase6-wrapper {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+            background: linear-gradient(135deg, #0a0a1a 0%, #1a1040 30%, #2d1b69 60%, #1a1040 100%);
+            overflow: hidden;
+        }
+
+        .bg-particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .particle {
+            position: absolute;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(108, 60, 225, 0.25), transparent);
+            animation: floatParticle 16s ease-in-out infinite;
+        }
+
+        .particle:nth-child(1) { width: 320px; height: 320px; top: -100px; left: -80px; animation-delay: 0s; }
+        .particle:nth-child(2) { width: 280px; height: 280px; bottom: -120px; right: -60px; animation-delay: 3s; }
+        .particle:nth-child(3) { width: 220px; height: 220px; top: 40%; right: 5%; animation-delay: 6s; }
+        .particle:nth-child(4) { width: 350px; height: 350px; bottom: 20%; left: -100px; animation-delay: 2s; }
+        .particle:nth-child(5) { width: 180px; height: 180px; top: 15%; left: 25%; animation-delay: 5s; }
+
+        @keyframes floatParticle {
+            0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.25; }
+            33% { transform: translate(50px, -40px) scale(1.2); opacity: 0.45; }
+            66% { transform: translate(-30px, 40px) scale(0.8); opacity: 0.3; }
+        }
+
+        /* ===== ENROLLMENT SCENE (Watermark) ===== */
+        .enrollment-scene {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0.07;
+        }
+
+        .enrollment-scene svg {
+            width: 100%;
+            height: 100%;
+            max-width: 1200px;
+            max-height: 800px;
+        }
+
+        /* ===== MAIN CONTENT ===== */
+        .phase6-container {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            max-width: 950px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 28px;
+            padding: 45px 50px;
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5), 0 0 40px rgba(108, 60, 225, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            animation: slideUp 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px) scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        /* ===== HEADER ===== */
+        .phase6-header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #f0e6ff;
+        }
+
+        .phase6-header .phase-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #6C3CE1, #a855f7);
+            color: white;
+            padding: 6px 20px;
+            border-radius: 50px;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+        }
+
+        .phase6-header h1 {
+            font-size: 28px;
+            font-weight: 800;
+            color: #1a1040;
+            margin-bottom: 4px;
+        }
+
+        .phase6-header p {
+            font-size: 16px;
+            color: #6b5b8a;
+        }
+
+        /* ===== STEP PROGRESS ===== */
+        .step-progress {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin: 20px 0 30px;
+        }
+
+        .step-dot {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #e8e0f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: #a898b8;
+            font-size: 14px;
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .step-dot.active {
+            background: linear-gradient(135deg, #6C3CE1, #a855f7);
+            color: white;
+            box-shadow: 0 0 0 4px rgba(108, 60, 225, 0.2);
+            transform: scale(1.1);
+        }
+
+        .step-dot.done {
+            background: #22c55e;
+            color: white;
+        }
+
+        .step-line {
+            width: 50px;
+            height: 3px;
+            background: #e8e0f0;
+            border-radius: 3px;
+            transition: all 0.5s;
+        }
+
+        .step-line.active {
+            background: linear-gradient(90deg, #6C3CE1, #a855f7);
+        }
+
+        .step-counter {
+            text-align: center;
+            color: #6b5b8a;
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 20px;
+        }
+
+        /* ===== STEPS ===== */
+        .step-content {
+            display: none;
+            animation: fadeStep 0.5s ease;
+        }
+
+        .step-content.active {
+            display: block;
+        }
+
+        @keyframes fadeStep {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .step-content h2 {
+            font-size: 20px;
+            font-weight: 700;
+            color: #1a1040;
+            margin-bottom: 6px;
+        }
+
+        .step-content .step-desc {
+            color: #6b5b8a;
+            margin-bottom: 20px;
+            font-size: 15px;
+        }
+
+        /* ===== PROFILE REVIEW ===== */
+        .profile-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin: 16px 0 24px;
+        }
+
+        .profile-field {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 16px;
+            background: #f8f4ff;
+            border-radius: 10px;
+            border: 1px solid #e8e0f0;
+            font-size: 14px;
+        }
+
+        .profile-field .label {
+            font-weight: 600;
+            color: #1a1040;
+        }
+
+        .profile-field .value {
+            color: #4a3a6a;
+            font-weight: 500;
+        }
+
+        .profile-field.highlight {
+            background: linear-gradient(135deg, #6C3CE1, #a855f7);
+            border: none;
+            grid-column: 1 / -1;
+        }
+
+        .profile-field.highlight .label,
+        .profile-field.highlight .value {
+            color: white;
+        }
+
+        /* ===== PROGRAM CARDS ===== */
+        .program-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin: 16px 0 24px;
+        }
+
+        .program-card {
+            padding: 24px;
+            border: 2px solid #e8e0f0;
+            border-radius: 14px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            text-align: center;
+            background: white;
+        }
+
+        .program-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 30px rgba(108, 60, 225, 0.1);
+        }
+
+        .program-card.selected {
+            border-color: #6C3CE1;
+            background: #f8f4ff;
+            box-shadow: 0 0 0 4px rgba(108, 60, 225, 0.1);
+            transform: translateY(-4px);
+        }
+
+        .program-card .icon {
+            font-size: 32px;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .program-card h3 {
+            font-size: 17px;
+            font-weight: 700;
+            color: #1a1040;
+            margin-bottom: 4px;
+        }
+
+        .program-card p {
+            font-size: 13px;
+            color: #6b5b8a;
+            margin-bottom: 8px;
+        }
+
+        .program-card .price {
+            font-size: 22px;
+            font-weight: 800;
+            color: #6C3CE1;
+        }
+
+        .program-card .price small {
+            font-size: 13px;
+            font-weight: 400;
+            color: #6b5b8a;
+        }
+
+        /* ===== PAYMENT SECTION ===== */
+        .payment-section {
+            text-align: center;
+            padding: 30px;
+            background: #f8f4ff;
+            border-radius: 16px;
+            border: 1px solid #e8e0f0;
+            margin: 16px 0 24px;
+        }
+
+        .payment-section .selected-program {
+            font-size: 18px;
+            font-weight: 700;
+            color: #1a1040;
+            margin-bottom: 4px;
+        }
+
+        .payment-section .amount {
+            font-size: 32px;
+            font-weight: 800;
+            color: #6C3CE1;
+            margin-bottom: 16px;
+        }
+
+        .pay-btn {
+            padding: 16px 50px;
+            background: linear-gradient(135deg, #6C3CE1, #a855f7);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 17px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            font-family: 'Inter', sans-serif;
+        }
+
+        .pay-btn:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 12px 40px rgba(108, 60, 225, 0.4);
+        }
+
+        .pay-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .payment-success {
+            margin-top: 16px;
+            padding: 16px;
+            background: #d4edda;
+            border-radius: 10px;
+            color: #155724;
+            font-weight: 600;
+            animation: fadeInUp 0.5s ease;
+            display: none;
+        }
+
+        .payment-success.show {
+            display: block;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ===== UNIVERSITIES ===== */
+        .universities-section {
+            margin: 20px 0 24px;
+            padding: 20px;
+            background: #f8f4ff;
+            border-radius: 16px;
+            border: 1px solid #e8e0f0;
+        }
+
+        .universities-section h3 {
+            font-size: 16px;
+            font-weight: 700;
+            color: #1a1040;
+            margin-bottom: 12px;
+        }
+
+        .uni-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 10px;
+        }
+
+        .uni-item {
+            padding: 10px 14px;
+            background: white;
+            border-radius: 10px;
+            border: 1px solid #e8e0f0;
+            text-align: center;
+            font-size: 13px;
+            font-weight: 500;
+            color: #1a1040;
+            transition: all 0.3s;
+        }
+
+        .uni-item:hover {
+            border-color: #6C3CE1;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(108, 60, 225, 0.08);
+        }
+
+        /* ===== COMPLETION ===== */
+        .completion {
+            text-align: center;
+            padding: 20px 0;
+        }
+
+        .completion .big-icon {
+            font-size: 72px;
+            display: block;
+            margin-bottom: 12px;
+            animation: bounceIn 0.6s ease;
+        }
+
+        @keyframes bounceIn {
+            0% { transform: scale(0); opacity: 0; }
+            60% { transform: scale(1.2); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .completion h2 {
+            font-size: 28px;
+            color: #1a1040;
+            margin-bottom: 6px;
+        }
+
+        .completion p {
+            color: #6b5b8a;
+            font-size: 16px;
+            margin-bottom: 16px;
+        }
+
+        /* ===== BUTTONS ===== */
+        .action-buttons {
+            display: flex;
+            gap: 14px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 8px;
+        }
+
+        .btn-next {
+            padding: 14px 44px;
+            background: linear-gradient(135deg, #6C3CE1, #a855f7);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            font-family: 'Inter', sans-serif;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-next:hover:not(:disabled) {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 12px 40px rgba(108, 60, 225, 0.4);
+        }
+
+        .btn-next:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-back {
+            padding: 14px 36px;
+            background: transparent;
+            color: #6C3CE1;
+            border: 2px solid #6C3CE1;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: 'Inter', sans-serif;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-back:hover {
+            background: #f8f4ff;
+            transform: translateY(-2px);
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 768px) {
+            .phase6-container {
+                padding: 28px 20px;
+            }
+
+            .phase6-header h1 {
+                font-size: 22px;
+            }
+
+            .profile-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .program-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .uni-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .step-progress {
+                gap: 4px;
+            }
+
+            .step-dot {
+                width: 32px;
+                height: 32px;
+                font-size: 12px;
+            }
+
+            .step-line {
+                width: 25px;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+                width: 100%;
+            }
+
+            .btn-next, .btn-back {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .phase6-container {
+                padding: 20px 14px;
+                border-radius: 20px;
+            }
+
+            .phase6-header h1 {
+                font-size: 19px;
+            }
+
+            .uni-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .step-dot {
+                width: 28px;
+                height: 28px;
+                font-size: 10px;
+            }
+
+            .step-line {
+                width: 15px;
+            }
+        }
+    </style>
 </head>
 <body>
-    <div class="app-container">
-        <!-- Header -->
-        <div class="header-bar">
-            <div class="logo">🚀 Futures <span>Abroad</span></div>
-            <div class="header-actions">
-                <a href="student-app.html" class="btn-secondary" style="padding: 8px 16px; font-size: 13px; text-decoration: none;">🎯 Activities</a>
-                <a href="portfolio.html" class="btn-secondary" style="padding: 8px 16px; font-size: 13px; text-decoration: none;">📂 Portfolio</a>
-                <a href="dashboard.html" class="btn-secondary" style="padding: 8px 16px; font-size: 13px; text-decoration: none;">📊 Dashboard</a>
-                <button onclick="handleLogout()" class="btn-logout">🚪 Logout</button>
-            </div>
+
+    <div class="phase6-wrapper">
+        <!-- Background Particles -->
+        <div class="bg-particles">
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
         </div>
 
-        <!-- Phase Navigation -->
-        <div id="phase-navigation" class="phase-nav"></div>
+        <!-- Enrollment Scene (Watermark) -->
+        <div class="enrollment-scene">
+            <svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
+                <!-- Students celebrating -->
+                <circle cx="250" cy="350" r="55" fill="rgba(255,255,255,0.2)"/>
+                <circle cx="350" cy="370" r="50" fill="rgba(255,255,255,0.17)"/>
+                <circle cx="460" cy="340" r="58" fill="rgba(255,255,255,0.22)"/>
+                <circle cx="570" cy="360" r="48" fill="rgba(255,255,255,0.18)"/>
+                <circle cx="680" cy="350" r="54" fill="rgba(255,255,255,0.20)"/>
+                <circle cx="790" cy="370" r="52" fill="rgba(255,255,255,0.16)"/>
+                <circle cx="900" cy="345" r="56" fill="rgba(255,255,255,0.21)"/>
 
-        <!-- Main Card -->
-        <div class="enrollment-card" id="phase6-container">
-            <h1>Phase 6: Futures Abroad Enrollment</h1>
-            <p class="subtitle">Complete your enrollment to get personalized guidance from our counselors.</p>
+                <!-- Celebration stars -->
+                <text x="320" y="200" font-size="30" fill="rgba(255,215,0,0.1)">✦</text>
+                <text x="520" y="180" font-size="40" fill="rgba(255,215,0,0.08)">✦</text>
+                <text x="720" y="190" font-size="35" fill="rgba(255,215,0,0.09)">✦</text>
+                <text x="420" y="160" font-size="25" fill="rgba(255,215,0,0.07)">✦</text>
+                <text x="620" y="170" font-size="28" fill="rgba(255,215,0,0.08)">✦</text>
+                <text x="820" y="155" font-size="32" fill="rgba(255,215,0,0.06)">✦</text>
+
+                <!-- Certificate/Diploma -->
+                <rect x="450" y="430" width="300" height="180" rx="8" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.06)" stroke-width="2"/>
+                <rect x="470" y="450" width="260" height="30" rx="3" fill="rgba(255,255,255,0.04)"/>
+                <rect x="470" y="490" width="200" height="20" rx="3" fill="rgba(255,255,255,0.03)"/>
+                <rect x="470" y="520" width="180" height="20" rx="3" fill="rgba(255,255,255,0.03)"/>
+                <rect x="470" y="550" width="220" height="20" rx="3" fill="rgba(255,255,255,0.03)"/>
+
+                <!-- Text "ENROLLMENT" -->
+                <text x="600" y="700" text-anchor="middle" font-size="70" font-weight="900" fill="rgba(255,255,255,0.04)" letter-spacing="12">ENROLLMENT</text>
+            </svg>
+        </div>
+
+        <!-- Main Content -->
+        <div class="phase6-container">
+            <div class="phase6-header">
+                <span class="phase-badge">🚀 Phase 6</span>
+                <h1>Futures Abroad Enrollment</h1>
+                <p>Complete your enrollment to get personalized guidance from our counselors.</p>
+            </div>
 
             <!-- Step Progress -->
-            <div class="step-progress">
-                <span class="step-dot active" id="stepDot1">1</span>
-                <span class="step-line" id="stepLine1"></span>
-                <span class="step-dot" id="stepDot2">2</span>
-                <span class="step-line" id="stepLine2"></span>
-                <span class="step-dot" id="stepDot3">3</span>
-                <span class="step-line" id="stepLine3"></span>
-                <span class="step-dot" id="stepDot4">4</span>
+            <div class="step-progress" id="stepProgress">
+                <span class="step-dot active" id="dot1">1</span>
+                <span class="step-line active" id="line1"></span>
+                <span class="step-dot" id="dot2">2</span>
+                <span class="step-line" id="line2"></span>
+                <span class="step-dot" id="dot3">3</span>
+                <span class="step-line" id="line3"></span>
+                <span class="step-dot" id="dot4">4</span>
             </div>
-            <p class="step-counter" id="stepCounter">Step 1 of 4</p>
+            <div class="step-counter" id="stepCounter">Step 1 of 4</div>
 
-            <!-- STEP 1: Review Profile -->
-            <div id="step-1" class="handoff-step">
-                <h2 style="font-size: 20px; margin-bottom: 10px; color: #1e293b;">Step 1: Review Your Profile</h2>
-                <p style="color: #64748b; margin-bottom: 15px;">Please review your profile before sharing with counselors.</p>
-                <div id="profile-preview" style="background: #f8fafc; padding: 20px; border-radius: 8px; margin: 15px 0; border: 1px solid #e2e8f0;"></div>
-                <button onclick="nextStep()" class="btn-primary">Next →</button>
+            <!-- STEP 1: Profile -->
+            <div class="step-content active" id="step1">
+                <h2>Step 1: Review Your Profile</h2>
+                <p class="step-desc">Please review your profile before sharing with counselors.</p>
+
+                <div class="profile-grid" id="profileGrid">
+                    <div class="profile-field"><span class="label">👤 Name</span><span class="value" id="pName">Not set</span></div>
+                    <div class="profile-field"><span class="label">📚 Grade</span><span class="value" id="pGrade">Not set</span></div>
+                    <div class="profile-field"><span class="label">🏫 School</span><span class="value" id="pSchool">Not set</span></div>
+                    <div class="profile-field"><span class="label">🌍 Country</span><span class="value" id="pCountry">Not set</span></div>
+                    <div class="profile-field"><span class="label">🎯 Interests</span><span class="value" id="pInterests">Not set</span></div>
+                    <div class="profile-field"><span class="label">📝 Activities Completed</span><span class="value" id="pActivities">0</span></div>
+                    <div class="profile-field"><span class="label">📊 Profile Strength</span><span class="value" id="pStrength">60%</span></div>
+                    <div class="profile-field highlight"><span class="label">🏛️ Universities Shortlisted</span><span class="value" id="pUniversities">0</span></div>
+                </div>
+
+                <div class="action-buttons">
+                    <button class="btn-next" onclick="goToStep(2)">Next →</button>
+                </div>
             </div>
 
-            <!-- STEP 2: Choose Program -->
-            <div id="step-2" class="handoff-step" style="display:none;">
-                <h2 style="font-size: 20px; margin-bottom: 10px; color: #1e293b;">Step 2: Choose Your Program</h2>
-                <div class="program-options">
-                    <div class="program-card" data-program="grade10-12" onclick="selectProgram(this)">
-                        <h3 style="margin: 0 0 6px 0;">📚 Grade 10-12 Track</h3>
-                        <p style="color: #64748b; margin: 4px 0;">Complete guidance through Grade 10, 11, and 12</p>
-                        <p class="price">$1,200/year</p>
+            <!-- STEP 2: Program -->
+            <div class="step-content" id="step2">
+                <h2>Step 2: Choose Your Program</h2>
+                <p class="step-desc">Select the program that best fits your academic journey.</p>
+
+                <div class="program-grid">
+                    <div class="program-card" onclick="selectProgram(this, 'grade10-12')">
+                        <span class="icon">📚</span>
+                        <h3>Grade 10-12 Track</h3>
+                        <p>Complete guidance through Grade 10, 11, and 12</p>
+                        <div class="price">$1,200 <small>/year</small></div>
                     </div>
-                    <div class="program-card" data-program="grade11-fast" onclick="selectProgram(this)">
-                        <h3 style="margin: 0 0 6px 0;">⚡ Grade 11 Fast-Track</h3>
-                        <p style="color: #64748b; margin: 4px 0;">Intensive preparation for Grade 11-12</p>
-                        <p class="price">$1,800/year</p>
+                    <div class="program-card" onclick="selectProgram(this, 'grade11-fast')">
+                        <span class="icon">⚡</span>
+                        <h3>Grade 11 Fast-Track</h3>
+                        <p>Intensive preparation for Grade 11-12</p>
+                        <div class="price">$1,800 <small>/year</small></div>
                     </div>
                 </div>
-                <div style="margin-top: 20px;">
-                    <button onclick="prevStep()" class="btn-secondary">← Back</button>
-                    <button onclick="nextStep()" id="nextStepBtn2" class="btn-primary" disabled>Next →</button>
+
+                <div class="action-buttons">
+                    <button class="btn-back" onclick="goToStep(1)">← Back</button>
+                    <button class="btn-next" id="nextStep2" onclick="goToStep(3)" disabled>Next →</button>
                 </div>
             </div>
 
             <!-- STEP 3: Payment -->
-            <div id="step-3" class="handoff-step" style="display:none;">
-                <h2 style="font-size: 20px; margin-bottom: 10px; color: #1e293b;">Step 3: Payment</h2>
-                <p style="color: #64748b; margin-bottom: 15px;">Complete payment to finalize your enrollment.</p>
-                
+            <div class="step-content" id="step3">
+                <h2>Step 3: Complete Payment</h2>
+                <p class="step-desc">Complete payment to finalize your enrollment.</p>
+
                 <div class="payment-section">
-                    <div class="payment-details">
-                        <h4 id="selectedProgramDisplay">No program selected</h4>
-                        <p id="amountDisplay">Amount: $0</p>
-                    </div>
-                    
-                    <button onclick="processPayment()" class="pay-button" id="payButton">
-                        💳 Proceed to Payment
-                    </button>
-                    
-                    <div id="paymentSuccess" style="display:none;" class="payment-success">
-                        <h4>✅ Payment Successful!</h4>
-                        <p>Your universities have been shortlisted.</p>
+                    <div class="selected-program" id="selectedProgramDisplay">No program selected</div>
+                    <div class="amount" id="amountDisplay">$0</div>
+                    <button class="pay-btn" id="payBtn" onclick="processPayment()">💳 Proceed to Payment</button>
+                    <div class="payment-success" id="paymentSuccess">
+                        ✅ Payment Successful! Your universities have been shortlisted.
                     </div>
                 </div>
-                
-                <div style="margin-top: 20px;">
-                    <button onclick="prevStep()" class="btn-secondary">← Back</button>
-                    <button onclick="nextStep()" id="nextStepBtn3" class="btn-primary" disabled>Next →</button>
+
+                <div class="action-buttons">
+                    <button class="btn-back" onclick="goToStep(2)">← Back</button>
+                    <button class="btn-next" id="nextStep3" onclick="goToStep(4)" disabled>Next →</button>
                 </div>
             </div>
 
             <!-- STEP 4: Completion -->
-            <div id="step-4" class="handoff-step" style="display:none;">
-                <h2 style="font-size: 20px; margin-bottom: 10px; color: #1e293b;">Step 4: Enrollment Complete!</h2>
-                
-                <div class="enrollment-success">
-                    <span class="success-icon">🎉</span>
-                    <h2>Welcome to Futures Abroad!</h2>
-                    <p>Your enrollment is complete. You'll receive personalized guidance from our counselors.</p>
-                    
-                    <div class="shortlisted-universities">
-                        <h4>🏛️ Universities Shortlisted for you:</h4>
-                        <div class="university-list">
-                            <div class="university-item">Harvard University</div>
-                            <div class="university-item">Stanford University</div>
-                            <div class="university-item">MIT</div>
-                            <div class="university-item">Oxford University</div>
-                            <div class="university-item">Cambridge University</div>
-                            <div class="university-item">Princeton University</div>
-                            <div class="university-item">Yale University</div>
-                            <div class="university-item">Columbia University</div>
-                            <div class="university-item">University of Toronto</div>
-                            <div class="university-item">University of Tokyo</div>
-                            <div class="university-item">ETH Zurich</div>
-                            <div class="university-item">NUS Singapore</div>
+            <div class="step-content" id="step4">
+                <div class="completion">
+                    <span class="big-icon">🎉</span>
+                    <h2>Enrollment Complete!</h2>
+                    <p>Welcome to Futures Abroad! You'll receive personalized guidance from our counselors.</p>
+
+                    <div class="universities-section">
+                        <h3>🏛️ Universities Shortlisted for You</h3>
+                        <div class="uni-grid" id="uniGrid">
+                            <div class="uni-item">Harvard University</div>
+                            <div class="uni-item">Stanford University</div>
+                            <div class="uni-item">MIT</div>
+                            <div class="uni-item">Oxford University</div>
+                            <div class="uni-item">Cambridge University</div>
+                            <div class="uni-item">Princeton University</div>
+                            <div class="uni-item">Yale University</div>
+                            <div class="uni-item">Columbia University</div>
+                            <div class="uni-item">University of Toronto</div>
+                            <div class="uni-item">University of Tokyo</div>
+                            <div class="uni-item">ETH Zurich</div>
+                            <div class="uni-item">NUS Singapore</div>
                         </div>
                     </div>
                 </div>
-                
-                <div style="margin-top: 20px;">
-                    <button onclick="prevStep()" class="btn-secondary">← Back</button>
-                    <a href="dashboard.html" class="btn-primary" style="text-decoration: none;">Go to Dashboard →</a>
+
+                <div class="action-buttons">
+                    <button class="btn-back" onclick="goToStep(3)">← Back</button>
+                    <a href="dashboard.html" class="btn-next">Go to Dashboard →</a>
                 </div>
             </div>
         </div>
@@ -134,7 +764,7 @@
 
     <script>
         // ============================================================
-        // ENROLLMENT - COMPLETE
+        // PHASE 6 - COMPLETE
         // ============================================================
 
         let currentStep = 1;
@@ -142,168 +772,77 @@
         let paymentProcessed = false;
         let paymentWindow = null;
 
-        // ===== LOGOUT =====
-        function handleLogout() {
-            if (confirm('Are you sure you want to logout?')) {
-                localStorage.removeItem('futuresAbroadUser');
-                window.location.href = 'login.html';
-            }
-        }
-
         // ===== LOAD USER DATA =====
         function loadUserData() {
             try {
                 const userData = JSON.parse(localStorage.getItem('futuresAbroadUser'));
                 if (userData) {
-                    return userData;
+                    document.getElementById('pName').textContent = userData.name || 'Not set';
+                    document.getElementById('pGrade').textContent = userData.grade ? `Grade ${userData.grade}` : 'Not set';
+                    document.getElementById('pSchool').textContent = userData.school || 'Not set';
+                    document.getElementById('pCountry').textContent = userData.country || 'Not set';
+                    document.getElementById('pInterests').textContent = (userData.interests || []).join(', ') || 'Not set';
+
+                    // Activities completed
+                    try {
+                        const portfolio = JSON.parse(localStorage.getItem('studentPortfolio') || '[]');
+                        document.getElementById('pActivities').textContent = portfolio.length;
+                    } catch (e) {}
+
+                    // Profile strength
+                    document.getElementById('pStrength').textContent = `${userData.profileStrengthScore || 60}%`;
+
+                    // Universities shortlisted
+                    const uniCount = localStorage.getItem('universitiesShortlisted') || 0;
+                    document.getElementById('pUniversities').textContent = uniCount;
                 }
             } catch (e) {
                 console.log('No user data found');
             }
-            return null;
-        }
-
-        // ===== DISPLAY PROFILE =====
-        function displayProfile() {
-            const userData = loadUserData();
-            const container = document.getElementById('profile-preview');
-            if (!container) return;
-
-            // Get portfolio and shortlist data
-            let portfolio = [];
-            let shortlist = { reach: [], target: [], safety: [] };
-            
-            try {
-                portfolio = JSON.parse(localStorage.getItem('studentPortfolio') || '[]');
-                shortlist = JSON.parse(localStorage.getItem('universityShortlist') || '{"reach":[],"target":[],"safety":[]}');
-            } catch (e) {}
-
-            const totalShortlisted = (shortlist.reach || []).length + (shortlist.target || []).length + (shortlist.safety || []).length;
-
-            container.innerHTML = `
-                <div class="profile-details">
-                    <p><strong>👤 Name:</strong> ${userData?.name || 'Not set'}</p>
-                    <p><strong>📚 Grade:</strong> ${userData?.grade || 'Not set'}</p>
-                    <p><strong>🏫 School:</strong> ${userData?.school || 'Not set'}</p>
-                    <p><strong>🌍 Country:</strong> ${userData?.country || 'Not set'}</p>
-                    <p><strong>🎯 Interests:</strong> ${(userData?.interests || []).join(', ') || 'Not set'}</p>
-                    <p><strong>📝 Activities Completed:</strong> ${portfolio.length}</p>
-                    <p><strong>📊 Profile Strength:</strong> ${userData?.profileStrengthScore || 60}%</p>
-                    <p><strong>🏛️ Universities Shortlisted:</strong> ${totalShortlisted}</p>
-                </div>
-            `;
-        }
-
-        // ===== PHASE NAVIGATION =====
-        function renderPhaseNavigation() {
-            const phases = [
-                { num: 1, label: 'Discovery' },
-                { num: 2, label: 'Activities' },
-                { num: 3, label: 'Register' },
-                { num: 4, label: 'Reflect' },
-                { num: 5, label: 'Pathway' },
-                { num: 6, label: 'Enroll' }
-            ];
-            
-            let html = '';
-            phases.forEach((phase, index) => {
-                const isActive = phase.num <= 6;
-                const isCompleted = phase.num < 6;
-                const isCurrent = phase.num === 6;
-                let circleClass = 'phase-circle' + (isActive ? ' active' : '') + (isCompleted ? ' completed' : '') + (isCurrent ? ' current' : '');
-                let labelClass = 'phase-label' + (isActive ? ' active' : '');
-                let circleContent = isCompleted ? '✓' : phase.num;
-                
-                html += `
-                    <div class="phase-item" onclick="window.location.href='${getPhasePage(phase.num)}'">
-                        <div class="${circleClass}"><span>${circleContent}</span></div>
-                        <span class="${labelClass}">${phase.label}</span>
-                    </div>
-                `;
-                if (index < phases.length - 1) {
-                    html += `<div class="phase-connector ${phase.num < 6 ? 'active' : ''}"></div>`;
-                }
-            });
-            return html;
-        }
-
-        function getPhasePage(phase) {
-            const pages = {
-                1: 'quiz.html',
-                2: 'student-app.html',
-                3: 'activity-registration.html',
-                4: 'post-activity.html',
-                5: 'university-shortlist.html',
-                6: 'futures-abroad-enroll.html'
-            };
-            return pages[phase] || 'dashboard.html';
-        }
-
-        // ===== SELECT PROGRAM =====
-        function selectProgram(element) {
-            document.querySelectorAll('.program-card').forEach(c => c.classList.remove('selected'));
-            element.classList.add('selected');
-            selectedProgram = element.dataset.program;
-            
-            const btn = document.getElementById('nextStepBtn2');
-            if (btn) btn.disabled = false;
         }
 
         // ===== STEP NAVIGATION =====
-        function nextStep() {
-            if (currentStep === 1) {
-                currentStep = 2;
-                showStep(2);
-            } else if (currentStep === 2) {
-                if (!selectedProgram) {
-                    alert('Please select a program');
-                    return;
-                }
-                currentStep = 3;
-                showStep(3);
-                updatePaymentDisplay();
-            } else if (currentStep === 3) {
-                if (!paymentProcessed) {
-                    alert('Please complete payment first');
-                    return;
-                }
-                currentStep = 4;
-                showStep(4);
-            }
-        }
+        function goToStep(step) {
+            currentStep = step;
 
-        function prevStep() {
-            if (currentStep > 1) {
-                currentStep--;
-                showStep(currentStep);
-            }
-        }
+            // Hide all steps
+            document.querySelectorAll('.step-content').forEach(el => el.classList.remove('active'));
 
-        function showStep(step) {
-            document.querySelectorAll('.handoff-step').forEach(el => el.style.display = 'none');
-            const stepEl = document.getElementById(`step-${step}`);
-            if (stepEl) stepEl.style.display = 'block';
+            // Show current step
+            document.getElementById(`step${step}`).classList.add('active');
 
-            // Update step dots
+            // Update dots
             for (let i = 1; i <= 4; i++) {
-                const dot = document.getElementById(`stepDot${i}`);
-                if (dot) {
-                    dot.classList.toggle('active', i <= step);
-                }
-                if (i < 4) {
-                    const line = document.getElementById(`stepLine${i}`);
-                    if (line) {
-                        line.classList.toggle('active', i < step);
-                    }
+                const dot = document.getElementById(`dot${i}`);
+                const line = document.getElementById(`line${i}`);
+                dot.classList.remove('active', 'done');
+                if (i < step) {
+                    dot.classList.add('done');
+                    dot.textContent = '✓';
+                    if (line) line.classList.add('active');
+                } else if (i === step) {
+                    dot.classList.add('active');
+                    dot.textContent = i;
+                    if (line) line.classList.remove('active');
+                } else {
+                    dot.textContent = i;
+                    if (line) line.classList.remove('active');
                 }
             }
 
             document.getElementById('stepCounter').textContent = `Step ${step} of 4`;
         }
 
-        // ===== PAYMENT =====
-        function updatePaymentDisplay() {
-            const programNames = {
+        // ===== SELECT PROGRAM =====
+        function selectProgram(element, program) {
+            document.querySelectorAll('.program-card').forEach(c => c.classList.remove('selected'));
+            element.classList.add('selected');
+            selectedProgram = program;
+
+            document.getElementById('nextStep2').disabled = false;
+
+            // Update payment display
+            const names = {
                 'grade10-12': 'Grade 10-12 Track',
                 'grade11-fast': 'Grade 11 Fast-Track'
             };
@@ -311,15 +850,20 @@
                 'grade10-12': '$1,200',
                 'grade11-fast': '$1,800'
             };
-            document.getElementById('selectedProgramDisplay').textContent = programNames[selectedProgram] || 'No program selected';
-            document.getElementById('amountDisplay').textContent = `Amount: ${amounts[selectedProgram] || '$0'}`;
+            document.getElementById('selectedProgramDisplay').textContent = names[program];
+            document.getElementById('amountDisplay').textContent = amounts[program];
         }
 
+        // ===== PROCESS PAYMENT =====
         function processPayment() {
             if (!selectedProgram) {
                 alert('Please select a program first');
                 return;
             }
+
+            const payBtn = document.getElementById('payBtn');
+            payBtn.disabled = true;
+            payBtn.textContent = '⏳ Processing...';
 
             // Open payment link
             const paymentUrl = 'https://pay.nomodapp.com/en/l/8ea80e8e835c4b86';
@@ -331,16 +875,17 @@
                     clearInterval(checkPayment);
                     setTimeout(() => {
                         paymentProcessed = true;
-                        document.getElementById('payButton').style.display = 'none';
-                        document.getElementById('paymentSuccess').style.display = 'block';
-                        
-                        // Update universities shortlisted
-                        const universitiesCount = 12;
-                        localStorage.setItem('universitiesShortlisted', universitiesCount);
-                        
-                        // Enable next button
-                        document.getElementById('nextStepBtn3').disabled = false;
-                        
+                        document.getElementById('paymentSuccess').classList.add('show');
+                        document.getElementById('nextStep3').disabled = false;
+
+                        // Update universities count
+                        const uniCount = 12;
+                        localStorage.setItem('universitiesShortlisted', uniCount);
+                        document.getElementById('pUniversities').textContent = uniCount;
+
+                        payBtn.textContent = '✅ Payment Complete';
+                        payBtn.style.background = 'linear-gradient(135deg, #22c55e, #16a34a)';
+
                         alert('✅ Payment verified! 12 universities have been shortlisted for you.');
                     }, 1000);
                 }
@@ -348,24 +893,27 @@
         }
 
         // ===== INIT =====
-        document.addEventListener('DOMContentLoaded', function() {
-            const navContainer = document.getElementById('phase-navigation');
-            if (navContainer) {
-                navContainer.innerHTML = renderPhaseNavigation();
+        window.onload = function() {
+            loadUserData();
+            goToStep(1);
+
+            // Load saved program selection
+            const savedProgram = localStorage.getItem('selectedProgram');
+            if (savedProgram) {
+                const cards = document.querySelectorAll('.program-card');
+                cards.forEach(card => {
+                    if (card.dataset.program === savedProgram) {
+                        selectProgram(card, savedProgram);
+                    }
+                });
             }
-            
-            displayProfile();
-            showStep(1);
-        });
+        };
 
         // Make functions global
-        window.nextStep = nextStep;
-        window.prevStep = prevStep;
+        window.goToStep = goToStep;
         window.selectProgram = selectProgram;
         window.processPayment = processPayment;
-        window.handleLogout = handleLogout;
-
-        console.log('🚀 Enrollment page loaded successfully!');
     </script>
+
 </body>
 </html>
