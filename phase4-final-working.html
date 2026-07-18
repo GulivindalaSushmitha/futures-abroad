@@ -13,11 +13,15 @@
             box-sizing: border-box;
         }
 
+        body {
+            background: #f5f5f5;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
         .phase-4-container {
             max-width: 1200px;
             margin: 0 auto;
             padding: 20px;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
         .phase-header {
@@ -70,36 +74,32 @@
         .phase-4-content {
             border-radius: 15px;
             overflow: hidden;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
             position: relative;
             min-height: 600px;
+            background: #ffffff;
         }
 
-        .background-image-wrapper {
-            position: relative;
-            width: 100%;
-            min-height: 600px;
-            background: #1a237e;
-        }
-
-        .background-image-wrapper .bg-image {
-            width: 100%;
-            height: 100%;
-            min-height: 600px;
-            object-fit: cover;
-            display: block;
-        }
-
-        .overlay-content {
+        /* Background Image - Full width with reduced opacity */
+        .phase-4-bg {
             position: absolute;
             top: 0;
             left: 0;
-            right: 0;
-            bottom: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.15;
+            z-index: 0;
+        }
+
+        /* Content on top of background */
+        .phase-4-body {
+            position: relative;
+            z-index: 1;
             padding: 40px;
-            background: rgba(255, 255, 255, 0.92);
-            backdrop-filter: blur(8px);
-            overflow-y: auto;
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(2px);
+            min-height: 600px;
         }
 
         .reflection-header {
@@ -127,10 +127,10 @@
 
         .reflection-progress {
             background: white;
-            padding: 20px;
+            padding: 20px 25px;
             border-radius: 12px;
             margin: 15px 0;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
         }
 
         .reflection-progress h3 {
@@ -139,48 +139,27 @@
             font-size: 1.1rem;
         }
 
-        .progress-items {
+        .progress-list {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 10px;
+            gap: 8px 30px;
         }
 
         .progress-item {
             display: flex;
             align-items: center;
-            gap: 10px;
-            padding: 8px 12px;
-            background: #f8f9fa;
-            border-radius: 8px;
+            gap: 12px;
+            padding: 6px 0;
         }
 
-        .progress-item .checkbox {
-            width: 20px;
-            height: 20px;
-            border: 2px solid #ccc;
-            border-radius: 4px;
-            display: inline-block;
-            flex-shrink: 0;
-        }
-
-        .progress-item .checkbox.checked {
-            background: #4CAF50;
-            border-color: #4CAF50;
-            position: relative;
-        }
-
-        .progress-item .checkbox.checked::after {
-            content: '✓';
-            color: white;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 14px;
+        .progress-item .check {
+            color: #4CAF50;
+            font-weight: bold;
+            font-size: 1.2rem;
         }
 
         .progress-item .label {
-            color: #555;
+            color: #333;
             font-size: 0.95rem;
         }
 
@@ -189,31 +168,27 @@
             padding: 25px;
             border-radius: 12px;
             margin: 15px 0;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
         }
 
         .reflection-question .question-title {
             color: #1a237e;
             font-weight: 600;
             font-size: 1.1rem;
-            margin-bottom: 10px;
+            margin-bottom: 5px;
         }
 
-        .reflection-question textarea {
-            width: 100%;
-            padding: 15px;
-            border: 2px solid #e0e0e0;
+        .reflection-question .question-text {
+            color: #555;
+            margin-bottom: 12px;
+        }
+
+        .reflection-question .answer {
+            background: #f8f9fa;
+            padding: 12px 16px;
             border-radius: 8px;
-            font-size: 1rem;
-            font-family: inherit;
-            resize: vertical;
-            min-height: 100px;
-            transition: border-color 0.3s ease;
-        }
-
-        .reflection-question textarea:focus {
-            outline: none;
-            border-color: #1a237e;
+            color: #333;
+            border-left: 3px solid #1a237e;
         }
 
         .phase-actions {
@@ -255,19 +230,19 @@
             background: #d0d0d0;
         }
 
+        /* Phase label at bottom */
+        .phase-label {
+            text-align: center;
+            margin-top: 20px;
+            color: #999;
+            font-size: 0.9rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+        }
+
         @media (max-width: 768px) {
-            .background-image-wrapper {
-                min-height: 500px;
-            }
-
-            .background-image-wrapper .bg-image {
-                min-height: 500px;
-            }
-
-            .overlay-content {
+            .phase-4-body {
                 padding: 20px;
-                position: relative;
-                background: white;
             }
 
             .phase-header h1 {
@@ -278,8 +253,12 @@
                 font-size: 1.5rem;
             }
 
-            .progress-items {
+            .progress-list {
                 grid-template-columns: 1fr;
+            }
+
+            .phase-4-content {
+                min-height: 400px;
             }
         }
     </style>
@@ -301,57 +280,58 @@
         </div>
 
         <div class="phase-4-content">
-            <div class="background-image-wrapper">
-                <img src="https://compass.proplr.ae/assets/students-Dk42-8Za.png" alt="Students collaborating" class="bg-image" />
-                <div class="overlay-content">
-                    <div class="reflection-header">
-                        <h2>Post-Activity Reflection</h2>
-                        <p class="subtitle">Reflect on your experience with <strong>Youth Leadership Academy</strong></p>
-                    </div>
+            <!-- Background Image -->
+            <img 
+                src="https://compass.proplr.ae/assets/students-Dk42-8Za.png" 
+                alt="Students background" 
+                class="phase-4-bg"
+            />
 
-                    <div class="reflection-date">
-                        <strong>Date Completed:</strong> 07/13/2026
-                    </div>
+            <!-- Content Overlay -->
+            <div class="phase-4-body">
+                <div class="reflection-header">
+                    <h2>Post-Activity Reflection</h2>
+                    <p class="subtitle">Reflect on your experience with <strong>Youth Leadership Academy</strong></p>
+                </div>
 
-                    <div class="reflection-progress">
-                        <h3>Reflection Progress</h3>
-                        <div class="progress-items">
-                            <div class="progress-item">
-                                <span class="checkbox checked"></span>
-                                <span class="label">Question 1</span>
-                            </div>
-                            <div class="progress-item">
-                                <span class="checkbox checked"></span>
-                                <span class="label">Question 2</span>
-                            </div>
-                            <div class="progress-item">
-                                <span class="checkbox"></span>
-                                <span class="label">Question 3</span>
-                            </div>
-                            <div class="progress-item">
-                                <span class="checkbox"></span>
-                                <span class="label">Question 4</span>
-                            </div>
+                <div class="reflection-date">
+                    <strong>Date Completed:</strong> 07/13/2026
+                </div>
+
+                <div class="reflection-progress">
+                    <h3>Reflection Progress</h3>
+                    <div class="progress-list">
+                        <div class="progress-item">
+                            <span class="check">✔</span>
+                            <span class="label">Question 1</span>
+                        </div>
+                        <div class="progress-item">
+                            <span class="check">✔</span>
+                            <span class="label">Question 2</span>
+                        </div>
+                        <div class="progress-item">
+                            <span class="check">✔</span>
+                            <span class="label">Question 3</span>
+                        </div>
+                        <div class="progress-item">
+                            <span class="check">✔</span>
+                            <span class="label">Question 4</span>
                         </div>
                     </div>
-
-                    <div class="reflection-question">
-                        <div class="question-title">Question 1</div>
-                        <p style="color: #666; margin-bottom: 10px;">What was the most important thing you learned?</p>
-                        <textarea placeholder="Type your answer here...">asdf</textarea>
-                    </div>
-
-                    <div class="reflection-question" style="display: none;">
-                        <div class="question-title">Question 2</div>
-                        <p style="color: #666; margin-bottom: 10px;">How will you apply what you learned?</p>
-                        <textarea placeholder="Type your answer here..."></textarea>
-                    </div>
-
-                    <div class="phase-actions">
-                        <button class="btn-back" onclick="goToPhase3()">← Back</button>
-                        <button class="btn-next" onclick="goToPhase5()">Next →</button>
-                    </div>
                 </div>
+
+                <div class="reflection-question">
+                    <div class="question-title">Question 1</div>
+                    <div class="question-text">What was the most important thing you learned?</div>
+                    <div class="answer">asdf</div>
+                </div>
+
+                <div class="phase-actions">
+                    <button class="btn-back" onclick="goToPhase3()">← Back</button>
+                    <button class="btn-next" onclick="goToPhase5()">Next →</button>
+                </div>
+
+                <div class="phase-label">PHASE 4</div>
             </div>
         </div>
     </div>
@@ -362,7 +342,6 @@
         }
 
         function goToPhase5() {
-            // Save phase 4 completion
             localStorage.setItem('phase4Complete', 'true');
             window.location.href = 'phase5-pathway.html';
         }
