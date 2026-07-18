@@ -3,10 +3,16 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Phase 4: Review & Continue</title>
+    <title>Phase 4: Post-Activity Reflection</title>
     <link rel="stylesheet" href="css/enrollment.css" />
     <link rel="stylesheet" href="css/style.css" />
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         .phase-4-container {
             max-width: 1200px;
             margin: 0 auto;
@@ -94,28 +100,91 @@
             background: rgba(255, 255, 255, 0.92);
             backdrop-filter: blur(8px);
             overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
         }
 
-        .phase-4-title {
+        .reflection-header {
             text-align: center;
             margin-bottom: 25px;
         }
 
-        .phase-4-title h2 {
+        .reflection-header h2 {
             color: #1a237e;
             font-size: 2rem;
             margin-bottom: 10px;
         }
 
-        .phase-4-title p {
+        .reflection-header .subtitle {
             color: #666;
             font-size: 1.1rem;
         }
 
-        .profile-review {
+        .reflection-date {
+            text-align: center;
+            color: #666;
+            margin: 15px 0;
+            font-size: 0.95rem;
+        }
+
+        .reflection-progress {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin: 15px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+        }
+
+        .reflection-progress h3 {
+            color: #1a237e;
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+        }
+
+        .progress-items {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .progress-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 12px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+
+        .progress-item .checkbox {
+            width: 20px;
+            height: 20px;
+            border: 2px solid #ccc;
+            border-radius: 4px;
+            display: inline-block;
+            flex-shrink: 0;
+        }
+
+        .progress-item .checkbox.checked {
+            background: #4CAF50;
+            border-color: #4CAF50;
+            position: relative;
+        }
+
+        .progress-item .checkbox.checked::after {
+            content: '✓';
+            color: white;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 14px;
+        }
+
+        .progress-item .label {
+            color: #555;
+            font-size: 0.95rem;
+        }
+
+        .reflection-question {
             background: white;
             padding: 25px;
             border-radius: 12px;
@@ -123,81 +192,40 @@
             box-shadow: 0 2px 10px rgba(0,0,0,0.08);
         }
 
-        .profile-row {
-            display: flex;
-            justify-content: space-between;
-            padding: 12px 0;
-            border-bottom: 1px solid #f0f0f0;
-            flex-wrap: wrap;
-            gap: 5px;
-        }
-
-        .profile-row:last-child {
-            border-bottom: none;
-        }
-
-        .profile-row .label {
+        .reflection-question .question-title {
+            color: #1a237e;
             font-weight: 600;
-            color: #555;
+            font-size: 1.1rem;
+            margin-bottom: 10px;
         }
 
-        .profile-row .value {
-            color: #1a237e;
-            font-weight: 500;
+        .reflection-question textarea {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-family: inherit;
+            resize: vertical;
+            min-height: 100px;
+            transition: border-color 0.3s ease;
         }
 
-        .gap-analysis {
-            background: white;
-            padding: 20px 25px;
-            border-radius: 12px;
-            margin: 15px 0;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
-        }
-
-        .gap-analysis h3 {
-            color: #1a237e;
-            margin-bottom: 15px;
-        }
-
-        .gap-analysis ul {
-            list-style: none;
-            padding: 0;
-        }
-
-        .gap-analysis ul li {
-            padding: 10px 0;
-            border-bottom: 1px solid #f0f0f0;
-            color: #555;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .gap-analysis ul li:last-child {
-            border-bottom: none;
-        }
-
-        .gap-analysis ul li::before {
-            content: '•';
-            color: #1a237e;
-            font-weight: bold;
-            font-size: 1.5rem;
-        }
-
-        .gap-analysis ul li.completed::before {
-            content: '✓';
-            color: #4CAF50;
+        .reflection-question textarea:focus {
+            outline: none;
+            border-color: #1a237e;
         }
 
         .phase-actions {
             display: flex;
             justify-content: space-between;
-            margin-top: 20px;
+            margin-top: 25px;
             padding-top: 20px;
             border-top: 1px solid #e0e0e0;
         }
 
-        .btn-next, .btn-back {
+        .btn-next,
+        .btn-back {
             padding: 12px 35px;
             border: none;
             border-radius: 8px;
@@ -246,13 +274,12 @@
                 font-size: 1.8rem;
             }
 
-            .phase-4-title h2 {
+            .reflection-header h2 {
                 font-size: 1.5rem;
             }
 
-            .profile-row {
-                flex-direction: column;
-                gap: 2px;
+            .progress-items {
+                grid-template-columns: 1fr;
             }
         }
     </style>
@@ -275,59 +302,49 @@
 
         <div class="phase-4-content">
             <div class="background-image-wrapper">
-                <img 
-                    src="https://compass.proplr.ae/assets/students-Dk42-8Za.png" 
-                    alt="Students collaborating" 
-                    class="bg-image"
-                />
+                <img src="https://compass.proplr.ae/assets/students-Dk42-8Za.png" alt="Students collaborating" class="bg-image" />
                 <div class="overlay-content">
-                    <div class="phase-4-title">
-                        <h2>Step 4: Review Your Profile</h2>
-                        <p>Please review your profile before sharing with counselors.</p>
+                    <div class="reflection-header">
+                        <h2>Post-Activity Reflection</h2>
+                        <p class="subtitle">Reflect on your experience with <strong>Youth Leadership Academy</strong></p>
                     </div>
 
-                    <div class="profile-review">
-                        <div class="profile-row">
-                            <span class="label">Name</span>
-                            <span class="value">sushmithagulivindala</span>
-                        </div>
-                        <div class="profile-row">
-                            <span class="label">Grade</span>
-                            <span class="value">Grade 10</span>
-                        </div>
-                        <div class="profile-row">
-                            <span class="label">School</span>
-                            <span class="value">Not set</span>
-                        </div>
-                        <div class="profile-row">
-                            <span class="label">Country</span>
-                            <span class="value">Not set</span>
-                        </div>
-                        <div class="profile-row">
-                            <span class="label">Interests</span>
-                            <span class="value">STEM, Leadership</span>
-                        </div>
-                        <div class="profile-row">
-                            <span class="label">Activities Completed</span>
-                            <span class="value">0</span>
-                        </div>
-                        <div class="profile-row">
-                            <span class="label">Profile Strength</span>
-                            <span class="value">60%</span>
-                        </div>
-                        <div class="profile-row">
-                            <span class="label">Universities Shortlisted</span>
-                            <span class="value">0</span>
+                    <div class="reflection-date">
+                        <strong>Date Completed:</strong> 07/13/2026
+                    </div>
+
+                    <div class="reflection-progress">
+                        <h3>Reflection Progress</h3>
+                        <div class="progress-items">
+                            <div class="progress-item">
+                                <span class="checkbox checked"></span>
+                                <span class="label">Question 1</span>
+                            </div>
+                            <div class="progress-item">
+                                <span class="checkbox checked"></span>
+                                <span class="label">Question 2</span>
+                            </div>
+                            <div class="progress-item">
+                                <span class="checkbox"></span>
+                                <span class="label">Question 3</span>
+                            </div>
+                            <div class="progress-item">
+                                <span class="checkbox"></span>
+                                <span class="label">Question 4</span>
+                            </div>
                         </div>
                     </div>
 
-                    <div class="gap-analysis">
-                        <h3>Gap Analysis</h3>
-                        <ul>
-                            <li class="completed">You have strong academics but no volunteering experience yet</li>
-                            <li>Consider joining a competition to build your profile</li>
-                            <li>Internships are valuable for university applications</li>
-                        </ul>
+                    <div class="reflection-question">
+                        <div class="question-title">Question 1</div>
+                        <p style="color: #666; margin-bottom: 10px;">What was the most important thing you learned?</p>
+                        <textarea placeholder="Type your answer here...">asdf</textarea>
+                    </div>
+
+                    <div class="reflection-question" style="display: none;">
+                        <div class="question-title">Question 2</div>
+                        <p style="color: #666; margin-bottom: 10px;">How will you apply what you learned?</p>
+                        <textarea placeholder="Type your answer here..."></textarea>
                     </div>
 
                     <div class="phase-actions">
@@ -345,6 +362,8 @@
         }
 
         function goToPhase5() {
+            // Save phase 4 completion
+            localStorage.setItem('phase4Complete', 'true');
             window.location.href = 'phase5-pathway.html';
         }
     </script>
