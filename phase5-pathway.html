@@ -4,8 +4,6 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Phase 5: University Pathway</title>
-    <link rel="stylesheet" href="css/enrollment.css" />
-    <link rel="stylesheet" href="css/style.css" />
     <style>
         * {
             margin: 0;
@@ -14,42 +12,42 @@
         }
 
         body {
-            background: #f5f5f5;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f0f2f5;
         }
 
-        .phase-5-container {
-            max-width: 1200px;
+        .phase5-container {
+            max-width: 900px;
             margin: 0 auto;
             padding: 20px;
         }
 
-        .phase-header {
+        .phase5-header {
             text-align: center;
             margin-bottom: 30px;
         }
 
-        .phase-header h1 {
+        .phase5-header h1 {
             color: #1a237e;
-            font-size: 2.5rem;
-            margin-bottom: 10px;
+            font-size: 2.2rem;
+            margin-bottom: 8px;
         }
 
-        .phase-header p {
+        .phase5-header p {
             color: #666;
-            font-size: 1.1rem;
+            font-size: 1rem;
         }
 
-        .phase-indicators {
+        .phase5-dots {
             display: flex;
             justify-content: center;
-            gap: 15px;
+            gap: 12px;
             margin: 20px 0;
         }
 
-        .phase-dot {
-            width: 40px;
-            height: 40px;
+        .phase5-dot {
+            width: 36px;
+            height: 36px;
             border-radius: 50%;
             background: #e0e0e0;
             display: flex;
@@ -57,320 +55,303 @@
             justify-content: center;
             font-weight: bold;
             color: #999;
-            transition: all 0.3s ease;
+            font-size: 14px;
         }
 
-        .phase-dot.active {
+        .phase5-dot.active {
             background: #1a237e;
             color: white;
-            transform: scale(1.1);
         }
 
-        .phase-dot.completed {
+        .phase5-dot.done {
             background: #4CAF50;
             color: white;
         }
 
-        .phase-5-content {
-            border-radius: 15px;
-            overflow: hidden;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
-            position: relative;
-            min-height: 600px;
-            background: #ffffff;
-        }
-
-        .phase-5-bg {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            opacity: 0.15;
-            z-index: 0;
-        }
-
-        .phase-5-body {
-            position: relative;
-            z-index: 1;
-            padding: 40px;
-            background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(2px);
-            min-height: 600px;
-        }
-
-        .pathway-header {
+        .phase5-step-label {
             text-align: center;
-            margin-bottom: 25px;
-        }
-
-        .pathway-header h2 {
             color: #1a237e;
-            font-size: 2rem;
-            margin-bottom: 10px;
-        }
-
-        .pathway-header p {
-            color: #666;
+            font-weight: 600;
             font-size: 1.1rem;
+            margin-bottom: 20px;
         }
 
-        .profile-card {
-            background: white;
-            padding: 25px;
-            border-radius: 12px;
-            margin: 15px 0;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+        .phase5-card {
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            position: relative;
+            min-height: 500px;
+            background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRMrDjMyPlXPBUG4x9JW3bTYF6gcDIy4Hz6DjisF4PZvQ&s=10');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
         }
 
-        .profile-name {
-            font-size: 1.5rem;
+        .phase5-overlay {
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(2px);
+            padding: 35px 40px 30px;
+            min-height: 500px;
+            width: 100%;
+        }
+
+        .phase5-title {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .phase5-title h2 {
+            color: #1a237e;
+            font-size: 1.8rem;
+        }
+
+        .phase5-title p {
+            color: #555;
+            font-size: 1rem;
+        }
+
+        .phase5-profile {
+            background: #f8f9fa;
+            padding: 20px 22px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .phase5-profile-name {
+            font-size: 1.3rem;
             font-weight: bold;
             color: #1a237e;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
         }
 
-        .profile-details {
+        .phase5-profile-details {
             color: #666;
-            margin-bottom: 15px;
-            line-height: 1.8;
+            margin-bottom: 12px;
         }
 
-        .profile-details span {
-            display: inline-block;
-            background: #f0f2ff;
-            padding: 3px 12px;
-            border-radius: 15px;
-            font-size: 0.9rem;
+        .phase5-profile-details span {
+            background: white;
+            padding: 2px 12px;
+            border-radius: 12px;
+            font-size: 0.85rem;
             color: #1a237e;
-            margin: 3px 5px 3px 0;
+            margin-right: 6px;
+            display: inline-block;
         }
 
-        .profile-strength {
+        .phase5-strength {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 15px;
-            background: #f8f9fa;
-            border-radius: 8px;
-            margin-bottom: 15px;
+            padding: 10px 14px;
+            background: white;
+            border-radius: 6px;
+            margin-bottom: 12px;
             flex-wrap: wrap;
-            gap: 10px;
+            gap: 8px;
         }
 
-        .strength-value {
+        .phase5-strength-value {
             color: #4CAF50;
             font-weight: bold;
-            font-size: 1.1rem;
         }
 
-        .strength-bar {
+        .phase5-strength-bar {
             flex: 1;
-            min-width: 150px;
-            height: 8px;
+            min-width: 120px;
+            height: 6px;
             background: #e0e0e0;
-            border-radius: 4px;
+            border-radius: 3px;
             overflow: hidden;
         }
 
-        .strength-bar-fill {
+        .phase5-strength-fill {
             height: 100%;
-            background: linear-gradient(90deg, #4CAF50, #8BC34A);
-            border-radius: 4px;
+            background: #4CAF50;
+            border-radius: 3px;
             width: 60%;
         }
 
-        .interests {
+        .phase5-interests {
             display: flex;
-            gap: 10px;
+            gap: 8px;
             flex-wrap: wrap;
         }
 
-        .interest-tag {
+        .phase5-interest-tag {
             background: #e3f2fd;
             color: #1a237e;
-            padding: 5px 15px;
-            border-radius: 20px;
-            font-size: 0.9rem;
-            font-weight: 500;
+            padding: 4px 14px;
+            border-radius: 14px;
+            font-size: 0.85rem;
         }
 
-        .gap-analysis {
-            background: white;
-            padding: 20px 25px;
-            border-radius: 12px;
-            margin: 15px 0;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+        .phase5-gap {
+            background: #f8f9fa;
+            padding: 18px 22px;
+            border-radius: 10px;
+            margin-bottom: 20px;
         }
 
-        .gap-analysis h3 {
+        .phase5-gap h3 {
             color: #1a237e;
-            margin-bottom: 15px;
+            font-size: 1rem;
+            margin-bottom: 10px;
         }
 
-        .gap-analysis ul {
+        .phase5-gap ul {
             list-style: none;
             padding: 0;
         }
 
-        .gap-analysis ul li {
-            padding: 10px 0;
-            border-bottom: 1px solid #f0f0f0;
+        .phase5-gap ul li {
+            padding: 8px 0;
+            border-bottom: 1px solid #eee;
             color: #555;
             display: flex;
-            align-items: flex-start;
             gap: 10px;
         }
 
-        .gap-analysis ul li:last-child {
+        .phase5-gap ul li:last-child {
             border-bottom: none;
         }
 
-        .gap-analysis ul li .bullet {
+        .phase5-gap ul li .bullet {
             color: #1a237e;
             font-weight: bold;
-            font-size: 1.2rem;
         }
 
-        .phase-actions {
+        .phase5-actions {
             display: flex;
             justify-content: space-between;
-            margin-top: 25px;
             padding-top: 20px;
             border-top: 1px solid #e0e0e0;
+            margin-top: 10px;
         }
 
-        .btn-next,
-        .btn-back {
-            padding: 12px 35px;
+        .phase5-btn {
+            padding: 10px 30px;
             border: none;
             border-radius: 8px;
             font-size: 1rem;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: 0.3s;
         }
 
-        .btn-next {
-            background: #1a237e;
-            color: white;
-        }
-
-        .btn-next:hover {
-            background: #0d1642;
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(26, 35, 126, 0.3);
-        }
-
-        .btn-back {
+        .phase5-btn-back {
             background: #e0e0e0;
             color: #555;
         }
 
-        .btn-back:hover {
+        .phase5-btn-back:hover {
             background: #d0d0d0;
         }
 
-        @media (max-width: 768px) {
-            .phase-5-body {
+        .phase5-btn-next {
+            background: #1a237e;
+            color: white;
+        }
+
+        .phase5-btn-next:hover {
+            background: #0d1642;
+        }
+
+        @media (max-width: 600px) {
+            .phase5-overlay {
                 padding: 20px;
             }
-
-            .phase-header h1 {
-                font-size: 1.8rem;
-            }
-
-            .pathway-header h2 {
+            .phase5-header h1 {
                 font-size: 1.5rem;
+            }
+            .phase5-title h2 {
+                font-size: 1.3rem;
+            }
+            .phase5-actions {
+                flex-direction: column;
+                gap: 10px;
+            }
+            .phase5-btn {
+                width: 100%;
+                text-align: center;
             }
         }
     </style>
 </head>
 <body>
-    <div class="phase-5-container">
-        <div class="phase-header">
+
+    <div class="phase5-container">
+        <div class="phase5-header">
             <h1>FUTURES ABROAD ENROLLMENT</h1>
             <p>Complete your enrollment to get personalized guidance from our counselors.</p>
-            <div class="phase-indicators">
-                <div class="phase-dot completed">1</div>
-                <div class="phase-dot completed">2</div>
-                <div class="phase-dot completed">3</div>
-                <div class="phase-dot completed">4</div>
-                <div class="phase-dot active">5</div>
-                <div class="phase-dot">6</div>
-            </div>
-            <p style="font-size: 1.2rem; color: #1a237e; font-weight: 600;">Step 5 of 6</p>
         </div>
 
-        <div class="phase-5-content">
-            <img 
-                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRMrDjMyPlXPBUG4x9JW3bTYF6gcDIy4Hz6DjisF4PZvQ&s=10" 
-                alt="University background" 
-                class="phase-5-bg"
-            />
+        <div class="phase5-dots">
+            <div class="phase5-dot done">1</div>
+            <div class="phase5-dot done">2</div>
+            <div class="phase5-dot done">3</div>
+            <div class="phase5-dot done">4</div>
+            <div class="phase5-dot active">5</div>
+            <div class="phase5-dot">6</div>
+        </div>
 
-            <div class="phase-5-body">
-                <div class="pathway-header">
+        <div class="phase5-step-label">Step 5 of 6</div>
+
+        <div class="phase5-card">
+            <div class="phase5-overlay">
+                <div class="phase5-title">
                     <h2>University Pathway</h2>
                     <p>Your personalized university recommendations based on your interests</p>
                 </div>
 
-                <div class="profile-card">
-                    <div class="profile-name">sushmithagulivindala</div>
-                    <div class="profile-details">
+                <div class="phase5-profile">
+                    <div class="phase5-profile-name">sushmithagulivindala</div>
+                    <div class="phase5-profile-details">
                         <span>Grade 10</span>
                         <span>School not set</span>
                         <span>Country not set</span>
                     </div>
-                    <div class="profile-strength">
+                    <div class="phase5-strength">
                         <span>Profile Strength</span>
-                        <span class="strength-value">60%</span>
-                        <div class="strength-bar">
-                            <div class="strength-bar-fill"></div>
+                        <span class="phase5-strength-value">60%</span>
+                        <div class="phase5-strength-bar">
+                            <div class="phase5-strength-fill"></div>
                         </div>
                     </div>
-                    <div class="interests">
-                        <span class="interest-tag">STEM</span>
-                        <span class="interest-tag">Leadership</span>
+                    <div class="phase5-interests">
+                        <span class="phase5-interest-tag">STEM</span>
+                        <span class="phase5-interest-tag">Leadership</span>
                     </div>
                 </div>
 
-                <div class="gap-analysis">
+                <div class="phase5-gap">
                     <h3>Gap Analysis</h3>
                     <ul>
-                        <li>
-                            <span class="bullet">•</span>
-                            <span>You have strong academics but no volunteering experience yet</span>
-                        </li>
-                        <li>
-                            <span class="bullet">•</span>
-                            <span>Consider joining a competition to build your profile</span>
-                        </li>
-                        <li>
-                            <span class="bullet">•</span>
-                            <span>Internships are valuable for university applications</span>
-                        </li>
+                        <li><span class="bullet">•</span> You have strong academics but no volunteering experience yet</li>
+                        <li><span class="bullet">•</span> Consider joining a competition to build your profile</li>
+                        <li><span class="bullet">•</span> Internships are valuable for university applications</li>
                     </ul>
                 </div>
 
-                <div class="phase-actions">
-                    <button class="btn-back" onclick="goToPhase4()">← Back</button>
-                    <button class="btn-next" onclick="goToPhase6()">Next →</button>
+                <div class="phase5-actions">
+                    <button class="phase5-btn phase5-btn-back" onclick="goBack()">← Back</button>
+                    <button class="phase5-btn phase5-btn-next" onclick="goNext()">Next →</button>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-        function goToPhase4() {
+        function goBack() {
             window.location.href = 'phase4-final-working.html';
         }
 
-        function goToPhase6() {
+        function goNext() {
             localStorage.setItem('phase5Complete', 'true');
             window.location.href = 'phase6-payment.html';
         }
     </script>
+
 </body>
 </html>
