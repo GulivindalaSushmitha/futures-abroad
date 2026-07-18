@@ -7,6 +7,12 @@
     <link rel="stylesheet" href="css/enrollment.css" />
     <link rel="stylesheet" href="css/style.css" />
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         .phase-6-container {
             max-width: 1200px;
             margin: 0 auto;
@@ -82,7 +88,7 @@
         .background-images img {
             width: 50%;
             object-fit: cover;
-            opacity: 0.3;
+            opacity: 0.25;
         }
 
         .payment-content {
@@ -159,12 +165,6 @@
             box-shadow: 0 5px 20px rgba(76, 175, 80, 0.4);
         }
 
-        .btn-pay:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-            transform: none;
-        }
-
         .payment-processing {
             text-align: center;
             padding: 40px 0;
@@ -181,8 +181,12 @@
         }
 
         @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
         }
 
         .payment-processing p {
@@ -198,7 +202,7 @@
             max-width: 200px;
             margin: 20px auto;
             border-radius: 15px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
         }
 
         .payment-success h2 {
@@ -322,19 +326,13 @@
 
         <div class="phase-6-content">
             <div class="background-images">
-                <img 
-                    src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQPRmy762VkGtWpxwDFJQKB87YUzo2HWR2uaAMobGTvzQ&s=10" 
-                    alt="Payment background 1"
-                />
-                <img 
-                    src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQRASixKYK1ZNcv3Qm7vCYTJN35jiyV-dIE07RhbqfDFA&s=10" 
-                    alt="Payment background 2"
-                />
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQPRmy762VkGtWpxwDFJQKB87YUzo2HWR2uaAMobGTvzQ&s=10" alt="Payment background 1" />
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQRASixKYK1ZNcv3Qm7vCYTJN35jiyV-dIE07RhbqfDFA&s=10" alt="Payment background 2" />
             </div>
 
             <div class="payment-content" id="paymentContent">
                 <h2>Complete Your Enrollment</h2>
-                
+
                 <div id="paymentPending" class="payment-pending">
                     <div class="payment-summary">
                         <h3>Grade 10-12 Track</h3>
@@ -358,11 +356,7 @@
                 </div>
 
                 <div id="paymentSuccess" style="display: none;" class="payment-success">
-                    <img 
-                        src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQM-r7rmTWik44IovFWBByF9N7BEUIX5viP04-StjLwZw&s=10" 
-                        alt="Payment Success" 
-                        class="success-image"
-                    />
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQM-r7rmTWik44IovFWBByF9N7BEUIX5viP04-StjLwZw&s=10" alt="Payment Success" class="success-image" />
                     <h2>Payment Successful! 🎉</h2>
                     <p class="success-message">Your enrollment is complete. You will receive a confirmation email shortly.</p>
                     <div class="congrats-message">
@@ -388,6 +382,7 @@
         }
 
         function goToDashboard() {
+            localStorage.setItem('enrollmentComplete', 'true');
             window.location.href = 'dashboard.html';
         }
 
@@ -395,13 +390,15 @@
             document.getElementById('paymentPending').style.display = 'none';
             document.getElementById('paymentProcessing').style.display = 'block';
 
+            // Simulate payment processing
             setTimeout(() => {
                 document.getElementById('paymentProcessing').style.display = 'none';
                 document.getElementById('paymentSuccess').style.display = 'block';
-                
+
                 try {
                     localStorage.setItem('enrollmentComplete', 'true');
                     localStorage.setItem('enrollmentDate', new Date().toISOString());
+                    localStorage.setItem('phase6Complete', 'true');
                 } catch (e) {
                     console.log('Storage not available');
                 }
