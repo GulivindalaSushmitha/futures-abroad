@@ -4,8 +4,6 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Phase 6: Payment</title>
-    <link rel="stylesheet" href="css/enrollment.css" />
-    <link rel="stylesheet" href="css/style.css" />
     <style>
         * {
             margin: 0;
@@ -14,42 +12,42 @@
         }
 
         body {
-            background: #f5f5f5;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f0f2f5;
         }
 
-        .phase-6-container {
-            max-width: 1200px;
+        .phase6-container {
+            max-width: 900px;
             margin: 0 auto;
             padding: 20px;
         }
 
-        .phase-header {
+        .phase6-header {
             text-align: center;
             margin-bottom: 30px;
         }
 
-        .phase-header h1 {
+        .phase6-header h1 {
             color: #1a237e;
-            font-size: 2.5rem;
-            margin-bottom: 10px;
+            font-size: 2.2rem;
+            margin-bottom: 8px;
         }
 
-        .phase-header p {
+        .phase6-header p {
             color: #666;
-            font-size: 1.1rem;
+            font-size: 1rem;
         }
 
-        .phase-indicators {
+        .phase6-dots {
             display: flex;
             justify-content: center;
-            gap: 15px;
+            gap: 12px;
             margin: 20px 0;
         }
 
-        .phase-dot {
-            width: 40px;
-            height: 40px;
+        .phase6-dot {
+            width: 36px;
+            height: 36px;
             border-radius: 50%;
             background: #e0e0e0;
             display: flex;
@@ -57,132 +55,139 @@
             justify-content: center;
             font-weight: bold;
             color: #999;
-            transition: all 0.3s ease;
+            font-size: 14px;
         }
 
-        .phase-dot.active {
+        .phase6-dot.active {
             background: #1a237e;
             color: white;
-            transform: scale(1.1);
         }
 
-        .phase-dot.completed {
+        .phase6-dot.done {
             background: #4CAF50;
             color: white;
         }
 
-        .phase-6-content {
-            border-radius: 15px;
+        .phase6-step-label {
+            text-align: center;
+            color: #1a237e;
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+        }
+
+        .phase6-card {
+            border-radius: 16px;
             overflow: hidden;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
             position: relative;
-            min-height: 600px;
-            background: #ffffff;
+            min-height: 500px;
+            background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQPRmy762VkGtWpxwDFJQKB87YUzo2HWR2uaAMobGTvzQ&s=10');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
         }
 
-        .phase-6-bg {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            z-index: 0;
-        }
-
-        .phase-6-bg img {
-            width: 50%;
-            object-fit: cover;
-            opacity: 0.15;
-        }
-
-        .phase-6-body {
-            position: relative;
-            z-index: 1;
-            padding: 40px;
-            background: rgba(255, 255, 255, 0.85);
+        .phase6-overlay {
+            background: rgba(255, 255, 255, 0.92);
             backdrop-filter: blur(2px);
-            min-height: 600px;
+            padding: 40px;
+            min-height: 500px;
+            max-width: 500px;
+            margin: 0 auto;
             display: flex;
             flex-direction: column;
             justify-content: center;
-            max-width: 600px;
-            margin: 0 auto;
         }
 
-        .phase-6-body h2 {
+        .phase6-overlay h2 {
             text-align: center;
             color: #1a237e;
-            font-size: 2rem;
-            margin-bottom: 30px;
+            font-size: 1.8rem;
+            margin-bottom: 25px;
         }
 
-        .payment-pending {
+        .phase6-pending {
             text-align: center;
         }
 
-        .payment-summary {
+        .phase6-summary {
             background: #f8f9fa;
-            padding: 30px;
-            border-radius: 12px;
-            margin-bottom: 30px;
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 25px;
         }
 
-        .payment-summary h3 {
+        .phase6-summary h3 {
             color: #1a237e;
-            font-size: 1.3rem;
-            margin-bottom: 10px;
+            font-size: 1.2rem;
+            margin-bottom: 8px;
         }
 
-        .payment-summary .price {
-            font-size: 2.5rem;
+        .phase6-summary .price {
+            font-size: 2.2rem;
             font-weight: bold;
             color: #1a237e;
         }
 
-        .payment-summary .price-detail {
-            color: #666;
-            font-size: 0.9rem;
+        .phase6-summary .detail {
+            color: #888;
+            font-size: 0.85rem;
             margin-top: 5px;
         }
 
-        .payment-actions {
+        .phase6-actions {
             display: flex;
             flex-direction: column;
-            gap: 15px;
+            gap: 12px;
         }
 
-        .btn-pay {
-            padding: 16px;
+        .phase6-btn-pay {
+            padding: 14px;
             background: #4CAF50;
             color: white;
             border: none;
-            border-radius: 10px;
-            font-size: 1.2rem;
+            border-radius: 8px;
+            font-size: 1.1rem;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: 0.3s;
         }
 
-        .btn-pay:hover {
+        .phase6-btn-pay:hover {
             background: #388E3C;
-            transform: translateY(-2px);
-            box-shadow: 0 5px 20px rgba(76, 175, 80, 0.4);
         }
 
-        .payment-processing {
+        .phase6-btn-back {
+            padding: 12px;
+            background: #e0e0e0;
+            color: #555;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+            width: 100%;
+        }
+
+        .phase6-btn-back:hover {
+            background: #d0d0d0;
+        }
+
+        .phase6-processing {
             text-align: center;
-            padding: 40px 0;
+            padding: 30px 0;
         }
 
-        .spinner {
+        .phase6-spinner {
             border: 4px solid #f3f3f3;
             border-top: 4px solid #1a237e;
             border-radius: 50%;
-            width: 60px;
-            height: 60px;
+            width: 50px;
+            height: 50px;
             animation: spin 1s linear infinite;
-            margin: 0 auto 20px;
+            margin: 0 auto 15px;
         }
 
         @keyframes spin {
@@ -194,184 +199,136 @@
             }
         }
 
-        .payment-processing p {
+        .phase6-processing p {
             color: #666;
-            font-size: 1.1rem;
         }
 
-        .payment-success {
+        .phase6-success {
             text-align: center;
         }
 
-        .payment-success .success-image {
-            max-width: 200px;
-            margin: 20px auto;
-            border-radius: 15px;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        .phase6-success .success-image {
+            max-width: 150px;
+            margin: 0 auto 15px;
+            border-radius: 10px;
+            display: block;
         }
 
-        .payment-success h2 {
+        .phase6-success h2 {
             color: #4CAF50;
-            font-size: 2.2rem;
-            margin: 20px 0 10px;
+            font-size: 1.8rem;
+            margin: 10px 0;
         }
 
-        .payment-success .success-message {
+        .phase6-success .msg {
             color: #666;
-            font-size: 1.1rem;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
         }
 
-        .congrats-message {
-            margin-top: 25px;
-            padding: 25px;
+        .phase6-congrats {
             background: #e8f5e9;
-            border-radius: 12px;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
         }
 
-        .congrats-message h3 {
+        .phase6-congrats h3 {
             color: #2e7d32;
-            font-size: 1.5rem;
-            margin-bottom: 10px;
+            font-size: 1.3rem;
+            margin-bottom: 5px;
         }
 
-        .congrats-message p {
-            color: #555;
-            font-size: 1rem;
-        }
-
-        .phase-actions {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 30px;
-            padding-top: 20px;
-            border-top: 1px solid #e0e0e0;
-        }
-
-        .btn-back {
-            padding: 12px 35px;
-            border: none;
-            border-radius: 8px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            background: #e0e0e0;
+        .phase6-congrats p {
             color: #555;
         }
 
-        .btn-back:hover {
-            background: #d0d0d0;
-        }
-
-        .btn-dashboard {
-            padding: 12px 35px;
-            border: none;
-            border-radius: 8px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
+        .phase6-btn-dashboard {
+            padding: 12px 30px;
             background: #1a237e;
             color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+            margin-top: 10px;
         }
 
-        .btn-dashboard:hover {
+        .phase6-btn-dashboard:hover {
             background: #0d1642;
-            transform: translateY(-2px);
         }
 
-        @media (max-width: 768px) {
-            .phase-6-body {
+        @media (max-width: 600px) {
+            .phase6-overlay {
                 padding: 20px;
                 max-width: 100%;
             }
-
-            .phase-header h1 {
-                font-size: 1.8rem;
-            }
-
-            .phase-6-body h2 {
+            .phase6-header h1 {
                 font-size: 1.5rem;
             }
-
-            .payment-summary .price {
-                font-size: 2rem;
-            }
-
-            .phase-6-bg img {
-                width: 100%;
-                height: 50%;
-            }
-
-            .phase-6-bg {
-                flex-direction: column;
+            .phase6-overlay h2 {
+                font-size: 1.3rem;
             }
         }
     </style>
 </head>
 <body>
-    <div class="phase-6-container">
-        <div class="phase-header">
+
+    <div class="phase6-container">
+        <div class="phase6-header">
             <h1>FUTURES ABROAD ENROLLMENT</h1>
             <p>Complete your enrollment to get personalized guidance from our counselors.</p>
-            <div class="phase-indicators">
-                <div class="phase-dot completed">1</div>
-                <div class="phase-dot completed">2</div>
-                <div class="phase-dot completed">3</div>
-                <div class="phase-dot completed">4</div>
-                <div class="phase-dot completed">5</div>
-                <div class="phase-dot active">6</div>
-            </div>
-            <p style="font-size: 1.2rem; color: #1a237e; font-weight: 600;">Step 6 of 6</p>
         </div>
 
-        <div class="phase-6-content">
-            <div class="phase-6-bg">
-                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQPRmy762VkGtWpxwDFJQKB87YUzo2HWR2uaAMobGTvzQ&s=10" alt="Payment bg 1" />
-                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQRASixKYK1ZNcv3Qm7vCYTJN35jiyV-dIE07RhbqfDFA&s=10" alt="Payment bg 2" />
-            </div>
+        <div class="phase6-dots">
+            <div class="phase6-dot done">1</div>
+            <div class="phase6-dot done">2</div>
+            <div class="phase6-dot done">3</div>
+            <div class="phase6-dot done">4</div>
+            <div class="phase6-dot done">5</div>
+            <div class="phase6-dot active">6</div>
+        </div>
 
-            <div class="phase-6-body" id="paymentContent">
+        <div class="phase6-step-label">Step 6 of 6</div>
+
+        <div class="phase6-card">
+            <div class="phase6-overlay" id="paymentContent">
                 <h2>Complete Your Enrollment</h2>
 
-                <div id="paymentPending" class="payment-pending">
-                    <div class="payment-summary">
-                        <h3>Grade 10-12 Track</h3>
-                        <div class="price">$1,200</div>
-                        <div class="price-detail">Full guidance through Grade 10, 11, and 12</div>
-                    </div>
-                    <div class="payment-actions">
-                        <button class="btn-pay" onclick="processPayment()">
-                            Complete Payment
-                        </button>
-                        <button class="btn-back" onclick="goToPhase5()" style="width: 100%;">
-                            ← Back
-                        </button>
+                <div id="paymentPending">
+                    <div class="phase6-pending">
+                        <div class="phase6-summary">
+                            <h3>Grade 10-12 Track</h3>
+                            <div class="price">$1,200</div>
+                            <div class="detail">Full guidance through Grade 10, 11, and 12</div>
+                        </div>
+                        <div class="phase6-actions">
+                            <button class="phase6-btn-pay" onclick="processPayment()">Complete Payment</button>
+                            <button class="phase6-btn-back" onclick="goBack()">← Back</button>
+                        </div>
                     </div>
                 </div>
 
-                <div id="paymentProcessing" style="display: none;" class="payment-processing">
-                    <div class="spinner"></div>
-                    <p>Processing your payment...</p>
-                    <p style="color: #999; font-size: 0.9rem;">Please do not close this window</p>
+                <div id="paymentProcessing" style="display: none;">
+                    <div class="phase6-processing">
+                        <div class="phase6-spinner"></div>
+                        <p>Processing your payment...</p>
+                        <p style="color: #999; font-size: 0.85rem;">Please do not close this window</p>
+                    </div>
                 </div>
 
-                <div id="paymentSuccess" style="display: none;" class="payment-success">
-                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQM-r7rmTWik44IovFWBByF9N7BEUIX5viP04-StjLwZw&s=10" alt="Payment Success" class="success-image" />
-                    <h2>Payment Successful! 🎉</h2>
-                    <p class="success-message">Your enrollment is complete. You will receive a confirmation email shortly.</p>
-                    <div class="congrats-message">
-                        <h3>Welcome to Futures Abroad!</h3>
-                        <p>Your journey to studying abroad starts here.</p>
-                        <p style="margin-top: 10px; color: #2e7d32; font-weight: 500;">
-                            A counselor will reach out to you within 24 hours.
-                        </p>
-                    </div>
-                    <div style="margin-top: 25px;">
-                        <button class="btn-dashboard" onclick="goToDashboard()">
-                            Go to Dashboard
-                        </button>
+                <div id="paymentSuccess" style="display: none;">
+                    <div class="phase6-success">
+                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQM-r7rmTWik44IovFWBByF9N7BEUIX5viP04-StjLwZw&s=10" alt="Success" class="success-image" />
+                        <h2>Payment Successful! 🎉</h2>
+                        <p class="msg">Your enrollment is complete. You will receive a confirmation email shortly.</p>
+                        <div class="phase6-congrats">
+                            <h3>Welcome to Futures Abroad!</h3>
+                            <p>Your journey to studying abroad starts here.</p>
+                            <p style="margin-top: 8px; color: #2e7d32; font-weight: 500;">A counselor will reach out within 24 hours.</p>
+                        </div>
+                        <button class="phase6-btn-dashboard" onclick="goDashboard()">Go to Dashboard</button>
                     </div>
                 </div>
             </div>
@@ -379,11 +336,11 @@
     </div>
 
     <script>
-        function goToPhase5() {
+        function goBack() {
             window.location.href = 'phase5-pathway.html';
         }
 
-        function goToDashboard() {
+        function goDashboard() {
             localStorage.setItem('enrollmentComplete', 'true');
             window.location.href = 'dashboard.html';
         }
@@ -395,28 +352,19 @@
             setTimeout(() => {
                 document.getElementById('paymentProcessing').style.display = 'none';
                 document.getElementById('paymentSuccess').style.display = 'block';
-
-                try {
-                    localStorage.setItem('enrollmentComplete', 'true');
-                    localStorage.setItem('enrollmentDate', new Date().toISOString());
-                    localStorage.setItem('phase6Complete', 'true');
-                } catch (e) {
-                    console.log('Storage not available');
-                }
+                localStorage.setItem('enrollmentComplete', 'true');
+                localStorage.setItem('phase6Complete', 'true');
             }, 3000);
         }
 
         document.addEventListener('DOMContentLoaded', function() {
-            try {
-                if (localStorage.getItem('enrollmentComplete') === 'true') {
-                    document.getElementById('paymentPending').style.display = 'none';
-                    document.getElementById('paymentProcessing').style.display = 'none';
-                    document.getElementById('paymentSuccess').style.display = 'block';
-                }
-            } catch (e) {
-                console.log('Storage not available');
+            if (localStorage.getItem('enrollmentComplete') === 'true') {
+                document.getElementById('paymentPending').style.display = 'none';
+                document.getElementById('paymentProcessing').style.display = 'none';
+                document.getElementById('paymentSuccess').style.display = 'block';
             }
         });
     </script>
+
 </body>
 </html>
