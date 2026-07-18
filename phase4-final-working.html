@@ -16,36 +16,36 @@
             background: #f0f2f5;
         }
 
-        .container {
+        .phase4-container {
             max-width: 900px;
             margin: 0 auto;
             padding: 20px;
         }
 
-        .header {
+        .phase4-header {
             text-align: center;
             margin-bottom: 30px;
         }
 
-        .header h1 {
+        .phase4-header h1 {
             color: #1a237e;
             font-size: 2.2rem;
             margin-bottom: 8px;
         }
 
-        .header p {
+        .phase4-header p {
             color: #666;
             font-size: 1rem;
         }
 
-        .dots {
+        .phase4-dots {
             display: flex;
             justify-content: center;
             gap: 12px;
             margin: 20px 0;
         }
 
-        .dot {
+        .phase4-dot {
             width: 36px;
             height: 36px;
             border-radius: 50%;
@@ -58,17 +58,17 @@
             font-size: 14px;
         }
 
-        .dot.active {
+        .phase4-dot.active {
             background: #1a237e;
             color: white;
         }
 
-        .dot.done {
+        .phase4-dot.done {
             background: #4CAF50;
             color: white;
         }
 
-        .step-label {
+        .phase4-step-label {
             text-align: center;
             color: #1a237e;
             font-weight: 600;
@@ -76,7 +76,7 @@
             margin-bottom: 20px;
         }
 
-        .card {
+        .phase4-card {
             border-radius: 16px;
             overflow: hidden;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
@@ -88,7 +88,7 @@
             background-repeat: no-repeat;
         }
 
-        .card-overlay {
+        .phase4-overlay {
             background: rgba(255, 255, 255, 0.92);
             backdrop-filter: blur(2px);
             padding: 35px 40px 30px;
@@ -96,86 +96,86 @@
             width: 100%;
         }
 
-        .reflection-title {
+        .phase4-reflection-title {
             text-align: center;
             margin-bottom: 10px;
         }
 
-        .reflection-title h2 {
+        .phase4-reflection-title h2 {
             color: #1a237e;
             font-size: 1.8rem;
         }
 
-        .reflection-title p {
+        .phase4-reflection-title p {
             color: #555;
             font-size: 1rem;
         }
 
-        .date {
+        .phase4-date {
             text-align: center;
             color: #888;
             font-size: 0.9rem;
             margin: 12px 0 20px;
         }
 
-        .progress-section {
+        .phase4-progress {
             background: #f8f9fa;
             padding: 18px 22px;
             border-radius: 10px;
             margin-bottom: 20px;
         }
 
-        .progress-section h3 {
+        .phase4-progress h3 {
             color: #1a237e;
             font-size: 1rem;
             margin-bottom: 12px;
         }
 
-        .progress-grid {
+        .phase4-progress-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 6px 30px;
         }
 
-        .progress-item {
+        .phase4-progress-item {
             display: flex;
             align-items: center;
             gap: 10px;
             padding: 4px 0;
         }
 
-        .progress-item .check {
+        .phase4-progress-item .check {
             color: #4CAF50;
             font-weight: bold;
             font-size: 1.1rem;
         }
 
-        .progress-item .label {
+        .phase4-progress-item .label {
             color: #333;
             font-size: 0.95rem;
         }
 
-        .question-box {
+        .phase4-question {
             background: #f8f9fa;
             padding: 20px 22px;
             border-radius: 10px;
             margin-bottom: 20px;
         }
 
-        .question-box .q-label {
+        .phase4-question .q-label {
             color: #1a237e;
             font-weight: 600;
             font-size: 1rem;
             margin-bottom: 4px;
         }
 
-        .question-box .q-text {
+        .phase4-question .q-text {
             color: #555;
             font-size: 0.95rem;
             margin-bottom: 10px;
         }
 
-        .question-box .answer {
+        .phase4-question .answer {
             background: white;
             padding: 10px 14px;
             border-radius: 6px;
@@ -183,7 +183,7 @@
             color: #333;
         }
 
-        .actions {
+        .phase4-actions {
             display: flex;
             justify-content: space-between;
             padding-top: 20px;
@@ -191,7 +191,7 @@
             margin-top: 10px;
         }
 
-        .btn {
+        .phase4-btn {
             padding: 10px 30px;
             border: none;
             border-radius: 8px;
@@ -201,25 +201,25 @@
             transition: 0.3s;
         }
 
-        .btn-back {
+        .phase4-btn-back {
             background: #e0e0e0;
             color: #555;
         }
 
-        .btn-back:hover {
+        .phase4-btn-back:hover {
             background: #d0d0d0;
         }
 
-        .btn-next {
+        .phase4-btn-next {
             background: #1a237e;
             color: white;
         }
 
-        .btn-next:hover {
+        .phase4-btn-next:hover {
             background: #0d1642;
         }
 
-        .phase-label {
+        .phase4-label {
             text-align: center;
             margin-top: 18px;
             color: #bbb;
@@ -229,28 +229,23 @@
         }
 
         @media (max-width: 600px) {
-            .card-overlay {
+            .phase4-overlay {
                 padding: 20px;
             }
-
-            .progress-grid {
+            .phase4-progress-grid {
                 grid-template-columns: 1fr;
             }
-
-            .header h1 {
+            .phase4-header h1 {
                 font-size: 1.5rem;
             }
-
-            .reflection-title h2 {
+            .phase4-reflection-title h2 {
                 font-size: 1.3rem;
             }
-
-            .actions {
+            .phase4-actions {
                 flex-direction: column;
                 gap: 10px;
             }
-
-            .btn {
+            .phase4-btn {
                 width: 100%;
                 text-align: center;
             }
@@ -259,68 +254,68 @@
 </head>
 <body>
 
-    <div class="container">
-        <div class="header">
+    <div class="phase4-container">
+        <div class="phase4-header">
             <h1>FUTURES ABROAD ENROLLMENT</h1>
             <p>Complete your enrollment to get personalized guidance from our counselors.</p>
         </div>
 
-        <div class="dots">
-            <div class="dot done">1</div>
-            <div class="dot done">2</div>
-            <div class="dot done">3</div>
-            <div class="dot active">4</div>
-            <div class="dot">5</div>
-            <div class="dot">6</div>
+        <div class="phase4-dots">
+            <div class="phase4-dot done">1</div>
+            <div class="phase4-dot done">2</div>
+            <div class="phase4-dot done">3</div>
+            <div class="phase4-dot active">4</div>
+            <div class="phase4-dot">5</div>
+            <div class="phase4-dot">6</div>
         </div>
 
-        <div class="step-label">Step 4 of 6</div>
+        <div class="phase4-step-label">Step 4 of 6</div>
 
-        <div class="card">
-            <div class="card-overlay">
-                <div class="reflection-title">
+        <div class="phase4-card">
+            <div class="phase4-overlay">
+                <div class="phase4-reflection-title">
                     <h2>Post-Activity Reflection</h2>
                     <p>Reflect on your experience with <strong>Youth Leadership Academy</strong></p>
                 </div>
 
-                <div class="date">
+                <div class="phase4-date">
                     <strong>Date Completed:</strong> 07/13/2026
                 </div>
 
-                <div class="progress-section">
+                <div class="phase4-progress">
                     <h3>Reflection Progress</h3>
-                    <div class="progress-grid">
-                        <div class="progress-item">
+                    <div class="phase4-progress-grid">
+                        <div class="phase4-progress-item">
                             <span class="check">✔</span>
                             <span class="label">Question 1</span>
                         </div>
-                        <div class="progress-item">
+                        <div class="phase4-progress-item">
                             <span class="check">✔</span>
                             <span class="label">Question 2</span>
                         </div>
-                        <div class="progress-item">
+                        <div class="phase4-progress-item">
                             <span class="check">✔</span>
                             <span class="label">Question 3</span>
                         </div>
-                        <div class="progress-item">
+                        <div class="phase4-progress-item">
                             <span class="check">✔</span>
                             <span class="label">Question 4</span>
                         </div>
                     </div>
                 </div>
 
-                <div class="question-box">
+                <div class="phase4-question">
                     <div class="q-label">Question 1</div>
                     <div class="q-text">What was the most important thing you learned?</div>
                     <div class="answer">asdf</div>
                 </div>
 
-                <div class="actions">
-                    <button class="btn btn-back" onclick="goBack()">← Back</button>
-                    <button class="btn btn-next" onclick="goNext()">Next →</button>
+                <div class="phase4-actions">
+                    <button class="phase4-btn phase4-btn-back" onclick="goBack()">← Back</button>
+                    <button class="phase4-btn phase4-btn-next" onclick="goNext()">Next →</button>
                 </div>
 
-                <div class="phase-label">PHASE 4</div>
+                <div class="phase4-label">PHASE 4</div>
             </div>
         </div>
     </div>
