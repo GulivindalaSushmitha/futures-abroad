@@ -13,11 +13,15 @@
             box-sizing: border-box;
         }
 
+        body {
+            background: #f5f5f5;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
         .phase-5-container {
             max-width: 1200px;
             margin: 0 auto;
             padding: 20px;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
         .phase-header {
@@ -70,36 +74,30 @@
         .phase-5-content {
             border-radius: 15px;
             overflow: hidden;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
             position: relative;
             min-height: 600px;
+            background: #ffffff;
         }
 
-        .background-image-wrapper {
-            position: relative;
-            width: 100%;
-            min-height: 600px;
-            background: #1a237e;
-        }
-
-        .background-image-wrapper .bg-image {
-            width: 100%;
-            height: 100%;
-            min-height: 600px;
-            object-fit: cover;
-            display: block;
-        }
-
-        .overlay-content {
+        .phase-5-bg {
             position: absolute;
             top: 0;
             left: 0;
-            right: 0;
-            bottom: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.15;
+            z-index: 0;
+        }
+
+        .phase-5-body {
+            position: relative;
+            z-index: 1;
             padding: 40px;
-            background: rgba(255, 255, 255, 0.92);
-            backdrop-filter: blur(8px);
-            overflow-y: auto;
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(2px);
+            min-height: 600px;
         }
 
         .pathway-header {
@@ -123,7 +121,7 @@
             padding: 25px;
             border-radius: 12px;
             margin: 15px 0;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
         }
 
         .profile-name {
@@ -203,7 +201,7 @@
             padding: 20px 25px;
             border-radius: 12px;
             margin: 15px 0;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
         }
 
         .gap-analysis h3 {
@@ -233,10 +231,6 @@
             color: #1a237e;
             font-weight: bold;
             font-size: 1.2rem;
-        }
-
-        .gap-analysis ul li .text {
-            flex: 1;
         }
 
         .phase-actions {
@@ -279,18 +273,8 @@
         }
 
         @media (max-width: 768px) {
-            .background-image-wrapper {
-                min-height: 500px;
-            }
-
-            .background-image-wrapper .bg-image {
-                min-height: 500px;
-            }
-
-            .overlay-content {
+            .phase-5-body {
                 padding: 20px;
-                position: relative;
-                background: white;
             }
 
             .phase-header h1 {
@@ -320,56 +304,59 @@
         </div>
 
         <div class="phase-5-content">
-            <div class="background-image-wrapper">
-                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRMrDjMyPlXPBUG4x9JW3bTYF6gcDIy4Hz6DjisF4PZvQ&s=10" alt="University Pathway" class="bg-image" />
-                <div class="overlay-content">
-                    <div class="pathway-header">
-                        <h2>University Pathway</h2>
-                        <p>Your personalized university recommendations based on your interests</p>
-                    </div>
+            <img 
+                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRMrDjMyPlXPBUG4x9JW3bTYF6gcDIy4Hz6DjisF4PZvQ&s=10" 
+                alt="University background" 
+                class="phase-5-bg"
+            />
 
-                    <div class="profile-card">
-                        <div class="profile-name">sushmithagulivindala</div>
-                        <div class="profile-details">
-                            <span>Grade 10</span>
-                            <span>School not set</span>
-                            <span>Country not set</span>
-                        </div>
-                        <div class="profile-strength">
-                            <span>Profile Strength</span>
-                            <span class="strength-value">60%</span>
-                            <div class="strength-bar">
-                                <div class="strength-bar-fill"></div>
-                            </div>
-                        </div>
-                        <div class="interests">
-                            <span class="interest-tag">STEM</span>
-                            <span class="interest-tag">Leadership</span>
-                        </div>
-                    </div>
+            <div class="phase-5-body">
+                <div class="pathway-header">
+                    <h2>University Pathway</h2>
+                    <p>Your personalized university recommendations based on your interests</p>
+                </div>
 
-                    <div class="gap-analysis">
-                        <h3>Gap Analysis</h3>
-                        <ul>
-                            <li>
-                                <span class="bullet">•</span>
-                                <span class="text">You have strong academics but no volunteering experience yet</span>
-                            </li>
-                            <li>
-                                <span class="bullet">•</span>
-                                <span class="text">Consider joining a competition to build your profile</span>
-                            </li>
-                            <li>
-                                <span class="bullet">•</span>
-                                <span class="text">Internships are valuable for university applications</span>
-                            </li>
-                        </ul>
+                <div class="profile-card">
+                    <div class="profile-name">sushmithagulivindala</div>
+                    <div class="profile-details">
+                        <span>Grade 10</span>
+                        <span>School not set</span>
+                        <span>Country not set</span>
                     </div>
+                    <div class="profile-strength">
+                        <span>Profile Strength</span>
+                        <span class="strength-value">60%</span>
+                        <div class="strength-bar">
+                            <div class="strength-bar-fill"></div>
+                        </div>
+                    </div>
+                    <div class="interests">
+                        <span class="interest-tag">STEM</span>
+                        <span class="interest-tag">Leadership</span>
+                    </div>
+                </div>
 
-                    <div class="phase-actions">
-                        <button class="btn-back" onclick="goToPhase4()">← Back</button>
-                        <button class="btn-next" onclick="goToPhase6()">Next →</button>
-                    </div>
+                <div class="gap-analysis">
+                    <h3>Gap Analysis</h3>
+                    <ul>
+                        <li>
+                            <span class="bullet">•</span>
+                            <span>You have strong academics but no volunteering experience yet</span>
+                        </li>
+                        <li>
+                            <span class="bullet">•</span>
+                            <span>Consider joining a competition to build your profile</span>
+                        </li>
+                        <li>
+                            <span class="bullet">•</span>
+                            <span>Internships are valuable for university applications</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="phase-actions">
+                    <button class="btn-back" onclick="goToPhase4()">← Back</button>
+                    <button class="btn-next" onclick="goToPhase6()">Next →</button>
                 </div>
             </div>
         </div>
