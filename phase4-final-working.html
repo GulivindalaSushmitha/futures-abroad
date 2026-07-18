@@ -4,8 +4,6 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Phase 4: Post-Activity Reflection</title>
-    <link rel="stylesheet" href="css/enrollment.css" />
-    <link rel="stylesheet" href="css/style.css" />
     <style>
         * {
             margin: 0;
@@ -14,42 +12,44 @@
         }
 
         body {
-            background: #f5f5f5;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f0f2f5;
         }
 
-        .phase-4-container {
-            max-width: 1200px;
+        .container {
+            max-width: 900px;
             margin: 0 auto;
             padding: 20px;
         }
 
-        .phase-header {
+        /* Header */
+        .header {
             text-align: center;
             margin-bottom: 30px;
         }
 
-        .phase-header h1 {
+        .header h1 {
             color: #1a237e;
-            font-size: 2.5rem;
-            margin-bottom: 10px;
+            font-size: 2.2rem;
+            margin-bottom: 8px;
         }
 
-        .phase-header p {
+        .header p {
             color: #666;
-            font-size: 1.1rem;
+            font-size: 1rem;
         }
 
-        .phase-indicators {
+        /* Phase dots */
+        .dots {
             display: flex;
             justify-content: center;
-            gap: 15px;
+            gap: 12px;
             margin: 20px 0;
         }
 
-        .phase-dot {
-            width: 40px;
-            height: 40px;
+        .dot {
+            width: 36px;
+            height: 36px;
             border-radius: 50%;
             background: #e0e0e0;
             display: flex;
@@ -57,105 +57,110 @@
             justify-content: center;
             font-weight: bold;
             color: #999;
-            transition: all 0.3s ease;
+            font-size: 14px;
         }
 
-        .phase-dot.active {
+        .dot.active {
             background: #1a237e;
             color: white;
-            transform: scale(1.1);
         }
 
-        .phase-dot.completed {
+        .dot.done {
             background: #4CAF50;
             color: white;
         }
 
-        .phase-4-content {
-            border-radius: 15px;
-            overflow: hidden;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
-            position: relative;
-            min-height: 600px;
-            background: #ffffff;
+        .step-label {
+            text-align: center;
+            color: #1a237e;
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin-bottom: 20px;
         }
 
-        /* Background Image - Full width with reduced opacity */
-        .phase-4-bg {
+        /* Main card with background image */
+        .card {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            position: relative;
+            min-height: 500px;
+        }
+
+        /* Background image - very subtle */
+        .card-bg {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
             object-fit: cover;
-            opacity: 0.15;
+            opacity: 0.08;
             z-index: 0;
         }
 
-        /* Content on top of background */
-        .phase-4-body {
+        /* Content on top */
+        .card-body {
             position: relative;
             z-index: 1;
-            padding: 40px;
-            background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(2px);
-            min-height: 600px;
+            padding: 35px 40px 30px;
         }
 
-        .reflection-header {
+        /* Reflection content */
+        .reflection-title {
             text-align: center;
-            margin-bottom: 25px;
-        }
-
-        .reflection-header h2 {
-            color: #1a237e;
-            font-size: 2rem;
             margin-bottom: 10px;
         }
 
-        .reflection-header .subtitle {
-            color: #666;
-            font-size: 1.1rem;
-        }
-
-        .reflection-date {
-            text-align: center;
-            color: #666;
-            margin: 15px 0;
-            font-size: 0.95rem;
-        }
-
-        .reflection-progress {
-            background: white;
-            padding: 20px 25px;
-            border-radius: 12px;
-            margin: 15px 0;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
-        }
-
-        .reflection-progress h3 {
+        .reflection-title h2 {
             color: #1a237e;
-            margin-bottom: 15px;
-            font-size: 1.1rem;
+            font-size: 1.8rem;
         }
 
-        .progress-list {
+        .reflection-title p {
+            color: #555;
+            font-size: 1rem;
+        }
+
+        .date {
+            text-align: center;
+            color: #888;
+            font-size: 0.9rem;
+            margin: 12px 0 20px;
+        }
+
+        /* Progress section */
+        .progress-section {
+            background: #f8f9fa;
+            padding: 18px 22px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .progress-section h3 {
+            color: #1a237e;
+            font-size: 1rem;
+            margin-bottom: 12px;
+        }
+
+        .progress-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 8px 30px;
+            gap: 6px 30px;
         }
 
         .progress-item {
             display: flex;
             align-items: center;
-            gap: 12px;
-            padding: 6px 0;
+            gap: 10px;
+            padding: 4px 0;
         }
 
         .progress-item .check {
             color: #4CAF50;
             font-weight: bold;
-            font-size: 1.2rem;
+            font-size: 1.1rem;
         }
 
         .progress-item .label {
@@ -163,62 +168,52 @@
             font-size: 0.95rem;
         }
 
-        .reflection-question {
-            background: white;
-            padding: 25px;
-            border-radius: 12px;
-            margin: 15px 0;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+        /* Question */
+        .question-box {
+            background: #f8f9fa;
+            padding: 20px 22px;
+            border-radius: 10px;
+            margin-bottom: 20px;
         }
 
-        .reflection-question .question-title {
+        .question-box .q-label {
             color: #1a237e;
             font-weight: 600;
-            font-size: 1.1rem;
-            margin-bottom: 5px;
+            font-size: 1rem;
+            margin-bottom: 4px;
         }
 
-        .reflection-question .question-text {
+        .question-box .q-text {
             color: #555;
-            margin-bottom: 12px;
+            font-size: 0.95rem;
+            margin-bottom: 10px;
         }
 
-        .reflection-question .answer {
-            background: #f8f9fa;
-            padding: 12px 16px;
-            border-radius: 8px;
-            color: #333;
+        .question-box .answer {
+            background: white;
+            padding: 10px 14px;
+            border-radius: 6px;
             border-left: 3px solid #1a237e;
+            color: #333;
         }
 
-        .phase-actions {
+        /* Buttons */
+        .actions {
             display: flex;
             justify-content: space-between;
-            margin-top: 25px;
             padding-top: 20px;
             border-top: 1px solid #e0e0e0;
+            margin-top: 10px;
         }
 
-        .btn-next,
-        .btn-back {
-            padding: 12px 35px;
+        .btn {
+            padding: 10px 30px;
             border: none;
             border-radius: 8px;
             font-size: 1rem;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .btn-next {
-            background: #1a237e;
-            color: white;
-        }
-
-        .btn-next:hover {
-            background: #0d1642;
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(26, 35, 126, 0.3);
+            transition: 0.3s;
         }
 
         .btn-back {
@@ -230,77 +225,100 @@
             background: #d0d0d0;
         }
 
-        /* Phase label at bottom */
-        .phase-label {
-            text-align: center;
-            margin-top: 20px;
-            color: #999;
-            font-size: 0.9rem;
-            font-weight: 600;
-            letter-spacing: 2px;
+        .btn-next {
+            background: #1a237e;
+            color: white;
         }
 
-        @media (max-width: 768px) {
-            .phase-4-body {
+        .btn-next:hover {
+            background: #0d1642;
+        }
+
+        .phase-label {
+            text-align: center;
+            margin-top: 18px;
+            color: #bbb;
+            font-size: 0.8rem;
+            font-weight: 600;
+            letter-spacing: 3px;
+        }
+
+        /* Mobile */
+        @media (max-width: 600px) {
+            .card-body {
                 padding: 20px;
             }
 
-            .phase-header h1 {
-                font-size: 1.8rem;
-            }
-
-            .reflection-header h2 {
-                font-size: 1.5rem;
-            }
-
-            .progress-list {
+            .progress-grid {
                 grid-template-columns: 1fr;
             }
 
-            .phase-4-content {
-                min-height: 400px;
+            .header h1 {
+                font-size: 1.5rem;
+            }
+
+            .reflection-title h2 {
+                font-size: 1.3rem;
+            }
+
+            .actions {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .btn {
+                width: 100%;
+                text-align: center;
             }
         }
     </style>
 </head>
 <body>
-    <div class="phase-4-container">
-        <div class="phase-header">
+
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
             <h1>FUTURES ABROAD ENROLLMENT</h1>
             <p>Complete your enrollment to get personalized guidance from our counselors.</p>
-            <div class="phase-indicators">
-                <div class="phase-dot completed">1</div>
-                <div class="phase-dot completed">2</div>
-                <div class="phase-dot completed">3</div>
-                <div class="phase-dot active">4</div>
-                <div class="phase-dot">5</div>
-                <div class="phase-dot">6</div>
-            </div>
-            <p style="font-size: 1.2rem; color: #1a237e; font-weight: 600;">Step 4 of 6</p>
         </div>
 
-        <div class="phase-4-content">
+        <!-- Phase Dots -->
+        <div class="dots">
+            <div class="dot done">1</div>
+            <div class="dot done">2</div>
+            <div class="dot done">3</div>
+            <div class="dot active">4</div>
+            <div class="dot">5</div>
+            <div class="dot">6</div>
+        </div>
+
+        <div class="step-label">Step 4 of 6</div>
+
+        <!-- Main Card -->
+        <div class="card">
             <!-- Background Image -->
             <img 
                 src="https://compass.proplr.ae/assets/students-Dk42-8Za.png" 
-                alt="Students background" 
-                class="phase-4-bg"
+                alt="Students" 
+                class="card-bg"
             />
 
-            <!-- Content Overlay -->
-            <div class="phase-4-body">
-                <div class="reflection-header">
+            <!-- Content -->
+            <div class="card-body">
+                <!-- Reflection Header -->
+                <div class="reflection-title">
                     <h2>Post-Activity Reflection</h2>
-                    <p class="subtitle">Reflect on your experience with <strong>Youth Leadership Academy</strong></p>
+                    <p>Reflect on your experience with <strong>Youth Leadership Academy</strong></p>
                 </div>
 
-                <div class="reflection-date">
+                <div class="date">
                     <strong>Date Completed:</strong> 07/13/2026
                 </div>
 
-                <div class="reflection-progress">
+                <!-- Progress -->
+                <div class="progress-section">
                     <h3>Reflection Progress</h3>
-                    <div class="progress-list">
+                    <div class="progress-grid">
                         <div class="progress-item">
                             <span class="check">✔</span>
                             <span class="label">Question 1</span>
@@ -320,15 +338,17 @@
                     </div>
                 </div>
 
-                <div class="reflection-question">
-                    <div class="question-title">Question 1</div>
-                    <div class="question-text">What was the most important thing you learned?</div>
+                <!-- Question -->
+                <div class="question-box">
+                    <div class="q-label">Question 1</div>
+                    <div class="q-text">What was the most important thing you learned?</div>
                     <div class="answer">asdf</div>
                 </div>
 
-                <div class="phase-actions">
-                    <button class="btn-back" onclick="goToPhase3()">← Back</button>
-                    <button class="btn-next" onclick="goToPhase5()">Next →</button>
+                <!-- Actions -->
+                <div class="actions">
+                    <button class="btn btn-back" onclick="goBack()">← Back</button>
+                    <button class="btn btn-next" onclick="goNext()">Next →</button>
                 </div>
 
                 <div class="phase-label">PHASE 4</div>
@@ -337,14 +357,15 @@
     </div>
 
     <script>
-        function goToPhase3() {
+        function goBack() {
             window.location.href = 'futures-abroad-enroll.html';
         }
 
-        function goToPhase5() {
+        function goNext() {
             localStorage.setItem('phase4Complete', 'true');
             window.location.href = 'phase5-pathway.html';
         }
     </script>
+
 </body>
 </html>
