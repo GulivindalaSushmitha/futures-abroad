@@ -22,7 +22,6 @@
             padding: 20px;
         }
 
-        /* Header */
         .header {
             text-align: center;
             margin-bottom: 30px;
@@ -39,7 +38,6 @@
             font-size: 1rem;
         }
 
-        /* Phase dots */
         .dots {
             display: flex;
             justify-content: center;
@@ -78,36 +76,26 @@
             margin-bottom: 20px;
         }
 
-        /* Main card with background image */
         .card {
-            background: white;
             border-radius: 16px;
             overflow: hidden;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
             position: relative;
             min-height: 500px;
+            background-image: url('https://compass.proplr.ae/assets/students-Dk42-8Za.png');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
         }
 
-        /* Background image - very subtle */
-        .card-bg {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            opacity: 0.08;
-            z-index: 0;
-        }
-
-        /* Content on top */
-        .card-body {
-            position: relative;
-            z-index: 1;
+        .card-overlay {
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(2px);
             padding: 35px 40px 30px;
+            min-height: 500px;
+            width: 100%;
         }
 
-        /* Reflection content */
         .reflection-title {
             text-align: center;
             margin-bottom: 10px;
@@ -130,7 +118,6 @@
             margin: 12px 0 20px;
         }
 
-        /* Progress section */
         .progress-section {
             background: #f8f9fa;
             padding: 18px 22px;
@@ -168,7 +155,6 @@
             font-size: 0.95rem;
         }
 
-        /* Question */
         .question-box {
             background: #f8f9fa;
             padding: 20px 22px;
@@ -197,7 +183,6 @@
             color: #333;
         }
 
-        /* Buttons */
         .actions {
             display: flex;
             justify-content: space-between;
@@ -243,9 +228,8 @@
             letter-spacing: 3px;
         }
 
-        /* Mobile */
         @media (max-width: 600px) {
-            .card-body {
+            .card-overlay {
                 padding: 20px;
             }
 
@@ -276,13 +260,11 @@
 <body>
 
     <div class="container">
-        <!-- Header -->
         <div class="header">
             <h1>FUTURES ABROAD ENROLLMENT</h1>
             <p>Complete your enrollment to get personalized guidance from our counselors.</p>
         </div>
 
-        <!-- Phase Dots -->
         <div class="dots">
             <div class="dot done">1</div>
             <div class="dot done">2</div>
@@ -294,18 +276,8 @@
 
         <div class="step-label">Step 4 of 6</div>
 
-        <!-- Main Card -->
         <div class="card">
-            <!-- Background Image -->
-            <img 
-                src="https://compass.proplr.ae/assets/students-Dk42-8Za.png" 
-                alt="Students" 
-                class="card-bg"
-            />
-
-            <!-- Content -->
-            <div class="card-body">
-                <!-- Reflection Header -->
+            <div class="card-overlay">
                 <div class="reflection-title">
                     <h2>Post-Activity Reflection</h2>
                     <p>Reflect on your experience with <strong>Youth Leadership Academy</strong></p>
@@ -315,7 +287,6 @@
                     <strong>Date Completed:</strong> 07/13/2026
                 </div>
 
-                <!-- Progress -->
                 <div class="progress-section">
                     <h3>Reflection Progress</h3>
                     <div class="progress-grid">
@@ -338,14 +309,12 @@
                     </div>
                 </div>
 
-                <!-- Question -->
                 <div class="question-box">
                     <div class="q-label">Question 1</div>
                     <div class="q-text">What was the most important thing you learned?</div>
                     <div class="answer">asdf</div>
                 </div>
 
-                <!-- Actions -->
                 <div class="actions">
                     <button class="btn btn-back" onclick="goBack()">← Back</button>
                     <button class="btn btn-next" onclick="goNext()">Next →</button>
