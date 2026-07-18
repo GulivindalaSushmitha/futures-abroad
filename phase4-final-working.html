@@ -1,123 +1,352 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Phase 4 - Complete Activity</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Phase 4: Review & Continue</title>
+    <link rel="stylesheet" href="css/enrollment.css" />
+    <link rel="stylesheet" href="css/style.css" />
+    <style>
+        .phase-4-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .phase-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .phase-header h1 {
+            color: #1a237e;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .phase-header p {
+            color: #666;
+            font-size: 1.1rem;
+        }
+
+        .phase-indicators {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .phase-dot {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #e0e0e0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: #999;
+            transition: all 0.3s ease;
+        }
+
+        .phase-dot.active {
+            background: #1a237e;
+            color: white;
+            transform: scale(1.1);
+        }
+
+        .phase-dot.completed {
+            background: #4CAF50;
+            color: white;
+        }
+
+        .phase-4-content {
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            position: relative;
+            min-height: 600px;
+        }
+
+        .background-image-wrapper {
+            position: relative;
+            width: 100%;
+            min-height: 600px;
+            background: #1a237e;
+        }
+
+        .background-image-wrapper .bg-image {
+            width: 100%;
+            height: 100%;
+            min-height: 600px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .overlay-content {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            padding: 40px;
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(8px);
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .phase-4-title {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .phase-4-title h2 {
+            color: #1a237e;
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .phase-4-title p {
+            color: #666;
+            font-size: 1.1rem;
+        }
+
+        .profile-review {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            margin: 15px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+        }
+
+        .profile-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid #f0f0f0;
+            flex-wrap: wrap;
+            gap: 5px;
+        }
+
+        .profile-row:last-child {
+            border-bottom: none;
+        }
+
+        .profile-row .label {
+            font-weight: 600;
+            color: #555;
+        }
+
+        .profile-row .value {
+            color: #1a237e;
+            font-weight: 500;
+        }
+
+        .gap-analysis {
+            background: white;
+            padding: 20px 25px;
+            border-radius: 12px;
+            margin: 15px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+        }
+
+        .gap-analysis h3 {
+            color: #1a237e;
+            margin-bottom: 15px;
+        }
+
+        .gap-analysis ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .gap-analysis ul li {
+            padding: 10px 0;
+            border-bottom: 1px solid #f0f0f0;
+            color: #555;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .gap-analysis ul li:last-child {
+            border-bottom: none;
+        }
+
+        .gap-analysis ul li::before {
+            content: '•';
+            color: #1a237e;
+            font-weight: bold;
+            font-size: 1.5rem;
+        }
+
+        .gap-analysis ul li.completed::before {
+            content: '✓';
+            color: #4CAF50;
+        }
+
+        .phase-actions {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        .btn-next, .btn-back {
+            padding: 12px 35px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-next {
+            background: #1a237e;
+            color: white;
+        }
+
+        .btn-next:hover {
+            background: #0d1642;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(26, 35, 126, 0.3);
+        }
+
+        .btn-back {
+            background: #e0e0e0;
+            color: #555;
+        }
+
+        .btn-back:hover {
+            background: #d0d0d0;
+        }
+
+        @media (max-width: 768px) {
+            .background-image-wrapper {
+                min-height: 500px;
+            }
+
+            .background-image-wrapper .bg-image {
+                min-height: 500px;
+            }
+
+            .overlay-content {
+                padding: 20px;
+                position: relative;
+                background: white;
+            }
+
+            .phase-header h1 {
+                font-size: 1.8rem;
+            }
+
+            .phase-4-title h2 {
+                font-size: 1.5rem;
+            }
+
+            .profile-row {
+                flex-direction: column;
+                gap: 2px;
+            }
+        }
+    </style>
 </head>
-<body style="font-family: Arial, sans-serif; background: #f0f4ff; padding: 40px; margin: 0;">
-
-    <div style="max-width: 850px; margin: 0 auto; background: white; padding: 40px; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.1);">
-        
-        <div style="background: #ffeb3b; padding: 15px; border-radius: 12px; text-align: center; font-size: 20px; font-weight: bold; margin-bottom: 20px; border: 4px solid #f44336;">
-            ✅ PHASE 4 IS WORKING! CLICK THE GREEN BUTTON BELOW!
+<body>
+    <div class="phase-4-container">
+        <div class="phase-header">
+            <h1>FUTURES ABROAD ENROLLMENT</h1>
+            <p>Complete your enrollment to get personalized guidance from our counselors.</p>
+            <div class="phase-indicators">
+                <div class="phase-dot completed">1</div>
+                <div class="phase-dot completed">2</div>
+                <div class="phase-dot completed">3</div>
+                <div class="phase-dot active">4</div>
+                <div class="phase-dot">5</div>
+                <div class="phase-dot">6</div>
+            </div>
+            <p style="font-size: 1.2rem; color: #1a237e; font-weight: 600;">Step 4 of 6</p>
         </div>
 
-        <div style="display: inline-block; background: #22c55e; color: white; padding: 6px 20px; border-radius: 20px; font-size: 14px; font-weight: bold;">
-            ✅ Phase 4
-        </div>
-        
-        <h1 style="color: #2D1B4E; margin: 15px 0 10px; font-size: 32px;">🎯 After Completing This Activity</h1>
-        
-        <p style="color: #555; font-size: 18px; margin-bottom: 20px;">
-            Click the <strong style="color: #22c55e;">green button</strong> below to mark this activity as complete.
-        </p>
+        <div class="phase-4-content">
+            <div class="background-image-wrapper">
+                <img 
+                    src="https://compass.proplr.ae/assets/students-Dk42-8Za.png" 
+                    alt="Students collaborating" 
+                    class="bg-image"
+                />
+                <div class="overlay-content">
+                    <div class="phase-4-title">
+                        <h2>Step 4: Review Your Profile</h2>
+                        <p>Please review your profile before sharing with counselors.</p>
+                    </div>
 
-        <div style="background: #f8f4ff; padding: 15px; border-radius: 12px; border-left: 4px solid #6C3CE1; margin: 15px 0; font-size: 22px; font-weight: bold; color: #2D1B4E;">
-            📌 Global Entrepreneurship Challenge
-        </div>
+                    <div class="profile-review">
+                        <div class="profile-row">
+                            <span class="label">Name</span>
+                            <span class="value">sushmithagulivindala</span>
+                        </div>
+                        <div class="profile-row">
+                            <span class="label">Grade</span>
+                            <span class="value">Grade 10</span>
+                        </div>
+                        <div class="profile-row">
+                            <span class="label">School</span>
+                            <span class="value">Not set</span>
+                        </div>
+                        <div class="profile-row">
+                            <span class="label">Country</span>
+                            <span class="value">Not set</span>
+                        </div>
+                        <div class="profile-row">
+                            <span class="label">Interests</span>
+                            <span class="value">STEM, Leadership</span>
+                        </div>
+                        <div class="profile-row">
+                            <span class="label">Activities Completed</span>
+                            <span class="value">0</span>
+                        </div>
+                        <div class="profile-row">
+                            <span class="label">Profile Strength</span>
+                            <span class="value">60%</span>
+                        </div>
+                        <div class="profile-row">
+                            <span class="label">Universities Shortlisted</span>
+                            <span class="value">0</span>
+                        </div>
+                    </div>
 
-        <div style="background: #f0f0f0; padding: 10px; border-radius: 8px; font-size: 14px; color: #666; text-align: center; margin: 5px 0 15px;">
-            <strong>Activity ID:</strong> LU8gQBL9ECWXp1RsUbet
-        </div>
+                    <div class="gap-analysis">
+                        <h3>Gap Analysis</h3>
+                        <ul>
+                            <li class="completed">You have strong academics but no volunteering experience yet</li>
+                            <li>Consider joining a competition to build your profile</li>
+                            <li>Internships are valuable for university applications</li>
+                        </ul>
+                    </div>
 
-        <div style="text-align: center;">
-            <div style="background: #22c55e; color: white; padding: 12px 28px; border-radius: 50px; display: inline-block; font-weight: bold; margin: 10px 0; font-size: 18px;">
-                ✅ You are already registered for this activity!
+                    <div class="phase-actions">
+                        <button class="btn-back" onclick="goToPhase3()">← Back</button>
+                        <button class="btn-next" onclick="goToPhase5()">Next →</button>
+                    </div>
+                </div>
             </div>
         </div>
-
-        <div id="statusMessage" style="padding: 15px; border-radius: 12px; margin: 10px 0; display: none; text-align: center; font-size: 18px;"></div>
-
-        <div style="text-align: center; margin-top: 20px;">
-            <button id="completeBtn" style="background: #22c55e; color: white; border: none; padding: 22px 60px; border-radius: 50px; font-size: 24px; font-weight: bold; cursor: pointer; width: 100%; max-width: 500px; box-shadow: 0 4px 15px rgba(34,197,94,0.4);">
-                ✅ Mark Activity as Complete
-            </button>
-            <p style="color: #888; font-size: 0.9rem; margin-top: 10px;">
-                After completion, you'll be redirected to reflect on your experience.
-            </p>
-        </div>
-
-        <div id="successBox" style="background: #e8f5e9; padding: 30px; border-radius: 16px; border: 4px solid #22c55e; text-align: center; margin: 20px 0; display: none;">
-            <div style="font-size: 64px;">✅</div>
-            <h2 style="color: #16a34a; margin: 15px 0 10px; font-size: 28px;">Activity Completed!</h2>
-            <p style="font-size: 18px; color: #555;">Your progress has been saved to your portfolio.</p>
-            <p style="margin-top: 10px; font-size: 18px;">
-                ⏳ Redirecting to Phase 4 reflection page...
-            </p>
-        </div>
-
-        <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee; display: flex; gap: 10px; flex-wrap: wrap; justify-content: center;">
-            <a href="dashboard.html" style="background: transparent; color: #6C3CE1; border: 2px solid #6C3CE1; padding: 10px 24px; border-radius: 50px; text-decoration: none; font-weight: bold;">📊 Dashboard</a>
-            <a href="student-app.html" style="background: transparent; color: #6C3CE1; border: 2px solid #6C3CE1; padding: 10px 24px; border-radius: 50px; text-decoration: none; font-weight: bold;">🎯 Find Activities</a>
-            <a href="university-shortlist.html" style="background: transparent; color: #6C3CE1; border: 2px solid #6C3CE1; padding: 10px 24px; border-radius: 50px; text-decoration: none; font-weight: bold;">🏛️ Universities</a>
-            <a href="futures-abroad-enroll.html" style="background: linear-gradient(135deg, #00b09b, #96c93d); color: white; border: none; padding: 10px 24px; border-radius: 50px; text-decoration: none; font-weight: bold;">🚀 Enroll Now</a>
-        </div>
-
     </div>
 
     <script>
-        console.log('🚀 PHASE 4 LOADED!');
-        
-        const completeBtn = document.getElementById('completeBtn');
-        const successBox = document.getElementById('successBox');
-        const statusMessage = document.getElementById('statusMessage');
-
-        function showStatus(message, type) {
-            statusMessage.style.display = 'block';
-            statusMessage.textContent = message;
-            if (type === 'success') {
-                statusMessage.style.background = '#e8f5e9';
-                statusMessage.style.color = '#16a34a';
-                statusMessage.style.border = '2px solid #22c55e';
-            } else {
-                statusMessage.style.background = '#e3f2fd';
-                statusMessage.style.color = '#0d47a1';
-                statusMessage.style.border = '2px solid #2196f3';
-            }
+        function goToPhase3() {
+            window.location.href = 'futures-abroad-enroll.html';
         }
 
-        function markActivityAsComplete() {
-            console.log('🔵 BUTTON CLICKED!');
-
-            completeBtn.textContent = '⏳ Processing...';
-            completeBtn.disabled = true;
-            completeBtn.style.opacity = '0.6';
-            completeBtn.style.cursor = 'not-allowed';
-
-            showStatus('✅ Saving to portfolio...', 'info');
-
-            setTimeout(function() {
-                console.log('✅ Activity marked as complete!');
-                
-                showStatus('✅ Activity completed successfully!', 'success');
-                successBox.style.display = 'block';
-                completeBtn.textContent = '✅ Completed!';
-
-                alert('✅ SUCCESS! Phase 4 is working!\n\nYour activity has been marked as complete.');
-
-                setTimeout(function() {
-                    console.log('🔄 Redirecting to post-activity.html');
-                    window.location.href = 'post-activity.html?id=LU8gQBL9ECWXp1RsUbet';
-                }, 2000);
-
-            }, 1500);
+        function goToPhase5() {
+            window.location.href = 'phase5-pathway.html';
         }
-
-        completeBtn.addEventListener('click', markActivityAsComplete);
-
-        console.log('✅ Phase 4 ready!');
-        console.log('📌 Activity ID: LU8gQBL9ECWXp1RsUbet');
     </script>
-
 </body>
 </html>
