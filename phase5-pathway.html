@@ -7,6 +7,12 @@
     <link rel="stylesheet" href="css/enrollment.css" />
     <link rel="stylesheet" href="css/style.css" />
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         .phase-5-container {
             max-width: 1200px;
             margin: 0 auto;
@@ -94,28 +100,25 @@
             background: rgba(255, 255, 255, 0.92);
             backdrop-filter: blur(8px);
             overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
         }
 
-        .phase-5-title {
+        .pathway-header {
             text-align: center;
             margin-bottom: 25px;
         }
 
-        .phase-5-title h2 {
+        .pathway-header h2 {
             color: #1a237e;
             font-size: 2rem;
             margin-bottom: 10px;
         }
 
-        .phase-5-title p {
+        .pathway-header p {
             color: #666;
             font-size: 1.1rem;
         }
 
-        .profile-info {
+        .profile-card {
             background: white;
             padding: 25px;
             border-radius: 12px;
@@ -124,26 +127,26 @@
         }
 
         .profile-name {
-            font-size: 1.8rem;
+            font-size: 1.5rem;
             font-weight: bold;
             color: #1a237e;
             margin-bottom: 10px;
         }
 
         .profile-details {
-            display: flex;
-            gap: 25px;
             color: #666;
             margin-bottom: 15px;
-            flex-wrap: wrap;
+            line-height: 1.8;
         }
 
         .profile-details span {
+            display: inline-block;
             background: #f0f2ff;
-            padding: 5px 15px;
-            border-radius: 20px;
+            padding: 3px 12px;
+            border-radius: 15px;
             font-size: 0.9rem;
             color: #1a237e;
+            margin: 3px 5px 3px 0;
         }
 
         .profile-strength {
@@ -166,7 +169,7 @@
 
         .strength-bar {
             flex: 1;
-            min-width: 200px;
+            min-width: 150px;
             height: 8px;
             background: #e0e0e0;
             border-radius: 4px;
@@ -177,7 +180,6 @@
             height: 100%;
             background: linear-gradient(90deg, #4CAF50, #8BC34A);
             border-radius: 4px;
-            transition: width 0.5s ease;
             width: 60%;
         }
 
@@ -190,7 +192,7 @@
         .interest-tag {
             background: #e3f2fd;
             color: #1a237e;
-            padding: 6px 18px;
+            padding: 5px 15px;
             border-radius: 20px;
             font-size: 0.9rem;
             font-weight: 500;
@@ -219,15 +221,17 @@
             border-bottom: 1px solid #f0f0f0;
             color: #555;
             display: flex;
-            align-items: center;
-            gap: 12px;
+            align-items: flex-start;
+            gap: 10px;
         }
 
         .gap-analysis ul li:last-child {
             border-bottom: none;
         }
 
-        .gap-analysis ul li .icon {
+        .gap-analysis ul li .bullet {
+            color: #1a237e;
+            font-weight: bold;
             font-size: 1.2rem;
         }
 
@@ -235,21 +239,16 @@
             flex: 1;
         }
 
-        .gap-analysis ul li .status {
-            color: #4CAF50;
-            font-weight: 500;
-            font-size: 0.9rem;
-        }
-
         .phase-actions {
             display: flex;
             justify-content: space-between;
-            margin-top: 20px;
+            margin-top: 25px;
             padding-top: 20px;
             border-top: 1px solid #e0e0e0;
         }
 
-        .btn-next, .btn-back {
+        .btn-next,
+        .btn-back {
             padding: 12px 35px;
             border: none;
             border-radius: 8px;
@@ -298,13 +297,8 @@
                 font-size: 1.8rem;
             }
 
-            .profile-name {
-                font-size: 1.4rem;
-            }
-
-            .profile-details {
-                flex-direction: column;
-                gap: 10px;
+            .pathway-header h2 {
+                font-size: 1.5rem;
             }
         }
     </style>
@@ -327,18 +321,14 @@
 
         <div class="phase-5-content">
             <div class="background-image-wrapper">
-                <img 
-                    src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRMrDjMyPlXPBUG4x9JW3bTYF6gcDIy4Hz6DjisF4PZvQ&s=10" 
-                    alt="University Pathway" 
-                    class="bg-image"
-                />
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRMrDjMyPlXPBUG4x9JW3bTYF6gcDIy4Hz6DjisF4PZvQ&s=10" alt="University Pathway" class="bg-image" />
                 <div class="overlay-content">
-                    <div class="phase-5-title">
+                    <div class="pathway-header">
                         <h2>University Pathway</h2>
                         <p>Your personalized university recommendations based on your interests</p>
                     </div>
 
-                    <div class="profile-info">
+                    <div class="profile-card">
                         <div class="profile-name">sushmithagulivindala</div>
                         <div class="profile-details">
                             <span>Grade 10</span>
@@ -347,7 +337,7 @@
                         </div>
                         <div class="profile-strength">
                             <span>Profile Strength</span>
-                            <span class="strength-value">60% STRENGTH</span>
+                            <span class="strength-value">60%</span>
                             <div class="strength-bar">
                                 <div class="strength-bar-fill"></div>
                             </div>
@@ -362,19 +352,16 @@
                         <h3>Gap Analysis</h3>
                         <ul>
                             <li>
-                                <span class="icon">✓</span>
+                                <span class="bullet">•</span>
                                 <span class="text">You have strong academics but no volunteering experience yet</span>
-                                <span class="status">Action Needed</span>
                             </li>
                             <li>
-                                <span class="icon">○</span>
+                                <span class="bullet">•</span>
                                 <span class="text">Consider joining a competition to build your profile</span>
-                                <span class="status">Recommended</span>
                             </li>
                             <li>
-                                <span class="icon">○</span>
+                                <span class="bullet">•</span>
                                 <span class="text">Internships are valuable for university applications</span>
-                                <span class="status">Recommended</span>
                             </li>
                         </ul>
                     </div>
@@ -394,6 +381,7 @@
         }
 
         function goToPhase6() {
+            localStorage.setItem('phase5Complete', 'true');
             window.location.href = 'phase6-payment.html';
         }
     </script>
