@@ -11,11 +11,11 @@
             box-sizing: border-box;
         }
 
-        /* ===== PHASE 4 - FULL PAGE BACKGROUND ===== */
         html, body {
             min-height: 100vh;
             margin: 0;
             padding: 0;
+            width: 100%;
         }
 
         body {
@@ -25,27 +25,60 @@
             align-items: center;
             justify-content: center;
             padding: 20px;
-            
-            /* ===== MAIN BACKGROUND IMAGE (img1) ===== */
-            background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTk_zUijas1Evj87Ym1V7LCBiwfnlMm_zB4tUN8MwsEhA&s=10') !important;
-            background-size: cover !important;
-            background-position: center !important;
-            background-attachment: fixed !important;
-            background-repeat: no-repeat !important;
-            
-            /* ===== DARK OVERLAY FOR READABILITY ===== */
-            background-color: rgba(0, 0, 0, 0.5) !important;
-            background-blend-mode: overlay !important;
+            background: #f0f2f5;
         }
 
-        /* ===== DECORATIVE FLOATING IMAGE (img4) - BOTTOM RIGHT ===== */
-        body::before {
+        /* ===== HERO BACKGROUND CONTAINER (like homepage) ===== */
+        .phase4-wrapper {
+            width: 100%;
+            max-width: 950px;
+            margin: 0 auto;
+            padding: 30px;
+            border-radius: 24px;
+            position: relative;
+            
+            /* ===== BACKGROUND IMAGE (img1) ===== */
+            background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTk_zUijas1Evj87Ym1V7LCBiwfnlMm_zB4tUN8MwsEhA&s=10');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            
+            /* ===== GRADIENT OVERLAY (like homepage) ===== */
+            background-image: 
+                linear-gradient(135deg, rgba(26, 35, 126, 0.7) 0%, rgba(118, 75, 162, 0.7) 100%),
+                url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTk_zUijas1Evj87Ym1V7LCBiwfnlMm_zB4tUN8MwsEhA&s=10');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        /* ===== DECORATIVE FLOATING IMAGE (img4) ===== */
+        .phase4-wrapper::before {
             content: '';
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            width: 150px;
-            height: 150px;
+            position: absolute;
+            bottom: -20px;
+            right: -20px;
+            width: 100px;
+            height: 100px;
+            background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ84wAd2EvA62Pna28II-U0Psf6y9Do5lDRRL6yhi-N9A&s');
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            opacity: 0.2;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .phase4-wrapper::after {
+            content: '';
+            position: absolute;
+            top: -20px;
+            left: -20px;
+            width: 70px;
+            height: 70px;
             background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ84wAd2EvA62Pna28II-U0Psf6y9Do5lDRRL6yhi-N9A&s');
             background-size: contain;
             background-repeat: no-repeat;
@@ -56,36 +89,14 @@
             z-index: 0;
         }
 
-        /* ===== DECORATIVE FLOATING IMAGE (img4) - TOP LEFT ===== */
-        body::after {
-            content: '';
-            position: fixed;
-            top: 30px;
-            left: 30px;
-            width: 100px;
-            height: 100px;
-            background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ84wAd2EvA62Pna28II-U0Psf6y9Do5lDRRL6yhi-N9A&s');
-            background-size: contain;
-            background-repeat: no-repeat;
-            background-position: center;
-            opacity: 0.10;
-            border-radius: 50%;
-            pointer-events: none;
-            z-index: 0;
-        }
-
-        /* ===== MAIN CONTENT CARD ===== */
+        /* ===== CONTENT CARD (white/transparent) ===== */
         .phase4-container {
-            max-width: 900px;
-            width: 100%;
-            margin: 20px auto;
-            padding: 30px;
-            background: rgba(255, 255, 255, 0.92);
-            backdrop-filter: blur(8px);
-            border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
             position: relative;
             z-index: 1;
+            padding: 30px;
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
             animation: fadeIn 0.6s ease-in;
         }
 
@@ -158,12 +169,12 @@
             border-radius: 16px;
             overflow: hidden;
             position: relative;
-            min-height: 500px;
+            min-height: 400px;
         }
 
         .phase4-overlay {
-            padding: 35px 40px 30px;
-            min-height: 500px;
+            padding: 25px 30px 20px;
+            min-height: 400px;
             width: 100%;
         }
 
@@ -300,8 +311,14 @@
         }
 
         @media (max-width: 600px) {
+            .phase4-wrapper {
+                padding: 15px;
+            }
+            .phase4-container {
+                padding: 15px;
+            }
             .phase4-overlay {
-                padding: 20px;
+                padding: 15px;
             }
             .phase4-progress-grid {
                 grid-template-columns: 1fr;
@@ -320,90 +337,89 @@
                 width: 100%;
                 text-align: center;
             }
-            .phase4-container {
-                padding: 15px;
-            }
             
-            body::before {
-                width: 80px;
-                height: 80px;
-                bottom: 15px;
-                right: 15px;
-            }
-            
-            body::after {
+            .phase4-wrapper::before {
                 width: 60px;
                 height: 60px;
-                top: 15px;
-                left: 15px;
+                bottom: -10px;
+                right: -10px;
+            }
+            
+            .phase4-wrapper::after {
+                width: 40px;
+                height: 40px;
+                top: -10px;
+                left: -10px;
             }
         }
     </style>
 </head>
 <body>
 
-    <div class="phase4-container">
-        <div class="phase4-header">
-            <h1>FUTURES ABROAD ENROLLMENT</h1>
-            <p>Complete your enrollment to get personalized guidance from our counselors.</p>
-        </div>
+    <div class="phase4-wrapper">
+        <div class="phase4-container">
+            <div class="phase4-header">
+                <h1>FUTURES ABROAD ENROLLMENT</h1>
+                <p>Complete your enrollment to get personalized guidance from our counselors.</p>
+            </div>
 
-        <div class="phase4-dots">
-            <div class="phase4-dot done">1</div>
-            <div class="phase4-dot done">2</div>
-            <div class="phase4-dot done">3</div>
-            <div class="phase4-dot active">4</div>
-            <div class="phase4-dot">5</div>
-            <div class="phase4-dot">6</div>
-        </div>
+            <div class="phase4-dots">
+                <div class="phase4-dot done">1</div>
+                <div class="phase4-dot done">2</div>
+                <div class="phase4-dot done">3</div>
+                <div class="phase4-dot active">4</div>
+                <div class="phase4-dot">5</div>
+                <div class="phase4-dot">6</div>
+            </div>
 
-        <div class="phase4-step-label">Step 4 of 6</div>
+            <div class="phase4-step-label">Step 4 of 6</div>
 
-        <div class="phase4-card">
-            <div class="phase4-overlay">
-                <div class="phase4-reflection-title">
-                    <h2>Post-Activity Reflection</h2>
-                    <p>Reflect on your experience with <strong>Youth Leadership Academy</strong></p>
-                </div>
+            <div class="phase4-card">
+                <div class="phase4-overlay">
+                    <div class="phase4-reflection-title">
+                        <h2>Post-Activity Reflection</h2>
+                        <p>Reflect on your experience with <strong>Youth Leadership Academy</strong></p>
+                    </div>
 
-                <div class="phase4-date">
-                    <strong>Date Completed:</strong> 07/13/2026
-                </div>
+                    <div class="phase4-date">
+                        <strong>Date Completed:</strong> 07/13/2026
+                    </div>
 
-                <div class="phase4-progress">
-                    <h3>Reflection Progress</h3>
-                    <div class="phase4-progress-grid">
-                        <div class="phase4-progress-item">
-                            <span class="check">✔</span>
-                            <span class="label">Question 1</span>
-                        </div>
-                        <div class="phase4-progress-item">
-                            <span class="check">✔</span>
-                            <span class="label">Question 2</span>
-                        </div>
-                        <div class="phase4-progress-item">
-                            <span class="check">✔</span>
-                            <span class="label">Question 3</span>
-                        </div>
-                        <div class="phase4-progress-item">
-                            <span class="check">✔</span>
-                            <span class="label">Question 4</span>
+                    <div class="phase4-progress">
+                        <h3>Reflection Progress</h3>
+                        <div class="phase4-progress-grid">
+                            <div class="phase4-progress-item">
+                                <span class="check">✔</span>
+                                <span class="label">Question 1</span>
+                            </div>
+                            <div class="phase4-progress-item">
+                                <span class="check">✔</span>
+                                <span class="label">Question 2</span>
+                            </div>
+                            <div class="phase4-progress-item">
+                                <span class="check">✔</span>
+                                <span class="label">Question 3</span>
+                            </div>
+                            <div class="phase4-progress-item">
+                                <span class="check">✔</span>
+                                <span class="label">Question 4</span>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <div class="phase4-question">
-                    <div class="q-label">Question 1</div>
-                    <div class="q-text">What was the most important thing you learned?</div>
-                    <div class="answer">asdf</div>
-                </div>
+                    <div class="phase4-question">
+                        <div class="q-label">Question 1</div>
+                        <div class="q-text">What was the most important thing you learned?</div>
+                        <div class="answer">asdf</div>
+                    </div>
 
-                <div class="phase4-actions">
-                    <button class="phase4-btn phase4-btn-back" onclick="goBack()">← Back</button>
-                    <button class="phase4-btn phase4-btn-next" onclick="goNext()">Next →</button>
-                </div>
+                    <div class="phase4-actions">
+                        <button class="phase4-btn phase4-btn-back" onclick="goBack()">← Back</button>
+                        <button class="phase4-btn phase4-btn-next" onclick="goNext()">Next →</button>
+                    </div>
 
-                <div class="phase4-label">PHASE 4</div>
+                    <div class="phase4-label">PHASE 4</div>
+                </div>
             </div>
         </div>
     </div>
