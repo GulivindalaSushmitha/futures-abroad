@@ -1,5 +1,5 @@
 /* ============================================================
-   css/enrollment.css - COMPLETE
+   css/enrollment.css - COMPLETE (Phase 6)
    ============================================================ */
 
 * {
@@ -8,17 +8,76 @@
     box-sizing: border-box;
 }
 
+/* ===== FULL PAGE BACKGROUND ===== */
+html, body {
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+}
+
 body {
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-    background: #f1f5f9;
-    color: #1e293b;
-    line-height: 1.6;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    
+    /* ===== MAIN BACKGROUND IMAGE (img3) ===== */
+    background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT12vQuLuqej29-3j31ajCx9mOCV5YYsroZM0922IXMjg&s=10');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    
+    /* ===== DARK OVERLAY FOR READABILITY ===== */
+    background-color: rgba(0, 0, 0, 0.5);
+    background-blend-mode: overlay;
+}
+
+/* ===== DECORATIVE FLOATING IMAGE (img6) - BOTTOM RIGHT ===== */
+body::before {
+    content: '';
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 150px;
+    height: 150px;
+    background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT6FuIQKQSbsOxpWsbyPhUv32pgLTxLNlIVx_z6ZKv8BQ&s=10');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    opacity: 0.15;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* ===== DECORATIVE FLOATING IMAGE (img6) - TOP LEFT ===== */
+body::after {
+    content: '';
+    position: fixed;
+    top: 30px;
+    left: 30px;
+    width: 100px;
+    height: 100px;
+    background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT6FuIQKQSbsOxpWsbyPhUv32pgLTxLNlIVx_z6ZKv8BQ&s=10');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    opacity: 0.10;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 0;
 }
 
 .app-container {
     max-width: 900px;
+    width: 100%;
     margin: 0 auto;
     padding: 30px 20px;
+    position: relative;
+    z-index: 1;
 }
 
 /* ===== Header Bar ===== */
@@ -175,7 +234,8 @@ body {
 
 /* ===== Enrollment Card ===== */
 .enrollment-card {
-    background: white;
+    background: rgba(255, 255, 255, 0.92);
+    backdrop-filter: blur(8px);
     border-radius: 12px;
     padding: 30px;
     box-shadow: 0 2px 8px rgba(0,0,0,0.06);
@@ -498,6 +558,20 @@ body {
     
     .header-actions {
         justify-content: center;
+    }
+    
+    body::before {
+        width: 80px;
+        height: 80px;
+        bottom: 15px;
+        right: 15px;
+    }
+    
+    body::after {
+        width: 60px;
+        height: 60px;
+        top: 15px;
+        left: 15px;
     }
 }
 
