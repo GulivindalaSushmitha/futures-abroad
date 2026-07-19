@@ -13,32 +13,61 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: #f0f2f5;
             min-height: 100vh;
-            /* BACKGROUND IMAGE FOR PHASE 6 */
+            margin: 0;
+            padding: 0;
+            position: relative;
+            
+            /* Main background image - img3 */
             background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT12vQuLuqej29-3j31ajCx9mOCV5YYsroZM0922IXMjg&s=10');
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
             background-repeat: no-repeat;
-            background-color: rgba(0, 0, 0, 0.35);
+            
+            /* Dark overlay for readability */
+            background-color: rgba(0, 0, 0, 0.5);
             background-blend-mode: overlay;
+            
             display: flex;
             align-items: center;
             justify-content: center;
             padding: 20px;
         }
 
-        .phase6-container {
-            max-width: 900px;
-            width: 100%;
-            margin: 0 auto;
-            padding: 20px;
-            background: rgba(255, 255, 255, 0.92);
-            backdrop-filter: blur(4px);
-            border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-            animation: fadeIn 0.6s ease-in;
+        /* Add a second decorative image - img6 as a floating element */
+        body::before {
+            content: '';
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 120px;
+            height: 120px;
+            background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT6FuIQKQSbsOxpWsbyPhUv32pgLTxLNlIVx_z6ZKv8BQ&s=10');
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            opacity: 0.15;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        body::after {
+            content: '';
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            width: 80px;
+            height: 80px;
+            background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT6FuIQKQSbsOxpWsbyPhUv32pgLTxLNlIVx_z6ZKv8BQ&s=10');
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            opacity: 0.10;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 0;
         }
 
         @keyframes fadeIn {
@@ -50,6 +79,20 @@
                 opacity: 1;
                 transform: translateY(0);
             }
+        }
+
+        .phase6-container {
+            max-width: 900px;
+            width: 100%;
+            margin: 20px auto;
+            padding: 30px;
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(8px);
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            position: relative;
+            z-index: 1;
+            animation: fadeIn 0.6s ease-in;
         }
 
         .phase6-header {
