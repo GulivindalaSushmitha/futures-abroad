@@ -14,12 +14,42 @@
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: #f0f2f5;
+            min-height: 100vh;
+            /* BACKGROUND IMAGE FOR PHASE 5 */
+            background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcShdCSjQaa9SD3NAvsCGHfYtjWns8e4gPHpd8RYVlTc1A&s=10');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            background-repeat: no-repeat;
+            background-color: rgba(0, 0, 0, 0.35);
+            background-blend-mode: overlay;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
         }
 
         .phase5-container {
             max-width: 900px;
+            width: 100%;
             margin: 0 auto;
             padding: 20px;
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(4px);
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: fadeIn 0.6s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .phase5-header {
@@ -79,147 +109,199 @@
         .phase5-card {
             border-radius: 16px;
             overflow: hidden;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
             position: relative;
             min-height: 500px;
-            background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRMrDjMyPlXPBUG4x9JW3bTYF6gcDIy4Hz6DjisF4PZvQ&s=10');
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
         }
 
         .phase5-overlay {
-            background: rgba(255, 255, 255, 0.92);
-            backdrop-filter: blur(2px);
             padding: 35px 40px 30px;
             min-height: 500px;
             width: 100%;
         }
 
-        .phase5-title {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        .phase5-title h2 {
-            color: #1a237e;
-            font-size: 1.8rem;
-        }
-
-        .phase5-title p {
-            color: #555;
-            font-size: 1rem;
-        }
-
         .phase5-profile {
             background: #f8f9fa;
-            padding: 20px 22px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-        }
-
-        .phase5-profile-name {
-            font-size: 1.3rem;
-            font-weight: bold;
-            color: #1a237e;
-            margin-bottom: 8px;
-        }
-
-        .phase5-profile-details {
-            color: #666;
-            margin-bottom: 12px;
-        }
-
-        .phase5-profile-details span {
-            background: white;
-            padding: 2px 12px;
+            padding: 20px;
             border-radius: 12px;
-            font-size: 0.85rem;
-            color: #1a237e;
-            margin-right: 6px;
-            display: inline-block;
+            margin-bottom: 25px;
+            border: 1px solid #e0e0e0;
         }
 
-        .phase5-strength {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px 14px;
-            background: white;
-            border-radius: 6px;
+        .phase5-profile h3 {
+            color: #1a237e;
             margin-bottom: 12px;
-            flex-wrap: wrap;
-            gap: 8px;
+            font-size: 1.1rem;
         }
 
-        .phase5-strength-value {
-            color: #4CAF50;
-            font-weight: bold;
+        .phase5-profile-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px 20px;
         }
 
-        .phase5-strength-bar {
-            flex: 1;
-            min-width: 120px;
-            height: 6px;
-            background: #e0e0e0;
-            border-radius: 3px;
-            overflow: hidden;
-        }
-
-        .phase5-strength-fill {
-            height: 100%;
-            background: #4CAF50;
-            border-radius: 3px;
-            width: 60%;
-        }
-
-        .phase5-interests {
+        .phase5-profile-item {
             display: flex;
+            align-items: center;
             gap: 8px;
+            padding: 6px 0;
+        }
+
+        .phase5-profile-item .label {
+            color: #888;
+            font-size: 0.85rem;
+            min-width: 70px;
+        }
+
+        .phase5-profile-item .value {
+            color: #333;
+            font-weight: 500;
+            font-size: 0.95rem;
+        }
+
+        .phase5-profile-item .value.not-set {
+            color: #999;
+            font-style: italic;
+        }
+
+        .phase5-badges {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
             flex-wrap: wrap;
         }
 
-        .phase5-interest-tag {
-            background: #e3f2fd;
-            color: #1a237e;
-            padding: 4px 14px;
-            border-radius: 14px;
+        .phase5-badge {
+            padding: 5px 16px;
+            border-radius: 20px;
             font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .phase5-badge.stem {
+            background: #e3f2fd;
+            color: #1565c0;
+        }
+
+        .phase5-badge.leadership {
+            background: #fff3e0;
+            color: #e65100;
         }
 
         .phase5-gap {
-            background: #f8f9fa;
-            padding: 18px 22px;
-            border-radius: 10px;
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px 20px;
+            border-radius: 8px;
             margin-bottom: 20px;
         }
 
-        .phase5-gap h3 {
-            color: #1a237e;
-            font-size: 1rem;
-            margin-bottom: 10px;
+        .phase5-gap h4 {
+            color: #856404;
+            font-size: 0.95rem;
+            margin-bottom: 6px;
         }
 
         .phase5-gap ul {
             list-style: none;
-            padding: 0;
+            padding-left: 0;
         }
 
         .phase5-gap ul li {
-            padding: 8px 0;
-            border-bottom: 1px solid #eee;
-            color: #555;
-            display: flex;
-            gap: 10px;
+            color: #856404;
+            padding: 3px 0;
+            padding-left: 20px;
+            position: relative;
+            font-size: 0.9rem;
         }
 
-        .phase5-gap ul li:last-child {
-            border-bottom: none;
-        }
-
-        .phase5-gap ul li .bullet {
-            color: #1a237e;
+        .phase5-gap ul li::before {
+            content: "•";
+            position: absolute;
+            left: 0;
             font-weight: bold;
+        }
+
+        .phase5-tip {
+            background: #d1ecf1;
+            border-radius: 10px;
+            padding: 15px 20px;
+            margin-bottom: 25px;
+            border-left: 4px solid #17a2b8;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .phase5-tip .icon {
+            font-size: 24px;
+        }
+
+        .phase5-tip .text {
+            color: #0c5460;
+            font-size: 0.95rem;
+        }
+
+        .phase5-universities h3 {
+            color: #1a237e;
+            margin-bottom: 12px;
+            font-size: 1.1rem;
+        }
+
+        .phase5-uni-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .phase5-uni-card {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            border: 2px solid #e0e0e0;
+            transition: all 0.3s ease;
+        }
+
+        .phase5-uni-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .phase5-uni-card .name {
+            font-weight: 600;
+            color: #1a237e;
+            font-size: 0.9rem;
+        }
+
+        .phase5-uni-card .location {
+            font-size: 0.8rem;
+            color: #888;
+            margin-top: 3px;
+        }
+
+        .phase5-uni-card .tag {
+            display: inline-block;
+            margin-top: 8px;
+            padding: 2px 12px;
+            border-radius: 12px;
+            font-size: 0.7rem;
+            font-weight: 600;
+        }
+
+        .tag-reach {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .tag-target {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .tag-safety {
+            background: #d1ecf1;
+            color: #0c5460;
         }
 
         .phase5-actions {
@@ -258,15 +340,27 @@
             background: #0d1642;
         }
 
+        .phase5-label {
+            text-align: center;
+            margin-top: 18px;
+            color: #bbb;
+            font-size: 0.8rem;
+            font-weight: 600;
+            letter-spacing: 3px;
+        }
+
         @media (max-width: 600px) {
             .phase5-overlay {
                 padding: 20px;
             }
+            .phase5-profile-grid {
+                grid-template-columns: 1fr;
+            }
+            .phase5-uni-grid {
+                grid-template-columns: 1fr;
+            }
             .phase5-header h1 {
                 font-size: 1.5rem;
-            }
-            .phase5-title h2 {
-                font-size: 1.3rem;
             }
             .phase5-actions {
                 flex-direction: column;
@@ -275,6 +369,9 @@
             .phase5-btn {
                 width: 100%;
                 text-align: center;
+            }
+            .phase5-container {
+                padding: 15px;
             }
         }
     </style>
@@ -300,44 +397,81 @@
 
         <div class="phase5-card">
             <div class="phase5-overlay">
-                <div class="phase5-title">
-                    <h2>University Pathway</h2>
-                    <p>Your personalized university recommendations based on your interests</p>
-                </div>
+                <h2 style="color: #1a237e; font-size: 1.6rem; margin-bottom: 20px;">University Pathway</h2>
+                <p style="color: #666; margin-bottom: 20px;">Your personalized university recommendations based on your interests</p>
 
                 <div class="phase5-profile">
-                    <div class="phase5-profile-name">sushmithagulivindala</div>
-                    <div class="phase5-profile-details">
-                        <span>Grade 10</span>
-                        <span>School not set</span>
-                        <span>Country not set</span>
-                    </div>
-                    <div class="phase5-strength">
-                        <span>Profile Strength</span>
-                        <span class="phase5-strength-value">60%</span>
-                        <div class="phase5-strength-bar">
-                            <div class="phase5-strength-fill"></div>
+                    <h3>📋 Profile Overview</h3>
+                    <div class="phase5-profile-grid">
+                        <div class="phase5-profile-item">
+                            <span class="label">Name:</span>
+                            <span class="value">sushmithagulivindala</span>
+                        </div>
+                        <div class="phase5-profile-item">
+                            <span class="label">Grade:</span>
+                            <span class="value">10</span>
+                        </div>
+                        <div class="phase5-profile-item">
+                            <span class="label">School:</span>
+                            <span class="value not-set">Not set</span>
+                        </div>
+                        <div class="phase5-profile-item">
+                            <span class="label">Country:</span>
+                            <span class="value not-set">Not set</span>
+                        </div>
+                        <div class="phase5-profile-item" style="grid-column: 1 / -1;">
+                            <span class="label">Profile Strength:</span>
+                            <span class="value" style="color: #1a237e; font-weight: 700;">60%</span>
+                            <span style="margin-left: 10px; font-size: 0.8rem; color: #888;">(Intermediate)</span>
                         </div>
                     </div>
-                    <div class="phase5-interests">
-                        <span class="phase5-interest-tag">STEM</span>
-                        <span class="phase5-interest-tag">Leadership</span>
-                    </div>
+                </div>
+
+                <div class="phase5-badges">
+                    <span class="phase5-badge stem">🔬 STEM</span>
+                    <span class="phase5-badge leadership">🌟 Leadership</span>
                 </div>
 
                 <div class="phase5-gap">
-                    <h3>Gap Analysis</h3>
+                    <h4>📊 Gap Analysis</h4>
                     <ul>
-                        <li><span class="bullet">•</span> You have strong academics but no volunteering experience yet</li>
-                        <li><span class="bullet">•</span> Consider joining a competition to build your profile</li>
-                        <li><span class="bullet">•</span> Internships are valuable for university applications</li>
+                        <li>You have strong academics but no volunteering experience yet</li>
+                        <li>Consider joining a competition to build your profile</li>
                     </ul>
+                </div>
+
+                <div class="phase5-tip">
+                    <span class="icon">💡</span>
+                    <span class="text"><strong>Pro Tip:</strong> Internships are valuable for university applications.</span>
+                </div>
+
+                <div class="phase5-universities">
+                    <h3>🏛️ Your University Shortlist</h3>
+                    <div class="phase5-uni-grid">
+                        <div class="phase5-uni-card">
+                            <div class="name">Massachusetts Institute of Technology</div>
+                            <div class="location">USA • STEM Focus</div>
+                            <span class="tag tag-reach">Reach</span>
+                        </div>
+                        <div class="phase5-uni-card">
+                            <div class="name">University of Toronto</div>
+                            <div class="location">Canada • Research</div>
+                            <span class="tag tag-target">Target</span>
+                        </div>
+                        <div class="phase5-uni-card">
+                            <div class="name">University of Melbourne</div>
+                            <div class="location">Australia • Comprehensive</div>
+                            <span class="tag tag-safety">Safety</span>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="phase5-actions">
                     <button class="phase5-btn phase5-btn-back" onclick="goBack()">← Back</button>
                     <button class="phase5-btn phase5-btn-next" onclick="goNext()">Next →</button>
                 </div>
+
+                <div class="phase5-label">PHASE 5</div>
             </div>
         </div>
     </div>
