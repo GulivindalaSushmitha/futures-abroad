@@ -5,30 +5,28 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Phase 4: Post-Activity Reflection</title>
     <style>
+        /* --- RESET & BASE --- */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-
         html, body {
             min-height: 100vh;
             margin: 0;
             padding: 0;
             width: 100%;
-        }
-
-        body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            min-height: 100vh;
+        }
+        body {
             display: flex;
             align-items: center;
             justify-content: center;
             padding: 20px;
-            background: #f0f2f5;
+            background: #f0f2f5; /* Fallback */
         }
 
-        /* ===== HERO BACKGROUND CONTAINER (like homepage) ===== */
+        /* --- PHASE 4 WRAPPER with BACKGROUND and OVERLAY --- */
         .phase4-wrapper {
             width: 100%;
             max-width: 950px;
@@ -36,32 +34,42 @@
             padding: 30px;
             border-radius: 24px;
             position: relative;
-            
-            /* ===== BACKGROUND IMAGE (img1) ===== */
-            background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTk_zUijas1Evj87Ym1V7LCBiwfnlMm_zB4tUN8MwsEhA&s=10');
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            
-            /* ===== GRADIENT OVERLAY (like homepage) ===== */
+            /* Using two background layers: overlay gradient + image */
             background-image: 
-                linear-gradient(135deg, rgba(26, 35, 126, 0.7) 0%, rgba(118, 75, 162, 0.7) 100%),
+                linear-gradient(135deg, rgba(26, 35, 126, 0.85) 0%, rgba(118, 75, 162, 0.85) 100%),
                 url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTk_zUijas1Evj87Ym1V7LCBiwfnlMm_zB4tUN8MwsEhA&s=10');
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
-            
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+            /* Fallback if image fails */
+            background-color: #1a237e;
         }
 
-        /* ===== DECORATIVE FLOATING IMAGE (img4) ===== */
+        /* --- DECORATIVE IMAGES (img4) --- */
         .phase4-wrapper::before {
             content: '';
             position: absolute;
-            bottom: -20px;
-            right: -20px;
+            bottom: -15px;
+            right: -15px;
             width: 100px;
             height: 100px;
+            background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ84wAd2EvA62Pna28II-U0Psf6y9Do5lDRRL6yhi-N9A&s');
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            opacity: 0.25;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 0;
+        }
+        .phase4-wrapper::after {
+            content: '';
+            position: absolute;
+            top: -15px;
+            left: -15px;
+            width: 70px;
+            height: 70px;
             background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ84wAd2EvA62Pna28II-U0Psf6y9Do5lDRRL6yhi-N9A&s');
             background-size: contain;
             background-repeat: no-repeat;
@@ -72,297 +80,78 @@
             z-index: 0;
         }
 
-        .phase4-wrapper::after {
-            content: '';
-            position: absolute;
-            top: -20px;
-            left: -20px;
-            width: 70px;
-            height: 70px;
-            background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ84wAd2EvA62Pna28II-U0Psf6y9Do5lDRRL6yhi-N9A&s');
-            background-size: contain;
-            background-repeat: no-repeat;
-            background-position: center;
-            opacity: 0.15;
-            border-radius: 50%;
-            pointer-events: none;
-            z-index: 0;
-        }
-
-        /* ===== CONTENT CARD (white/transparent) ===== */
+        /* --- CONTENT CARD --- */
         .phase4-container {
             position: relative;
             z-index: 1;
             padding: 30px;
             background: rgba(255, 255, 255, 0.92);
-            backdrop-filter: blur(10px);
+            backdrop-filter: blur(8px);
             border-radius: 16px;
             animation: fadeIn 0.6s ease-in;
         }
 
         @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        .phase4-header {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-
-        .phase4-header h1 {
-            color: #1a237e;
-            font-size: 2.2rem;
-            margin-bottom: 8px;
-        }
-
-        .phase4-header p {
-            color: #666;
-            font-size: 1rem;
-        }
-
-        .phase4-dots {
-            display: flex;
-            justify-content: center;
-            gap: 12px;
-            margin: 20px 0;
-        }
-
-        .phase4-dot {
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            background: #e0e0e0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            color: #999;
-            font-size: 14px;
-        }
-
-        .phase4-dot.active {
-            background: #1a237e;
-            color: white;
-        }
-
-        .phase4-dot.done {
-            background: #4CAF50;
-            color: white;
-        }
-
-        .phase4-step-label {
-            text-align: center;
-            color: #1a237e;
-            font-weight: 600;
-            font-size: 1.1rem;
-            margin-bottom: 20px;
-        }
-
-        .phase4-card {
-            border-radius: 16px;
-            overflow: hidden;
-            position: relative;
-            min-height: 400px;
-        }
-
-        .phase4-overlay {
-            padding: 25px 30px 20px;
-            min-height: 400px;
-            width: 100%;
-        }
-
-        .phase4-reflection-title {
-            text-align: center;
-            margin-bottom: 10px;
-        }
-
-        .phase4-reflection-title h2 {
-            color: #1a237e;
-            font-size: 1.8rem;
-        }
-
-        .phase4-reflection-title p {
-            color: #555;
-            font-size: 1rem;
-        }
-
-        .phase4-date {
-            text-align: center;
-            color: #888;
-            font-size: 0.9rem;
-            margin: 12px 0 20px;
-        }
-
-        .phase4-progress {
-            background: #f8f9fa;
-            padding: 18px 22px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-        }
-
-        .phase4-progress h3 {
-            color: #1a237e;
-            font-size: 1rem;
-            margin-bottom: 12px;
-        }
-
-        .phase4-progress-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 6px 30px;
-        }
-
-        .phase4-progress-item {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 4px 0;
-        }
-
-        .phase4-progress-item .check {
-            color: #4CAF50;
-            font-weight: bold;
-            font-size: 1.1rem;
-        }
-
-        .phase4-progress-item .label {
-            color: #333;
-            font-size: 0.95rem;
-        }
-
-        .phase4-question {
-            background: #f8f9fa;
-            padding: 20px 22px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-        }
-
-        .phase4-question .q-label {
-            color: #1a237e;
-            font-weight: 600;
-            font-size: 1rem;
-            margin-bottom: 4px;
-        }
-
-        .phase4-question .q-text {
-            color: #555;
-            font-size: 0.95rem;
-            margin-bottom: 10px;
-        }
-
-        .phase4-question .answer {
-            background: white;
-            padding: 10px 14px;
-            border-radius: 6px;
-            border-left: 3px solid #1a237e;
-            color: #333;
-        }
-
-        .phase4-actions {
-            display: flex;
-            justify-content: space-between;
-            padding-top: 20px;
-            border-top: 1px solid #e0e0e0;
-            margin-top: 10px;
-        }
-
-        .phase4-btn {
-            padding: 10px 30px;
-            border: none;
-            border-radius: 8px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-
-        .phase4-btn-back {
-            background: #e0e0e0;
-            color: #555;
-        }
-
-        .phase4-btn-back:hover {
-            background: #d0d0d0;
-        }
-
-        .phase4-btn-next {
-            background: #1a237e;
-            color: white;
-        }
-
-        .phase4-btn-next:hover {
-            background: #0d1642;
-        }
-
-        .phase4-label {
-            text-align: center;
-            margin-top: 18px;
-            color: #bbb;
-            font-size: 0.8rem;
-            font-weight: 600;
-            letter-spacing: 3px;
-        }
+        /* --- ALL YOUR EXISTING STYLES BELOW (Unchanged) --- */
+        .phase4-header { text-align: center; margin-bottom: 30px; }
+        .phase4-header h1 { color: #1a237e; font-size: 2.2rem; margin-bottom: 8px; }
+        .phase4-header p { color: #666; font-size: 1rem; }
+        .phase4-dots { display: flex; justify-content: center; gap: 12px; margin: 20px 0; }
+        .phase4-dot { width: 36px; height: 36px; border-radius: 50%; background: #e0e0e0; display: flex; align-items: center; justify-content: center; font-weight: bold; color: #999; font-size: 14px; }
+        .phase4-dot.active { background: #1a237e; color: white; }
+        .phase4-dot.done { background: #4CAF50; color: white; }
+        .phase4-step-label { text-align: center; color: #1a237e; font-weight: 600; font-size: 1.1rem; margin-bottom: 20px; }
+        .phase4-card { border-radius: 16px; overflow: hidden; position: relative; min-height: 400px; }
+        .phase4-overlay { padding: 25px 30px 20px; min-height: 400px; width: 100%; }
+        .phase4-reflection-title { text-align: center; margin-bottom: 10px; }
+        .phase4-reflection-title h2 { color: #1a237e; font-size: 1.8rem; }
+        .phase4-reflection-title p { color: #555; font-size: 1rem; }
+        .phase4-date { text-align: center; color: #888; font-size: 0.9rem; margin: 12px 0 20px; }
+        .phase4-progress { background: #f8f9fa; padding: 18px 22px; border-radius: 10px; margin-bottom: 20px; }
+        .phase4-progress h3 { color: #1a237e; font-size: 1rem; margin-bottom: 12px; }
+        .phase4-progress-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px 30px; }
+        .phase4-progress-item { display: flex; align-items: center; gap: 10px; padding: 4px 0; }
+        .phase4-progress-item .check { color: #4CAF50; font-weight: bold; font-size: 1.1rem; }
+        .phase4-progress-item .label { color: #333; font-size: 0.95rem; }
+        .phase4-question { background: #f8f9fa; padding: 20px 22px; border-radius: 10px; margin-bottom: 20px; }
+        .phase4-question .q-label { color: #1a237e; font-weight: 600; font-size: 1rem; margin-bottom: 4px; }
+        .phase4-question .q-text { color: #555; font-size: 0.95rem; margin-bottom: 10px; }
+        .phase4-question .answer { background: white; padding: 10px 14px; border-radius: 6px; border-left: 3px solid #1a237e; color: #333; }
+        .phase4-actions { display: flex; justify-content: space-between; padding-top: 20px; border-top: 1px solid #e0e0e0; margin-top: 10px; }
+        .phase4-btn { padding: 10px 30px; border: none; border-radius: 8px; font-size: 1rem; font-weight: 600; cursor: pointer; transition: 0.3s; }
+        .phase4-btn-back { background: #e0e0e0; color: #555; }
+        .phase4-btn-back:hover { background: #d0d0d0; }
+        .phase4-btn-next { background: #1a237e; color: white; }
+        .phase4-btn-next:hover { background: #0d1642; }
+        .phase4-label { text-align: center; margin-top: 18px; color: #bbb; font-size: 0.8rem; font-weight: 600; letter-spacing: 3px; }
 
         @media (max-width: 600px) {
-            .phase4-wrapper {
-                padding: 15px;
-            }
-            .phase4-container {
-                padding: 15px;
-            }
-            .phase4-overlay {
-                padding: 15px;
-            }
-            .phase4-progress-grid {
-                grid-template-columns: 1fr;
-            }
-            .phase4-header h1 {
-                font-size: 1.5rem;
-            }
-            .phase4-reflection-title h2 {
-                font-size: 1.3rem;
-            }
-            .phase4-actions {
-                flex-direction: column;
-                gap: 10px;
-            }
-            .phase4-btn {
-                width: 100%;
-                text-align: center;
-            }
-            
-            .phase4-wrapper::before {
-                width: 60px;
-                height: 60px;
-                bottom: -10px;
-                right: -10px;
-            }
-            
-            .phase4-wrapper::after {
-                width: 40px;
-                height: 40px;
-                top: -10px;
-                left: -10px;
-            }
+            .phase4-wrapper { padding: 15px; }
+            .phase4-container { padding: 15px; }
+            .phase4-overlay { padding: 15px; }
+            .phase4-progress-grid { grid-template-columns: 1fr; }
+            .phase4-header h1 { font-size: 1.5rem; }
+            .phase4-reflection-title h2 { font-size: 1.3rem; }
+            .phase4-actions { flex-direction: column; gap: 10px; }
+            .phase4-btn { width: 100%; text-align: center; }
+            .phase4-wrapper::before { width: 60px; height: 60px; bottom: -10px; right: -10px; }
+            .phase4-wrapper::after { width: 40px; height: 40px; top: -10px; left: -10px; }
         }
     </style>
 </head>
 <body>
-
+    <!-- WRAPPER CONTAINER WITH BACKGROUND -->
     <div class="phase4-wrapper">
         <div class="phase4-container">
+            <!-- YOUR EXISTING HTML CONTENT (UNCHANGED) -->
             <div class="phase4-header">
                 <h1>FUTURES ABROAD ENROLLMENT</h1>
                 <p>Complete your enrollment to get personalized guidance from our counselors.</p>
             </div>
-
             <div class="phase4-dots">
                 <div class="phase4-dot done">1</div>
                 <div class="phase4-dot done">2</div>
@@ -371,53 +160,34 @@
                 <div class="phase4-dot">5</div>
                 <div class="phase4-dot">6</div>
             </div>
-
             <div class="phase4-step-label">Step 4 of 6</div>
-
             <div class="phase4-card">
                 <div class="phase4-overlay">
                     <div class="phase4-reflection-title">
                         <h2>Post-Activity Reflection</h2>
                         <p>Reflect on your experience with <strong>Youth Leadership Academy</strong></p>
                     </div>
-
                     <div class="phase4-date">
                         <strong>Date Completed:</strong> 07/13/2026
                     </div>
-
                     <div class="phase4-progress">
                         <h3>Reflection Progress</h3>
                         <div class="phase4-progress-grid">
-                            <div class="phase4-progress-item">
-                                <span class="check">✔</span>
-                                <span class="label">Question 1</span>
-                            </div>
-                            <div class="phase4-progress-item">
-                                <span class="check">✔</span>
-                                <span class="label">Question 2</span>
-                            </div>
-                            <div class="phase4-progress-item">
-                                <span class="check">✔</span>
-                                <span class="label">Question 3</span>
-                            </div>
-                            <div class="phase4-progress-item">
-                                <span class="check">✔</span>
-                                <span class="label">Question 4</span>
-                            </div>
+                            <div class="phase4-progress-item"><span class="check">✔</span><span class="label">Question 1</span></div>
+                            <div class="phase4-progress-item"><span class="check">✔</span><span class="label">Question 2</span></div>
+                            <div class="phase4-progress-item"><span class="check">✔</span><span class="label">Question 3</span></div>
+                            <div class="phase4-progress-item"><span class="check">✔</span><span class="label">Question 4</span></div>
                         </div>
                     </div>
-
                     <div class="phase4-question">
                         <div class="q-label">Question 1</div>
                         <div class="q-text">What was the most important thing you learned?</div>
                         <div class="answer">asdf</div>
                     </div>
-
                     <div class="phase4-actions">
                         <button class="phase4-btn phase4-btn-back" onclick="goBack()">← Back</button>
                         <button class="phase4-btn phase4-btn-next" onclick="goNext()">Next →</button>
                     </div>
-
                     <div class="phase4-label">PHASE 4</div>
                 </div>
             </div>
@@ -425,15 +195,8 @@
     </div>
 
     <script>
-        function goBack() {
-            window.location.href = 'futures-abroad-enroll.html';
-        }
-
-        function goNext() {
-            localStorage.setItem('phase4Complete', 'true');
-            window.location.href = 'phase5-pathway.html';
-        }
+        function goBack() { window.location.href = 'futures-abroad-enroll.html'; }
+        function goNext() { localStorage.setItem('phase4Complete', 'true'); window.location.href = 'phase5-pathway.html'; }
     </script>
-
 </body>
 </html>
