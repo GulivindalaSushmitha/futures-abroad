@@ -14,12 +14,42 @@
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: #f0f2f5;
+            min-height: 100vh;
+            /* BACKGROUND IMAGE FOR PHASE 6 */
+            background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT12vQuLuqej29-3j31ajCx9mOCV5YYsroZM0922IXMjg&s=10');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            background-repeat: no-repeat;
+            background-color: rgba(0, 0, 0, 0.35);
+            background-blend-mode: overlay;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
         }
 
         .phase6-container {
             max-width: 900px;
+            width: 100%;
             margin: 0 auto;
             padding: 20px;
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(4px);
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: fadeIn 0.6s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .phase6-header {
@@ -79,22 +109,14 @@
         .phase6-card {
             border-radius: 16px;
             overflow: hidden;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
             position: relative;
             min-height: 500px;
-            background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQPRmy762VkGtWpxwDFJQKB87YUzo2HWR2uaAMobGTvzQ&s=10');
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
         }
 
         .phase6-overlay {
-            background: rgba(255, 255, 255, 0.92);
-            backdrop-filter: blur(2px);
-            padding: 40px;
+            padding: 35px 40px 30px;
             min-height: 500px;
-            max-width: 500px;
-            margin: 0 auto;
+            width: 100%;
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -156,6 +178,8 @@
 
         .phase6-btn-pay:hover {
             background: #388E3C;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
         }
 
         .phase6-btn-back {
@@ -262,13 +286,15 @@
         @media (max-width: 600px) {
             .phase6-overlay {
                 padding: 20px;
-                max-width: 100%;
             }
             .phase6-header h1 {
                 font-size: 1.5rem;
             }
             .phase6-overlay h2 {
                 font-size: 1.3rem;
+            }
+            .phase6-container {
+                padding: 15px;
             }
         }
     </style>
@@ -304,7 +330,7 @@
                             <div class="detail">Full guidance through Grade 10, 11, and 12</div>
                         </div>
                         <div class="phase6-actions">
-                            <button class="phase6-btn-pay" onclick="processPayment()">Complete Payment</button>
+                            <button class="phase6-btn-pay" onclick="processPayment()">💳 Complete Payment</button>
                             <button class="phase6-btn-back" onclick="goBack()">← Back</button>
                         </div>
                     </div>
@@ -328,7 +354,7 @@
                             <p>Your journey to studying abroad starts here.</p>
                             <p style="margin-top: 8px; color: #2e7d32; font-weight: 500;">A counselor will reach out within 24 hours.</p>
                         </div>
-                        <button class="phase6-btn-dashboard" onclick="goDashboard()">Go to Dashboard</button>
+                        <button class="phase6-btn-dashboard" onclick="goDashboard()">🚀 Go to Dashboard</button>
                     </div>
                 </div>
             </div>
